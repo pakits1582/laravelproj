@@ -19,7 +19,8 @@ class SchoolController extends Controller
     {
         $schools =  $this->school_model->allschools();
 
-        return view('school.index', compact('schools'));     
+        return view('school.index', compact('schools'));
+        
     }
 
     /**
