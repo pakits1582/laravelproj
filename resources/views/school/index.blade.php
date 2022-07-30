@@ -12,7 +12,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 {{-- <h6 class="m-0 font-weight-bold text-primary">Schools Table</h6> --}}
-                <a href="{{ route('addnewschool') }}" class="btn btn-primary btn-icon-split">
+                <a href="{{ route('addschool') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>

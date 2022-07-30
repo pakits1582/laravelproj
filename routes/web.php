@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,13 +16,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('auth.index');
 });
+
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::get('/changepassword', [LoginController::class, 'changepassword'])->name('changepassword');
+Route::post('/savechangepassword', [LoginController::class, 'savechangepassword'])->name('savechangepassword');
 
 //Route::resource('schools', SchoolController::class);
 Route::get('/schools', [SchoolController::class, 'index'])->name('schoolindex');
 
-Route::get('/schools/create', [SchoolController::class, 'create'])->name('addnewschool');
+Route::get('/schools/create', [SchoolController::class, 'create'])->name('addschool');
 
 Route::post('/schools', [SchoolController::class, 'store'])->name('saveschool');
 
@@ -31,3 +36,6 @@ Route::put('/schools/{school}', [SchoolController::class, 'update'])->name('upda
 
 Route::delete('/schools/{school}', [SchoolController::class, 'destroy'])->name('deleteschool');
 
+Route::get('/home', function () {
+    return view('home');
+});

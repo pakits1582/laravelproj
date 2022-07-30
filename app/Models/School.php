@@ -19,25 +19,25 @@ class School extends Model
         ->get();
     }
 
-    public function insertWithcheckdupli($array, $formfields)
-    {
-        return $this->firstOrCreate($array, $formfields);
-    }
+    // public function insertWithcheckdupli($array, $formfields)
+    // {
+    //     return $this->firstOrCreate($array, $formfields);
+    // }
 
-    public function checkDuplicateOnUpdate($array)
-    {
-        return $this->where($array)->first();
-    }
+    // public function checkDuplicateOnUpdate($array)
+    // {
+    //     return $this->where($array)->first();
+    // }
 
-    public function updateSchool($fields, $where)
-    {
-        return $this->where($where)->update($fields);
-    }
+    // public function updateSchool($fields, $where)
+    // {
+    //     return $this->where($where)->update($fields);
+    // }
 
-    public function findSchool($id)
-    {
-        return $this->find($id);
-    }
+    // public function findSchool($id)
+    // {
+    //     return $this->find($id);
+    // }
 
 
 }
