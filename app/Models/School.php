@@ -10,12 +10,13 @@ class School extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'code', 'address'];
+    protected $fillable = ['name', 'code', 'address', 'added_by'];
 
     public function allschools()
     {
-        return $this->select('schools.name', 'code', 'address','schools.id','users.name AS addedby')
+        return $this->select('schools.name', 'code', 'address','schools.id','userinfo.name AS addedby')
         ->leftJoin('users', 'users.id', '=', 'schools.added_by')
+        ->leftJoin('userinfo', 'userinfo.user_id', '=', 'users.id')
         ->get();
     }
 

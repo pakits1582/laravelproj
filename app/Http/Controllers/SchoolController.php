@@ -51,26 +51,6 @@ class SchoolController extends Controller
     // {
     //     //
     // }
-
-    // 
-
-
-    // public function update(SchoolFormRequest $request, school $school){
-    //     $sch = $this->school_model->checkDuplicateOnUpdate(
-    //         [
-    //             ['code', '=', $request->code],
-    //             ['name', '=', $request->name],
-    //             ['id', '<>', $school->id]
-    //         ]);
-
-    //     if($sch){
-    //         return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, school already exists!']);
-    //     }else{
-    //         $this->school_model->updateSchool($request->validated(), ['id' => $school->id]);
-    //         return back()->with(['alert-class' => 'alert-success', 'message' => 'School sucessfully updated!']);
-    //     }
-    // }
-
    
     // public function destroy(school $school){
 

@@ -18,9 +18,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'idno',
         'password',
+        'utype',
+        'is_active'
     ];
 
     /**
@@ -41,4 +42,26 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function allusers()
+    {
+        return $this->select('users.id', 'idno', 'is_active', 'utype', 'userinfo.id AS userinfoid','userinfo.name')
+        ->leftJoin('userinfo', 'userinfo.user_id', '=', 'users.id')
+        ->get();
+    }
+
+    public function userLoggedinName()
+    {
+        return $this->name;
+    }
+    
+    public function info()
+    {
+        return $this->hasOne(Userinfo::class);
+    }
+
+    public function access()
+    {
+        return $this->hasMany(Useraccess::class);
+    }
 }

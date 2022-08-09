@@ -25,8 +25,7 @@ class SchoolService
 
     public function saveSchool($request)
     {
-    
-        $insert = $this->school->createSchool(['code' => $request->code, 'name' => $request->name], $request->validated());
+        $insert = $this->school->createSchool(['code' => $request->code, 'name' => $request->name], array_merge($request->validated(), ['added_by' => 1]));
        
         if($insert->wasRecentlyCreated){
             return back()->with(['alert-class' => 'alert-success', 'message' => 'School sucessfully added!']);

@@ -7,4 +7,12 @@ $(document).ready(function() {
           "className": "text-center"
      }]
   });
+
+  $('#userTable').DataTable({
+    'columnDefs': [
+      {
+          "targets": [1,3,4], // your case first column
+          "className": "text-center"
+     }]
+  });
 });
