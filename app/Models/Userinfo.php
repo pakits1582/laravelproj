@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Userinfo extends Model
 {
-    
     use HasFactory;
-    
+
     protected $table = 'userinfo';
 
     protected $fillable = [
@@ -19,7 +18,6 @@ class Userinfo extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, );
     }
-    
 }

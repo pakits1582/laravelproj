@@ -5,140 +5,194 @@ namespace App\Libs;
 class Helpers
 {
     public static $load;
-    
+
     public static function setLoad($loadfile)
     {
-		if(isset($loadfile)){
-			self::$load = $loadfile;
-		}
-	}
-	
-	public static function getLoad()
+        if (isset($loadfile)) {
+            self::$load = $loadfile;
+        }
+    }
+
+    public static function getLoad()
     {
-		return self::$load;
-	}
+        return self::$load;
+    }
 
     public static function userAccessArray()
     {
-        return array(
-            array(
+        return [
+            [
                 'title' => 'General',
-                'access' => array(
-                    array('header' => 'Configuration' ,'link' => 'configuration', 'id' => 'configuration'),
-                    array('header' => 'Colleges'      ,'link' => 'college', 'id' => 'college'),
-                    array('header' => 'Periods'       ,'link' => 'period', 'id' => 'period'),
-                    array('header' => 'School'        ,'link' => 'school', 'id' => 'school'),
-                    array('header' => 'User Accounts' ,'link' => 'user', 'id' => 'user'),
-                    array('header' => 'Audit Log'     ,'link' => 'configuration/auditlog', 'id' => 'auditlog')
-                    )
-            ),
+                'access' => [
+                    ['header' => 'Configurations', 'link' => 'configurations', 'id' => 'configuration'],
+                    ['header' => 'Colleges', 'link' => 'colleges', 'id' => 'college'],
+                    ['header' => 'Periods', 'link' => 'periods', 'id' => 'period'],
+                    ['header' => 'Schools', 'link' => 'schools', 'id' => 'school'],
+                    ['header' => 'User Accounts', 'link' => 'users', 'id' => 'user'],
+                    ['header' => 'Audit Logs', 'link' => 'configurations/auditlogs', 'id' => 'auditlog'],
+                ],
+            ],
 
-            array(
+            [
                 'title' => 'Offerings',
-                'access' => array(
-                    array('header' => 'Programs'    ,'link' => 'program', 'id' => 'program'),
-                    array('header' => 'Departments' ,'link' => 'department', 'id' => 'department'),
-                    array('header' => 'Curriculum'  ,'link' => 'curriculum', 'id' => 'curriculum'),
-                    array('header' => 'Instructors' ,'link' => 'instructor', 'id' => 'instructor'),
-                    array('header' => 'Rooms'       ,'link' => 'room', 'id' => 'room'),
-                    array('header' => 'Sections'    ,'link' => 'section', 'id' => 'section'),
-                    array('header' => 'Subjects'    ,'link' => 'subject', 'id' => 'subject')
-                )
-            ),
-            array(
+                'access' => [
+                    ['header' => 'Programs', 'link' => 'programs', 'id' => 'program'],
+                    ['header' => 'Departments', 'link' => 'departments', 'id' => 'department'],
+                    ['header' => 'Curriculum', 'link' => 'curriculum', 'id' => 'curriculum'],
+                    ['header' => 'Instructors', 'link' => 'instructors', 'id' => 'instructor'],
+                    ['header' => 'Rooms', 'link' => 'rooms', 'id' => 'room'],
+                    ['header' => 'Sections', 'link' => 'sections', 'id' => 'section'],
+                    ['header' => 'Subjects', 'link' => 'subjects', 'id' => 'subject'],
+                ],
+            ],
+            [
                 'title' => 'Scheduling',
-                'access' => array(
-                    array('header' => 'Classes'             ,'link' => 'classes', 'id' => 'classes'),
-                    array('header' => 'Slot Monitoring'     ,'link' => 'classes/monitoring', 'id' => 'classes_monitoring'),
-                    array('header' => 'Section Monitoring'  ,'link' => 'section/monitoring', 'id' => 'section_monitoring'),
-                    array('header' => 'General Schedule'    ,'link' => 'generalschedule', 'id' => 'generalschedule'),
-                    array('header' => 'Room Assignment'     ,'link' => 'room/assignment', 'id' => 'roomassignment'),
-                    array('header' => 'Faculty Evaluation'  ,'link' => 'facultyevaluation', 'id' => 'facultyevaluation')
-                )
-            ),   
+                'access' => [
+                    ['header' => 'Classes', 'link' => 'classes', 'id' => 'classes'],
+                    ['header' => 'Slot Monitoring', 'link' => 'classes/monitoring', 'id' => 'classes_monitoring'],
+                    ['header' => 'Section Monitoring', 'link' => 'sections/monitoring', 'id' => 'section_monitoring'],
+                    ['header' => 'General Schedule', 'link' => 'generalschedules', 'id' => 'generalschedule'],
+                    ['header' => 'Room Assignment', 'link' => 'rooms/assignment', 'id' => 'roomassignment'],
+                    ['header' => 'Faculty Evaluation', 'link' => 'facultyevaluations', 'id' => 'facultyevaluation'],
+                ],
+            ],
 
-            array(
+            [
                 'title' => 'Enrolment',
-                'access' => array(
-                    array('header' => 'Adding/Dropping'   ,'link' => 'adddrop', 'id' => 'adddrop'),
-                    array('header' => 'Assessment'        ,'link' => 'assessment', 'id' => 'assessment'),
-                    array('header' => 'Enrolment'         ,'link' => 'enrolment', 'id' => 'enrolment'),
-                    array('header' => 'Validation'        ,'link' => 'validation', 'id' => 'validation'),
-                    array('header' => 'Re-assessment'     ,'link' => 'reassessment', 'id' => 'reassessment'),
-                    array('header' => 'Unpaid Assessment' ,'link' => 'assessment/unpaid', 'id' => 'unpaidassessment'),
-                    array('header' => 'Unsaved Enrolment' ,'link' => 'enrolment/unsaved', 'id' => 'unsavedenrolment')
-                )
-            ),   
-            
-            array(
-                'title' => 'Services',
-                'access' => array(
-                    array('header' => 'Students'          ,'link' => 'student', 'id' => 'student'),
-                    array('header' => 'Class List'        ,'link' => 'classlist', 'id' => 'classlist'),
-                    array('header' => 'Grading System'    ,'link' => 'gradingsystem', 'id' => 'gradingsystem'),
-                    array('header' => 'Master List'       ,'link' => 'masterlist', 'id' => 'masterlist'),
-                    array('header' => 'Faculty Load'      ,'link' => 'facultyload', 'id' => 'facultyload'),
-                    array('header' => 'Enrolment Summary' ,'link' => 'enrolmentsummary', 'id' => 'enrolmentsummary'),
-                    array('header' => 'Attendace'         ,'link' => 'attendance', 'id' => 'attendance'),
-                    array('header' => 'Student Schedule'  ,'link' => 'studentschedule', 'id' => 'studentschedule')
-                )
-            ),
-            
-            array(
-                'title' => 'Process',
-                'access' => array(
-                    array('header' => 'Application'         ,'link' => 'application', 'id' => 'application'),
-                    array('header' => 'Admission'           ,'link' => 'admission', 'id' => 'admission'),
-                    array('header' => 'Admission Documents' ,'link' => 'admission/documents', 'id' => 'admissiondocuments'),
-                    array('header' => 'Registrar Reports'   ,'link' => 'registrarreports', 'id' => 'registrarreports')
-                )
-            ),   
-           
-            array(
-                'title' => 'Accounting',
-                'access'  => array(
-                    array('header' => 'Fees Library'       ,'link' => 'fees', 'id' => 'fees'),
-                    array('header' => 'Payment Option'     ,'link' => 'paymentoption', 'id' => 'paymentoption'),
-                    array('header' => 'Setup Fees'         ,'link' => 'fees/setup', 'id' => 'setupfees'),
-                    array('header' => 'Receipt Entry',      'link' => 'receipt', 'id' => 'receipt'),
-                    array('header' => 'Daily Collection'   ,'link' => 'dailycollection', 'id' => 'dailycollection'),
-                    array('header' => 'Accounting Reports' ,'link' => 'accountingreports', 'id' => 'accountingreports')
-                )
-            ),
+                'access' => [
+                    ['header' => 'Adding/Dropping', 'link' => 'adddrop', 'id' => 'adddrop'],
+                    ['header' => 'Assessment', 'link' => 'assessments', 'id' => 'assessment'],
+                    ['header' => 'Enrolment', 'link' => 'enrolments', 'id' => 'enrolment'],
+                    ['header' => 'Validation', 'link' => 'validations', 'id' => 'validation'],
+                    ['header' => 'Re-assessment', 'link' => 'reassessments', 'id' => 'reassessment'],
+                    ['header' => 'Unpaid Assessment', 'link' => 'assessments/unpaid', 'id' => 'unpaidassessment'],
+                    ['header' => 'Unsaved Enrolment', 'link' => 'enrolments/unsaved', 'id' => 'unsavedenrolment'],
+                ],
+            ],
 
-            array(
+            [
+                'title' => 'Services',
+                'access' => [
+                    ['header' => 'Students', 'link' => 'students', 'id' => 'student'],
+                    ['header' => 'Class List', 'link' => 'classlists', 'id' => 'classlist'],
+                    ['header' => 'Grading System', 'link' => 'gradingsystems', 'id' => 'gradingsystem'],
+                    ['header' => 'Master List', 'link' => 'masterlists', 'id' => 'masterlist'],
+                    ['header' => 'Faculty Load', 'link' => 'facultyloads', 'id' => 'facultyload'],
+                    ['header' => 'Enrolment Summary', 'link' => 'enrolmentsummary', 'id' => 'enrolmentsummary'],
+                    ['header' => 'Attendace', 'link' => 'attendances', 'id' => 'attendance'],
+                    ['header' => 'Student Schedule', 'link' => 'studentschedules', 'id' => 'studentschedule'],
+                ],
+            ],
+
+            [
+                'title' => 'Process',
+                'access' => [
+                    ['header' => 'Application', 'link' => 'applications', 'id' => 'application'],
+                    ['header' => 'Admission', 'link' => 'admissions', 'id' => 'admission'],
+                    ['header' => 'Admission Documents', 'link' => 'admissions/documents', 'id' => 'admissiondocuments'],
+                    ['header' => 'Registrar Reports', 'link' => 'registrarreports', 'id' => 'registrarreports'],
+                ],
+            ],
+
+            [
+                'title' => 'Accounting',
+                'access' => [
+                    ['header' => 'Fees Library', 'link' => 'fees', 'id' => 'fees'],
+                    ['header' => 'Payment Option', 'link' => 'paymentoptions', 'id' => 'paymentoption'],
+                    ['header' => 'Setup Fees', 'link' => 'fees/setup', 'id' => 'setupfees'],
+                    ['header' => 'Receipt Entry',      'link' => 'receipts', 'id' => 'receipt'],
+                    ['header' => 'Daily Collection', 'link' => 'dailycollections', 'id' => 'dailycollection'],
+                    ['header' => 'Accounting Reports', 'link' => 'accountingreports', 'id' => 'accountingreports'],
+                ],
+            ],
+
+            [
                 'title' => 'Grades',
-                'access' => array(
-                    array('header' => 'Evaluation'       ,'link' => 'evaluation', 'id' => 'evaluation'),
-                    array('header' => 'Grade File'       ,'link' => 'grade', 'id' => 'grade'),
-                    array('header' => 'External Grades'  ,'link' => 'gradeexternal', 'id' => 'gradeexternal'),
-                    array('header' => 'Internal Grades'  ,'link' => 'gradeinternal', 'id' => 'gradeinternal'),
-                    array('header' => 'Grading Sheet'    ,'link' => 'gradingsheet', 'id' => 'gradingsheet')
-                )
-            ),
-            
-            array(
+                'access' => [
+                    ['header' => 'Evaluation', 'link' => 'evaluations', 'id' => 'evaluation'],
+                    ['header' => 'Grade File', 'link' => 'grades', 'id' => 'grade'],
+                    ['header' => 'External Grades', 'link' => 'gradeexternals', 'id' => 'gradeexternal'],
+                    ['header' => 'Internal Grades', 'link' => 'gradeinternals', 'id' => 'gradeinternal'],
+                    ['header' => 'Grading Sheet', 'link' => 'gradingsheets', 'id' => 'gradingsheet'],
+                ],
+            ],
+
+            [
                 'title' => 'Student Ledger',
-                'access' => array(
-                    array('header' => 'Post Charge'                ,'link' => 'postcharge', 'id' => 'postcharge'),
-                    array('header' => 'Scholarship/Discount'       ,'link' => 'scholarshipdiscount', 'id' => 'scholarshipdiscount'),
-                    array('header' => 'Statement of Accounts'      ,'link' => 'studentledger', 'id' => 'studentledger'),
-                    array('header' => 'Scholarship/Discount Grant' ,'link' => 'scholarshipdiscount/grant', 'id' => 'scholarshipdiscountgrant'),
-                    array('header' => 'Student Adjustment'         ,'link' => 'studentadjustment', 'id' => 'studentadjustment')
-                )
-            )
-        );
-      
+                'access' => [
+                    ['header' => 'Post Charge', 'link' => 'postcharges', 'id' => 'postcharge'],
+                    ['header' => 'Scholarship/Discount', 'link' => 'scholarshipdiscounts', 'id' => 'scholarshipdiscount'],
+                    ['header' => 'Statement of Accounts', 'link' => 'studentledgers', 'id' => 'studentledger'],
+                    ['header' => 'Scholarship/Discount Grant', 'link' => 'scholarshipdiscounts/grant', 'id' => 'scholarshipdiscountgrant'],
+                    ['header' => 'Student Adjustment', 'link' => 'studentadjustments', 'id' => 'studentadjustment'],
+                ],
+            ],
+        ];
     }
 
     public static function searchUSerAccess($array, $val, $column)
     {
         foreach ($array as $key => $value) {
             foreach ($value['access'] as $k => $v) {
-                if($v[$column] == $val){
+                if ($v[$column] == $val) {
                     return array_merge(['title' => $value['title']], $v);
                 }
             }
+        }
+    }
+
+    public static function userAccessCategories($array)
+    {
+        if ($array) {
+            $categories = array_unique(array_column($array, 'category'));
+
+            $accesses = [];
+            foreach ($categories as $key => $value) {
+                $accesses[$key] = ['category' => $value];
+                foreach ($array as $k => $v) {
+                    if ($value == $v['category']) {
+                        $accesses[$key]['access'][] = $v;
+                    }
+                }
+            }
+
+            return $accesses;
+        }
+    }
+
+    public static function menuCategoryIcon($category)
+    {
+        switch ($category) {
+            case 'Configuration':
+                return 'fa-cog';
+                break;
+            case 'Offerings':
+                return 'fa-folder-open';
+                break;
+            case 'Scheduling':
+                return 'fa-book';
+                break;
+            case 'Enrolment':
+                return 'fa-list-alt';
+                break;
+            case 'Services':
+                return 'fa-cogs';
+                break;
+            case 'Process':
+                return 'fa-calendar';
+                break;
+            case 'Accounting':
+                return 'fa-credit-card';
+                break;
+            case 'Grades':
+                return 'fa-graduation-cap';
+                break;
+            case 'Student Ledger':
+                return 'fa-suitcase';
+                break;
+            default:
+                return 'fa-cog';
+                break;
         }
     }
 }

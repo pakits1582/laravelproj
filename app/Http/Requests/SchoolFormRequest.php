@@ -26,7 +26,7 @@ class SchoolFormRequest extends FormRequest
         return [
             'code' => 'required',
             'name' => 'required',
-            'address' => 'required'
+            'address' => 'required',
         ];
     }
 }

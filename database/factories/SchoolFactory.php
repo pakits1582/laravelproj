@@ -19,7 +19,7 @@ class SchoolFactory extends Factory
         return [
             'code' => fake()->text(10),
             'name' => fake()->name(),
-            'address' => fake()->address()
+            'address' => fake()->address(),
         ];
     }
 }

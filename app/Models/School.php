@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class School extends Model
 {
@@ -14,7 +13,7 @@ class School extends Model
 
     public function allschools()
     {
-        return $this->select('schools.name', 'code', 'address','schools.id','userinfo.name AS addedby')
+        return $this->select('schools.name', 'code', 'address', 'schools.id', 'userinfo.name AS addedby')
         ->leftJoin('users', 'users.id', '=', 'schools.added_by')
         ->leftJoin('userinfo', 'userinfo.user_id', '=', 'users.id')
         ->get();
@@ -39,6 +38,4 @@ class School extends Model
     // {
     //     return $this->find($id);
     // }
-
-
 }

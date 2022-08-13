@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +31,6 @@ Route::post('/schools', [SchoolController::class, 'store'])->name('saveschool');
 Route::get('/schools/{school}/edit', [SchoolController::class, 'edit'])->name('editschool');
 Route::put('/schools/{school}', [SchoolController::class, 'update'])->name('updateschool');
 Route::delete('/schools/{school}', [SchoolController::class, 'destroy'])->name('deleteschool');
-
 
 Route::get('/users', [UserController::class, 'index'])->name('userindex');
 Route::get('/users/create', [UserController::class, 'create'])->name('adduser');

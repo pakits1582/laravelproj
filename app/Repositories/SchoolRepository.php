@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\SchoolRepositoryInterface;
 use App\Models\School;
 
-class SchoolRepository implements SchoolRepositoryInterface 
+class SchoolRepository implements SchoolRepositoryInterface
 {
     protected $model;
 
@@ -14,17 +14,17 @@ class SchoolRepository implements SchoolRepositoryInterface
         $this->model = $model;
     }
 
-    public function getAllSchools() 
+    public function getAllSchools()
     {
         return $this->model->allschools();
     }
 
-    public function createSchool(array $arr, array $SchoolDetails) 
+    public function createSchool(array $arr, array $SchoolDetails)
     {
         return School::firstOrCreate($arr, $SchoolDetails);
     }
 
-    public function getSchoolById($SchoolId) 
+    public function getSchoolById($SchoolId)
     {
         return School::findOrFail($SchoolId);
     }
@@ -34,17 +34,13 @@ class SchoolRepository implements SchoolRepositoryInterface
         return School::where($array)->first();
     }
 
-    public function updateSchool($SchoolId, array $newDetails) 
+    public function updateSchool($SchoolId, array $newDetails)
     {
         return School::whereId($SchoolId)->update($newDetails);
     }
 
-    public function deleteSchool($SchoolId) 
+    public function deleteSchool($SchoolId)
     {
         School::destroy($SchoolId);
     }
-
-   
-
-    
 }

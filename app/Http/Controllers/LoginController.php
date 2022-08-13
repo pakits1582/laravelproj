@@ -1,19 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use App\Services\LoginService;
+
 use App\Http\Requests\LoginFormRequest;
+use App\Services\LoginService;
 
 class LoginController extends Controller
 {
-    
     protected $log;
 
     public function __construct(LoginService $login)
     {
-        $this->log = $login; 
-    } 
+        $this->log = $login;
+    }
 
     public function login(LoginFormRequest $request)
     {
@@ -32,8 +31,5 @@ class LoginController extends Controller
 
     public function savechangepassword()
     {
-        
     }
 }
-
-

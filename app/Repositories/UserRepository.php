@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 
-class UserRepository implements UserRepositoryInterface 
+class UserRepository implements UserRepositoryInterface
 {
     protected $model;
 
@@ -14,22 +14,22 @@ class UserRepository implements UserRepositoryInterface
         $this->model = $model;
     }
 
-    public function getAllUsers() 
+    public function getAllUsers()
     {
         return $this->model->allusers();
     }
 
-    public function createUserwithduplicheck(array $arr, array $UserDetails) 
+    public function createUserwithduplicheck(array $arr, array $UserDetails)
     {
         return User::firstOrCreate($arr, $UserDetails);
     }
 
-    public function createUser(array $UserDetails) 
+    public function createUser(array $UserDetails)
     {
         return User::create($UserDetails);
     }
 
-    public function getUserById($UserId) 
+    public function getUserById($UserId)
     {
         return User::findOrFail($UserId);
     }
@@ -44,7 +44,7 @@ class UserRepository implements UserRepositoryInterface
         return User::find($UserId)->access;
     }
 
-    public function getUserByIdno($idno) 
+    public function getUserByIdno($idno)
     {
         return User::where('idno', $idno)->firstOrFail();
     }
@@ -54,17 +54,13 @@ class UserRepository implements UserRepositoryInterface
     //     return User::where($array)->first();
     // }
 
-    // public function updateUser($UserId, array $newDetails) 
+    // public function updateUser($UserId, array $newDetails)
     // {
     //     return User::whereId($UserId)->update($newDetails);
     // }
 
-    // public function deleteUser($UserId) 
+    // public function deleteUser($UserId)
     // {
     //     User::destroy($UserId);
     // }
-
-   
-
-    
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,7 +9,9 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,7 @@ class User extends Authenticatable
         'idno',
         'password',
         'utype',
-        'is_active'
+        'is_active',
     ];
 
     /**
@@ -43,25 +44,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function allusers()
-    {
-        return $this->select('users.id', 'idno', 'is_active', 'utype', 'userinfo.id AS userinfoid','userinfo.name')
-        ->leftJoin('userinfo', 'userinfo.user_id', '=', 'users.id')
-        ->get();
-    }
-
     public function userLoggedinName()
     {
         return $this->name;
     }
-    
+
     public function info()
     {
-        return $this->hasOne(Userinfo::class);
+        return $this->hasOne(Userinfo::class, 'user_id', 'id');
     }
 
     public function access()
     {
-        return $this->hasMany(Useraccess::class);
+        return $this->hasMany(Useraccess::class, 'user_id', 'id');
     }
 }
