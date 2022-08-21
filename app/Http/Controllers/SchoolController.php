@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\School;
 use App\Http\Requests\SchoolFormRequest;
-use App\Services\SchoolService;
+use App\Http\Requests\SchoolUpdateFormRequest;
 
 class SchoolController extends Controller
 {
-    protected $schoolService;
-
-    public function __construct(SchoolService $schoolService)
-    {
-        $this->schoolService = $schoolService;
-    }
-
+    
     public function index()
     {
-        $schools = $this->schoolService->allSchools();
+        $schools = School::all();
+        $schools->load('addedby');
 
         return view('school.index', compact('schools'));
     }
@@ -28,28 +24,33 @@ class SchoolController extends Controller
 
     public function store(SchoolFormRequest $request)
     {
-        return  $this->schoolService->saveSchool($request);
+        $insert = School::firstOrCreate(['code' => $request->code, 'name' => $request->name], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return back()->with(['alert-class' => 'alert-success', 'message' => 'School sucessfully added!']);
+        } 
+            return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, school already exists!'])->withInput();
     }
 
-    public function edit($schoolId)
+    public function edit(School $school)
     {
-        return  $this->schoolService->editSchool($schoolId);
+        return view('school.edit',  compact('school'));
     }
 
-    public function update(SchoolFormRequest $request, $school)
+    public function update(SchoolUpdateFormRequest $request, School $school)
     {
-        return  $this->schoolService->updateSchool($request, $school);
+        $school->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'School sucessfully updated!']);
     }
 
-    // public function show(school $school)
-    // {
-    //     //
-    // }
+    public function show(School $school)
+    {
+        //
+    }
 
-    // public function destroy(school $school){
+    public function destroy(School $school)
+    {
 
-    //     $school->delete();
-
-    //     return redirect()->route('schoolindex')->with(['alert-class' => 'alert-success', 'message' => 'School sucessfully deleted!']);
-    // }
+    }
 }

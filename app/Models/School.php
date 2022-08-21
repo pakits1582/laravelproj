@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class School extends Model
 {
@@ -11,31 +12,32 @@ class School extends Model
 
     protected $fillable = ['name', 'code', 'address', 'added_by'];
 
-    public function allschools()
+    public function code(): Attribute
     {
-        return $this->select('schools.name', 'code', 'address', 'schools.id', 'userinfo.name AS addedby')
-        ->leftJoin('users', 'users.id', '=', 'schools.added_by')
-        ->leftJoin('userinfo', 'userinfo.user_id', '=', 'users.id')
-        ->get();
+        return new Attribute(
+            get: fn($value, $attributes) => strtoupper($attributes['code']),
+            set: fn($value) => strtoupper($value)
+        );
     }
 
-    // public function insertWithcheckdupli($array, $formfields)
-    // {
-    //     return $this->firstOrCreate($array, $formfields);
-    // }
+    public function name(): Attribute
+    {
+        return new Attribute(
+            get: fn($value, $attributes) => strtoupper($attributes['name']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
 
-    // public function checkDuplicateOnUpdate($array)
-    // {
-    //     return $this->where($array)->first();
-    // }
+    public function address(): Attribute
+    {
+        return new Attribute(
+            get: fn($value, $attributes) => strtoupper($attributes['address']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
 
-    // public function updateSchool($fields, $where)
-    // {
-    //     return $this->where($where)->update($fields);
-    // }
-
-    // public function findSchool($id)
-    // {
-    //     return $this->find($id);
-    // }
+    public function addedby()
+    {
+        return $this->hasOne(Userinfo::class, 'user_id', 'added_by');
+    }
 }

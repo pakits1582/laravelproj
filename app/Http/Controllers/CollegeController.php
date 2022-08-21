@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\College;
+use App\Models\Instructor;
 use Illuminate\Http\Request;
+use App\Http\Requests\CollegeFormRequest;
+use App\Http\Requests\CollegeUpdateFormRequest;
 
 class CollegeController extends Controller
 {
@@ -14,7 +17,9 @@ class CollegeController extends Controller
      */
     public function index()
     {
-        //
+        $colleges = College::all();
+
+        return view('college.index', compact('colleges'));
     }
 
     /**
@@ -24,7 +29,9 @@ class CollegeController extends Controller
      */
     public function create()
     {
-        //
+        $instructors = Instructor::all();
+
+        return view('college.create', compact('instructors'));
     }
 
     /**
@@ -33,9 +40,15 @@ class CollegeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CollegeFormRequest $request)
     {
-        //
+        $insert = College::firstOrCreate(['code' => $request->code, 'name' => $request->name], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return back()->with(['alert-class' => 'alert-success', 'message' => 'College sucessfully added!']);
+        } 
+            return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, college already exists!'])->withInput();
+        
     }
 
     /**
@@ -57,7 +70,9 @@ class CollegeController extends Controller
      */
     public function edit(College $college)
     {
-        //
+        $instructors = Instructor::all();
+        return view('college.edit',  compact('college', 'instructors'));
+
     }
 
     /**
@@ -67,9 +82,12 @@ class CollegeController extends Controller
      * @param  \App\Models\College  $college
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, College $college)
+    public function update(CollegeUpdateFormRequest $request, College $college)
     {
-        //
+        $college->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'College sucessfully updated!']);
+    
     }
 
     /**

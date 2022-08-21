@@ -1,9 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SchoolController;
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CollegeController;
+use App\Http\Controllers\InstructorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,20 +26,41 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/changepassword', [LoginController::class, 'changepassword'])->name('changepassword');
 Route::post('/savechangepassword', [LoginController::class, 'savechangepassword'])->name('savechangepassword');
 
-//Route::resource('schools', SchoolController::class);
-Route::get('/schools', [SchoolController::class, 'index'])->name('schoolindex');
-Route::get('/schools/create', [SchoolController::class, 'create'])->name('addschool');
-Route::post('/schools', [SchoolController::class, 'store'])->name('saveschool');
-Route::get('/schools/{school}/edit', [SchoolController::class, 'edit'])->name('editschool');
-Route::put('/schools/{school}', [SchoolController::class, 'update'])->name('updateschool');
-Route::delete('/schools/{school}', [SchoolController::class, 'destroy'])->name('deleteschool');
+Route::controller(SchoolController::class)->group(function () {
+    Route::get('/schools', 'index')->name('schoolindex');
+    Route::get('/schools/create', 'create')->name('addschool');
+    Route::post('/schools', 'store')->name('saveschool');
+    Route::get('/schools/{school}/edit', 'edit')->name('editschool');
+    Route::put('/schools/{school}', 'update')->name('updateschool');
+    Route::delete('/schools/{school}', 'destroy')->name('deleteschool');
+});
 
-Route::get('/users', [UserController::class, 'index'])->name('userindex');
-Route::get('/users/create', [UserController::class, 'create'])->name('adduser');
-Route::post('/users', [UserController::class, 'store'])->name('saveuser');
-Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('edituser');
-Route::put('/users/{user}', [UserController::class, 'update'])->name('updateuser');
-Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('deleteuser');
+Route::controller(UserController::class)->group(function () {
+    Route::get('/users', 'index')->name('userindex');
+    Route::get('/users/create', 'create')->name('adduser');
+    Route::post('/users', 'store')->name('saveuser');
+    Route::get('/users/{user}/edit', 'edit')->name('edituser');
+    Route::put('/users/{user}', 'update')->name('updateuser');
+    Route::delete('/users/{user}', 'destroy')->name('deleteuser');
+});
+
+Route::controller(InstructorController::class)->group(function () {
+    Route::get('/instructors', 'index')->name('instructorindex');
+    Route::get('/instructors/create', 'create')->name('addinstructor');
+    Route::post('/instructors', 'store')->name('saveinstructor');
+    Route::get('/instructors/{instructor}/edit', 'edit')->name('editinstructor');
+    Route::put('/instructors/{instructor}', 'update')->name('updateinstructor');
+    Route::delete('/instructors/{instructor}', 'destroy')->name('deleteinstructor');
+});
+
+Route::controller(CollegeController::class)->group(function () {
+    Route::get('/colleges', 'index')->name('collegeindex');
+    Route::get('/colleges/create', 'create')->name('addcollege');
+    Route::post('/colleges', 'store')->name('savecollege');
+    Route::get('/colleges/{college}/edit', 'edit')->name('editcollege');
+    Route::put('/colleges/{college}', 'update')->name('updatecollege');
+    Route::delete('/colleges/{college}', 'destroy')->name('deletecollege');
+});
 
 Route::get('/home', function () {
     return view('home');

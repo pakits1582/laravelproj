@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Libs\Helpers;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
+use App\Services\InstructorService;
 
 class InstructorController extends Controller
 {
+
+    protected $instructorService;
+
+    public function __construct(InstructorService $instructorService)
+    {
+        $this->instructorService = $instructorService;
+        Helpers::setLoad(['jquery_instructor.js']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +24,10 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        //
+        $instructors = Instructor::all();
+        $instructors->load('user');
+        
+        return view('instructor.index', compact('instructors'));
     }
 
     /**
@@ -24,7 +37,7 @@ class InstructorController extends Controller
      */
     public function create()
     {
-        //
+        return view('instructor.create');
     }
 
     /**

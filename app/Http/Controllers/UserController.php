@@ -26,7 +26,6 @@ class UserController extends Controller
 
     public function index()
     {
-        //$users =  $this->userService->allUsers();
         $users = User::all();
         $users->load('info', 'access');
 
