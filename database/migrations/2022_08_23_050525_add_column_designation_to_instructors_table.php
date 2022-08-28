@@ -13,7 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('instructors', function (Blueprint $table) {
+            $table->tinyInteger('designation')->nullable()->after('name_suffix');
+        });
     }
 
     /**
@@ -23,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('instructors', function (Blueprint $table) {
+            $table->dropColumn('designation');
+        });
     }
 };

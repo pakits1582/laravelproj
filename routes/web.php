@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\CollegeController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\InstructorController;
 
 /*
@@ -60,6 +62,24 @@ Route::controller(CollegeController::class)->group(function () {
     Route::get('/colleges/{college}/edit', 'edit')->name('editcollege');
     Route::put('/colleges/{college}', 'update')->name('updatecollege');
     Route::delete('/colleges/{college}', 'destroy')->name('deletecollege');
+});
+
+Route::controller(DepartmentController::class)->group(function () {
+    Route::get('/departments', 'index')->name('departmentindex');
+    Route::get('/departments/create', 'create')->name('adddepartment');
+    Route::post('/departments', 'store')->name('savedepartment');
+    Route::get('/departments/{department}/edit', 'edit')->name('editdepartment');
+    Route::put('/departments/{department}', 'update')->name('updatedepartment');
+    Route::delete('/departments/{department}', 'destroy')->name('deletedepartment');
+});
+
+Route::controller(PeriodController::class)->group(function () {
+    Route::get('/periods', 'index')->name('periodindex');
+    Route::get('/periods/create', 'create')->name('addperiod');
+    Route::post('/periods', 'store')->name('saveperiod');
+    Route::get('/periods/{period}/edit', 'edit')->name('editperiod');
+    Route::put('/periods/{period}', 'update')->name('updateperiod');
+    Route::delete('/periods/{period}', 'destroy')->name('deleteperiod');
 });
 
 Route::get('/home', function () {

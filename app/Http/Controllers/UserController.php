@@ -26,7 +26,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::all();
+        $users = User::where('utype', 0)->get();
         $users->load('info', 'access');
 
         return view('user.index', compact('users'));

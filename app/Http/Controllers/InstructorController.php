@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInstructorRequest;
+use App\Http\Requests\UpdateInstructorRequest;
 use App\Libs\Helpers;
+use App\Models\College;
+use App\Models\Department;
+use App\Models\Educationallevel;
 use App\Models\Instructor;
-use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Useraccess;
 use App\Services\InstructorService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class InstructorController extends Controller
 {
-
     protected $instructorService;
 
     public function __construct(InstructorService $instructorService)
@@ -17,6 +26,7 @@ class InstructorController extends Controller
         $this->instructorService = $instructorService;
         Helpers::setLoad(['jquery_instructor.js']);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,8 +35,10 @@ class InstructorController extends Controller
     public function index()
     {
         $instructors = Instructor::all();
-        $instructors->load('user');
-        
+        $instructors->load('user', 'collegeinfo', 'deptinfo');
+
+        //dd($instructors);
+
         return view('instructor.index', compact('instructors'));
     }
 
@@ -37,7 +49,11 @@ class InstructorController extends Controller
      */
     public function create()
     {
-        return view('instructor.create');
+        $departments = Department::all();
+        $colleges = College::all();
+        $educlevels = Educationallevel::all();
+
+        return view('instructor.create', compact('colleges', 'departments', 'educlevels'));
     }
 
     /**
@@ -46,9 +62,58 @@ class InstructorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreInstructorRequest $request)
     {
-        //
+        $alertCLass = 'alert-success';
+        $alertMessage = 'Instructor sucessfully added!';
+
+        try {
+            DB::beginTransaction();
+
+            //INSERT TO USERS TABLE
+            $user = User::create([
+                'idno' => $request->idno,
+                'password' => Hash::make('password'),
+                'utype' => 1,
+            ]);
+            //INSERT TO INSTRUCTOR TABLE
+            Instructor::firstOrCreate([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'middle_name' => $request->middle_name,
+                'name_suffix' => $request->name_suffix,
+            ], array_merge($request->validated(), ['user_id' => $user->id])
+            );
+            //INSERT INSTRUCTOR'S DEFAULT ACCESS
+            $instructorAccesses = [
+                ['access' => 'facultyloads/facultyload', 'title' => 'Faculty Load', 'category' => 'Faculty Menu'],
+                ['access' => 'classlist/facultyclasslist', 'title' => 'Faculty Class List', 'category' => 'Faculty Menu'],
+                ['access' => 'instructors/profile', 'title' => 'Faculty Profile', 'category' => 'Faculty Menu'],
+                ['access' => 'gradingsheets', 'title' => 'Grading Sheet', 'category' => 'Faculty Menu'],
+                ['access' => 'gradegenerator', 'title' => 'Grade Generator', 'category' => 'Faculty Menu'],
+            ];
+
+            // //LOOP THROUGH ALL USERACCESS AND ADD TO USERS_ACCESS TABLE
+            foreach ($instructorAccesses as $key => $access) {
+                $accesses[] = new Useraccess([
+                    'access' => $access['access'],
+                    'title' => $access['title'],
+                    'category' => $access['category'],
+                ]);
+            }
+            $user->access()->saveMany($accesses);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error(get_called_class(), [
+                //'createdBy' => $user->userLoggedinName(),
+                'body' => $request->all(),
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+            ]);
+        }
+
+        return back()->with(['alert-class' => $alertCLass, 'message' => $alertMessage]);
     }
 
     /**
@@ -70,7 +135,17 @@ class InstructorController extends Controller
      */
     public function edit(Instructor $instructor)
     {
-        //
+        try {
+            $instructor->load('user');
+
+            $departments = Department::all();
+            $colleges = College::all();
+            $educlevels = Educationallevel::all();
+
+            return view('instructor.edit', compact('instructor', 'departments', 'colleges', 'educlevels'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('instructorindex');
+        }
     }
 
     /**
@@ -80,9 +155,14 @@ class InstructorController extends Controller
      * @param  \App\Models\Instructor  $instructor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Instructor $instructor)
+    public function update(UpdateInstructorRequest $request, Instructor $instructor)
     {
-        //
+        $instructor->user->idno = $request->idno;
+        $instructor->user->save();
+
+        $instructor->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Instructor sucessfully updated!']);
     }
 
     /**

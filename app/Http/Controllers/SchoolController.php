@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\School;
 use App\Http\Requests\SchoolFormRequest;
 use App\Http\Requests\SchoolUpdateFormRequest;
+use App\Models\School;
 
 class SchoolController extends Controller
 {
-    
     public function index()
     {
-        $schools = School::all();
+        $schools = School::all()->sortBy('code');
         $schools->load('addedby');
 
         return view('school.index', compact('schools'));
@@ -28,13 +27,14 @@ class SchoolController extends Controller
 
         if ($insert->wasRecentlyCreated) {
             return back()->with(['alert-class' => 'alert-success', 'message' => 'School sucessfully added!']);
-        } 
-            return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, school already exists!'])->withInput();
+        }
+
+        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, school already exists!'])->withInput();
     }
 
     public function edit(School $school)
     {
-        return view('school.edit',  compact('school'));
+        return view('school.edit', compact('school'));
     }
 
     public function update(SchoolUpdateFormRequest $request, School $school)
@@ -51,6 +51,5 @@ class SchoolController extends Controller
 
     public function destroy(School $school)
     {
-
     }
 }

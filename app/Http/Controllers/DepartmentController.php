@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
 use App\Models\Department;
+use App\Models\Instructor;
 
 class DepartmentController extends Controller
 {
@@ -15,7 +16,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        $departments = Department::all()->sortBy('code');
+
+        return view('department.index', compact('departments'));
     }
 
     /**
@@ -25,7 +28,9 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        $instructors = Instructor::where('designation', 3)->get()->sortBy('lname');
+
+        return view('department.create', compact('instructors'));
     }
 
     /**
@@ -36,7 +41,13 @@ class DepartmentController extends Controller
      */
     public function store(StoreDepartmentRequest $request)
     {
-        //
+        $insert = Department::firstOrCreate(['code' => $request->code, 'name' => $request->name], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return back()->with(['alert-class' => 'alert-success', 'message' => 'Department sucessfully added!']);
+        }
+
+        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, department already exists!'])->withInput();
     }
 
     /**
@@ -58,7 +69,9 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        //
+        $instructors = Instructor::where('designation', 3)->get()->sortBy('lname');
+
+        return view('department.edit', compact('department', 'instructors'));
     }
 
     /**
@@ -70,7 +83,9 @@ class DepartmentController extends Controller
      */
     public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        //
+        $department->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Department sucessfully updated!']);
     }
 
     /**

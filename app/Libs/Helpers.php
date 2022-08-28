@@ -195,4 +195,48 @@ class Helpers
                 break;
         }
     }
+
+    public static function getDesignation($designation)
+    {
+        switch ($designation) {
+            case 1:
+                return 'Teacher';
+                break;
+            case 2:
+                return 'Program Head';
+                break;
+            case 3:
+                return 'Department Head';
+                break;
+            case 4:
+                return 'Dean';
+                break;
+            case 5:
+                return 'Professor';
+                break;
+            case 6:
+                return 'Others';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+
+    public static function romanic_number($integer, $upcase = true)
+    {
+        $table = ['M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1];
+        $return = '';
+        while ($integer > 0) {
+            foreach ($table as $rom => $arb) {
+                if ($integer >= $arb) {
+                    $integer -= $arb;
+                    $return .= $rom;
+                    break;
+                }
+            }
+        }
+
+        return $return;
+    }
 }

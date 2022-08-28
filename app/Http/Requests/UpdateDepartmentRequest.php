@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateDepartmentRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateDepartmentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,9 @@ class UpdateDepartmentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'code' => ['required',  Rule::unique('departments')->where(fn ($query) => $query->where('name', $this->name))->ignore($this->department->id)],
+            'name' => ['required',  Rule::unique('departments')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->department->id)],
+            'head' => [],
         ];
     }
 }

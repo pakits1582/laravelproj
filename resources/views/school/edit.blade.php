@@ -5,14 +5,13 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Edit School</h1>
-        <p class="mb-4">Update record in the database</p>
-
         <div class="container py-2">       
             <div class="row">
               <div class="col-lg-7 mx-auto">
                 <div class="bg-white rounded-lg shadow-sm p-5">
-          
+                  <h1 class="h3 mb-0 text-primary font-weight-bold">Update School</h1>
+                  <p class="mb-2">Update record in the database</p>
+                  <p class="font-italic text-info">Note: (*) Denotes field is required.</p>
                     <!-- credit card info-->
                     <div id="nav-tab-card" class="tab-pane fade show active">
                         @if(Session::has('message'))
@@ -22,21 +21,21 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                          <label for="username">School Code</label>
+                          <label for="code" class="m-0 font-weight-bold text-primary">* School Code</label>
                           <input type="text" name="code" placeholder="" class="form-control text-uppercase" value="{{ $school->code }}">
                         @error('code')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                         @enderror
                         </div>
                         <div class="form-group">
-                            <label for="username">School Name</label>
+                            <label for="name" class="m-0 font-weight-bold text-primary">* School Name</label>
                             <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ $school->name }}">
                         @error('name')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                         @enderror
                         </div>
                         <div class="form-group">
-                            <label for="username">School Address</label>
+                            <label for="address" class="m-0 font-weight-bold text-primary">School Address</label>
                             <input type="text" name="address" placeholder="" class="form-control text-uppercase" value="{{ $school->address }}">
                         @error('address')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>

@@ -19,9 +19,9 @@ return new class() extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name_prefix')->nullable();
             $table->string('last_name');
-            $table->string('ffirst_name');
-            $table->string('middle_name');
-            $table->string('name_suffix');
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('name_suffix')->nullable();
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                {{-- <h6 class="m-0 font-weight-bold text-primary">users Table</h6> --}}
+                {{-- <h6 class="m-0 font-weight-bold text-primary">instructor Table</h6> --}}
                 <a href="{{ route('addinstructor') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
@@ -27,59 +27,55 @@
                                 <th>#</th>
                                 <th>ID Number</th>
                                 <th>Name</th>
-                                <th>Designation</th>
+                                <th>College</th>
+                                <th>Educ Level</th>
                                 <th>Department</th>
+                                <th>Designation</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @if ($users)
-                                @unless (count($users) == 0)
-                                    @foreach ($users as $user)
+                            @if ($instructors)
+                                @unless (count($instructors) == 0)
+                                    @foreach ($instructors as $instructor)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $user->idno }}</td>
-                                            <td>{{ $user->info->name }}</td>
-                                            <td>{{ ($user->is_active == 1) ? 'Active' : 'Inactive'  }}</td>
+                                            <td>{{ $instructor->user->idno }}</td>
+                                            <td>{{ $instructor->fullname }}</td>
+                                            <td>{{ $instructor->collegeinfo->code }}</td>
+                                            <td>{{ $instructor->educlevel->level }}</td>
+                                            <td>{{ $instructor->deptcode  }}</td>
+                                            <td>{{ Helpers::getDesignation($instructor->designation) }}</td>
+                                            <td>{{ ($instructor->user->is_active == 1) ? 'Active' : 'Inactive'  }}</td>
                                             <td class="cente">
-                                                <a href="{{ route('edituser', ['user' => $user->id ]) }}" class="btn btn-primary btn-icon-split">
+                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-primary btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>
                                                     </span>
                                                 </a>
-                                                <a href="{{ route('edituser', ['user' => $user->id ]) }}" class="btn btn-success btn-icon-split">
+                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-success btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-power-off"></i>
                                                     </span>
                                                 </a>
-                                                <a href="{{ route('edituser', ['user' => $user->id ]) }}" class="btn btn-info btn-icon-split">
+                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-info btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-undo"></i>
                                                     </span>
                                                 </a>
-                                                <a href="{{ route('edituser', ['user' => $user->id ]) }}" class="btn btn-danger btn-icon-split">
+                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-danger btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </span>
                                                 </a>
-                                                <form method="POST" action="{{ route('deleteuser', ['user' => $user->id ]) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-danger btn-icon-split">
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </span>
-                                                        <span class="text">Delete</span>
-                                                    </button>
-                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
                                 @endunless
                             @else
                                 <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif --}}
+                            @endif
                         </tbody>
                     </table>
                 </div>

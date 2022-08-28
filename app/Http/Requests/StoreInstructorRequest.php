@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CollegeUpdateFormRequest extends FormRequest
+class StoreInstructorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +24,16 @@ class CollegeUpdateFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => ['required',  Rule::unique('colleges')->where(fn ($query) => $query->where('name', $this->name))->ignore($this->college->id)],
-            'name' => ['required',  Rule::unique('colleges')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->college->id)],
-            'dean' => '',
+            'idno' => 'required|unique:users|max:10',
+            'last_name' => 'required',
+            'first_name' => 'required',
+            'college' => 'required',
+            'educational_level' => 'required',
+            'designation' => 'required',
+            'middle_name' => 'required',
+            'name_suffix' => '',
+            'name_prefix' => '',
+            'department' => '',
         ];
     }
 }

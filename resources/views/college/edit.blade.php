@@ -41,7 +41,7 @@
                                 <option value="">- select college dean -</option>
                                 @if ($instructors)
                                     @foreach ($instructors as $instructor)
-                                        <option value="{{ $instructor->id }}">{{ $instructor->lname.', '.$instructor->fname }}</option>
+                                        <option value="{{ $instructor->id }}" {{ ($college->dean == $instructor->id) ? 'selected' : '' }}>{{ $instructor->last_name.', '.$instructor->first_name.' '.$instructor->middle_name }}</option>
                                     @endforeach
                                 @endif
                             </select>    

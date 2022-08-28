@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('_schools', function (Blueprint $table) {
-            //
+        Schema::table('instructors', function (Blueprint $table) {
+            $table->unsignedBigInteger('educational_level')->nullable()->after('designation');
+            $table->foreign('educational_level')->references('id')->on('educational_levels');
         });
     }
 
@@ -25,8 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('_schools', function (Blueprint $table) {
-            //
+        Schema::table('instructors', function (Blueprint $table) {
+            $table->dropForeign('educational_level');
         });
     }
 };

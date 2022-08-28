@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\College;
-use App\Models\Instructor;
-use Illuminate\Http\Request;
 use App\Http\Requests\CollegeFormRequest;
 use App\Http\Requests\CollegeUpdateFormRequest;
+use App\Models\College;
+use App\Models\Instructor;
 
 class CollegeController extends Controller
 {
@@ -46,9 +45,9 @@ class CollegeController extends Controller
 
         if ($insert->wasRecentlyCreated) {
             return back()->with(['alert-class' => 'alert-success', 'message' => 'College sucessfully added!']);
-        } 
-            return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, college already exists!'])->withInput();
-        
+        }
+
+        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, college already exists!'])->withInput();
     }
 
     /**
@@ -70,9 +69,9 @@ class CollegeController extends Controller
      */
     public function edit(College $college)
     {
-        $instructors = Instructor::all();
-        return view('college.edit',  compact('college', 'instructors'));
+        $instructors = Instructor::where('designation', 4)->get();
 
+        return view('college.edit', compact('college', 'instructors'));
     }
 
     /**
@@ -87,7 +86,6 @@ class CollegeController extends Controller
         $college->update($request->validated());
 
         return back()->with(['alert-class' => 'alert-success', 'message' => 'College sucessfully updated!']);
-    
     }
 
     /**

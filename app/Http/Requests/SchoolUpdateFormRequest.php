@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SchoolUpdateFormRequest extends FormRequest
 {
@@ -26,7 +26,8 @@ class SchoolUpdateFormRequest extends FormRequest
     {
         return [
             'code' => ['required',  Rule::unique('schools')->where(fn ($query) => $query->where('name', $this->name))->ignore($this->school->id)],
-            'name' => ['required',  Rule::unique('schools')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->school->id)]
+            'name' => ['required',  Rule::unique('schools')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->school->id)],
+            'address' => [],
         ];
     }
 }
