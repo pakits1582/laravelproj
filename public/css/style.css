@@ -1,0 +1,76 @@
+/**********************************
+*** MESSAGES MESSAGES MESSAGES ****
+**********************************/
+.successpop{
+	background:url(../images/check2.png) #2ecc71 no-repeat center center;
+	padding-top:100px;
+	background-size:75px 75px;	
+	z-index:1000;
+	width: 100%;
+}
+.errorpop{
+	background:url(../images/wrong2.png) #e74c3c no-repeat center center;
+	padding-top:100px;
+	background-size:75px 75px;
+	z-index:1000;
+	width: 100%;
+}
+.confirmationpop{
+	background:url(../images/help.png) #3498db no-repeat center center;
+	padding-top:100px;
+	background-size:75px 75px;
+	z-index:1000;
+	width: 100%;
+}
+.popups{
+	clear:both;
+	z-index:1000;
+	word-wrap:break-word;
+	background-color:#fff;
+	width:30%;
+	border-radius:3px 3px 0px 0px;	
+}
+.err{
+	border:1px solid #e74c3c;
+}
+.succ{
+	border:1px solid #2ecc71;
+}
+
+.ui_title_success{
+	margin:2%;
+	text-align:center;
+	color:#2ecc71;
+	font-size:18px;
+}
+.ui_title_error{
+	margin:2%;
+	text-align:center;
+	color:#e74c3c;
+	font-size:18px;
+}
+.ui_title_confirm{
+	margin:2%;
+	text-align:center;
+	color:#3498db;
+	font-size:18px;
+	font-weight:bold;
+}
+.message{
+	padding:0 2% 2% 2%;
+	text-align:center;
+	word-wrap:break-word;
+	font-weight:bold;
+	
+}
+
+.closebutton,.closebuttons{
+	margin:5px 5px 0 0;
+	display:block;
+	position:relative;
+	width:30px;
+	height:30px;
+	background:url(../images/close.png) no-repeat;
+	float:right;
+	cursor:pointer;
+}

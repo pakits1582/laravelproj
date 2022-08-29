@@ -41,22 +41,22 @@ class UpdateInstructorRequest extends FormRequest
                                                                                 ->where('first_name', $this->first_name)
                                                                                 ->where('middle_name', $this->middle_name)
                                                                                 ->where('name_suffix', $this->name_suffix)
-            )->ignore($this->instructor->id)],
+                                                                            )->ignore($this->instructor->id)],
             'first_name' => ['required',  Rule::unique('instructors')->where(fn ($query) => $query
-                ->where('last_name', $this->last_name)
-                ->where('middle_name', $this->middle_name)
-                ->where('name_suffix', $this->name_suffix)
-            )->ignore($this->instructor->id)],
+                                                                                ->where('last_name', $this->last_name)
+                                                                                ->where('middle_name', $this->middle_name)
+                                                                                ->where('name_suffix', $this->name_suffix)
+                                                                            )->ignore($this->instructor->id)],
             'middle_name' => [Rule::unique('instructors')->where(fn ($query) => $query
-                ->where('last_name', $this->last_name)
-                ->where('first_name', $this->first_name)
-                ->where('name_suffix', $this->name_suffix)
-            )->ignore($this->instructor->id)],
+                                                                                ->where('last_name', $this->last_name)
+                                                                                ->where('first_name', $this->first_name)
+                                                                                ->where('name_suffix', $this->name_suffix)
+                                                                            )->ignore($this->instructor->id)],
             'name_suffix' => [Rule::unique('instructors')->where(fn ($query) => $query
-                ->where('last_name', $this->last_name)
-                ->where('middle_name', $this->middle_name)
-                ->where('first_name', $this->first_name)
-            )->ignore($this->instructor->id)],
+                                                                                ->where('last_name', $this->last_name)
+                                                                                ->where('middle_name', $this->middle_name)
+                                                                                ->where('first_name', $this->first_name)
+                                                                            )->ignore($this->instructor->id)],
             'college' => 'required',
             'educational_level' => 'required',
             'designation' => 'required',

@@ -1,59 +1,109 @@
 //DOCUMENT READY
 $(function(){
-    var pickerOpts = { 
-        dateFormat: $.datepicker.ATOM,
-        changeYear: true,
-        changeMonth: true,
-        dateFormat:'mm-dd-yy'
-        };	
     
-        var pickerOpts3 = { 
-        dateFormat: $.datepicker.ATOM,
-        //minDate: new Date(),
-        maxDate: new Date(),
-        changeYear: true,
-        changeMonth: true
-        };	
-        
-        var pickerOpts2 = { 
-        dateFormat: $.datepicker.ATOM,
-        //minDate: new Date(),
-        changeYear: true,
-        changeMonth: true,
-        maxDate: new Date(),
-        dateFormat:'mm-dd-yy'
-        //maxDate: "-18y",
-        };	
-
     $('.datepicker').datepicker(pickerOpts);  
 
+/***********************************************
+*** FUNCTION CHANGE SCHOOL START DATE PICKER ***
+***********************************************/
     $(document).on("change","#term", function(e){
 		let val = $(this).val();
 		if(val == 'addterm'){
 			$("#term option:selected").prop('selected', false);
-            alert('xxxx');
-			// $.ajax({url: baseUrl+"/period/addsemester/",success: function(data){
-			// 		$("#ui_content").html(data).dialog({
-			// 			show: 'fade',
-			// 			width: 450,
-			// 			height: 'auto',
-			// 			resizable: false,	
-			// 			draggable: false,
-			// 			modal: true
-			// 		});//end of dialogbox
-			// 		$(".ui-dialog-titlebar").hide();
-			// 	}
-			// });	
+            $.ajax({url: "/periods/addterm",success: function(data){
+                    $('#ui_content').html(data);
+                    $("#modalll").modal('show');
+                }
+            });	
 	   }else{
-			if($('#year').val() != ""){
-				var idmask = $('#syear').val().slice(-2)+$(this).val();
-				$("#idmask").val(idmask);
-				$('.date_picker').val("");	
+            var year = $('#year').val();
+			if(year != ""){
+                var term_type = $("#term option:selected").attr('data-type');
+                var term_text = $("#term option:selected").text();
+                var periodyear = parseInt(year) + 1;
+                var periodname = (term_type == 1) ? term_text+', '+year+'-'+periodyear : term_text+' '+year;
+                $("#name").val(periodname);
+
 			}else{
 				$(this).prop("selectedIndex", 0);
 				showError('Please fill year first.');
 			}
 	   }
 		e.preventDefault();
-	});	
- });
+	});
+
+/***********************************************
+*** FUNCTION CHANGE SCHOOL START DATE PICKER ***
+***********************************************/
+    $(document).on("click", "#succeeding_year", function(){
+        var term = $("#term").val();
+        var term_type = $("#term option:selected").attr('data-type');
+        var term_text = $("#term option:selected").text();
+        var year = $('#year').val();
+        var periodyear = parseInt(year) + 1;
+        
+        if(year != "" && term != "" ){
+            var periodname = ($(this).prop('checked') && term_type == 1) ? term_text+' '+year : term_text+', '+year+'-'+periodyear;
+        
+            $("#name").val(periodname);
+        }else{
+            showError('Please select year and term first!');
+            $(this).prop('checked', false);
+        }
+    });	
+
+/***********************************************
+*** FUNCTION CHANGE SCHOOL START DATE PICKER ***
+***********************************************/
+    $(document).on("change", "#class_start", function(e){
+        var year = $("#year").val();
+        var term = $("#term").val();
+        var term_type = $("#term option:selected").attr('data-type');
+        var start = $(this).val();
+
+        if(year != "" && term != "" ){
+            var addedmonth = (term_type == 1) ? 5 : 2;
+            
+            $('#class_end, #class_ext').val(moment(start).add(addedmonth, 'M').format("YYYY-MM-DD"));
+            $('#enroll_start, #adddrop_start').val(moment(start).subtract(1, 'M').format("YYYY-MM-DD"));
+            $('#adddrop_start').val(start);
+            $('#enroll_end, #enroll_ext, #adddrop_end, #adddrop_ext').val(moment(start).add(1, 'M').format("YYYY-MM-DD"));
+        }else{
+            $('.datepicker').val("");
+            showError('Please select year and term first!');
+        }
+        e.preventDefault();
+    });
+/***********************************************
+*** FUNCTION CHANGE SCHOOL START DATE PICKER ***
+***********************************************/
+    $(document).on("submit",'#addterm_form', function(e) {
+        var postData = $(this).serializeArray();
+        var url = $(this).attr('data-action');
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: postData,
+            dataType: 'json',
+            success: function(data){
+                $('.alert').remove();
+
+                $("#addterm_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
+                if(data.success){
+                    $('#term option:last').before($("<option></option>").attr("value", data.term_id).attr("data-type", data.type).text(data.term));
+                }
+            },
+            error: function (data) {
+                //console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
+                }
+            }
+        });	
+         e.preventDefault();
+     });
+});

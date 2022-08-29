@@ -19,6 +19,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('sbadmin/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('sbadmin/css/jquery-ui.min.css') }}" rel="stylesheet">
     <link href="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -191,6 +192,11 @@
         </div>
     </div>
 
+    <div id="confirmation"></div>
+    <div id="ui_content"></div>
+    <div id="ui_content2"></div>
+    <div id="ui_content3"></div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('sbadmin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('sbadmin/js/jquery-ui.min.js') }}"></script>
@@ -200,7 +206,7 @@
     <script src="{{ asset('sbadmin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script>
+    {{-- <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script> --}}
 
     <!-- Page level plugins -->
     <script src="{{ asset('sbadmin/vendor/datatables/jquery.dataTables.min.js') }}"></script>
@@ -208,7 +214,8 @@
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('sbadmin/js/demo/datatables-demo.js') }}"></script>
-
+    <script src="{{ asset('js/common.js') }}"></script>
+    <script src="{{ asset('js/moment.js') }}"></script>
     @php
         
    

@@ -43,7 +43,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $period->code }}</td>
                                             <td>{{ $period->name }}</td>
-                                            <td>{{ $period->term }}</td>
+                                            <td>{{ $period->terminfo->term }}</td>
                                             <td>{{ $period->year }}</td>
                                             <td>{{ $period->enroll_start  }}</td>
                                             <td>{{ $period->adddrop_start  }}</td>

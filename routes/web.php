@@ -80,6 +80,8 @@ Route::controller(PeriodController::class)->group(function () {
     Route::get('/periods/{period}/edit', 'edit')->name('editperiod');
     Route::put('/periods/{period}', 'update')->name('updateperiod');
     Route::delete('/periods/{period}', 'destroy')->name('deleteperiod');
+    Route::view('/periods/addterm', 'period.addterm');
+    Route::post('/periods/saveterm', 'storeterm')->name('saveterm');
 });
 
 Route::get('/home', function () {

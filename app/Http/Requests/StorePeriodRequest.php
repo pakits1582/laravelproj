@@ -13,7 +13,7 @@ class StorePeriodRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,22 @@ class StorePeriodRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'code' => ['required'],
+            'year' => ['required'],
+            'term' => ['required'],
+            'name' => ['required'],
+            'class_start' => ['required', 'date'],
+            'class_end' => ['required', 'date'],
+            'class_ext' => ['required', 'date'],
+            'enroll_start' => ['required', 'date'],
+            'enroll_end' => ['required', 'date'],
+            'enroll_ext' => ['required', 'date'],
+            'adddrop_start' => ['required', 'date'],
+            'adddrop_end' => ['required', 'date'],
+            'adddrop_ext' => ['required', 'date'],
+            'idmask' => ['required'],
+            'source' => ['required'],
+            'display' => ['required'],
         ];
     }
 }

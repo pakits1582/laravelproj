@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePeriodRequest;
 use App\Models\Term;
 use App\Libs\Helpers;
 use App\Models\Period;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTermRequest;
+use App\Http\Requests\UpdatePeriodRequest;
 
 class PeriodController extends Controller
 {
@@ -45,9 +48,18 @@ class PeriodController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePeriodRequest $request)
     {
-        //
+        $lastprioritylvl = Period::where('year', $request->validated('year'))->max('priority_lvl');
+        $prioritylvl = ($lastprioritylvl) ? $lastprioritylvl+1 : 1;
+
+        $insert = Period::firstOrCreate(['code' => $request->code, 'term' => $request->term, 'year' => $request->year], array_merge($request->validated(), ['priority_lvl' => $prioritylvl]));
+
+        if ($insert->wasRecentlyCreated) {
+            return back()->with(['alert-class' => 'alert-success', 'message' => 'Period sucessfully added!']);
+        }
+
+        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, period already exists!'])->withInput();
     }
 
     /**
@@ -69,7 +81,9 @@ class PeriodController extends Controller
      */
     public function edit(Period $period)
     {
-        //
+        $terms = Term::all();
+
+        return view('period.edit', compact('period', 'terms'));
     }
 
     /**
@@ -79,9 +93,11 @@ class PeriodController extends Controller
      * @param  \App\Models\Period  $period
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Period $period)
+    public function update(UpdatePeriodRequest $request, Period $period)
     {
-        //
+        $period->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Period sucessfully updated!']);
     }
 
     /**
@@ -93,5 +109,25 @@ class PeriodController extends Controller
     public function destroy(Period $period)
     {
         //
+    }
+
+    public function storeterm(StoreTermRequest $request)
+    {
+        $insert = Term::firstOrCreate(['term' => $request->term, 'type' => $request->type], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return response()->json([
+                'success' => true, 
+                'message' => 'Term successfully added!', 
+                'alert' => 'alert-success',
+                'term_id' => $insert->id,
+                'term' => $request->validated('term'),
+                'type' => $request->validated('type')
+            ], 200);
+        }
+
+        return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, term already exists!']);
+
+        
     }
 }
