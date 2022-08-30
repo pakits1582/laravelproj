@@ -43,6 +43,7 @@
                 User Menu
             </div>
             @php
+                if(isset($user)){
                 $userAccesses = Helpers::userAccessCategories($user->access->toArray());
                 foreach ($userAccesses as $access){
             @endphp
@@ -68,7 +69,7 @@
                 </li>
             @php
                 }
-                
+            }
             @endphp
              
             {{-- <li class="nav-item">
@@ -115,7 +116,11 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $user->info->name }}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    @isset($variable)
+                                        {{ $user->info->name }}
+                                    @endisset
+                                </span>
                                 <img class="img-profile rounded-circle"
                                     src="{{ asset('sbadmin/img/undraw_profile.svg') }}">
                             </a>

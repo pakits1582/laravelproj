@@ -17,7 +17,7 @@ return new class() extends Migration
             $table->id();
             $table->string('idno');
             $table->string('password');
-            $table->smallInteger('utype')->nullable();
+            $table->smallInteger('utype')->default(0);
             $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
