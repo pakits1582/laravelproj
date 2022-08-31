@@ -21,21 +21,21 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                          <label for="code" class="m-0 font-weight-bold text-primary">* Department Code</label>
+                          <label for="code" class="m-0 font-weight-bold text-primary">* Code</label>
                           <input type="text" name="code" placeholder="" class="form-control text-uppercase" value="{{ $department->code }}">
                         @error('code')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                         @enderror
                         </div>
                         <div class="form-group">
-                            <label for="name" class="m-0 font-weight-bold text-primary">* Department Name</label>
+                            <label for="name" class="m-0 font-weight-bold text-primary">* Name</label>
                             <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ $department->name }}">
                         @error('name')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                         @enderror
                         </div>
                         <div class="form-group">
-                          <label for="username" class="m-0 font-weight-bold text-primary">Department Head</label>
+                          <label for="username" class="m-0 font-weight-bold text-primary">Head</label>
                           <select name="head" class="form-control">
                               <option value="">- select department head -</option>
                               @if ($instructors)

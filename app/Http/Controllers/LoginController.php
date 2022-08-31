@@ -1,35 +1,50 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use App\Http\Requests\LoginFormRequest;
-use App\Services\LoginService;
-
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 class LoginController extends Controller
 {
-    protected $log;
-
-    public function __construct(LoginService $login)
+    public function index()
     {
-        $this->log = $login;
+        if(Auth::check()){
+            return redirect("/home");
+        }
+
+        return view('auth.index');
+    }  
+      
+    public function login(Request $request)
+    {
+        $request->validate([
+            'idno' => 'required',
+            'password' => 'required',
+        ]);
+   
+        $credentials = $request->only('idno', 'password');
+        if (Auth::attempt($credentials+['is_active' => 1])) {
+            // The user is active, not suspended, and exists.
+            return redirect()->intended('home');
+        }
+  
+        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Sorry we didn\'t recognized your login details. Please check idno and password and try again!'])->withInput();
     }
-
-    public function login(LoginFormRequest $request)
+      
+    public function home()
     {
-        return $this->log->LoginUser($request);
+        if(Auth::check()){
+            return view('home');
+        }
+  
+        return redirect("/");
     }
-
-    public function logout()
-    {
-        return $this->log->LogoutUser();
-    }
-
-    public function changepassword()
-    {
-        return view('auth.changepassword');
-    }
-
-    public function savechangepassword()
-    {
+    
+    public function logout() {
+        Session::flush();
+        Auth::logout();
+  
+        return redirect("/");
     }
 }

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Program extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['code', 'name', 'educational_level', 'college', 'head', 'years', 'source', 'active'];
 }

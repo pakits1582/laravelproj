@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="educational_level" class="m-0 font-weight-bold text-primary">* Educational Level</label>
+                                        <label for="educational_level" class="m-0 font-weight-bold text-primary">* Level</label>
                                         <select name="educational_level" class="form-control">
                                             <option value="">- select educational level -</option>
                                             @if ($educlevels)

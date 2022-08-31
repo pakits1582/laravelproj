@@ -48,6 +48,7 @@ class UserController extends Controller
             $user = User::create([
                 'idno' => $request->idno,
                 'password' => Hash::make('password'),
+                'utype' => 0
             ]);
 
             $info = new Userinfo(['name' => $request->name]);

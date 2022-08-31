@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProgramRequest;
+use App\Models\College;
 use App\Models\Program;
+use App\Models\Instructor;
 use Illuminate\Http\Request;
+use App\Models\Educationallevel;
 
 class ProgramController extends Controller
 {
@@ -14,7 +18,9 @@ class ProgramController extends Controller
      */
     public function index()
     {
-        //
+        $programs = Program::all();
+
+        return view('program.index', compact('programs'));
     }
 
     /**
@@ -24,7 +30,11 @@ class ProgramController extends Controller
      */
     public function create()
     {
-        //
+        $educlevels = Educationallevel::all();
+        $colleges = College::all();
+        $heads = Instructor::where('designation', 2)->get()->sortBy('lname');
+        
+        return view('program.create', compact('educlevels', 'colleges', 'heads'));
     }
 
     /**
@@ -33,9 +43,15 @@ class ProgramController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProgramRequest $request)
     {
-        //
+        $insert = Program::firstOrCreate(['code' => $request->code, 'name' => $request->name], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return back()->with(['alert-class' => 'alert-success', 'message' => 'Program sucessfully added!']);
+        }
+
+        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, program already exists!'])->withInput();
     }
 
     /**
