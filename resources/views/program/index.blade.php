@@ -30,6 +30,7 @@
                                 <th>Years</th>
                                 <th>Level</th>
                                 <th>College</th>
+                                <th>Head</th>
                                 <th>Active</th>
                                 <th>Action</th>
                             </tr>
@@ -53,8 +54,9 @@
                                             <td>{{ $program->code }}</td>
                                             <td>{{ $program->name }}</td>
                                             <td>{{ $program->years }}</td>
-                                            <td>{{ $program->level }}</td>
-                                            <td>{{ $program->college }}</td>
+                                            <td>{{ $program->level->level }}</td>
+                                            <td>{{ $program->collegeinfo->code }}</td>
+                                            <td>{{ $program->headName }}</td>
                                             <td>{{ $program->active }}</td>
                                             <td class="">
                                                 <a href="{{ route('programs.edit', ['program' => $program->id ]) }}" class="btn btn-primary btn-icon-split">
