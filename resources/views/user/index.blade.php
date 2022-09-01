@@ -1,5 +1,5 @@
 @extends('layout')
-
+@section('title') {{ 'Users List' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">

@@ -17,8 +17,8 @@ return new class() extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('access', 150);
-            $table->string('title', 150);
+            $table->string('access', 150)->index();
+            $table->string('title', 150)->index();
             $table->string('category', 100);
             $table->boolean('read_only')->default(1);
             $table->boolean('write_only')->default(1);

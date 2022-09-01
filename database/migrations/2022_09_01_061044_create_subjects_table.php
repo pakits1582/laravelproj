@@ -13,19 +13,26 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('programs', function (Blueprint $table) {
+        Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('code')->index();
             $table->string('name')->index();
+            $table->float('units')->nullable();
+            $table->float('tfunits')->nullable();
+            $table->float('loadunits')->nullable();
+            $table->float('lecunits')->nullable();
+            $table->float('labunits')->nullable();
+            $table->float('hours')->nullable();
             $table->unsignedBigInteger('educational_level')->nullable();
             $table->foreign('educational_level')->references('id')->on('educational_levels');
             $table->unsignedBigInteger('college')->nullable();
             $table->foreign('college')->references('id')->on('colleges');
-            $table->unsignedBigInteger('head')->nullable();
-            $table->foreign('head')->references('id')->on('instructors');
-            $table->integer('years')->default(0);
-            $table->tinyInteger('source')->default(1);
-            $table->boolean('active')->default(0);
+            $table->boolean('professional')->default(0);
+            $table->boolean('laboratory')->default(0);
+            $table->boolean('gwa')->default(0);
+            $table->boolean('nograde')->default(0);
+            $table->boolean('notuition')->default(0);
+            $table->boolean('exclusive')->default(0);
             $table->timestamps();
         });
     }
@@ -37,6 +44,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('programs');
+        Schema::dropIfExists('subjects');
     }
 };

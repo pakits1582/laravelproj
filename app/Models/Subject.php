@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Subject extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['code', 'name', 'units', 'tfunits', 'loadunits', 'lecunits', 'labunits', 'hours', 'educational_level', 'college', 'professional', 'laboratory', 'gwa', 'nograde', 'notuition', 'exclusive'];
+
+    public function code(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['code']),
+            set: fn ($value) => strtoupper($value)
+        );
+    }
+
+    public function name(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['name']),
+            set: fn ($value) => strtoupper($value)
+        );
+    }
+
+    public function collegeinfo()
+    {
+        return $this->belongsTo(College::class, 'college', 'id');
+    }
+
+    public function educlevel()
+    {
+        return $this->belongsTo(Educationallevel::class, 'educational_level', 'id');
+    }
+
+    // public function deptcode(): Attribute
+    // {
+    //     return new Attribute(
+    //         get: fn ($value, $attributes) => (is_null($this->deptinfo)) ? '' : $this->deptinfo->code,
+    //         //set: fn($value) => strtoupper($value)
+    //     );
+    // }
+}

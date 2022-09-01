@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProgramRequest;
+use App\Http\Requests\UpdateProgramRequest;
 use App\Models\College;
 use App\Models\Program;
 use App\Models\Instructor;
@@ -87,9 +88,11 @@ class ProgramController extends Controller
      * @param  \App\Models\Program  $program
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Program $program)
+    public function update(UpdateProgramRequest $request, Program $program)
     {
-        //
+        $program->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Program sucessfully updated!']);
     }
 
     /**

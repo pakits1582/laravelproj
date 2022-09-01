@@ -13,6 +13,22 @@ class Program extends Model
     protected $fillable = ['code', 'name', 'educational_level', 'college', 'head', 'years', 'source', 'active'];
 
 
+    public function code(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['code']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
+
+    public function name(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['name']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
+
     public function level()
     {
         return $this->belongsTo(Educationallevel::class, 'educational_level', 'id');

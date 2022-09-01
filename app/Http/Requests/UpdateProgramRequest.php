@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProgramRequest extends FormRequest
+class UpdateProgramRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +25,8 @@ class StoreProgramRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required',
-            'name' => 'required',
+            'code' => ['required',  Rule::unique('programs')->where(fn ($query) => $query->where('name', $this->name))->ignore($this->program->id)],
+            'name' => ['required',  Rule::unique('programs')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->program->id)],
             'years' => 'required|integer',
             'educational_level' => 'required',
             'college' => 'required',

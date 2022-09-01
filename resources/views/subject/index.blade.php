@@ -1,35 +1,42 @@
 @extends('layout')
-@section('title') {{ 'Schools List' }} @endsection
+@section('title') {{ 'Subjects List' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Schools</h1>
-        <p class="mb-4">List of all schools in the database</p>
+        <h1 class="h3 mb-2 text-gray-800">Subjects</h1>
+        <p class="mb-4">List of all subjects in the database</p>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                {{-- <h6 class="m-0 font-weight-bold text-primary">Schools Table</h6> --}}
-                <a href="{{ route('addschool') }}" class="btn btn-primary btn-icon-split">
+                {{-- <h6 class="m-0 font-weight-bold text-primary">Subjects Table</h6> --}}
+                <a href="{{ route('subjects.create') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add new school</span>
+                    <span class="text">Add new subject</span>
                 </a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="schoolTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="sectionTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th>Units</th>
+                                <th>Tuition</th>
+                                <th>Load</th>
+                                <th>Lec</th>
+                                <th>Lab</th>
+                                <th>Hours</th>
+                                <th>isProf</th>
+                                <th>isLab</th>
+                                <th>College</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         {{-- <tfoot>
@@ -43,33 +50,29 @@
                             </tr>
                         </tfoot> --}}
                         <tbody>
-                            @if ($schools)
-                                @unless (count($schools) == 0)
-                                    @foreach ($schools as $school)
+                            @if ($subjects)
+                                @unless (count($subjects) == 0)
+                                    @foreach ($subjects as $subject)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $school->code }}</td>
-                                            <td>{{ $school->name }}</td>
-                                            <td>{{ $school->address }}</td>
+                                            <td>{{ $subject->code }}</td>
+                                            <td>{{ $subject->name }}</td>
+                                            <td>{{ $subject->units }}</td>
+                                            <td>{{ $subject->tfunits }}</td>
+                                            <td>{{ $subject->loadunits }}</td>
+                                            <td>{{ $subject->lecunits }}</td>
+                                            <td>{{ $subject->labunits }}</td>
+                                            <td>{{ $subject->hours }}</td>
+                                            <td>{{ ($subject->professional == 1) ? 'YES' : 'NO' }}</td>
+                                            <td>{{ ($subject->laboratory == 1) ? 'YES' : 'NO' }}</td>
+                                            <td>{{ $subject->collegeinfo->code }}</td>
                                             <td class="">
-                                                <a href="{{ route('editschool', ['school' => $school->id ]) }}" class="btn btn-primary btn-icon-split">
+                                                <a href="{{ route('subjects.edit', ['subject' => $subject->id ]) }}" class="btn btn-primary btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>
                                                     </span>
                                                     <span class="text">Edit</span>
                                                 </a>
-                                            </td>
-                                            <td>
-                                                <form method="POST" action="{{ route('deleteschool', ['school' => $school->id ]) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-danger btn-icon-split">
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </span>
-                                                        <span class="text">Delete</span>
-                                                    </button>
-                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

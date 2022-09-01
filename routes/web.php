@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\LoginController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\InstructorController;
 
@@ -92,6 +95,21 @@ Route::controller(PeriodController::class)->middleware(['auth', 'inaccess:period
 Route::resource('programs', ProgramController::class)->middleware(['auth', 'inaccess:programs'])
         ->missing(function (Request $request) {
             return Redirect::route('programs.index');
+        });
+
+Route::resource('rooms', RoomController::class)->middleware(['auth', 'inaccess:rooms'])
+        ->missing(function (Request $request) {
+            return Redirect::route('rooms.index');
+        });
+
+Route::resource('sections', SectionController::class)->middleware(['auth', 'inaccess:sections'])
+        ->missing(function (Request $request) {
+            return Redirect::route('sections.index');
+        });
+
+Route::resource('subjects', SubjectController::class)->middleware(['auth', 'inaccess:subjects'])
+        ->missing(function (Request $request) {
+            return Redirect::route('subjects.index');
         });
 
 Route::get('/home', [LoginController::class, 'home'])->name('home');

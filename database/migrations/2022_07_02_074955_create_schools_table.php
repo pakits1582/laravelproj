@@ -15,8 +15,8 @@ return new class() extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 20);
-            $table->string('name');
+            $table->string('code', 20)->index();
+            $table->string('name')->index();
             $table->string('address');
             $table->smallInteger('added_by')->nullable();
             $table->timestamps();

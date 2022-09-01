@@ -23,6 +23,46 @@ class Instructor extends Model
         'department',
     ];
 
+    public function namePrefix(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['name_prefix']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
+
+    public function firstName(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['first_name']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
+
+    public function middleName(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['middle_name']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
+
+    public function lastName(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['last_name']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
+
+    public function nameSuffix(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['name_suffix']),
+            set: fn($value) => strtoupper($value)
+        );
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

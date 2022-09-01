@@ -18,8 +18,8 @@ return new class() extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name_prefix')->nullable();
-            $table->string('last_name');
-            $table->string('first_name');
+            $table->string('last_name')->index();
+            $table->string('first_name')->index();
             $table->string('middle_name')->nullable();
             $table->string('name_suffix')->nullable();
             $table->timestamps();

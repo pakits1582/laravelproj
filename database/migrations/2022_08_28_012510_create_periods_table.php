@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('periods', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->string('name');
+            $table->string('code')->index();
+            $table->string('name')->index();
             $table->unsignedBigInteger('term')->nullable();
             $table->foreign('term')->references('id')->on('terms');
-            $table->tinyInteger('year');
+            $table->tinyInteger('year')->index();
             $table->date('class_start')->nullable();
             $table->date('class_end')->nullable();
             $table->date('class_ext')->nullable();

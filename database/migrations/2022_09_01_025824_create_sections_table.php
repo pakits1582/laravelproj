@@ -13,10 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('terms', function (Blueprint $table) {
+        Schema::create('sections', function (Blueprint $table) {
             $table->id();
-            $table->string('term')->index();
-            $table->tinyInteger('type')->index();
+            $table->string('code')->index();
+            $table->string('name')->index();
+            $table->unsignedBigInteger('program')->nullable();
+            $table->foreign('program')->references('id')->on('programs');
+            $table->integer('year')->default(0);
+            $table->integer('minenrollee')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('terms');
+        Schema::dropIfExists('sections');
     }
 };
