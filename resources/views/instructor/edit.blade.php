@@ -90,14 +90,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="college" class="m-0 font-weight-bold text-primary">* College</label>
-                                        <select name="college" class="form-control">
-                                            <option value="">- select college -</option>
-                                            @if ($colleges)
-                                                @foreach ($colleges as $college)
-                                                    <option value="{{ $college->id }}" {{ ($instructor->college == $college->id) ? 'selected' : '' }}>{{ $college->code }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
+                                        @include('partials.colleges.dropdown', ['value' => $instructor->college])
                                         @error('college')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                                         @enderror
@@ -106,14 +99,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="educational_level" class="m-0 font-weight-bold text-primary">* Educational Level</label>
-                                        <select name="educational_level" class="form-control">
-                                            <option value="">- select educational level -</option>
-                                            @if ($educlevels)
-                                                @foreach ($educlevels as $educlevel)
-                                                    <option value="{{ $educlevel->id }}" {{ ($instructor->educational_level == $educlevel->id) ? 'selected' : '' }}>{{ $educlevel->level }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
+                                        @include('partials.educlevels.dropdown', ['value' => $instructor->educational_level])
                                         @error('educational_level')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                                         @enderror
@@ -122,14 +108,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="department" class="m-0 font-weight-bold text-primary">Department</label>
-                                        <select name="department" class="form-control">
-                                            <option value="">- select department -</option>
-                                            @if ($departments)
-                                                @foreach ($departments as $department)
-                                                    <option value="{{ $department->id }}" {{ ($instructor->department == $department->id) ? 'selected' : '' }}>{{ $department->code }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
+                                        @include('partials.departments.dropdown', ['value' => $instructor->department])
                                         @error('department')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                                         @enderror

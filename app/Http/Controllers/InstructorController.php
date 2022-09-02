@@ -49,11 +49,7 @@ class InstructorController extends Controller
      */
     public function create()
     {
-        $departments = Department::all();
-        $colleges = College::all();
-        $educlevels = Educationallevel::all();
-
-        return view('instructor.create', compact('colleges', 'departments', 'educlevels'));
+        return view('instructor.create');
     }
 
     /**
@@ -138,11 +134,7 @@ class InstructorController extends Controller
         try {
             $instructor->load('user');
 
-            $departments = Department::all();
-            $colleges = College::all();
-            $educlevels = Educationallevel::all();
-
-            return view('instructor.edit', compact('instructor', 'departments', 'colleges', 'educlevels'));
+            return view('instructor.edit', compact('instructor'));
         } catch (ModelNotFoundException $e) {
             return redirect()->route('instructorindex');
         }

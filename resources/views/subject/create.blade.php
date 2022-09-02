@@ -96,14 +96,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="educational_level" class="m-0 font-weight-bold text-primary">* Level</label>
-                                            <select name="educational_level" class="form-control">
-                                                <option value="">- select educational level -</option>
-                                                @if ($educlevels)
-                                                    @foreach ($educlevels as $educlevel)
-                                                        <option value="{{ $educlevel->id }}" {{ (old('educational_level') == $educlevel->id) ? 'selected' : '' }}>{{ $educlevel->level }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                            @include('partials.educlevels.dropdown')
                                             @error('educational_level')
                                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                                             @enderror
@@ -112,14 +105,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="college" class="m-0 font-weight-bold text-primary">College</label>
-                                            <select name="college" class="form-control">
-                                                <option value="">- select college -</option>
-                                                @if ($colleges)
-                                                    @foreach ($colleges as $college)
-                                                        <option value="{{ $college->id }}" {{ (old('college') == $college->id) ? 'selected' : '' }}>{{ $college->code }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                            @include('partials.colleges.dropdown')
                                             @error('college')
                                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                                             @enderror

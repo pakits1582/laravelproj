@@ -36,17 +36,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="program" class="m-0 font-weight-bold text-primary">* Program</label>
-                                <select name="program" class="form-control">
-                                    <option value="">- select program -</option>
-                                    @if ($programs)
-                                        @foreach ($programs as $program)
-                                            <option value="{{ $program->id }}" {{ (old('program') == $program->id) ? 'selected' : (($program->id == $section->program) ? 'selected' : '')  }}>{{ $program->code }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            @error('program')
-                                <p class="text-danger text-xs mt-1">{{$message}}</p>
-                            @enderror
+                                @include('partials.programs.dropdown',['value' => $section->program])
+                                @error('program')
+                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="year" class="m-0 font-weight-bold text-primary">* Year</label>

@@ -29,10 +29,7 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        $colleges = College::all();
-        $educlevels = Educationallevel::all();
-
-        return view('subject.create', compact('colleges', 'educlevels'));
+        return view('subject.create');
     }
 
     /**

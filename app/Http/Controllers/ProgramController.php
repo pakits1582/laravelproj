@@ -31,11 +31,9 @@ class ProgramController extends Controller
      */
     public function create()
     {
-        $educlevels = Educationallevel::all();
-        $colleges = College::all();
         $heads = Instructor::where('designation', 2)->get()->sortBy('lname');
         
-        return view('program.create', compact('educlevels', 'colleges', 'heads'));
+        return view('program.create', compact('heads'));
     }
 
     /**
@@ -74,11 +72,9 @@ class ProgramController extends Controller
      */
     public function edit(Program $program)
     {
-        $educlevels = Educationallevel::all();
-        $colleges = College::all();
         $heads = Instructor::where('designation', 2)->get()->sortBy('lname');
         
-        return view('program.edit', compact('program', 'educlevels', 'colleges', 'heads'));
+        return view('program.edit', compact('program', 'heads'));
     }
 
     /**

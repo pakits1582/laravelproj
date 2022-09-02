@@ -11,7 +11,7 @@ class LoginController extends Controller
 {
     protected function redirectTo()
     {
-        return '/home';
+        return redirect("/home");
     }
 
     public function index()

@@ -29,9 +29,7 @@ class SectionController extends Controller
      */
     public function create()
     {
-        $programs = Program::where('active', 1)->orderBy('code')->get();
-
-        return view('section.create', compact('programs'));
+        return view('section.create');
     }
 
     /**
@@ -70,9 +68,7 @@ class SectionController extends Controller
      */
     public function edit(Section $section)
     {
-        $programs = Program::where('active', 1)->orderBy('code')->get();
-
-        return view('section.edit', compact('programs', 'section'));
+        return view('section.edit', compact('section'));
     }
 
     /**
