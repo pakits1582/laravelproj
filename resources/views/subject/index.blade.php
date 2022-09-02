@@ -35,7 +35,7 @@
                                 <th>Hours</th>
                                 <th>isProf</th>
                                 <th>isLab</th>
-                                <th>College</th>
+                                <th>Level</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -65,7 +65,7 @@
                                             <td>{{ $subject->hours }}</td>
                                             <td>{{ ($subject->professional == 1) ? 'YES' : 'NO' }}</td>
                                             <td>{{ ($subject->laboratory == 1) ? 'YES' : 'NO' }}</td>
-                                            <td>{{ $subject->collegeinfo->code }}</td>
+                                            <td>{{ $subject->educlevel->code }}</td>
                                             <td class="">
                                                 <a href="{{ route('subjects.edit', ['subject' => $subject->id ]) }}" class="btn btn-primary btn-icon-split">
                                                     <span class="icon text-white-50">

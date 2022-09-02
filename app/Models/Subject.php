@@ -38,11 +38,11 @@ class Subject extends Model
         return $this->belongsTo(Educationallevel::class, 'educational_level', 'id');
     }
 
-    // public function deptcode(): Attribute
-    // {
-    //     return new Attribute(
-    //         get: fn ($value, $attributes) => (is_null($this->deptinfo)) ? '' : $this->deptinfo->code,
-    //         //set: fn($value) => strtoupper($value)
-    //     );
-    // }
+    public function collegecode(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => (is_null($this->collegeinfo)) ? '' : $this->collegeinfo->code,
+            //set: fn($value) => strtoupper($value)
+        );
+    }
 }

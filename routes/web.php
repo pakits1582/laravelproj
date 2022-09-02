@@ -2,18 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RoomController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\PeriodController;
-use App\Http\Controllers\SchoolController;
-use App\Http\Controllers\CollegeController;
-use App\Http\Controllers\ProgramController;
-use App\Http\Controllers\SectionController;
-use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\InstructorController;
+
+use App\Http\Controllers\{
+    LoginController,
+    PeriodController,
+    SchoolController,
+    CollegeController,
+    ProgramController,
+    SectionController,
+    SubjectController,
+    DepartmentController,
+    InstructorController,
+    RoomController,
+    UserController
+};
 
 /*
 |--------------------------------------------------------------------------

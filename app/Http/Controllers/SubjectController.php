@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSubjectRequest;
+use App\Http\Requests\UpdateSubjectRequest;
 use App\Models\College;
 use App\Models\Educationallevel;
 use App\Models\Subject;
@@ -68,7 +69,7 @@ class SubjectController extends Controller
      */
     public function edit(Subject $subject)
     {
-        //
+        return view('subject.edit', compact('subject'));
     }
 
     /**
@@ -78,9 +79,11 @@ class SubjectController extends Controller
      * @param  \App\Models\Subject  $subject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Subject $subject)
+    public function update(UpdateSubjectRequest $request, Subject $subject)
     {
-        //
+        $subject->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Subject sucessfully updated!']);
     }
 
     /**

@@ -48,26 +48,18 @@
                                             <td>{{ $instructor->deptcode  }}</td>
                                             <td>{{ Helpers::getDesignation($instructor->designation) }}</td>
                                             <td>{{ ($instructor->user->is_active == 1) ? 'Active' : 'Inactive'  }}</td>
-                                            <td class="cente">
-                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-primary btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
+                                            <td class="center">
+                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-primary btn-circle btn-sm" title="Edit">
+                                                    <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-success btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-power-off"></i>
-                                                    </span>
+                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-success btn-circle btn-sm" title="Activate">
+                                                    <i class="fas fa-power-off"></i>
                                                 </a>
-                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-info btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-undo"></i>
-                                                    </span>
+                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-info btn-circle btn-sm" title="Reset Password">
+                                                    <i class="fas fa-undo"></i>
                                                 </a>
-                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-danger btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </span>
+                                                <a href="{{ route('editinstructor', ['instructor' => $instructor->id ]) }}" class="btn btn-danger btn-circle btn-sm" title="Deactivate">
+                                                    <i class="fas fa-trash"></i>
                                                 </a>
                                             </td>
                                         </tr>
