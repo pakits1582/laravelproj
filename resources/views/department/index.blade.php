@@ -12,7 +12,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 {{-- <h6 class="m-0 font-weight-bold text-primary">departments Table</h6> --}}
-                <a href="{{ route('adddepartment') }}" class="btn btn-primary btn-icon-split">
+                <a href="{{ route('departments.create') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
@@ -28,8 +28,7 @@
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Head</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         {{-- <tfoot>
@@ -52,24 +51,12 @@
                                             <td>{{ $department->name }}</td>
                                             <td>{{ $department->headName }}</td>
                                             <td class="">
-                                                <a href="{{ route('editdepartment', ['department' => $department->id ]) }}" class="btn btn-primary btn-icon-split">
+                                                <a href="{{ route('departments.edit', ['department' => $department->id ]) }}" class="btn btn-primary btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>
                                                     </span>
                                                     <span class="text">Edit</span>
                                                 </a>
-                                            </td>
-                                            <td>
-                                                <form method="POST" action="{{ route('deletedepartment', ['department' => $department->id ]) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-danger btn-icon-split">
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </span>
-                                                        <span class="text">Delete</span>
-                                                    </button>
-                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -20,7 +20,7 @@
                         @if(Session::has('message'))
                             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                         @endif
-                      <form method="POST" action="{{ route('saveschool') }}"  role="form">
+                      <form method="POST" action="{{ route('schools.store') }}"  role="form">
                         @csrf
                         <div class="form-group">
                           <label for="username" class="m-0 font-weight-bold text-primary">* School Code</label>

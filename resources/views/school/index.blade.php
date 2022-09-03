@@ -12,7 +12,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 {{-- <h6 class="m-0 font-weight-bold text-primary">Schools Table</h6> --}}
-                <a href="{{ route('addschool') }}" class="btn btn-primary btn-icon-split">
+                <a href="{{ route('schools.create') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
@@ -28,8 +28,8 @@
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th>Actions</th>
+                                {{-- <th>Delete</th> --}}
                             </tr>
                         </thead>
                         {{-- <tfoot>
@@ -52,14 +52,14 @@
                                             <td>{{ $school->name }}</td>
                                             <td>{{ $school->address }}</td>
                                             <td class="">
-                                                <a href="{{ route('editschool', ['school' => $school->id ]) }}" class="btn btn-primary btn-icon-split">
+                                                <a href="{{ route('schools.edit', ['school' => $school->id ]) }}" class="btn btn-primary btn-icon-split" title="Edit School">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>
                                                     </span>
                                                     <span class="text">Edit</span>
                                                 </a>
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 <form method="POST" action="{{ route('deleteschool', ['school' => $school->id ]) }}">
                                                     @csrf
                                                     @method('DELETE')
@@ -70,7 +70,7 @@
                                                         <span class="text">Delete</span>
                                                     </button>
                                                 </form>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 @endunless

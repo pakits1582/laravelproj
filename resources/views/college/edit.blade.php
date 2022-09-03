@@ -18,7 +18,7 @@
                         @if(Session::has('message'))
                             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                         @endif
-                      <form method="POST" action="{{ route('updatecollege', ['college' => $college->id]) }}"  role="form">
+                      <form method="POST" action="{{ route('colleges.update', ['college' => $college->id]) }}"  role="form">
                         @csrf
                         @method('PUT')
                         <div class="form-group">

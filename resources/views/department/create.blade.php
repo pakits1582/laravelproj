@@ -17,7 +17,7 @@
                             @if(Session::has('message'))
                                 <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                             @endif
-                            <form method="POST" action="{{ route('savedepartment') }}"  role="form">
+                            <form method="POST" action="{{ route('departments.store') }}"  role="form">
                             @csrf
                             <div class="form-group">
                                 <label for="code" class="m-0 font-weight-bold text-primary">* Code</label>

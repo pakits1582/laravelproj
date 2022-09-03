@@ -30,7 +30,7 @@
                                 <th>Program</th>
                                 <th>Year Level</th>
                                 <th>Min Enrollee</th>
-                                <th>Action</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         {{-- <tfoot>

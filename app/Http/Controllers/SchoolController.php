@@ -43,13 +43,4 @@ class SchoolController extends Controller
 
         return back()->with(['alert-class' => 'alert-success', 'message' => 'School sucessfully updated!']);
     }
-
-    public function show(School $school)
-    {
-        //
-    }
-
-    public function destroy(School $school)
-    {
-    }
 }

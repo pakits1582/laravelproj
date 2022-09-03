@@ -29,7 +29,7 @@
                                 <th>Name</th>
                                 <th>Capacity</th>
                                 <th>Check Conflict</th>
-                                <th>Action</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         {{-- <tfoot>

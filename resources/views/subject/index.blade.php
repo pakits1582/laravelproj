@@ -36,7 +36,7 @@
                                 <th>isProf</th>
                                 <th>isLab</th>
                                 <th>Level</th>
-                                <th>Action</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         {{-- <tfoot>

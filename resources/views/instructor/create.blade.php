@@ -17,7 +17,7 @@
                         @if(Session::has('message'))
                             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                         @endif
-                      <form method="POST" action="{{ route('saveinstructor') }}"  role="form">
+                      <form method="POST" action="{{ route('instructors.store') }}"  role="form">
                         @csrf
                         <div class="form-group">
                             <label for="idno"  class="m-0 font-weight-bold text-primary">* ID Number</label>

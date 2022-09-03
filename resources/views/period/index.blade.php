@@ -12,7 +12,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 {{-- <h6 class="m-0 font-weight-bold text-primary">instructor Table</h6> --}}
-                <a href="{{ route('addperiod') }}" class="btn btn-primary btn-icon-split">
+                <a href="{{ route('periods.create') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
@@ -49,10 +49,11 @@
                                             <td>{{ $period->adddrop_start  }}</td>
                                             <td>{{ $period->priority_lvl }}</td>
                                             <td class="cente">
-                                                <a href="{{ route('editperiod', ['period' => $period->id ]) }}" class="btn btn-primary btn-icon-split">
+                                                <a href="{{ route('periods.edit', ['period' => $period->id ]) }}" class="btn btn-primary btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>
                                                     </span>
+                                                    <span class="text">Edit</span>
                                                 </a>
                                             </td>
                                         </tr>
