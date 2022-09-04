@@ -35,7 +35,7 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
-                <div class="sidebar-brand-text mx-3">SIAMS College</div>
+                <div class="sidebar-brand-text mx-3">SIAMS V2.0</div>
             </a>
 
             <!-- Heading -->

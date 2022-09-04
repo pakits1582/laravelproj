@@ -15,7 +15,8 @@ use App\Http\Controllers\{
     DepartmentController,
     InstructorController,
     RoomController,
-    UserController
+    UserController,
+    ConfigurationController,
 };
 
 /*
@@ -93,6 +94,9 @@ Route::group(['middleware' => ['auth']], function ()
                 return Redirect::route('subjects.index');
             });
     
+    Route::get('/configurations', [ConfigurationController::class, 'index'])->name('configurations.index');
+    Route::put('/configurations/{configuration?}', [ConfigurationController::class, 'update'])->name('configurations.update');
+
     Route::get('/home', [LoginController::class, 'home'])->name('home');
 });
 

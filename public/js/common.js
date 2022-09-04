@@ -84,6 +84,7 @@ $("#today, .calendar").datepicker(pickerOpts2);
 $(".date_picker").datepicker(pickerOpts3);
 $("#bdate, #bday").datepicker(pickerOpts);
 $(".picker_date").datepicker(pickerOpts4);
+$(".datepicker").datepicker(pickerOpts);
 
 /*************************************
 *** FUNCTION POSITION CENTER DIV   ***
