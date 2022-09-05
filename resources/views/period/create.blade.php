@@ -51,7 +51,7 @@
                                                     >{{ $term->term }}</option>
                                                 @endforeach
                                             @endif
-                                            <option value="addterm" data-toggle="modal" data-target="#modalll">- Click to add new term -</option>  
+                                            <option value="addterm" data-toggle="modal" data-target="#modal">- Click to add new term -</option>  
                                         </select>
                                         @error('term')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>

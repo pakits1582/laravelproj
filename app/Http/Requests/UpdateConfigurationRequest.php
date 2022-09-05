@@ -47,6 +47,7 @@ class UpdateConfigurationRequest extends FormRequest
             'pres_sig' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'reg_sig' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'tres_sig' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
 
     }

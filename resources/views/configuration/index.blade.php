@@ -27,6 +27,22 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-2">
+                                            <label for="name"  class="m-0 font-weight-bold text-primary py-2">Logo</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="uploadfile signature card border-left-primary shadow" id="school_logo" style="background-image:url({{ ($configuration->logo != '') ? asset('images/'.$configuration->logo) : '' }})">
+                                                &nbsp;
+                                            </div>
+                                            <input type="file" class="hidden" name="logo" id="school_logo_file" accept="image/*" />
+                                            @error('logo')
+                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-2">
                                             <label for="name"  class="m-0 font-weight-bold text-primary py-2">Name</label>
                                         </div>
                                         <div class="col-md-10">
@@ -291,14 +307,14 @@
                                     </div>
                                     <div class="col-md-5">
                                         @if ($configuration->status == 0)
-                                            <a href="#" id="open" class="manageapplication btn btn-primary btn-icon-split mx-2 align-middle">
+                                            <a href="#" id="open" class="applicationaction btn btn-primary btn-icon-split mx-2 align-middle">
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-door-open"></i>
                                                 </span>
                                                 <span class="text">Open Application</span>
                                             </a>
                                         @else
-                                            <a href="#" id="close" class="manageapplication btn btn-info btn-icon-split mx-2 align-middle">
+                                            <a href="#" id="close" class="applicationaction btn btn-info btn-icon-split mx-2 align-middle">
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-door-closed"></i>
                                                 </span>
@@ -425,7 +441,25 @@
         </div>
 
     </div>
-
+<!-- Logout Modal-->
+    <div class="modal fade" id="confirmaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="{{ route('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- /.container-fluid -->
 @endsection

@@ -29,9 +29,15 @@ class ConfigurationService
             $request->file('tres_sig')->move(public_path('images'), $tres_signame);
         }
 
-        if(!$configuration){
-            Configuration::create($request->safe()->except(['pres_sig', 'reg_sig', 'tres_sig'])+$signatures);
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo')->getClientOriginalName();
+            $signatures['logo'] = $logo;
+            $request->file('logo')->move(public_path('images'), $logo);
         }
-        Configuration::where("id", $configuration)->update($request->safe()->except(['pres_sig', 'reg_sig', 'tres_sig'])+$signatures);
+
+        if(!$configuration){
+            Configuration::create($request->safe()->except(['pres_sig', 'reg_sig', 'tres_sig', 'logo'])+$signatures);
+        }
+        Configuration::where("id", $configuration)->update($request->safe()->except(['pres_sig', 'reg_sig', 'tres_sig', 'logo'])+$signatures);
     }
 }
