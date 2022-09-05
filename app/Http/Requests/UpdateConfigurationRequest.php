@@ -41,9 +41,12 @@ class UpdateConfigurationRequest extends FormRequest
             'current_period' => ['required'], 
             'application_period' => ['required'], 
             'datefrom' => ['required', 'date'], 
-            'dateto' => ['required', 'date'], 
+            'dateto' => ['required', 'date', 'after_or_equal:datefrom'], 
             'status' => [],
-            'announcement' => []
+            'announcement' => [],
+            'pres_sig' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'reg_sig' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'tres_sig' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
 
     }

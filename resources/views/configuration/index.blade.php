@@ -147,9 +147,13 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <div class="card border-left-primary shadow h-100 py-2">
-                                            signature
+                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="pres_sig" style="background-image:url({{ ($configuration->pres_sig != '') ? asset('images/'.$configuration->pres_sig) : '' }})" >
+                                                &nbsp;
                                             </div>
+                                            <input type="file" class="hidden" name="pres_sig" id="pres_sig_file" accept="image/*" />
+                                            @error('pres_sig')
+                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
@@ -174,9 +178,13 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <div class="card border-left-primary shadow h-100 py-2">
-                                            signature
+                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="reg_sig" style="background-image:url({{ ($configuration->reg_sig != '') ? asset('images/'.$configuration->reg_sig) : '' }})">
+                                                &nbsp;
                                             </div>
+                                            <input type="file" class="hidden" name="reg_sig" id="reg_sig_file" accept="image/*" />
+                                            @error('reg_sig')
+                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
@@ -201,9 +209,13 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <div class="card border-left-primary shadow h-100 py-2">
-                                            signature
+                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="tres_sig" style="background-image:url({{ ($configuration->tres_sig != '') ? asset('images/'.$configuration->tres_sig) : '' }})">
+                                                &nbsp;
                                             </div>
+                                            <input type="file" class="hidden" name="tres_sig" id="tres_sig_file" accept="image/*" />
+                                            @error('tres_sig')
+                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
@@ -278,12 +290,21 @@
                                         </div>
                                     </div>
                                     <div class="col-md-5">
-                                        <a href="#" class="btn btn-primary btn-icon-split mx-2 align-middle">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-door-open"></i>
-                                            </span>
-                                            <span class="text">Open Application</span>
-                                        </a>
+                                        @if ($configuration->status == 0)
+                                            <a href="#" id="open" class="manageapplication btn btn-primary btn-icon-split mx-2 align-middle">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-door-open"></i>
+                                                </span>
+                                                <span class="text">Open Application</span>
+                                            </a>
+                                        @else
+                                            <a href="#" id="close" class="manageapplication btn btn-info btn-icon-split mx-2 align-middle">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-door-closed"></i>
+                                                </span>
+                                                <span class="text">Close Application</span>
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                                 @error('current_period')

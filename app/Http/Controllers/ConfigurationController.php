@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateConfigurationRequest;
-use App\Models\Configuration;
+use App\Libs\Helpers;
 use App\Models\Period;
 use Illuminate\Http\Request;
-
-use function PHPUnit\Framework\isEmpty;
+use App\Models\Configuration;
+use App\Services\ConfigurationService;
+use App\Http\Requests\UpdateConfigurationRequest;
 
 class ConfigurationController extends Controller
 {
+    protected $configService;
+
+    public function __construct(ConfigurationService $configService)
+    {
+        $this->configService = $configService;
+        Helpers::setLoad(['jquery_configuration.js']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -76,12 +84,8 @@ class ConfigurationController extends Controller
      */
     public function update(UpdateConfigurationRequest $request, $configuration='')
     {
-        
-        if(!$configuration){
-            Configuration::create($request->validated());
-        }
-        Configuration::where("id", $configuration)->update($request->validated());
-        
+        $this->configService->updateConfiguration($request, $configuration);
+       
         return back()->with(['alert-class' => 'alert-success', 'message' => 'Configuration sucessfully updated!']);
     }
 
