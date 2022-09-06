@@ -15,7 +15,7 @@
 	z-index:1000;
 	width: 100%;
 }
-.confirmationpop{
+.confirmation{
 	background:url(../images/help.png) #3498db no-repeat center center;
 	padding-top:100px;
 	background-size:75px 75px;
@@ -94,4 +94,30 @@
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+.ui_title_success{
+	margin:2%;
+	text-align:center;
+	color:#2ecc71;
+	font-size:18px;
+}
+.ui_title_error{
+	margin:2%;
+	text-align:center;
+	color:#e74c3c;
+	font-size:18px;
+}
+.ui_title_confirm{
+	margin:2%;
+	text-align:center;
+	color:#3498db;
+	font-size:18px;
+	font-weight:bold;
+}
+.message{
+	padding:0 2% 2% 2%;
+	text-align:center;
+	word-wrap:break-word;
+	font-weight:bold;
 }

@@ -307,14 +307,14 @@
                                     </div>
                                     <div class="col-md-5">
                                         @if ($configuration->status == 0)
-                                            <a href="#" id="open" class="applicationaction btn btn-primary btn-icon-split mx-2 align-middle">
+                                            <a href="#" id="open" data-id="{{ $configuration->id }}" class="applicationaction btn btn-primary btn-icon-split mx-2 align-middle">
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-door-open"></i>
                                                 </span>
                                                 <span class="text">Open Application</span>
                                             </a>
                                         @else
-                                            <a href="#" id="close" class="applicationaction btn btn-info btn-icon-split mx-2 align-middle">
+                                            <a href="#" id="close" data-id="{{ $configuration->id }}" class="applicationaction btn btn-info btn-icon-split mx-2 align-middle">
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-door-closed"></i>
                                                 </span>
@@ -365,7 +365,7 @@
 
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Split Buttons with Icon</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Schedules and Deadlines</h6>
                 </div>
                 <div class="card-body">
                     <p>Works with any button colors, just use the <code>.btn-icon-split</code> class and
@@ -440,25 +440,6 @@
 
         </div>
 
-    </div>
-<!-- Logout Modal-->
-    <div class="modal fade" id="confirmaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="{{ route('logout') }}">Logout</a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 <!-- /.container-fluid -->

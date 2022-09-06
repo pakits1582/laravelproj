@@ -21,7 +21,7 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('sbadmin/css/sb-admin-2.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('sbadmin/css/jquery-ui.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/ui-lightness/jquery-ui-1.10.4.custom.css') }}" rel="stylesheet">
     <link href="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 </head>
 

@@ -95,8 +95,12 @@ class ConfigurationController extends Controller
      * @param  \App\Models\Configuration  $configuration
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Configuration $configuration)
+    public function applicationaction(Configuration $configuration, $action)
     {
-        //
+        $status = ($action == 'open') ? 1 : 0;
+        $configuration->update(['status' => $status]);
+
+        return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Application action successfully excuted!']);
+
     }
 }

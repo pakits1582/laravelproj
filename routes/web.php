@@ -93,9 +93,12 @@ Route::group(['middleware' => ['auth']], function ()
             ->missing(function (Request $request) {
                 return Redirect::route('subjects.index');
             });
-    
-    Route::get('/configurations', [ConfigurationController::class, 'index'])->name('configurations.index');
-    Route::put('/configurations/{configuration?}', [ConfigurationController::class, 'update'])->name('configurations.update');
+    Route::group(['middleware' => ['inaccess:configurations']], function () 
+    {
+        Route::get('/configurations', [ConfigurationController::class, 'index'])->name('configurations.index');
+        Route::put('/configurations/{configuration?}', [ConfigurationController::class, 'update'])->name('configurations.update');
+        Route::post('/configurations/{configuration}/applicationaction/{action}', [ConfigurationController::class, 'applicationaction']);
+    });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
 });
