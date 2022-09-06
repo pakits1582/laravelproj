@@ -98,6 +98,7 @@ Route::group(['middleware' => ['auth']], function ()
         Route::get('/configurations', [ConfigurationController::class, 'index'])->name('configurations.index');
         Route::put('/configurations/{configuration?}', [ConfigurationController::class, 'update'])->name('configurations.update');
         Route::post('/configurations/{configuration}/applicationaction/{action}', [ConfigurationController::class, 'applicationaction']);
+        Route::post('/configurations', [ConfigurationController::class, 'store'])->name('configurations.store');
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

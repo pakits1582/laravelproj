@@ -362,82 +362,90 @@
             </form>
         </div>
         <div class="col-lg-6">
-
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Schedules and Deadlines</h6>
+            @if(Session::has('message'))
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+            @endif
+            <form method="POST" action="{{ route('configurations.store') }}"  role="form">
+                @csrf
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Schedules and Deadlines</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="type" class="m-0 font-weight-bold text-primary">Schedule Type</label>
+                                    <select name="type" class="form-control">
+                                        <option value="">- select type -</option>
+                                        <option value="1" {{ (old('designation') == 1) ? 'selected' : '' }}>Teacher</option>
+                                        <option value="2" {{ (old('designation') == 2) ? 'selected' : '' }}>Program Head</option>
+                                        <option value="3" {{ (old('designation') == 3) ? 'selected' : '' }}>Department Head</option>
+                                        <option value="4" {{ (old('designation') == 4) ? 'selected' : '' }}>Dean</option>
+                                        <option value="5" {{ (old('designation') == 5) ? 'selected' : '' }}>Professor</option>
+                                        <option value="6" {{ (old('designation') == 6) ? 'selected' : '' }}>Others</option>
+                                    </select>
+                                    @error('type')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
+                                    @include('partials.educlevels.dropdown')
+                                    @error('educational_level')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="college" class="m-0 font-weight-bold text-primary">College</label>
+                                    @include('partials.colleges.dropdown')
+                                    @error('college')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="year" class="m-0 font-weight-bold text-primary">Year Level</label>
+                                    <select name="year" class="form-control">
+                                        <option value="">- select year -</option>
+                                        <option value="1" {{ (old('year') == 1) ? 'selected' : '' }}>1</option>
+                                        <option value="2" {{ (old('year') == 2) ? 'selected' : '' }}>2</option>
+                                        <option value="3" {{ (old('year') == 3) ? 'selected' : '' }}>3</option>
+                                        <option value="4" {{ (old('year') == 4) ? 'selected' : '' }}>4</option>
+                                        <option value="5" {{ (old('year') == 5) ? 'selected' : '' }}>5</option>
+                                        <option value="6" {{ (old('year') == 6) ? 'selected' : '' }}>6</option>
+                                    </select>
+                                    @error('year')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="date_from" class="m-0 font-weight-bold text-primary">Date From</label>
+                                    <input type="text" name="date_from" placeholder="" class="form-control datepicker" value="{{ old('date_from') }}">
+                                    @error('date_from')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="date_to" class="m-0 font-weight-bold text-primary">Date To</label>
+                                    <input type="text" name="date_to" placeholder="" class="form-control datepicker" value="{{ old('date_to') }}">
+                                    @error('date_to')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Scedule</button>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p>Works with any button colors, just use the <code>.btn-icon-split</code> class and
-                        the markup in the examples below. The examples below also use the
-                        <code>.text-white-50</code> helper class on the icons for additional styling,
-                        but it is not required.</p>
-                    <a href="#" class="btn btn-primary btn-icon-split">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-flag"></i>
-                        </span>
-                        <span class="text">Split Button Primary</span>
-                    </a>
-                    <div class="my-2"></div>
-                    <a href="#" class="btn btn-success btn-icon-split">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-check"></i>
-                        </span>
-                        <span class="text">Split Button Success</span>
-                    </a>
-                    <div class="my-2"></div>
-                    <a href="#" class="btn btn-info btn-icon-split">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        <span class="text">Split Button Info</span>
-                    </a>
-                    <div class="my-2"></div>
-                    <a href="#" class="btn btn-warning btn-icon-split">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </span>
-                        <span class="text">Split Button Warning</span>
-                    </a>
-                    <div class="my-2"></div>
-                    <a href="#" class="btn btn-danger btn-icon-split">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-trash"></i>
-                        </span>
-                        <span class="text">Split Button Danger</span>
-                    </a>
-                    <div class="my-2"></div>
-                    <a href="#" class="btn btn-secondary btn-icon-split">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
-                        <span class="text">Split Button Secondary</span>
-                    </a>
-                    <div class="my-2"></div>
-                    <a href="#" class="btn btn-light btn-icon-split">
-                        <span class="icon text-gray-600">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
-                        <span class="text">Split Button Light</span>
-                    </a>
-                    <div class="mb-4"></div>
-                    <p>Also works with small and large button classes!</p>
-                    <a href="#" class="btn btn-primary btn-icon-split btn-sm">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-flag"></i>
-                        </span>
-                        <span class="text">Split Button Small</span>
-                    </a>
-                    <div class="my-2"></div>
-                    <a href="#" class="btn btn-primary btn-icon-split btn-lg">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-flag"></i>
-                        </span>
-                        <span class="text">Split Button Large</span>
-                    </a>
-                </div>
-            </div>
-
+            </form>
         </div>
 
     </div>
