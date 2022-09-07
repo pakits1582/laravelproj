@@ -74,10 +74,14 @@ Route::group(['middleware' => ['auth']], function ()
             return Redirect::route('periods.index');
     });
     
-    Route::resource('programs', ProgramController::class)->except(['show', 'destroy'])->middleware(['inaccess:programs'])
-            ->missing(function (Request $request) {
-                return Redirect::route('programs.index');
-            });
+    Route::group(['middleware' => ['inaccess:programs']], function () 
+    {
+        Route::view('/programs/addnewlevel', 'program.addnewlevel');
+        Route::post('/programs/savelevel', [ProgramController::class, 'storelevel'])->name('savelevel');
+        Route::resource('programs', ProgramController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+            return Redirect::route('programs.index');
+        });
+    });
     
     Route::resource('rooms', RoomController::class)->except(['show', 'destroy'])->middleware(['inaccess:rooms'])
             ->missing(function (Request $request) {
@@ -99,6 +103,8 @@ Route::group(['middleware' => ['auth']], function ()
         Route::put('/configurations/{configuration?}', [ConfigurationController::class, 'update'])->name('configurations.update');
         Route::post('/configurations/{configuration}/applicationaction/{action}', [ConfigurationController::class, 'applicationaction']);
         Route::post('/configurations', [ConfigurationController::class, 'store'])->name('configurations.store');
+
+        Route::delete('/configurations/{configsched}', [ConfigurationController::class, 'destroy']);
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

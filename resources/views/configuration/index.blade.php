@@ -362,8 +362,8 @@
             </form>
         </div>
         <div class="col-lg-6">
-            @if(Session::has('message'))
-                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+            @if(Session::has('sched_message'))
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('sched_message') }}</p>
             @endif
             <form method="POST" action="{{ route('configurations.store') }}"  role="form">
                 @csrf
@@ -375,15 +375,17 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="type" class="m-0 font-weight-bold text-primary">Schedule Type</label>
+                                    <label for="type" class="m-0 font-weight-bold text-primary">* Schedule Type</label>
                                     <select name="type" class="form-control">
                                         <option value="">- select type -</option>
-                                        <option value="1" {{ (old('designation') == 1) ? 'selected' : '' }}>Teacher</option>
-                                        <option value="2" {{ (old('designation') == 2) ? 'selected' : '' }}>Program Head</option>
-                                        <option value="3" {{ (old('designation') == 3) ? 'selected' : '' }}>Department Head</option>
-                                        <option value="4" {{ (old('designation') == 4) ? 'selected' : '' }}>Dean</option>
-                                        <option value="5" {{ (old('designation') == 5) ? 'selected' : '' }}>Professor</option>
-                                        <option value="6" {{ (old('designation') == 6) ? 'selected' : '' }}>Others</option>
+                                        <option {{ (old('type') == 'enrolment') ? 'selected' : '' }} value="enrolment">Student Enrolment</option>
+                                        <option {{ (old('type') == 'addingdropping') ? 'selected' : '' }} value="addingdropping">Adding Dropping</option>
+                                        <option {{ (old('type') == 'student_registration') ? 'selected' : '' }} value="student_registration">Student Online Registration</option>
+                                        <option {{ (old('type') == 'grade_posting') ? 'selected' : '' }} value="grade_posting" class="nodateto">Student Grade Viewing</option>
+                                        <option {{ (old('type') == 'final_grade_submission') ? 'selected' : '' }} value="final_grade_submission" class="noyear">Faculty Final Grade Submission</option>
+                                        <option {{ (old('type') == 'facultyload_posting') ? 'selected' : '' }} value="facultyload_posting" class="nodateto">Faculty Load Posting</option>
+                                        <option {{ (old('type') == 'class_scheduling') ? 'selected' : '' }} value="class_scheduling" class="nodateto">Class Scheduling</option>
+                                        <option {{ (old('type') == 'faculty_evaluation') ? 'selected' : '' }} value="faculty_evaluation" class="">Faculty Evaluation</option>
                                     </select>
                                     @error('type')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -427,7 +429,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="date_from" class="m-0 font-weight-bold text-primary">Date From</label>
+                                    <label for="date_from" class="m-0 font-weight-bold text-primary">* Date From</label>
                                     <input type="text" name="date_from" placeholder="" class="form-control datepicker" value="{{ old('date_from') }}">
                                     @error('date_from')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -442,10 +444,46 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Scedule</button>
+                        <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Schedule</button>
                     </div>
                 </div>
             </form>
+
+            @foreach ($configgrouped as $type => $schedules)
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ Helpers::getConfigschedtype($type) }}</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th scope="col">Level</th>
+                            <th scope="col">College</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Date From</th>
+                            <th scope="col">Date To</th>
+                            <th scope="col" class="mid"><i class="fas fa-fw fa-cog text-primary"></i></th>
+                          </tr>
+                        </thead>
+                        <tbody> 
+                            @foreach($schedules as $schedule)
+                                <tr>
+                                    <th scope="row">{{ $schedule->level->level }}</th>
+                                    <td>{{ $schedule->collegeinfo->code }}</td>
+                                    <td>{{ $schedule->year }}</td>
+                                    <td>{{ $schedule->date_from }}</td>
+                                    <td>{{ $schedule->date_to }}</td>
+                                    <td class="mid"><a href="#" id="{{ $schedule->id }}" class="deleteconfigsched btn btn-danger btn-circle btn-sm" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endforeach
         </div>
 
     </div>

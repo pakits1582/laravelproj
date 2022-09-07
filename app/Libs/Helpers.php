@@ -239,4 +239,37 @@ class Helpers
 
         return $return;
     }
+
+    public static function getConfigschedtype($type)
+    {
+        switch ($type) {
+            case 'enrolment':
+                return 'Student Enrolment';
+                break;
+            case 'addingdropping':
+                return 'Adding Dropping';
+                break;
+            case 'student_registration':
+                return 'Student Online Registration';
+                break;
+            case 'grade_posting':
+                return 'Student Grade Viewing';
+                break;
+            case 'final_grade_submission':
+                return 'Faculty Final Grade Submission';
+                break;
+            case 'facultyload_posting':
+                return 'Faculty Load Posting';
+                break;
+            case 'class_scheduling':
+                return 'Class Scheduling';
+                break;
+            case 'Faculty Evaluation':
+                return 'Others';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
 }

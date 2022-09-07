@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreConfigScheduleRequest;
 use App\Libs\Helpers;
 use App\Models\Period;
 use Illuminate\Http\Request;
 use App\Models\Configuration;
 use App\Services\ConfigurationService;
 use App\Http\Requests\UpdateConfigurationRequest;
+use App\Models\ConfigurationSchedule;
+use App\Models\Educationallevel;
 
 class ConfigurationController extends Controller
 {
@@ -28,8 +31,10 @@ class ConfigurationController extends Controller
     {
         $periods = Period::where('display', 1)->orderBy('year', 'DESC')->get();
         $configuration = Configuration::take(1)->first();
+        $configscheds = ConfigurationSchedule::all();
+        $configgrouped = $configscheds->groupBy('type');
 
-        return view('configuration.index', compact('periods', 'configuration'));
+        return view('configuration.index', compact('periods', 'configuration', 'configgrouped'));
     }
 
     /**
@@ -48,9 +53,21 @@ class ConfigurationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreConfigScheduleRequest $request)
     {
-        //
+        $insert = ConfigurationSchedule::firstOrCreate([
+            'type' => $request->type,
+            'educational_level' => $request->educational_level,
+            'college' => $request->college,
+            'year' => $request->year,
+            'period' => 1, //change to session setup
+        ], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return back()->with(['alert-class' => 'alert-success', 'sched_message' => 'Configuration schedule sucessfully added!']);
+        }
+
+        return back()->with(['alert-class' => 'alert-danger', 'sched_message' => 'Duplicate entry, configuration schedule already exists!'])->withInput();
     }
 
     /**
@@ -102,5 +119,12 @@ class ConfigurationController extends Controller
 
         return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Application action successfully excuted!']);
 
+    }
+
+    public function destroy(ConfigurationSchedule $configsched)
+    {
+        $configsched->delete();
+
+        return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Configuration schedule successfully deleted!']);
     }
 }

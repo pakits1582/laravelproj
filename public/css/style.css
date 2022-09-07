@@ -121,3 +121,7 @@
 	word-wrap:break-word;
 	font-weight:bold;
 }
+
+.mid{
+	text-align: center !important;
+}

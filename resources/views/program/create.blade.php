@@ -42,7 +42,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="educational_level" class="m-0 font-weight-bold text-primary">* Level</label>
-                                @include('partials.educlevels.dropdown')
+                                @include('partials.educlevels.dropdown',['addnew' => 1])
                                 @error('educational_level')
                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                 @enderror

@@ -10,4 +10,5 @@ class Educationallevel extends Model
     use HasFactory;
 
     protected $table = 'educational_levels';
+    protected $fillable = ['code', 'level'];
 }

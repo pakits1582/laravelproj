@@ -83,7 +83,7 @@ $(function(){
 
         $.ajax({
             url: url,
-            type: 'post',
+            type: 'POST',
             data: postData,
             dataType: 'json',
             success: function(data){

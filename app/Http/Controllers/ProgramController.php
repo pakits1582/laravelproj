@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProgramRequest;
-use App\Http\Requests\UpdateProgramRequest;
+use App\Http\Requests\StoreEducationalLevelRequest;
+use App\Libs\Helpers;
 use App\Models\College;
 use App\Models\Program;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreProgramRequest;
+use App\Http\Requests\UpdateProgramRequest;
 use App\Models\Educationallevel;
 
 class ProgramController extends Controller
 {
+    public function __construct()
+    {
+        //$this->instructorService = $instructorService;
+        Helpers::setLoad(['jquery_program.js']);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -100,5 +108,22 @@ class ProgramController extends Controller
     public function destroy(Program $program)
     {
         //
+    }
+
+    public function storelevel(StoreEducationalLevelRequest $request)
+    {
+        $insert = Educationallevel::firstOrCreate(['code' => $request->code, 'level' => $request->level], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return response()->json([
+                'success' => true, 
+                'message' => 'Educational level successfully added!', 
+                'alert' => 'alert-success',
+                'level_id' => $insert->id,
+                'level' => $request->validated('level'),
+            ], 200);
+        }
+
+        return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, term already exists!']);
     }
 }
