@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use function PHPUnit\Framework\isNull;
+
 class LoginController extends Controller
 {
     protected function redirectTo()
@@ -32,7 +34,15 @@ class LoginController extends Controller
    
         $credentials = $request->only('idno', 'password');
         if (Auth::attempt($credentials+['is_active' => 1])) {
-            // The user is active, not suspended, and exists.
+            //SET SESSIONS HERE
+            if(is_null(Auth::user()->setup->period)){
+                session()->put('current_period', Auth::user()->setup->id);
+                session()->put('periodname', Auth::user()->setup->name);
+            }else{
+                session()->put('current_period', Auth::user()->setup->period->id);
+                session()->put('periodname', Auth::user()->setup->period->name);
+            }
+        
             return redirect()->intended('home');
         }
   

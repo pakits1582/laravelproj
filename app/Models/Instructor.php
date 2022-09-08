@@ -68,7 +68,7 @@ class Instructor extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function fullname(): Attribute
+    public function name(): Attribute
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['last_name'].', '.$attributes['first_name'].' '.$attributes['name_suffix'].' '.$attributes['middle_name']),

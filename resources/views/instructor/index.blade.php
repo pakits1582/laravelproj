@@ -42,7 +42,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $instructor->user->idno }}</td>
-                                            <td>{{ $instructor->fullname }}</td>
+                                            <td>{{ $instructor->name }}</td>
                                             <td>{{ $instructor->collegeinfo->code }}</td>
                                             <td>{{ $instructor->educlevel->level }}</td>
                                             <td>{{ $instructor->deptcode  }}</td>

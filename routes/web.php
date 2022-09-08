@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth']], function ()
             return Redirect::route('departments.index');
     });
     
+    Route::get('/periods/changeperiod', [PeriodController::class, 'changeperiod']);
     Route::view('/periods/addterm', 'period.addterm')->middleware(['inaccess:periods']);
     Route::post('/periods/saveterm', [PeriodController::class, 'storeterm'])->name('saveterm')->middleware(['inaccess:periods']);
     Route::resource('periods', PeriodController::class)->except(['show', 'destroy'])->middleware(['inaccess:periods'])

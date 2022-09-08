@@ -127,7 +127,10 @@ class PeriodController extends Controller
         }
 
         return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, term already exists!']);
+    }
 
-        
+    public function changeperiod()
+    {
+        return view('period.changeperiod');
     }
 }

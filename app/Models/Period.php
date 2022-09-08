@@ -14,4 +14,9 @@ class Period extends Model
     {
         return $this->belongsTo(Term::class, 'term', 'id');
     }
+
+    public function setup()
+    {
+        return $this->hasOne(SetupPeriod::class);
+    }
 }

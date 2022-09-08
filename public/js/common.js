@@ -132,5 +132,32 @@ $(function(){
             $(this).remove();
         });
     });
+/*************************************
+*** FUNCTION CHANGE CURRENT PERIOD ***
+*************************************/
+    $(document).on("click",".current_period", function(e){
+        $.ajax({url: "/periods/changeperiod",success: function(data){
+                $('#ui_content').html(data);
+                $("#modalll").modal('show');
+            }
+        });	
+        e.preventDefault();
+    });
+
+/*************************************
+*** FUNCTION UPDATE CURRENT PERIOD ***
+*************************************/
+    // $(document).on("submit",'#changePeriod', function(e) {
+    //     var period = $("#changeperiod").val();
+    //     //alert(period);
+    //     $.ajax({url: baseUrl+"/period/savechangedperiod/"+period,success: function(data){
+    //         //alert(data);
+    //         if(data == 1){
+    //             location.reload(); 	
+    //         }
+    //     }
+    //     });
+    //     e.preventDefault();
+    // });
 
 });

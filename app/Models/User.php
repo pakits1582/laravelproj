@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -51,11 +52,30 @@ class User extends Authenticatable
 
     public function info()
     {
-        return $this->hasOne(Userinfo::class, 'user_id', 'id');
+        switch(Auth::user()->utype){
+            case 0:
+                return $this->hasOne(Userinfo::class, 'user_id', 'id');
+            break;
+            case 1:
+                return $this->hasOne(Instructor::class, 'user_id', 'id');
+            break;
+            case 2:
+                return $this->hasOne(Student::class, 'user_id', 'id');
+            break;	
+        }
     }
+
+    
 
     public function access()
     {
         return $this->hasMany(Useraccess::class, 'user_id', 'id');
+    } 
+    
+    public function setup()
+    {
+        $config = Configuration::take(1)->first();
+        
+        return $this->hasOne(SetupPeriod::class, 'user_id', 'id')->withDefault(['id' => $config->currentperiod->id, 'name' => $config->currentperiod->name]);
     }
 }
