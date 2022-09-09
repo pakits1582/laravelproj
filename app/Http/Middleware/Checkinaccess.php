@@ -2,9 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use App\Libs\Helpers;
 use App\Models\Useraccess;
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,9 +18,9 @@ class Checkinaccess
      */
     public function handle(Request $request, Closure $next, $access)
     {
-        $inaccess = Useraccess::where('access',$access)->where('user_id', Auth::id())->get();
+        $inaccess = Useraccess::where('access', $access)->where('user_id', Auth::id())->get();
 
-        if (!$inaccess->isEmpty()) { 
+        if (! $inaccess->isEmpty()) {
             return $next($request);
         }
 

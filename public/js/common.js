@@ -147,17 +147,34 @@ $(function(){
 /*************************************
 *** FUNCTION UPDATE CURRENT PERIOD ***
 *************************************/
-    // $(document).on("submit",'#changePeriod', function(e) {
-    //     var period = $("#changeperiod").val();
-    //     //alert(period);
-    //     $.ajax({url: baseUrl+"/period/savechangedperiod/"+period,success: function(data){
-    //         //alert(data);
-    //         if(data == 1){
-    //             location.reload(); 	
-    //         }
-    //     }
-    //     });
-    //     e.preventDefault();
-    // });
+    $(document).on("submit",'#changeperiod_form', function(e) {
+        var postData = $(this).serializeArray();
+        var url = $(this).attr('data-action');
+
+        $.ajax({
+        url: url,
+        type: 'POST',
+        data: postData,
+        dataType: 'json',
+        success: function(data){
+            $('.alert').remove();
+
+            $("#changeperiod_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
+            window.setTimeout(function(){
+                location.reload();
+            }, 1500);	
+        },
+        error: function (data) {
+            //console.log(data);
+            var errors = data.responseJSON;
+            if ($.isEmptyObject(errors) == false) {
+                $.each(errors.errors, function (key, value) {
+                    $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                });
+            }
+        }
+        });	
+        e.preventDefault();
+    });
 
 });

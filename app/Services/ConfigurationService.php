@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Libs\Helpers;
 use App\Models\Configuration;
 
 class ConfigurationService
@@ -35,9 +34,9 @@ class ConfigurationService
             $request->file('logo')->move(public_path('images'), $logo);
         }
 
-        if(!$configuration){
-            Configuration::create($request->safe()->except(['pres_sig', 'reg_sig', 'tres_sig', 'logo'])+$signatures);
+        if (! $configuration) {
+            Configuration::create($request->safe()->except(['pres_sig', 'reg_sig', 'tres_sig', 'logo']) + $signatures);
         }
-        Configuration::where("id", $configuration)->update($request->safe()->except(['pres_sig', 'reg_sig', 'tres_sig', 'logo'])+$signatures);
+        Configuration::where('id', $configuration)->update($request->safe()->except(['pres_sig', 'reg_sig', 'tres_sig', 'logo']) + $signatures);
     }
 }

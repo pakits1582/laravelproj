@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,7 +33,6 @@ class AppServiceProvider extends ServiceProvider
                 $user->load('info', 'access');
 
                 $view->with('user', $user);
-
             } catch (\Exception $e) {
                 Log::error(get_called_class(), [
                     'error' => $e->getMessage(),

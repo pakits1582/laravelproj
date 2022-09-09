@@ -25,7 +25,7 @@ class StoreEducationalLevelRequest extends FormRequest
     {
         return [
             'code' => 'required',
-            'level' => 'required'
+            'level' => 'required',
         ];
     }
 }

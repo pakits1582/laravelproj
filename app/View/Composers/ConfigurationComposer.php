@@ -2,7 +2,6 @@
 
 namespace App\View\Composers;
 
-use App\Models\College;
 use App\Models\Configuration;
 use Illuminate\View\View;
 

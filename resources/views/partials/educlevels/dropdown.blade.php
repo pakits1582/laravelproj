@@ -3,7 +3,7 @@
     @if ($educlevels)
         @foreach ($educlevels as $educlevel)
             <option value="{{ $educlevel->id }}" 
-                {{ (old('educational_level', $fieldname ?? 'educational_level') == $educlevel->id) ? 'selected' : '' }}
+                {{ (old($fieldname ?? 'educational_level') == $educlevel->id) ? 'selected' : '' }}
                 {{ (isset($value)) ? ($value == $educlevel->id) ? 'selected' : '' : '' }}
                 >{{ $educlevel->level }}</option>
         @endforeach
@@ -15,3 +15,6 @@
         
     @endif
 </select>
+@error($fieldname ?? 'educational_level')
+    <p class="text-danger text-xs mt-1">{{$message}}</p>
+@enderror

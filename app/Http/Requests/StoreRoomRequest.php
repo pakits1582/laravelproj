@@ -27,7 +27,7 @@ class StoreRoomRequest extends FormRequest
             'code' => 'required',
             'name' => 'required',
             'capacity' => 'required',
-            'excludechecking' => ''
+            'excludechecking' => '',
         ];
     }
 }

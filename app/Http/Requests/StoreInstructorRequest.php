@@ -16,6 +16,14 @@ class StoreInstructorRequest extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'educational_level_id.required' => 'The field educational level is required.',
+            'college_id.required' => 'The field college is required.',
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,13 +35,13 @@ class StoreInstructorRequest extends FormRequest
             'idno' => 'required|unique:users|max:10',
             'last_name' => 'required',
             'first_name' => 'required',
-            'college' => 'required',
-            'educational_level' => 'required',
+            'college_id' => 'required',
+            'educational_level_id' => 'required',
             'designation' => 'required',
             'middle_name' => 'required',
             'name_suffix' => '',
             'name_prefix' => '',
-            'department' => '',
+            'department_id' => '',
         ];
     }
 }

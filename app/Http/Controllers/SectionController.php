@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
-use App\Models\Program;
 use App\Models\Section;
-use Illuminate\Http\Request;
 
 class SectionController extends Controller
 {
@@ -57,7 +55,6 @@ class SectionController extends Controller
      */
     public function show(Section $section)
     {
-        
     }
 
     /**

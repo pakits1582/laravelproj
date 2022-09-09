@@ -30,7 +30,7 @@
                                             <label for="name"  class="m-0 font-weight-bold text-primary py-2">Logo</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="uploadfile signature card border-left-primary shadow" id="school_logo" style="background-image:url({{ ($configuration->logo != '') ? asset('images/'.$configuration->logo) : '' }})">
+                                            <div class="uploadfile signature card border-left-primary shadow" id="school_logo" style="background-image:url({{ (isset($configuration->logo)) ? asset('images/'.$configuration->logo) : '' }})">
                                                 &nbsp;
                                             </div>
                                             <input type="file" class="hidden" name="logo" id="school_logo_file" accept="image/*" />
@@ -46,7 +46,7 @@
                                             <label for="name"  class="m-0 font-weight-bold text-primary py-2">Name</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="text" name="name" placeholder="" class="form-control " value="{{ $configuration->name  ?? '' }}">
+                                            <input type="text" name="name" placeholder="" class="form-control " value="{{ (old('name')) ? old('name') : ($configuration->name  ?? '') }}">
                                         </div>
                                     </div>
                                     @error('name')
@@ -59,7 +59,7 @@
                                             <label for="address"  class="m-0 font-weight-bold text-primary py-2">Address</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="text" name="address" placeholder="" class="form-control " value="{{ $configuration->address  ?? '' }}">
+                                            <input type="text" name="address" placeholder="" class="form-control " value="{{ (old('address')) ? old('address') : ($configuration->address  ?? '') }}">
                                         </div>
                                     </div>
                                     @error('address')
@@ -72,7 +72,7 @@
                                             <label for="contactno"  class="m-0 font-weight-bold text-primary py-2">Contact #</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="text" name="contactno" placeholder="" class="form-control " value="{{ $configuration->contactno  ?? '' }}">
+                                            <input type="text" name="contactno" placeholder="" class="form-control " value="{{ (old('name')) ? old('name') : ($configuration->contactno  ?? '') }}">
                                         </div>
                                     </div>
                                     @error('contactno')
@@ -85,7 +85,7 @@
                                             <label for="accronym"  class="m-0 font-weight-bold text-primary py-2">Accronym</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="text" name="accronym" placeholder="" class="form-control " value="{{ $configuration->accronym  ?? '' }}">
+                                            <input type="text" name="accronym" placeholder="" class="form-control " value="{{ (old('accronym')) ? old('accronym') : ($configuration->accronym  ?? '') }}">
                                         </div>
                                     </div>
                                     @error('accronym')
@@ -147,7 +147,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" name="president" placeholder="President's Name" class="form-control " value="{{ $configuration->president  ?? '' }}">
+                                            <input type="text" name="president" placeholder="President's Name" class="form-control " value="{{ (old('president')) ? old('president') : ($configuration->president  ?? '') }}">
                                         </div>
                                         @error('president')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -155,7 +155,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <input type="text" name="pres_initials" placeholder="" class="form-control " value="{{ $configuration->pres_initials  ?? '' }}">
+                                            <input type="text" name="pres_initials" placeholder="" class="form-control " value="{{ (old('pres_initials')) ? old('pres_initials') : ($configuration->pres_initials  ?? '') }}">
                                         </div>
                                         @error('pres_initials')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -163,7 +163,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="pres_sig" style="background-image:url({{ ($configuration->pres_sig != '') ? asset('images/'.$configuration->pres_sig) : '' }})" >
+                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="pres_sig" style="background-image:url({{ (isset($configuration->pres_sig)) ? asset('images/'.$configuration->pres_sig) : '' }})" >
                                                 &nbsp;
                                             </div>
                                             <input type="file" class="hidden" name="pres_sig" id="pres_sig_file" accept="image/*" />
@@ -178,7 +178,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" name="registrar" placeholder="Registrar's Name" class="form-control " value="{{ $configuration->registrar  ?? '' }}">
+                                            <input type="text" name="registrar" placeholder="Registrar's Name" class="form-control " value="{{ (old('registrar')) ? old('registrar') : ($configuration->registrar  ?? '') }}">
                                         </div>
                                         @error('registrar')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -186,7 +186,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <input type="text" name="reg_initials" placeholder="" class="form-control " value="{{ $configuration->reg_initials  ?? '' }}">
+                                            <input type="text" name="reg_initials" placeholder="" class="form-control " value="{{ (old('reg_initials')) ? old('reg_initials') : ($configuration->reg_initials  ?? '') }}">
                                         </div>
                                         @error('reg_initials')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -194,7 +194,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="reg_sig" style="background-image:url({{ ($configuration->reg_sig != '') ? asset('images/'.$configuration->reg_sig) : '' }})">
+                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="reg_sig" style="background-image:url({{ (isset($configuration->reg_sig)) ? asset('images/'.$configuration->reg_sig) : '' }})">
                                                 &nbsp;
                                             </div>
                                             <input type="file" class="hidden" name="reg_sig" id="reg_sig_file" accept="image/*" />
@@ -209,7 +209,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" name="treasurer" placeholder="Tresurer's Name" class="form-control " value="{{ $configuration->treasurer  ?? '' }}">
+                                            <input type="text" name="treasurer" placeholder="Tresurer's Name" class="form-control " value="{{ (old('treasurer')) ? old('treasurer') : ($configuration->treasurer  ?? '') }}">
                                         </div>
                                         @error('treasurer')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -217,7 +217,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <input type="text" name="tres_initials" placeholder="" class="form-control " value="{{ $configuration->tres_initials  ?? '' }}">
+                                            <input type="text" name="tres_initials" placeholder="" class="form-control " value="{{ (old('tres_initials')) ? old('tres_initials') : ($configuration->tres_initials  ?? '') }}">
                                         </div>
                                         @error('tres_initials')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="tres_sig" style="background-image:url({{ ($configuration->tres_sig != '') ? asset('images/'.$configuration->tres_sig) : '' }})">
+                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="tres_sig" style="background-image:url({{ (isset($configuration->tres_sig)) ? asset('images/'.$configuration->tres_sig) : '' }})">
                                                 &nbsp;
                                             </div>
                                             <input type="file" class="hidden" name="tres_sig" id="tres_sig_file" accept="image/*" />
@@ -279,7 +279,7 @@
                                     </div>
                                     <div class="col-md-5">
                                         <div class="form-group">
-                                            <input type="text" name="datefrom" placeholder="" class="form-control datepicker" value="{{ $configuration->datefrom  ?? '' }}">
+                                            <input type="text" name="datefrom" placeholder="" class="form-control datepicker" value="{{ (old('datefrom')) ? old('datefrom') : ($configuration->datefrom  ?? '') }}">
                                         </div>
                                         @error('datefrom')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -287,7 +287,7 @@
                                     </div>
                                     <div class="col-md-5">
                                         <div class="form-group">
-                                            <input type="text" name="dateto" placeholder="" class="form-control datepicker" value="{{ $configuration->dateto  ?? '' }}">
+                                            <input type="text" name="dateto" placeholder="" class="form-control datepicker" value="{{ (old('dateto')) ? old('dateto') : ($configuration->dateto  ?? '') }}">
                                         </div>
                                         @error('dateto')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -306,21 +306,23 @@
                                         </div>
                                     </div>
                                     <div class="col-md-5">
-                                        @if ($configuration->status == 0)
-                                            <a href="#" id="open" data-id="{{ $configuration->id }}" class="applicationaction btn btn-primary btn-icon-split mx-2 align-middle">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-door-open"></i>
-                                                </span>
-                                                <span class="text">Open Application</span>
-                                            </a>
-                                        @else
-                                            <a href="#" id="close" data-id="{{ $configuration->id }}" class="applicationaction btn btn-info btn-icon-split mx-2 align-middle">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-door-closed"></i>
-                                                </span>
-                                                <span class="text">Close Application</span>
-                                            </a>
-                                        @endif
+                                        @isset($configuration->status)
+                                            @if ($configuration->status == 0)
+                                                <a href="#" id="open" data-id="{{ $configuration->id }}" class="applicationaction btn btn-primary btn-icon-split mx-2 align-middle">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-door-open"></i>
+                                                    </span>
+                                                    <span class="text">Open Application</span>
+                                                </a>
+                                            @else
+                                                <a href="#" id="close" data-id="{{ $configuration->id }}" class="applicationaction btn btn-info btn-icon-split mx-2 align-middle">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-door-closed"></i>
+                                                    </span>
+                                                    <span class="text">Close Application</span>
+                                                </a>
+                                            @endif
+                                        @endisset
                                     </div>
                                 </div>
                                 @error('current_period')
@@ -331,7 +333,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="balanceallowed" class="m-0 font-weight-bold text-primary">Balance Allowed</label>
-                                        <input type="text" name="balanceallowed" placeholder="" class="form-control " value="{{ $configuration->balanceallowed  ?? '' }}">
+                                        <input type="text" name="balanceallowed" placeholder="" class="form-control " value="{{ (old('balanceallowed')) ? old('balanceallowed') : ($configuration->balanceallowed  ?? '') }}">
                                         @error('balanceallowed')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                                         @enderror
@@ -340,7 +342,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="due" class="m-0 font-weight-bold text-primary">Due (Days)</label>
-                                        <input type="text" name="due" placeholder="" class="form-control " value="{{ $configuration->due  ?? '' }}">
+                                        <input type="text" name="due" placeholder="" class="form-control " value="{{ (old('due')) ? old('due') : ($configuration->due  ?? '') }}">
                                         @error('due')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                                         @enderror
@@ -350,7 +352,7 @@
                             <p class="font-italic text-info">Note: Please use this tag DUE to add duedate on assessment note</p>
                             <div class="form-group">
                                 <label for="note"  class="m-0 font-weight-bold text-primary">Assessment Note</label>
-                                <textarea name="note" class="form-control" rows="3">{{ $configuration->note  ?? '' }}</textarea>
+                                <textarea name="note" class="form-control" rows="3">{{ (old('note')) ? old('note') : ( $configuration->note  ?? '') }}</textarea>
                                 @error('note')
                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                 @enderror

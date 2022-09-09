@@ -96,19 +96,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="educational_level" class="m-0 font-weight-bold text-primary">* Level</label>
-                                            @include('partials.educlevels.dropdown')
-                                            @error('educational_level')
-                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                            @enderror
+                                            @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id'])
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="college" class="m-0 font-weight-bold text-primary">College</label>
-                                            @include('partials.colleges.dropdown')
-                                            @error('college')
-                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                            @enderror
+                                            @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college_id'])
                                         </div>
                                     </div>
                                 </div>

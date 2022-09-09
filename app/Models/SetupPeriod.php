@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class SetupPeriod extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'period'];
+
+    protected $fillable = ['user_id', 'period_id'];
 
     public function user()
     {

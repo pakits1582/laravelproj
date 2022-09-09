@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::table('instructors', function (Blueprint $table) {
-            $table->unsignedBigInteger('college')->nullable();
-            $table->foreign('college')->references('id')->on('colleges');
-            $table->unsignedBigInteger('department')->nullable();
-            $table->foreign('department')->references('id')->on('departments');
+            $table->unsignedBigInteger('college_id')->nullable();
+            $table->foreign('college_id')->references('id')->on('colleges');
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 

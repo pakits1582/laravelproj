@@ -52,30 +52,28 @@ class User extends Authenticatable
 
     public function info()
     {
-        switch(Auth::user()->utype){
+        switch (Auth::user()->utype) {
             case 0:
                 return $this->hasOne(Userinfo::class, 'user_id', 'id');
-            break;
+                break;
             case 1:
                 return $this->hasOne(Instructor::class, 'user_id', 'id');
-            break;
+                break;
             case 2:
                 return $this->hasOne(Student::class, 'user_id', 'id');
-            break;	
+                break;
         }
     }
-
-    
 
     public function access()
     {
         return $this->hasMany(Useraccess::class, 'user_id', 'id');
-    } 
-    
+    }
+
     public function setup()
     {
         $config = Configuration::take(1)->first();
-        
-        return $this->hasOne(SetupPeriod::class, 'user_id', 'id')->withDefault(['id' => $config->currentperiod->id, 'name' => $config->currentperiod->name]);
+
+        return $this->hasOne(SetupPeriod::class, 'user_id', 'id')->withDefault(['id' => $config->currentperiod->id ?? '', 'name' => $config->currentperiod->name ?? '']);
     }
 }

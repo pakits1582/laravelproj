@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'name', 'units', 'tfunits', 'loadunits', 'lecunits', 'labunits', 'hours', 'educational_level', 'college', 'professional', 'laboratory', 'gwa', 'nograde', 'notuition', 'exclusive'];
+    protected $fillable = ['code', 'name', 'units', 'tfunits', 'loadunits', 'lecunits', 'labunits', 'hours', 'educational_level_id', 'college_id', 'professional', 'laboratory', 'gwa', 'nograde', 'notuition', 'exclusive'];
 
     public function code(): Attribute
     {
@@ -30,12 +30,12 @@ class Subject extends Model
 
     public function collegeinfo()
     {
-        return $this->belongsTo(College::class, 'college', 'id');
+        return $this->belongsTo(College::class, 'college_id', 'id')->withDefault(['code' => '', 'name' => '']);
     }
 
     public function educlevel()
     {
-        return $this->belongsTo(Educationallevel::class, 'educational_level', 'id');
+        return $this->belongsTo(Educationallevel::class, 'educational_level_id', 'id')->withDefault(['code' => '', 'level' => '']);
     }
 
     public function collegecode(): Attribute

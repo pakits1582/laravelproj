@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('configuration_schedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('educational_level')->nullable()->index();
-            $table->foreign('educational_level')->references('id')->on('educational_levels');
-            $table->unsignedBigInteger('college')->nullable()->index();
-            $table->foreign('college')->references('id')->on('colleges');
+            $table->unsignedBigInteger('educational_level_id')->nullable()->index();
+            $table->foreign('educational_level_id')->references('id')->on('educational_levels');
+            $table->unsignedBigInteger('college_id')->nullable()->index();
+            $table->foreign('college_id')->references('id')->on('colleges');
             $table->tinyInteger('year')->default(0);
             $table->date('date_from')->nullable();
             $table->date('date_to')->nullable();
-            $table->unsignedBigInteger('period')->nullable()->index();
-            $table->foreign('period')->references('id')->on('periods');
+            $table->unsignedBigInteger('period_id')->nullable()->index();
+            $table->foreign('period_id')->references('id')->on('periods');
             $table->string('type')->nullable();
             $table->timestamps();
         });

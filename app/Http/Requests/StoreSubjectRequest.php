@@ -26,8 +26,8 @@ class StoreSubjectRequest extends FormRequest
         return [
             'code' => 'required',
             'name' => 'required',
-            'educational_level' => 'required',
-            'college' => '',
+            'educational_level_id' => 'required',
+            'college_id' => '',
             'units' => [],
             'tfunits' => [],
             'lecunits' => [],

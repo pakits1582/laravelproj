@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRoomRequest extends FormRequest
 {
@@ -28,7 +28,7 @@ class UpdateRoomRequest extends FormRequest
             'code' => ['required',  Rule::unique('departments')->where(fn ($query) => $query->where('name', $this->name))->ignore($this->room->id)],
             'name' => ['required',  Rule::unique('departments')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->room->id)],
             'capacity' => ['required', 'integer'],
-            'excludechecking' => ''
+            'excludechecking' => '',
         ];
     }
 }

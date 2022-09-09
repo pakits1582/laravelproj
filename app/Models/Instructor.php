@@ -18,16 +18,16 @@ class Instructor extends Model
         'middle_name',
         'name_suffix',
         'designation',
-        'educational_level',
-        'college',
-        'department',
+        'educational_level_id',
+        'college_id',
+        'department_id',
     ];
 
     public function namePrefix(): Attribute
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['name_prefix']),
-            set: fn($value) => strtoupper($value)
+            set: fn ($value) => strtoupper($value)
         );
     }
 
@@ -35,7 +35,7 @@ class Instructor extends Model
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['first_name']),
-            set: fn($value) => strtoupper($value)
+            set: fn ($value) => strtoupper($value)
         );
     }
 
@@ -43,7 +43,7 @@ class Instructor extends Model
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['middle_name']),
-            set: fn($value) => strtoupper($value)
+            set: fn ($value) => strtoupper($value)
         );
     }
 
@@ -51,7 +51,7 @@ class Instructor extends Model
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['last_name']),
-            set: fn($value) => strtoupper($value)
+            set: fn ($value) => strtoupper($value)
         );
     }
 
@@ -59,7 +59,7 @@ class Instructor extends Model
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['name_suffix']),
-            set: fn($value) => strtoupper($value)
+            set: fn ($value) => strtoupper($value)
         );
     }
 
@@ -86,16 +86,16 @@ class Instructor extends Model
 
     public function collegeinfo()
     {
-        return $this->belongsTo(College::class, 'college', 'id');
+        return $this->belongsTo(College::class, 'college_id', 'id')->withDefault(['code' => '', 'name' => '']);
     }
 
     public function deptinfo()
     {
-        return $this->belongsTo(Department::class, 'department', 'id');
+        return $this->belongsTo(Department::class, 'department_id', 'id')->withDefault(['code' => '', 'name' => '']);
     }
 
     public function educlevel()
     {
-        return $this->belongsTo(Educationallevel::class, 'educational_level', 'id');
+        return $this->belongsTo(Educationallevel::class, 'educational_level_id', 'id')->withDefault(['code' => '', 'name' => '']);
     }
 }

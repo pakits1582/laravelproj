@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePeriodRequest extends FormRequest
 {
@@ -21,8 +21,9 @@ class UpdatePeriodRequest extends FormRequest
     {
         return [
             'code.unique' => 'A period with the following code, term and year already exists.',
-            'term.unique' => 'A period with the following code, term and year already exists.',
+            'term_id.unique' => 'A period with the following code, term and year already exists.',
             'year.unique' => 'A period with the following code, term and year already exists.',
+            'term_id.required' => 'The term field is required.',
 
         ];
     }
@@ -36,17 +37,17 @@ class UpdatePeriodRequest extends FormRequest
     {
         return [
             'code' => ['required', Rule::unique('periods')->where(fn ($query) => $query
-                                                                                ->where('term', $this->term)
+                                                                                ->where('term_id', $this->term_id)
                                                                                 ->where('year', $this->year)
-                                                                                 )->ignore($this->period->id)],
-            'term' => ['required', Rule::unique('periods')->where(fn ($query) => $query
+            )->ignore($this->period->id)],
+            'term_id' => ['required', Rule::unique('periods')->where(fn ($query) => $query
                                                                                 ->where('code', $this->code)
                                                                                 ->where('year', $this->year)
-                                                                                )->ignore($this->period->id)],
+            )->ignore($this->period->id)],
             'year' => ['required', Rule::unique('periods')->where(fn ($query) => $query
-                                                                                ->where('code', $this->code)
-                                                                                ->where('term', $this->term)
-                                                                                )->ignore($this->period->id)],
+            ->where('code', $this->code)
+            ->where('term_id', $this->term_id)
+            )->ignore($this->period->id)],
             'name' => ['required'],
             'class_start' => ['required', 'date'],
             'class_end' => ['required', 'date'],

@@ -24,24 +24,24 @@ class UpdateConfigurationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'], 
-            'logo' => [], 
-            'contactno' => ['required'], 
-            'address' => ['required'], 
-            'accronym' => ['required'], 
-            'president' => ['required'], 
-            'pres_initials' => ['required'], 
-            'registrar' => ['required'],  
-            'reg_initials' => ['required'], 
+            'name' => ['required'],
+            'logo' => [],
+            'contactno' => ['required'],
+            'address' => ['required'],
+            'accronym' => ['required'],
+            'president' => ['required'],
+            'pres_initials' => ['required'],
+            'registrar' => ['required'],
+            'reg_initials' => ['required'],
             'treasurer' => ['required'],
-            'tres_initials' => ['required'], 
-            'balanceallowed' =>['required', 'regex:/^\d*(\.\d{1,2})?$/'],
-            'due' => ['required', 'integer'], 
-            'note' => ['required'], 
-            'current_period' => ['required'], 
-            'application_period' => ['required'], 
-            'datefrom' => ['required', 'date'], 
-            'dateto' => ['required', 'date', 'after_or_equal:datefrom'], 
+            'tres_initials' => ['required'],
+            'balanceallowed' => ['required', 'regex:/^\d*(\.\d{1,2})?$/'],
+            'due' => ['required', 'integer'],
+            'note' => ['required'],
+            'current_period' => ['required'],
+            'application_period' => ['required'],
+            'datefrom' => ['required', 'date'],
+            'dateto' => ['required', 'date', 'after_or_equal:datefrom'],
             'status' => [],
             'announcement' => [],
             'pres_sig' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -49,6 +49,5 @@ class UpdateConfigurationRequest extends FormRequest
             'tres_sig' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
-
     }
 }

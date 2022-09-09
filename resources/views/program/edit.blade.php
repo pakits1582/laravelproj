@@ -43,17 +43,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="educational_level" class="m-0 font-weight-bold text-primary">* Level</label>
-                                @include('partials.educlevels.dropdown', ['value' => $program->educational_level])
-                                @error('educational_level')
-                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                @enderror
+                                @include('partials.educlevels.dropdown', ['value' => $program->educational_level_id, 'fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id'])
                             </div>
                             <div class="form-group">
                                 <label for="college" class="m-0 font-weight-bold text-primary">* College</label>
-                                @include('partials.colleges.dropdown', ['value' => $program->college])
-                                @error('college')
-                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                @enderror
+                                @include('partials.colleges.dropdown', ['value' => $program->college_id, 'fieldname' => 'college_id', 'fieldid' => 'college_id'])
                             </div>
                             <div class="form-group">
                                 <label for="head" class="m-0 font-weight-bold text-primary">Head</label>

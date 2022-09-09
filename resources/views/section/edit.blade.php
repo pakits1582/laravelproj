@@ -36,7 +36,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="program" class="m-0 font-weight-bold text-primary">* Program</label>
-                                @include('partials.programs.dropdown',['value' => $section->program])
+                                @include('partials.programs.dropdown',['value' => $section->program_id, 'fieldname' => 'program_id', 'fieldid' => 'program_id'])
                                 @error('program')
                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                 @enderror

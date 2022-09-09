@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSubjectRequest extends FormRequest
 {
@@ -27,15 +27,15 @@ class UpdateSubjectRequest extends FormRequest
         return [
             'code' => ['required',  Rule::unique('subjects')->where(fn ($query) => $query->where('name', $this->name)
                                                                                         ->where('units', $this->name)
-                                                                                        )->ignore($this->subject->id)],
+            )->ignore($this->subject->id)],
             'name' => ['required',  Rule::unique('subjects')->where(fn ($query) => $query->where('code', $this->code)
-                                                                                        ->where('units', $this->name)
-                                                                                        )->ignore($this->subject->id)],
+            ->where('units', $this->name)
+            )->ignore($this->subject->id)],
             'units' => ['required',  Rule::unique('subjects')->where(fn ($query) => $query->where('code', $this->code)
-                                                                                            ->where('name', $this->name)
-                                                                                        )->ignore($this->subject->id)],
-            'educational_level' => 'required',
-            'college' => '',
+                ->where('name', $this->name)
+            )->ignore($this->subject->id)],
+            'educational_level_id' => 'required',
+            'college_id' => '',
             'tfunits' => [],
             'lecunits' => [],
             'labunits' => [],

@@ -36,6 +36,5 @@ class ComposerServiceProvider extends ServiceProvider
         View::composer('partials.programs.*', ProgramComposer::class);
         View::composer('partials.periods.*', PeriodComposer::class);
         View::composer('*', ConfigurationComposer::class);
-        
     }
 }

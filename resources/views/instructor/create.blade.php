@@ -89,28 +89,19 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="college" class="m-0 font-weight-bold text-primary">* College</label>
-                                        @include('partials.colleges.dropdown')
-                                        @error('college')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
+                                        @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college_id'])
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="educational_level" class="m-0 font-weight-bold text-primary">* Level</label>
-                                        @include('partials.educlevels.dropdown')
-                                        @error('educational_level')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
+                                        @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id'])
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="department" class="m-0 font-weight-bold text-primary">Department</label>
-                                        @include('partials.departments.dropdown')
-                                        @error('department')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
+                                        @include('partials.departments.dropdown', ['fieldname' => 'department_id', 'fieldid' => 'department_id'])
                                     </div>
                                 </div>
                                 <div class="col-md-3">

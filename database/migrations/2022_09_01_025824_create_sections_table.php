@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('code')->index();
             $table->string('name')->index();
-            $table->unsignedBigInteger('program')->nullable();
-            $table->foreign('program')->references('id')->on('programs');
+            $table->unsignedBigInteger('program_id')->nullable();
+            $table->foreign('program_id')->references('id')->on('programs');
             $table->integer('year')->default(0);
             $table->integer('minenrollee')->default(0);
             $table->timestamps();

@@ -19,17 +19,14 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" data-action="" id="changeperiod_form" role="form">
+                                <form method="POST"  data-action="{{ route('saveperiod') }}" id="changeperiod_form" role="form">
                                 @csrf
                                 <div class="form-group mid">
                                     <label for="term" class="m-0 font-weight-bold text-success">Current Period : {{ session('periodname') }}</label>
                                 </div>
                                 <div class="form-group">
-                                    <label for="code"  class="m-0 font-weight-bold text-primary">Period</label>
+                                    <label for="period"  class="m-0 font-weight-bold text-primary">Period</label>
                                     @include('partials.periods.dropdown')
-                                    @error('period')
-                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                    @enderror
                                     <div id="error_period"></div>
                                 </div>
                                 <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Period</button>

@@ -3,9 +3,12 @@
     @if ($colleges)
         @foreach ($colleges as $college)
             <option value="{{ $college->id }}" 
-                {{ (old('college', $fieldname ?? 'college') == $college->id) ? 'selected' : '' }}
+                {{ (old($fieldname ?? 'college') == $college->id) ? 'selected' : '' }}
                 {{ (isset($value)) ? ($value == $college->id) ? 'selected' : '' : '' }}
                 >{{ $college->code }}</option>
         @endforeach
     @endif
 </select>
+@error($fieldname ?? 'college')
+    <p class="text-danger text-xs mt-1">{{$message}}</p>
+@enderror

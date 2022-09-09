@@ -23,10 +23,10 @@ return new class extends Migration
             $table->float('lecunits')->nullable();
             $table->float('labunits')->nullable();
             $table->float('hours')->nullable();
-            $table->unsignedBigInteger('educational_level')->nullable();
-            $table->foreign('educational_level')->references('id')->on('educational_levels');
-            $table->unsignedBigInteger('college')->nullable();
-            $table->foreign('college')->references('id')->on('colleges');
+            $table->unsignedBigInteger('educational_level_id')->nullable();
+            $table->foreign('educational_level_id')->references('id')->on('educational_levels');
+            $table->unsignedBigInteger('college_id')->nullable();
+            $table->foreign('college_id')->references('id')->on('colleges');
             $table->boolean('professional')->default(0);
             $table->boolean('laboratory')->default(0);
             $table->boolean('gwa')->default(0);

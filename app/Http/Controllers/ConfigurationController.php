@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreConfigScheduleRequest;
-use App\Libs\Helpers;
-use App\Models\Period;
-use Illuminate\Http\Request;
-use App\Models\Configuration;
-use App\Services\ConfigurationService;
 use App\Http\Requests\UpdateConfigurationRequest;
+use App\Libs\Helpers;
+use App\Models\Configuration;
 use App\Models\ConfigurationSchedule;
-use App\Models\Educationallevel;
+use App\Models\Period;
+use App\Services\ConfigurationService;
 
 class ConfigurationController extends Controller
 {
@@ -31,7 +29,7 @@ class ConfigurationController extends Controller
     {
         $periods = Period::where('display', 1)->orderBy('year', 'DESC')->get();
         $configuration = Configuration::take(1)->first();
-        $configscheds = ConfigurationSchedule::all();
+        $configscheds = ConfigurationSchedule::where('period_id', session('current_period'))->get();
         $configgrouped = $configscheds->groupBy('type');
 
         return view('configuration.index', compact('periods', 'configuration', 'configgrouped'));
@@ -60,7 +58,7 @@ class ConfigurationController extends Controller
             'educational_level' => $request->educational_level,
             'college' => $request->college,
             'year' => $request->year,
-            'period' => 1, //change to session setup
+            'period' => session('current_period'), //change to session setup
         ], $request->validated());
 
         if ($insert->wasRecentlyCreated) {
@@ -99,10 +97,10 @@ class ConfigurationController extends Controller
      * @param  \App\Models\Configuration  $configuration
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateConfigurationRequest $request, $configuration='')
+    public function update(UpdateConfigurationRequest $request, $configuration = '')
     {
         $this->configService->updateConfiguration($request, $configuration);
-       
+
         return back()->with(['alert-class' => 'alert-success', 'message' => 'Configuration sucessfully updated!']);
     }
 
@@ -118,7 +116,6 @@ class ConfigurationController extends Controller
         $configuration->update(['status' => $status]);
 
         return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Application action successfully excuted!']);
-
     }
 
     public function destroy(ConfigurationSchedule $configsched)

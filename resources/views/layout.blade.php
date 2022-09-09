@@ -54,6 +54,7 @@
                     <div class="mr-2 d-none d-lg-inline text-gray-600 small">
                         @auth
                             {{ Auth::user()->info->name }}
+                            <p class="mb-0  font-weight-bold text-success">{{ session('periodname') }}</p>
                         @endauth
                     </div>
                     <img class="img-profile rounded-circle"
@@ -104,29 +105,31 @@
             @php
                 if(isset($user)){
                     $userAccesses = Helpers::userAccessCategories($user->access->toArray());
-                    foreach ($userAccesses as $access){
-            @endphp
-                <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse{{ $access['category'] }}"
-                        aria-expanded="true" aria-controls="collapse{{ $access['category'] }}">
-                        <i class="fas fa-fw {{ Helpers::menuCategoryIcon($access['category']) }}"></i>
-                        <span>{{ $access['category'] }}</span>
-                    </a>
-                    <div id="collapse{{ $access['category'] }}" class="collapse" aria-labelledby="heading{{ $access['category'] }}" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Category Menu</h6>
-                            @php
-                                foreach ($access['access'] as $key => $v) {
-                                    @endphp
-                                        <a class="collapse-item" href="/{{ $v['access'] }}">{{ $v['title'] }}</a>
-                                    @php
-                                }
+                    if($userAccesses){
+                        foreach ($userAccesses as $access){
                             @endphp
-                        </div>
-                    </div>
-                </li>
-            @php
+                                <!-- Nav Item - Pages Collapse Menu -->
+                                <li class="nav-item">
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse{{ $access['category'] }}"
+                                        aria-expanded="true" aria-controls="collapse{{ $access['category'] }}">
+                                        <i class="fas fa-fw {{ Helpers::menuCategoryIcon($access['category']) }}"></i>
+                                        <span>{{ $access['category'] }}</span>
+                                    </a>
+                                    <div id="collapse{{ $access['category'] }}" class="collapse" aria-labelledby="heading{{ $access['category'] }}" data-parent="#accordionSidebar">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <h6 class="collapse-header">Category Menu</h6>
+                                            @php
+                                                foreach ($access['access'] as $key => $v) {
+                                                    @endphp
+                                                        <a class="collapse-item" href="/{{ $v['access'] }}">{{ $v['title'] }}</a>
+                                                    @php
+                                                }
+                                            @endphp
+                                        </div>
+                                    </div>
+                                </li>
+                            @php
+                        }
                     }
                 }
             @endphp

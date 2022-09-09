@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('code')->index();
             $table->string('name')->index();
-            $table->unsignedBigInteger('educational_level')->nullable();
-            $table->foreign('educational_level')->references('id')->on('educational_levels');
-            $table->unsignedBigInteger('college')->nullable();
-            $table->foreign('college')->references('id')->on('colleges');
+            $table->unsignedBigInteger('educational_level_id')->nullable();
+            $table->foreign('educational_level_id')->references('id')->on('educational_levels');
+            $table->unsignedBigInteger('college_id')->nullable();
+            $table->foreign('college_id')->references('id')->on('colleges');
             $table->unsignedBigInteger('head')->nullable();
             $table->foreign('head')->references('id')->on('instructors');
             $table->integer('years')->default(0);

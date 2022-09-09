@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEducationalLevelRequest;
-use App\Libs\Helpers;
-use App\Models\College;
-use App\Models\Program;
-use App\Models\Instructor;
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
+use App\Libs\Helpers;
 use App\Models\Educationallevel;
+use App\Models\Instructor;
+use App\Models\Program;
 
 class ProgramController extends Controller
 {
@@ -19,7 +17,7 @@ class ProgramController extends Controller
         //$this->instructorService = $instructorService;
         Helpers::setLoad(['jquery_program.js']);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -40,7 +38,7 @@ class ProgramController extends Controller
     public function create()
     {
         $heads = Instructor::where('designation', 2)->get()->sortBy('lname');
-        
+
         return view('program.create', compact('heads'));
     }
 
@@ -81,7 +79,7 @@ class ProgramController extends Controller
     public function edit(Program $program)
     {
         $heads = Instructor::where('designation', 2)->get()->sortBy('lname');
-        
+
         return view('program.edit', compact('program', 'heads'));
     }
 
@@ -116,14 +114,14 @@ class ProgramController extends Controller
 
         if ($insert->wasRecentlyCreated) {
             return response()->json([
-                'success' => true, 
-                'message' => 'Educational level successfully added!', 
+                'success' => true,
+                'message' => 'Educational level successfully added!',
                 'alert' => 'alert-success',
                 'level_id' => $insert->id,
                 'level' => $request->validated('level'),
             ], 200);
         }
 
-        return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, term already exists!']);
+        return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, level already exists!']);
     }
 }

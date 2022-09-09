@@ -1,69 +1,65 @@
 <?php
+
 namespace App\Http\Controllers;
-use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
-use function PHPUnit\Framework\isNull;
 
 class LoginController extends Controller
 {
     protected function redirectTo()
     {
-        return redirect("/home");
+        return redirect('/home');
     }
 
     public function index()
     {
-        if(Auth::check()){
-            return redirect("/home");
+        if (Auth::check()) {
+            return redirect('/home');
         }
 
         return view('auth.index');
-    }  
-      
+    }
+
     public function login(Request $request)
     {
         $request->validate([
             'idno' => 'required',
             'password' => 'required',
         ]);
-   
+
         $credentials = $request->only('idno', 'password');
-        if (Auth::attempt($credentials+['is_active' => 1])) {
+        if (Auth::attempt($credentials + ['is_active' => 1])) {
             //SET SESSIONS HERE
-            if(is_null(Auth::user()->setup->period)){
+            if (is_null(Auth::user()->setup->period)) {
                 session()->put('current_period', Auth::user()->setup->id);
                 session()->put('periodname', Auth::user()->setup->name);
-            }else{
+            } else {
                 session()->put('current_period', Auth::user()->setup->period->id);
                 session()->put('periodname', Auth::user()->setup->period->name);
             }
-        
+
             return redirect()->intended('home');
         }
-  
+
         return back()->with(['alert-class' => 'alert-danger', 'message' => 'Sorry we didn\'t recognized your login details. Please check idno and password and try again!'])->withInput();
     }
-      
+
     public function home()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('home');
         }
-  
-        return redirect("/");
+
+        return redirect('/');
     }
-    
-    public function logout() {
+
+    public function logout()
+    {
         Session::flush();
         Auth::logout();
-  
-        return redirect("/");
+
+        return redirect('/');
     }
-
-
 }

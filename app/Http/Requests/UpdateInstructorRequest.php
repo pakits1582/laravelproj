@@ -24,7 +24,8 @@ class UpdateInstructorRequest extends FormRequest
             'first_name.unique' => 'An instructor with the following first, last, middle name and suffix already exists.',
             'middle_name.unique' => 'An instructor with the following first, last, middle name and suffix already exists.',
             'name_suffix.unique' => 'An instructor with the following first, last, middle name and suffix already exists.',
-
+            'educational_level_id.required' => 'The field educational level is required.',
+            'college_id.required' => 'The field college is required.',
         ];
     }
 
@@ -38,30 +39,30 @@ class UpdateInstructorRequest extends FormRequest
         return [
             'idno' => ['required',  Rule::unique('users')->ignore($this->instructor->user_id)],
             'last_name' => ['required',  Rule::unique('instructors')->where(fn ($query) => $query
-                                                                                ->where('first_name', $this->first_name)
-                                                                                ->where('middle_name', $this->middle_name)
-                                                                                ->where('name_suffix', $this->name_suffix)
-                                                                            )->ignore($this->instructor->id)],
+                ->where('first_name', $this->first_name)
+                ->where('middle_name', $this->middle_name)
+                ->where('name_suffix', $this->name_suffix)
+            )->ignore($this->instructor->id)],
             'first_name' => ['required',  Rule::unique('instructors')->where(fn ($query) => $query
-                                                                                ->where('last_name', $this->last_name)
-                                                                                ->where('middle_name', $this->middle_name)
-                                                                                ->where('name_suffix', $this->name_suffix)
-                                                                            )->ignore($this->instructor->id)],
+                ->where('last_name', $this->last_name)
+                ->where('middle_name', $this->middle_name)
+                ->where('name_suffix', $this->name_suffix)
+            )->ignore($this->instructor->id)],
             'middle_name' => [Rule::unique('instructors')->where(fn ($query) => $query
-                                                                                ->where('last_name', $this->last_name)
-                                                                                ->where('first_name', $this->first_name)
-                                                                                ->where('name_suffix', $this->name_suffix)
-                                                                            )->ignore($this->instructor->id)],
+                ->where('last_name', $this->last_name)
+                ->where('first_name', $this->first_name)
+                ->where('name_suffix', $this->name_suffix)
+            )->ignore($this->instructor->id)],
             'name_suffix' => [Rule::unique('instructors')->where(fn ($query) => $query
-                                                                                ->where('last_name', $this->last_name)
-                                                                                ->where('middle_name', $this->middle_name)
-                                                                                ->where('first_name', $this->first_name)
-                                                                            )->ignore($this->instructor->id)],
-            'college' => 'required',
-            'educational_level' => 'required',
+                ->where('last_name', $this->last_name)
+                ->where('middle_name', $this->middle_name)
+                ->where('first_name', $this->first_name)
+            )->ignore($this->instructor->id)],
+            'college_id' => 'required',
+            'educational_level_id' => 'required',
             'designation' => 'required',
             'name_prefix' => '',
-            'department' => '',
+            'department_id' => '',
         ];
     }
 }

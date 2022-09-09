@@ -16,6 +16,13 @@ class StoreSectionRequest extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'program_id.required' => 'The program field is required.',
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +33,7 @@ class StoreSectionRequest extends FormRequest
         return [
             'code' => 'required',
             'name' => 'required',
-            'program' => 'required',
+            'program_id' => 'required',
             'year' => ['required', 'integer'],
             'minenrollee' => ['required', 'integer'],
         ];

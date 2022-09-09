@@ -40,8 +40,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="term" class="m-0 font-weight-bold text-primary">* Term</label>
-                                        <select name="term" class="form-control" id="term">
+                                        <label for="term_id" class="m-0 font-weight-bold text-primary">* Term</label>
+                                        <select name="term_id" class="form-control" id="term">
                                             <option value="">- select term -</option>
                                             @if ($terms)
                                                 @foreach ($terms as $term)
@@ -49,13 +49,13 @@
                                                         value="{{ $term->id }}" 
                                                         data-type="{{ $term->type }}"
                                                         {{ (old('term')) ? (old('term') == $term->id) ? 'selected' : '' : '' }}
-                                                        {{ ($period->term == $term->id) ? 'selected' : '' }}
+                                                        {{ ($period->term_id == $term->id) ? 'selected' : '' }}
                                                     >{{ $term->term }}</option>
                                                 @endforeach
                                             @endif
                                             <option value="addterm" data-toggle="modal" data-target="#modalll">- Click to add new term -</option>  
                                         </select>
-                                        @error('term')
+                                        @error('term_id')
                                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                                         @enderror
                                     </div>

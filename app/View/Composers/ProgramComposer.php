@@ -2,7 +2,6 @@
 
 namespace App\View\Composers;
 
-use App\Models\Educationallevel;
 use App\Models\Program;
 use Illuminate\View\View;
 

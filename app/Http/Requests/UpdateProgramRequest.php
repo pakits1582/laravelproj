@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProgramRequest extends FormRequest
 {
@@ -28,8 +28,8 @@ class UpdateProgramRequest extends FormRequest
             'code' => ['required',  Rule::unique('programs')->where(fn ($query) => $query->where('name', $this->name))->ignore($this->program->id)],
             'name' => ['required',  Rule::unique('programs')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->program->id)],
             'years' => 'required|integer',
-            'educational_level' => 'required',
-            'college' => 'required',
+            'educational_level_id' => 'required',
+            'college_id' => 'required',
             'head' => '',
             'source' => '',
             'active' => '',

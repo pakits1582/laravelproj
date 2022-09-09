@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('treasurer')->nullable();
             $table->string('tres_sig')->nullable();
             $table->string('tres_initials')->nullable();
-            $table->decimal('balanceallowed', 11,2)->nullable();
+            $table->decimal('balanceallowed', 11, 2)->nullable();
             $table->tinyInteger('due')->nullable();
             $table->string('note')->nullable();
             $table->unsignedBigInteger('current_period')->nullable();

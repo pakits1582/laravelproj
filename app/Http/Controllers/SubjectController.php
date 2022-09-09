@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSubjectRequest;
 use App\Http\Requests\UpdateSubjectRequest;
-use App\Models\College;
-use App\Models\Educationallevel;
 use App\Models\Subject;
-use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {

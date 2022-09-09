@@ -41,18 +41,12 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="educational_level" class="m-0 font-weight-bold text-primary">* Level</label>
-                                @include('partials.educlevels.dropdown',['addnew' => 1])
-                                @error('educational_level')
-                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                @enderror
+                                <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Level</label>
+                                @include('partials.educlevels.dropdown',['addnew' => 1, 'fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id'])
                             </div>
                             <div class="form-group">
                                 <label for="college" class="m-0 font-weight-bold text-primary">* College</label>
-                                @include('partials.colleges.dropdown')
-                                @error('college')
-                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                @enderror
+                                @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college_id'])
                             </div>
                             <div class="form-group">
                                 <label for="head" class="m-0 font-weight-bold text-primary">Head</label>
