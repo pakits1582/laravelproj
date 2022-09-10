@@ -28,11 +28,6 @@ class College extends Model
         );
     }
 
-    public function deaninfo()
-    {
-        return $this->belongsTo(Instructor::class, 'dean', 'id');
-    }
-
     public function deanName(): Attribute
     {
         return new Attribute(
@@ -40,4 +35,10 @@ class College extends Model
             //set: fn($value) => strtoupper($value)
         );
     }
+
+    public function deaninfo()
+    {
+        return $this->belongsTo(Instructor::class, 'dean', 'id');
+    }
+
 }

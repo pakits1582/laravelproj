@@ -25,7 +25,8 @@ class ProgramController extends Controller
      */
     public function index()
     {
-        $programs = Program::all();
+        //$programs = Program::all();
+        $programs = Program::with(['level', 'collegeinfo', 'headinfo'])->orderBy('code')->get();
 
         return view('program.index', compact('programs'));
     }

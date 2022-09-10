@@ -6,10 +6,11 @@ $(function(){
 /***********************************************
 *** FUNCTION CHANGE SCHOOL START DATE PICKER ***
 ***********************************************/
-    $(document).on("change","#educational_level", function(e){
+    $(document).on("change","#educational_level_id", function(e){
 		let val = $(this).val();
+
 		if(val == 'addnewlevel'){
-			$("#educational_level option:selected").prop('selected', false);
+			$("#educational_level_id option:selected").prop('selected', false);
             $.ajax({url: "/programs/addnewlevel",success: function(data){
                     $('#ui_content').html(data);
                     $("#modalll").modal('show');
@@ -36,7 +37,7 @@ $(function(){
 
                 $("#addlevel_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
                 if(data.success){
-                    $('#educational_level option:last').before($("<option></option>").attr("value", data.level_id).text(data.level));
+                    $('#educational_level_id option:last').before($("<option></option>").attr("value", data.level_id).text(data.level));
                 }
             },
             error: function (data) {

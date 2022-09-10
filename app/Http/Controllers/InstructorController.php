@@ -31,13 +31,14 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        $instructors = Instructor::all();
-        $instructors->load('user', 'collegeinfo', 'deptinfo');
+        //$instructors = Instructor::all();
+        // $instructors->load('user', 'collegeinfo', 'deptinfo');
+        $instructors = Instructor::with(['user', 'collegeinfo', 'deptinfo'])->get();
 
         //dd($instructors);
 
         return view('instructor.index', compact('instructors'));
-    }
+    } 
 
     /**
      * Show the form for creating a new resource.

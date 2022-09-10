@@ -27,7 +27,8 @@ class PeriodController extends Controller
      */
     public function index()
     {
-        $periods = Period::all();
+        //$periods = Period::all();
+        $periods = Period::with('terminfo')->orderBy('year')->orderBy('priority_lvl')->get();
 
         return view('period.index', compact('periods'));
     }

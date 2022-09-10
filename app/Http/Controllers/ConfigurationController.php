@@ -29,7 +29,7 @@ class ConfigurationController extends Controller
     {
         $periods = Period::where('display', 1)->orderBy('year', 'DESC')->get();
         $configuration = Configuration::take(1)->first();
-        $configscheds = ConfigurationSchedule::where('period_id', session('current_period'))->get();
+        $configscheds = ConfigurationSchedule::with(['collegeinfo', 'level'])->where('period_id', session('current_period'))->get();
         $configgrouped = $configscheds->groupBy('type');
 
         return view('configuration.index', compact('periods', 'configuration', 'configgrouped'));
@@ -55,10 +55,10 @@ class ConfigurationController extends Controller
     {
         $insert = ConfigurationSchedule::firstOrCreate([
             'type' => $request->type,
-            'educational_level' => $request->educational_level,
-            'college' => $request->college,
+            'educational_level_id' => $request->educational_level,
+            'college_id' => $request->college,
             'year' => $request->year,
-            'period' => session('current_period'), //change to session setup
+            'period_id' => session('current_period'), //change to session setup
         ], $request->validated());
 
         if ($insert->wasRecentlyCreated) {

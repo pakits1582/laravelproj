@@ -15,7 +15,8 @@ class SectionController extends Controller
      */
     public function index()
     {
-        $sections = Section::all();
+        //$sections = Section::all();
+        $sections = Section::with('programinfo')->orderBy('code')->get();
 
         return view('section.index', compact('sections'));
     }

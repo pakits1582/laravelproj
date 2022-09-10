@@ -25,9 +25,10 @@ class StoreConfigScheduleRequest extends FormRequest
     {
         return [
             'type' => 'required',
-            'educational_level' => [],
-            'college' => [],
-            'year' => [],
+            'educational_level_id' => [],
+            'college_id' => [],
+            'period_id' => [],
+            'year' => ['nullable','integer'],
             'date_from' => ['required', 'date'],
             'date_to' => 'nullable|date|after_or_equal:date_from',
         ];

@@ -63,11 +63,6 @@ class Instructor extends Model
         );
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function name(): Attribute
     {
         return new Attribute(
@@ -84,6 +79,11 @@ class Instructor extends Model
         );
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    
     public function collegeinfo()
     {
         return $this->belongsTo(College::class, 'college_id', 'id')->withDefault(['code' => '', 'name' => '']);

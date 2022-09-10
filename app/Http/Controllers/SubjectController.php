@@ -15,7 +15,8 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::all()->sortBy('code');
+        //$subjects = Subject::all()->sortBy('code');
+        $subjects = Subject::with(['collegeinfo', 'educlevel'])->orderBy('code')->get();
 
         return view('subject.index', compact('subjects'));
     }

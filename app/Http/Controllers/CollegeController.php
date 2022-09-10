@@ -16,7 +16,8 @@ class CollegeController extends Controller
      */
     public function index()
     {
-        $colleges = College::all();
+        //$colleges = College::all();
+        $colleges = College::with('deaninfo')->get();
 
         return view('college.index', compact('colleges'));
     }
@@ -28,7 +29,7 @@ class CollegeController extends Controller
      */
     public function create()
     {
-        $instructors = Instructor::all();
+        $instructors = Instructor::where('designation', 4)->get();
 
         return view('college.create', compact('instructors'));
     }
