@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Libs\Helpers;
+use App\Models\Program;
 use App\Models\Curriculum;
 use Illuminate\Http\Request;
+use App\Services\CurriculumService;
+use Illuminate\Support\Facades\Auth;
 
 class CurriculumController extends Controller
 {
+    private $curriculumService;
+
+    public function __construct(CurriculumService $curriculumService)
+    {
+        $this->curriculumService = $curriculumService;
+        Helpers::setLoad(['jquery_ccurriculum.js']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +25,9 @@ class CurriculumController extends Controller
      */
     public function index()
     {
-        //
+        $programs = $this->curriculumService->getPrograms(Auth::user());
+        
+        return view('curriculum.index', ['programs' => $programs]);
     }
 
     /**

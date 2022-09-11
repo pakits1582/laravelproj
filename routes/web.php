@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\CollegeController;
-use App\Http\Controllers\ConfigurationController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\InstructorController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeriodController;
-use App\Http\Controllers\ProgramController;
-use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\CollegeController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CurriculumController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\ConfigurationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +103,11 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::delete('/configurations/{configsched}', [ConfigurationController::class, 'destroy']);
     });
+
+    Route::resource('curriculum', CurriculumController::class)->except(['show', 'destroy'])->middleware(['inaccess:curriculum'])
+            ->missing(function (Request $request) {
+                return Redirect::route('curriculum.index');
+            });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
 });
