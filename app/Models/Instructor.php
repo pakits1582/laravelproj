@@ -23,6 +23,13 @@ class Instructor extends Model
         'department_id',
     ];
 
+    const TYPE_TEACHER = 1;
+    const TYPE_PROGRAM_HEAD = 2;
+    const TYPE_DEPARTMENT_HEAD = 3;
+    const TYPE_DEAN = 4;
+    const TYPE_PROFESSOR = 5;
+    const TYPE_OTHERS = 6;
+
     public function namePrefix(): Attribute
     {
         return new Attribute(

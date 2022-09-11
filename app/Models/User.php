@@ -26,6 +26,10 @@ class User extends Authenticatable
         'is_active',
     ];
 
+    const TYPE_ADMIN = 0;
+    const TYPE_INTRUCTOR = 1;
+    const TYPE_STUDENT = 2;
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -45,14 +49,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function userLoggedinName()
+     /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+
+    public function userLoggedinName($query)
     {
         return $this->name;
     }
 
     public function info()
     {
-        switch (Auth::user()->utype) {
+        switch ($this->utype) {
             case 0:
                 return $this->hasOne(Userinfo::class, 'user_id', 'id');
                 break;
@@ -64,6 +75,22 @@ class User extends Authenticatable
                 break;
         }
     }
+
+    public function scopeAdmin($query)
+    {
+        return $query->where('utype', self::TYPE_ADMIN);
+    }
+
+    public function scopeDean($query)
+    {
+        return $query->info->where('designation', Instructor::TYPE_DEAN);
+    }
+
+    public function scopeProgramHead($query)
+    {
+        return $query->info->where('designation', Instructor::TYPE_PROGRAM_HEAD);
+    }
+
 
     public function access()
     {

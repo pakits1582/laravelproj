@@ -11,11 +11,9 @@ use Illuminate\Support\Facades\Auth;
 
 class CurriculumController extends Controller
 {
-    private $curriculumService;
 
-    public function __construct(CurriculumService $curriculumService)
+    public function __construct()
     {
-        $this->curriculumService = $curriculumService;
         Helpers::setLoad(['jquery_ccurriculum.js']);
     }
     /**
@@ -23,9 +21,9 @@ class CurriculumController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Curriculum $curriculum)
     {
-        $programs = $this->curriculumService->getPrograms(Auth::user());
+        $programs = $curriculum->getPrograms(Auth::user());
         
         return view('curriculum.index', ['programs' => $programs]);
     }
