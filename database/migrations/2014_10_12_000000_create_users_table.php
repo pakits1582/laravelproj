@@ -15,7 +15,7 @@ return new class() extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('idno');
+            $table->string('idno')->unique();
             $table->string('password');
             $table->smallInteger('utype')->default(0);
             $table->boolean('is_active')->default(1);

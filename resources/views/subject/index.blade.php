@@ -16,7 +16,25 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add new subject</span>
+                    <span class="text">Add New Subject</span>
+                </a>
+                <a href="{{ route('subjects.create') }}" class="btn btn-danger btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-print"></i>
+                    </span>
+                    <span class="text">Print PDF</span>
+                </a>
+                <a href="{{ route('subjects.create') }}" class="btn btn-success btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-download"></i>
+                    </span>
+                    <span class="text">Download Excel</span>
+                </a>
+                <a href="#" class="btn btn-secondary btn-icon-split" id="upload_excel" data-field="subjects">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="text">Upload Excel</span>
                 </a>
             </div>
             <div class="card-body">

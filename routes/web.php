@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth']], function () {
             ->missing(function (Request $request) {
                 return Redirect::route('subjects.index');
             });
+
     Route::group(['middleware' => ['inaccess:configurations']], function () {
         Route::get('/configurations', [ConfigurationController::class, 'index'])->name('configurations.index');
         Route::put('/configurations/{configuration?}', [ConfigurationController::class, 'update'])->name('configurations.update');
@@ -104,6 +105,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('/configurations/{configsched}', [ConfigurationController::class, 'destroy']);
     });
 
+    Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->name('curriculum.manage');
     Route::resource('curriculum', CurriculumController::class)->except(['show', 'destroy'])->middleware(['inaccess:curriculum'])
             ->missing(function (Request $request) {
                 return Redirect::route('curriculum.index');

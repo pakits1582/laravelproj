@@ -50,4 +50,9 @@ class Program extends Model
             //set: fn($value) => strtoupper($value)
         );
     }
+
+    public function curricula()
+    {
+        return $this->hasMany(Curriculum::class);
+    }
 }

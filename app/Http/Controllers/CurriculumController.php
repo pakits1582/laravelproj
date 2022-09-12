@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Libs\Helpers;
-use App\Models\Program;
 use App\Models\Curriculum;
+use App\Models\Program;
+use App\Models\Subject;
+use App\Models\Term;
 use Illuminate\Http\Request;
-use App\Services\CurriculumService;
 use Illuminate\Support\Facades\Auth;
 
 class CurriculumController extends Controller
@@ -14,7 +16,7 @@ class CurriculumController extends Controller
 
     public function __construct()
     {
-        Helpers::setLoad(['jquery_ccurriculum.js']);
+        Helpers::setLoad(['jquery_curriculum.js']);
     }
     /**
      * Display a listing of the resource.
@@ -36,6 +38,15 @@ class CurriculumController extends Controller
     public function create()
     {
         //
+    }
+
+    public function manage(Program $program)
+    {
+        $program->load('curricula');
+        $terms = Term::all();
+        $subjects = Subject::all();
+
+        return view('curriculum.manage', compact(['program', 'terms', 'subjects']));
     }
 
     /**

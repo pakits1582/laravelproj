@@ -17,7 +17,7 @@ $(function(){
             });	
 	   }else{
             var year = $('#year').val();
-			if(year != ""){
+			if(year != "" && val != ''){
                 var term_type = $("#term option:selected").attr('data-type');
                 var term_text = $("#term option:selected").text();
                 var periodyear = parseInt(year) + 1;
@@ -26,7 +26,8 @@ $(function(){
 
 			}else{
 				$(this).prop("selectedIndex", 0);
-				showError('Please fill year first.');
+                $("#name").val('');
+				//showError('Please fill year or term first.');
 			}
 	   }
 		e.preventDefault();

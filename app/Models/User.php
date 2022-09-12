@@ -81,15 +81,15 @@ class User extends Authenticatable
         return $query->where('utype', self::TYPE_ADMIN);
     }
 
-    public function scopeDean($query)
-    {
-        return $query->info->where('designation', Instructor::TYPE_DEAN);
-    }
+    // public function scopeDean($query)
+    // {  
+    //     return $query->info->where('designation', Instructor::TYPE_DEAN);
+    // }
 
-    public function scopeProgramHead($query)
-    {
-        return $query->info->where('designation', Instructor::TYPE_PROGRAM_HEAD);
-    }
+    // public function scopeProgramHead($query)
+    // {
+    //     return $query->info->where('designation', Instructor::TYPE_PROGRAM_HEAD);
+    // }
 
 
     public function access()

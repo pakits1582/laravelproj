@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Log;
 
 class InstructorController extends Controller
 {
-    protected $instructorService;
+    // protected $instructorService;
 
-    public function __construct(InstructorService $instructorService)
-    {
-        $this->instructorService = $instructorService;
-        Helpers::setLoad(['jquery_instructor.js']);
-    }
+    // public function __construct(InstructorService $instructorService)
+    // {
+    //     $this->instructorService = $instructorService;
+    //     Helpers::setLoad(['jquery_instructor.js']);
+    // }
 
     /**
      * Display a listing of the resource.

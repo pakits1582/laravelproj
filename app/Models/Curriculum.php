@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Program;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -31,5 +32,10 @@ class Curriculum extends Model
         $programs = $query->get();
 
         return $programs;
+    }
+
+    public function program()
+    {
+        return $this->hasOne(Program::class, 'program_id', 'id');
     }
 }
