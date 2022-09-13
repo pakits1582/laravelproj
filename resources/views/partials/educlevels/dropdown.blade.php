@@ -1,4 +1,4 @@
-<select name="{{ $fieldname ?? 'educational_level' }}" id="{{ $fieldid ?? 'educational_level' }}" class="form-control">
+<select name="{{ $fieldname ?? 'educational_level' }}" id="{{ $fieldid ?? 'educational_level' }}" class="form-control {{ $fieldclass ?? 'educational_level' }}">
     <option value="">- select level -</option>
     @if ($educlevels)
         @foreach ($educlevels as $educlevel)

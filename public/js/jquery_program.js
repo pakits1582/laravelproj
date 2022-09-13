@@ -52,4 +52,13 @@ $(function(){
         });	
          e.preventDefault();
      });
+
+     
+
+
+
+     $(document).on("change", ".dropdownfilter, #keyword", function(e)
+     {
+        alert('xxxx');
+     });
 });

@@ -36,6 +36,43 @@
                     </span>
                     <span class="text">Upload Excel</span>
                 </a>
+                <div>
+                    <form method="POST" action="" id="filter_form">
+                        @csrf
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                        <input type="text" name="middle_name" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="college" class="m-0 font-weight-bold text-primary">College</label>
+                                        @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college_id', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
+                                        @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="designation" class="m-0 font-weight-bold text-primary">Status</label>
+                                        <select name="designation" class="form-control dropdownfilter" id="status">
+                                            <option value="">- select status -</option>
+                                            <option value="1">Active</option>
+                                            <option value="2">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
