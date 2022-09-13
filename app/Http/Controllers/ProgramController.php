@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEducationalLevelRequest;
+use App\Libs\Helpers;
+use App\Models\Program;
+use App\Models\Instructor;
+use Illuminate\Http\Request;
+use App\Models\Educationallevel;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
-use App\Libs\Helpers;
-use App\Models\Educationallevel;
-use App\Models\Instructor;
-use App\Models\Program;
+use App\Http\Requests\StoreEducationalLevelRequest;
+use App\Imports\ProgramsImport;
 
 class ProgramController extends Controller
 {
@@ -124,5 +126,18 @@ class ProgramController extends Controller
         }
 
         return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, level already exists!']);
+    }
+
+    public function import(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            $import = new ProgramsImport;
+            $import->import($file);
+
+            //return errors
+            dd($import->failures());
+        }
     }
 }

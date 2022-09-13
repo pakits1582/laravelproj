@@ -15,4 +15,14 @@ $(document).ready(function() {
           "className": "text-center"
      }]
   });
+
+  $('#programTable').DataTable({
+    'columnDefs': [
+      {
+          "targets": [0,3,4,7], // your case first column
+          "className": "text-center"
+     }],
+
+     searching: false, "lengthChange": false
+  });
 });

@@ -104,4 +104,5 @@ class CurriculumController extends Controller
     {
         //
     }
+    
 }

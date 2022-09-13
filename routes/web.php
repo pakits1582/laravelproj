@@ -76,6 +76,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:programs']], function () {
         Route::view('/programs/addnewlevel', 'program.addnewlevel');
         Route::post('/programs/savelevel', [ProgramController::class, 'storelevel'])->name('savelevel');
+        Route::view('/programs/import', 'program.import')->name('programs.import');
+        Route::post('/programs/import', [ProgramController::class, 'import'])->name('programs.uploadimport');
         Route::resource('programs', ProgramController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('programs.index');
         });
