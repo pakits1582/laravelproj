@@ -38,7 +38,7 @@ class ProgramController extends Controller
         if($request->has('college') && !empty($request->college)) {
             $query->where('college_id', $request->college);
         }
-        if($request->has('status') && !empty($request->status)) {
+        if($request->has('status') && ($request->status == '0' || $request->status == '1')) {
             $query->where('active', $request->status);
         }
         $programs = $query->paginate(10);

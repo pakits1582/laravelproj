@@ -24,8 +24,8 @@
                         <td>{{ $program->level->level }}</td>
                         <td>{{ $program->collegeinfo->code }}</td>
                         <td>{{ $program->headName }}</td>
-                        <td>{{ $program->active }}</td>
-                        <td class="">
+                        <td>{{ ($program->active === 1) ? 'YES' : 'NO' }}</td>
+                        <td class="mid">
                             <a href="{{ route('programs.edit', ['program' => $program->id ]) }}" class="btn btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
