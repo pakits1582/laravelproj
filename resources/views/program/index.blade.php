@@ -44,25 +44,25 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
-                                        <input type="text" name="middle_name" placeholder="Type keyword to search..." class="form-control" id="keyword">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="college" class="m-0 font-weight-bold text-primary">College</label>
-                                        @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college_id', 'fieldclass' => 'dropdownfilter'])
+                                        <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
-                                        @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id', 'fieldclass' => 'dropdownfilter'])
+                                        @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="college" class="m-0 font-weight-bold text-primary">College</label>
+                                        @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'dropdownfilter'])
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="designation" class="m-0 font-weight-bold text-primary">Status</label>
-                                        <select name="designation" class="form-control dropdownfilter" id="status">
+                                        <select name="status" class="form-control dropdownfilter" id="status">
                                             <option value="">- select status -</option>
                                             <option value="1">Active</option>
                                             <option value="2">Inactive</option>
@@ -75,61 +75,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="programTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Years</th>
-                                <th>Level</th>
-                                <th>College</th>
-                                <th>Head</th>
-                                <th>Active</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </tfoot> --}}
-                        <tbody>
-                            @if ($programs)
-                                @unless (count($programs) == 0)
-                                    @foreach ($programs as $program)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $program->code }}</td>
-                                            <td>{{ $program->name }}</td>
-                                            <td>{{ $program->years }}</td>
-                                            <td>{{ $program->level->level }}</td>
-                                            <td>{{ $program->collegeinfo->code }}</td>
-                                            <td>{{ $program->headName }}</td>
-                                            <td>{{ $program->active }}</td>
-                                            <td class="">
-                                                <a href="{{ route('programs.edit', ['program' => $program->id ]) }}" class="btn btn-primary btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="text">Edit</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('program.return_programs')
             </div>
         </div>
 

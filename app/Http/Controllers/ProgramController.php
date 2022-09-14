@@ -25,10 +25,27 @@ class ProgramController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$programs = Program::all();
-        $programs = Program::with(['level', 'collegeinfo', 'headinfo'])->orderBy('code')->get();
+        $query = Program::with(['level', 'collegeinfo', 'headinfo'])->orderBy('code');
+
+        if($request->has('keyword') && !empty($request->keyword)) {
+            $query->where('code', 'like', '%'.$request->keyword.'%')->orWhere('name', 'like', '%'.$request->keyword.'%');
+        }
+        if($request->has('educational_level') && !empty($request->educational_level)) {
+            $query->where('educational_level_id', $request->educational_level);
+        }
+        if($request->has('college') && !empty($request->college)) {
+            $query->where('college_id', $request->college);
+        }
+        if($request->has('status') && !empty($request->status)) {
+            $query->where('active', $request->status);
+        }
+        $programs = $query->paginate(10);
+
+        if($request->ajax()){
+            return view('program.return_programs', compact('programs'));
+        }
 
         return view('program.index', compact('programs'));
     }
