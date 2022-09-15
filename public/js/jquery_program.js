@@ -93,5 +93,13 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on("click", "#download_excel", function(e)
+    {
+        $("#filter_form").attr("action","/programs/export");
+		$("#filter_form").submit();
+
+        e.preventDefault();
+    });
+
 
 });

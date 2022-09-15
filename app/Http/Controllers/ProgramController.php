@@ -6,11 +6,13 @@ use App\Libs\Helpers;
 use App\Models\Program;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
+use App\Exports\ProgramsExport;
+use App\Imports\ProgramsImport;
 use App\Models\Educationallevel;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
 use App\Http\Requests\StoreEducationalLevelRequest;
-use App\Imports\ProgramsImport;
 
 class ProgramController extends Controller
 {
@@ -156,5 +158,12 @@ class ProgramController extends Controller
             //return errors
             dd($import->failures());
         }
+    }
+
+    public function export(Request $request, Excel $excel)
+    {
+        $import = new ProgramsExport();
+        
+        return $import->download('programs.xlsx');
     }
 }

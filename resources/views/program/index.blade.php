@@ -24,7 +24,7 @@
                     </span>
                     <span class="text">Print PDF</span>
                 </a>
-                <a href="{{ route('subjects.create') }}" class="btn btn-success btn-icon-split">
+                <a href="#" class="btn btn-success btn-icon-split" id="download_excel">
                     <span class="icon text-white-50">
                         <i class="fas fa-download"></i>
                     </span>
@@ -37,7 +37,7 @@
                     <span class="text">Upload Excel</span>
                 </a>
                 <div>
-                    <form method="POST" action="" id="filter_form">
+                    <form method="POST" action="" id="filter_form" target="_blank">
                         @csrf
                         <div class="mt-3">
                             <div class="row">
