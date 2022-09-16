@@ -18,89 +18,64 @@
                     </span>
                     <span class="text">Add New Subject</span>
                 </a>
-                <a href="{{ route('subjects.create') }}" class="btn btn-danger btn-icon-split">
+                <a href="#" class="btn btn-danger btn-icon-split" id="generate_pdf">
                     <span class="icon text-white-50">
                         <i class="fas fa-print"></i>
                     </span>
                     <span class="text">Print PDF</span>
                 </a>
-                <a href="{{ route('subjects.create') }}" class="btn btn-success btn-icon-split">
+                <a href="#" class="btn btn-success btn-icon-split" id="download_excel">
                     <span class="icon text-white-50">
                         <i class="fas fa-download"></i>
                     </span>
                     <span class="text">Download Excel</span>
                 </a>
-                <a href="#" class="btn btn-secondary btn-icon-split" id="upload_excel" data-field="subjects">
+                <a href="{{ route('subjects.import') }}" class="btn btn-secondary btn-icon-split" id="upload_excel" data-field="subjects">
                     <span class="icon text-white-50">
                         <i class="fas fa-upload"></i>
                     </span>
                     <span class="text">Upload Excel</span>
                 </a>
+                <div>
+                    <form method="POST" action="" id="filter_form" target="_blank">
+                        @csrf
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                        <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
+                                        @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="college" class="m-0 font-weight-bold text-primary">College</label>
+                                        @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="designation" class="m-0 font-weight-bold text-primary">Type</label>
+                                        <select name="type" class="form-control dropdownfilter" id="type">
+                                            <option value="">All</option>
+                                            <option value="laboratory">Laboratory</option>
+                                            <option value="professional">Professional</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="subjectTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Units</th>
-                                <th>Tuition</th>
-                                <th>Load</th>
-                                <th>Lec</th>
-                                <th>Lab</th>
-                                <th>Hours</th>
-                                <th>isProf</th>
-                                <th>isLab</th>
-                                <th>Level</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </tfoot> --}}
-                        <tbody>
-                            @if ($subjects)
-                                @unless (count($subjects) == 0)
-                                    @foreach ($subjects as $subject)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $subject->code }}</td>
-                                            <td>{{ $subject->name }}</td>
-                                            <td>{{ $subject->units }}</td>
-                                            <td>{{ $subject->tfunits }}</td>
-                                            <td>{{ $subject->loadunits }}</td>
-                                            <td>{{ $subject->lecunits }}</td>
-                                            <td>{{ $subject->labunits }}</td>
-                                            <td>{{ $subject->hours }}</td>
-                                            <td>{{ ($subject->professional == 1) ? 'YES' : 'NO' }}</td>
-                                            <td>{{ ($subject->laboratory == 1) ? 'YES' : 'NO' }}</td>
-                                            <td>{{ $subject->educlevel->code }}</td>
-                                            <td class="">
-                                                <a href="{{ route('subjects.edit', ['subject' => $subject->id ]) }}" class="btn btn-primary btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="text">Edit</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('subject.return_subjects')
             </div>
         </div>
 

@@ -22,11 +22,7 @@
 
 </head>
 
-<body class="bg-gradient-primary" style="background: url({{ asset('images/bgnewest.jpg') }}) no-repeat center center fixed; 
--webkit-background-size: cover;
--moz-background-size: cover;
--o-background-size: cover;
-background-size: cover;">
+<body class="bg-gradient-primary">
 
     <div class="container">
 
@@ -39,11 +35,7 @@ background-size: cover;">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block" style="background: url({{ asset('images/a.png') }}) no-repeat center center; 
-                            -webkit-background-size: cover;
-                            -moz-background-size: cover;
-                            -o-background-size: cover;
-                            background-size: cover; height:500px;"></div>
+                            <div class="col-lg-6 d-none d-lg-block"></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">

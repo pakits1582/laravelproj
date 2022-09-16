@@ -3,7 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Configuration;
-use App\Models\Program;
+use App\Models\Subject;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -11,16 +12,14 @@ use Maatwebsite\Excel\Events\BeforeExport;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Events\BeforeWriting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class ProgramsExport implements FromCollection, ShouldAutoSize, WithMapping, WithHeadings, WithEvents, WithStartRow
+class SubjectsExport implements FromCollection, ShouldAutoSize, WithMapping, WithHeadings, WithEvents, WithStartRow
 {
     use Exportable, RegistersEventListeners;
-
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -28,7 +27,7 @@ class ProgramsExport implements FromCollection, ShouldAutoSize, WithMapping, Wit
     {
         $input = request()->all();
 
-        $query = Program::with(['level', 'collegeinfo', 'headinfo'])->orderBy('code');
+        $query = Subject::with(['collegeinfo', 'educlevel'])->orderBy('code');
 
         if(!empty($input['keyword'])){
             $query->where('code', 'like', '%'.$input['keyword'].'%')->orWhere('name', 'like', '%'.$input['keyword'].'%');
@@ -39,25 +38,36 @@ class ProgramsExport implements FromCollection, ShouldAutoSize, WithMapping, Wit
         if(!empty($input['college'])) {
             $query->where('college_id', $input['college']);
         }
-        if(!empty($input['status']) && ($input['status'] == '0' || $input['status'] == '1')) {
-            $query->where('active', $input['status']);
+        if(!empty($input['type'])) {
+            if($input['type'] === 'professional'){
+                $query->where('professional', 1);
+            }
+            if($input['type'] === 'laboratory'){
+                $query->where('laboratory', 1);
+            }
         }
-        $programs = $query->get();
+        $subjects = $query->get();
 
-        return $programs;
+        return $subjects;
     }
 
-    public function map($program): array
+    public function map($subject): array
     {
         return [
-            $program->id,
-            $program->code,
-            $program->name,
-            $program->years,
-            $program->level->level,
-            $program->collegeinfo->code,
-            $program->headName,
-            ($program->active === 1) ? 'YES' : 'NO',
+            ++$this->row,
+            $subject->code,
+            $subject->name,
+            $subject->units,
+            $subject->tfunits,
+            $subject->loadunits,
+            $subject->lecunits,
+            $subject->labunits,
+            $subject->hours,
+            $subject->educlevel->code,
+            $subject->collegeinfo->code,
+            ($subject->professional == 1) ? 'YES' : 'NO',
+            ($subject->laboratory == 1) ? 'YES' : 'NO',
+            
         ];
     }
 
@@ -67,11 +77,16 @@ class ProgramsExport implements FromCollection, ShouldAutoSize, WithMapping, Wit
             '#',
             'CODE',
             'NAME',
-            'YEARS',
+            'UNITS',
+            'LOAD UNITS',
+            'TF UNITS',
+            'LEC UNITS',
+            'LAB UNITS',
+            'HOURS',
             'LEVEL',
             'COLLEGE',
-            'HEAD',
-            'ACTIVE',
+            'PROF',
+            'LAB',
         ];
     }
 
@@ -84,7 +99,7 @@ class ProgramsExport implements FromCollection, ShouldAutoSize, WithMapping, Wit
     {
         $configuration = Configuration::take(1)->first();
 
-        $event->sheet->getStyle('A1:H1')->applyFromArray([
+        $event->sheet->getStyle('A1:M1')->applyFromArray([
             'font' => [
                 'bold' => true
             ]
@@ -96,43 +111,43 @@ class ProgramsExport implements FromCollection, ShouldAutoSize, WithMapping, Wit
         //     'bold'       => true
         // ));
 
-        $event->sheet->getDelegate()->getStyle('A2:H2')->getFont()->setSize(8);
+        $event->sheet->getDelegate()->getStyle('A2:M2')->getFont()->setSize(8);
 
-        $event->sheet->getDelegate()->mergeCells('A1:H1');
+        $event->sheet->getDelegate()->mergeCells('A1:M1');
         $event->sheet->setCellValue('A1', $configuration->name);
         $event->sheet->getDelegate()->getStyle('A1')
                                     ->getAlignment()
                                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
-        $event->sheet->getDelegate()->mergeCells('A2:H2');
+        $event->sheet->getDelegate()->mergeCells('A2:M2');
         $event->sheet->setCellValue('A2', $configuration->address);
         $event->sheet->getDelegate()->getStyle('A2')
                                     ->getAlignment()
                                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-        $event->sheet->getDelegate()->mergeCells('A3:H3');
-        $event->sheet->setCellValue('A3', 'PROGRAMS');
+        $event->sheet->getDelegate()->mergeCells('A3:M3');
+        $event->sheet->setCellValue('A3', 'SUBJECTS');
         $event->sheet->getDelegate()->getStyle('A3')
                                     ->getAlignment()
                                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        $event->sheet->getDelegate()->getStyle('A3:H3')
+        $event->sheet->getDelegate()->getStyle('A3:M3')
                                     ->getFont()
                                     ->setBold(true);
         
-        $event->sheet->getDelegate()->mergeCells('A4:H4');
+        $event->sheet->getDelegate()->mergeCells('A4:M4');
         $event->sheet->setCellValue('A4', '');
     }
 
     public static function afterSheet(AfterSheet $event)
     {
-        $event->sheet->getStyle('A5:H5')->applyFromArray([
+        $event->sheet->getStyle('A5:M5')->applyFromArray([
             'font' => [
                 'bold' => true
             ]
         ]);
 
-        $event->sheet->getDelegate()->getStyle('A5:H5')
+        $event->sheet->getDelegate()->getStyle('A5:M5')
                                 ->getAlignment()
                                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
     }

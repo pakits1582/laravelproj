@@ -2,22 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Libs\Helpers;
+use App\Models\Subject;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Http\Request;
+use App\Exports\SubjectsExport;
+use App\Imports\SubjectsImport;
+use App\Services\SubjectService;
 use App\Http\Requests\StoreSubjectRequest;
 use App\Http\Requests\UpdateSubjectRequest;
-use App\Models\Subject;
 
 class SubjectController extends Controller
 {
+    protected $subjectService;
+
+    public function __construct(SubjectService $subjectService)
+    {
+        $this->subjectService = $subjectService;
+
+        Helpers::setLoad(['jquery_subject.js']);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$subjects = Subject::all()->sortBy('code');
-        $subjects = Subject::with(['collegeinfo', 'educlevel'])->orderBy('code')->get();
-
+        $subjects = $this->subjectService->returnSubjects($request);
+        
+        if($request->ajax()){
+            return view('subject.return_subjects', compact('subjects'));
+        }
         return view('subject.index', compact('subjects'));
     }
 
@@ -93,5 +109,33 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         //
+    }
+
+    public function import(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            $import = new SubjectsImport;
+            $import->import($file);
+
+            //return errors
+            return $import->failures();
+        }
+    }
+
+    public function export(Request $request)
+    {
+        $import = new SubjectsExport();
+        
+        return $import->download('subjects.xlsx');
+    }
+
+    public function generatepdf(Request $request)
+    {
+        $subjects = $this->subjectService->returnSubjects($request, true);
+
+        $pdf = PDF::loadView('subject.generatepdf', ['subjects' => $subjects]);
+        return $pdf->stream('subjects.pdf');
     }
 }

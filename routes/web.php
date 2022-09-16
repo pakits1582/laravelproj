@@ -96,10 +96,15 @@ Route::group(['middleware' => ['auth']], function () {
                 return Redirect::route('sections.index');
             });
 
-    Route::resource('subjects', SubjectController::class)->except(['show', 'destroy'])->middleware(['inaccess:subjects'])
-            ->missing(function (Request $request) {
+    Route::group(['middleware' => ['inaccess:subjects']], function () {
+            Route::view('/subjects/import', 'subject.import')->name('subjects.import');
+            Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
+            Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
+            Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');
+            Route::resource('subjects', SubjectController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
                 return Redirect::route('subjects.index');
             });
+    });
 
     Route::group(['middleware' => ['inaccess:configurations']], function () {
         Route::get('/configurations', [ConfigurationController::class, 'index'])->name('configurations.index');
