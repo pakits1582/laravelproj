@@ -101,5 +101,13 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on("click", "#generate_pdf", function(e)
+    {
+        $("#filter_form").attr("action","/programs/generatepdf");
+		$("#filter_form").submit();
+
+        e.preventDefault();
+    });
+
 
 });

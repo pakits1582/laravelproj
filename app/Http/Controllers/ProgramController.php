@@ -4,21 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Program;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Excel;
 use App\Exports\ProgramsExport;
 use App\Imports\ProgramsImport;
 use App\Models\Educationallevel;
+use App\Services\ProgramService;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
 use App\Http\Requests\StoreEducationalLevelRequest;
 
 class ProgramController extends Controller
 {
-    public function __construct()
+    protected $programService;
+
+    public function __construct(ProgramService $programService)
     {
-        //$this->instructorService = $instructorService;
+        $this->programService = $programService;
+
         Helpers::setLoad(['jquery_program.js']);
     }
 
@@ -29,26 +33,11 @@ class ProgramController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Program::with(['level', 'collegeinfo', 'headinfo'])->orderBy('code');
-
-        if($request->has('keyword') && !empty($request->keyword)) {
-            $query->where('code', 'like', '%'.$request->keyword.'%')->orWhere('name', 'like', '%'.$request->keyword.'%');
-        }
-        if($request->has('educational_level') && !empty($request->educational_level)) {
-            $query->where('educational_level_id', $request->educational_level);
-        }
-        if($request->has('college') && !empty($request->college)) {
-            $query->where('college_id', $request->college);
-        }
-        if($request->has('status') && ($request->status == '0' || $request->status == '1')) {
-            $query->where('active', $request->status);
-        }
-        $programs = $query->paginate(10);
+        $programs = $this->programService->returnPrograms($request);
 
         if($request->ajax()){
             return view('program.return_programs', compact('programs'));
         }
-
         return view('program.index', compact('programs'));
     }
 
@@ -160,10 +149,18 @@ class ProgramController extends Controller
         }
     }
 
-    public function export(Request $request, Excel $excel)
+    public function export(Request $request)
     {
         $import = new ProgramsExport();
         
         return $import->download('programs.xlsx');
+    }
+
+    public function generatepdf(Request $request)
+    {
+        $programs = $this->programService->returnPrograms($request, true);
+
+        $pdf = PDF::loadView('program.generatepdf', ['programs' => $programs]);
+        return $pdf->stream('programs.pdf');
     }
 }

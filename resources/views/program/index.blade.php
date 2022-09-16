@@ -18,7 +18,7 @@
                     </span>
                     <span class="text">Add new program</span>
                 </a>
-                <a href="{{ route('subjects.create') }}" class="btn btn-danger btn-icon-split">
+                <a href="#" class="btn btn-danger btn-icon-split" id="generate_pdf">
                     <span class="icon text-white-50">
                         <i class="fas fa-print"></i>
                     </span>

@@ -79,6 +79,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::view('/programs/import', 'program.import')->name('programs.import');
         Route::post('/programs/import', [ProgramController::class, 'import'])->name('programs.uploadimport');
         Route::post('/programs/export', [ProgramController::class, 'export'])->name('programs.downloadexcel');
+        Route::post('/programs/generatepdf', [ProgramController::class, 'generatepdf'])->name('programs.generatepdf');
+        
         Route::resource('programs', ProgramController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('programs.index');
         });
