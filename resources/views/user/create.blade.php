@@ -4,15 +4,13 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
-        <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Add New User</h1>
-        <p class="mb-4">Add new record in the database</p>
-
-        <div class="container py-2">       
+        <div class=" py-2">       
             <div class="row">
               <div class="col-lg-12 mx-auto">
                 <div class="bg-white rounded-lg shadow-sm p-5">
-          
+                    <h1 class="h3 mb-0 text-primary font-weight-bold">Add New User</h1>
+                    <p class="mb-2">Add new record in the database</p>
+                    <p class="font-italic text-info">Note: (*) Denotes field is required.</p>
                     <!-- credit card info-->
                     <div id="nav-tab-card" class="tab-pane fade show active">
                         @if(Session::has('message'))
@@ -21,21 +19,21 @@
                       <form method="POST" action="{{ route('users.store') }}"  role="form">
                         @csrf
                         <div class="form-group">
-                            <label for="username">ID Number</label>
+                            <label for="code" class="m-0 font-weight-bold text-primary">* ID Number</label>
                             <input type="text" name="idno" placeholder="" class="form-control text-uppercase" value="{{ old('idno') }}">
                             @error('idno')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="username">Name</label>
+                            <label for="code" class="m-0 font-weight-bold text-primary">* Name</label>
                             <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ old('name') }}">
                             @error('name')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="username">User Access</label>
+                            <label for="code" class="m-0 font-weight-bold text-primary">* User Access</label>
                             {{-- <input type="text" name="address" placeholder="" class="form-control text-uppercase" value="{{ old('address') }}"> --}}
                             
                             @error('access')
@@ -68,7 +66,14 @@
                                                         <table class="table table-sm table-bordered table-striped">
                                                             <thead>
                                                             <tr>
-                                                                <th scope="col" class="text-center">{{ $value['title'] }}</th>
+                                                                <th scope="col" class="text-center">
+                                                                    <input type="checkbox" class="form-check-input selectall" data-id="{{ $key }}" />
+                                                                    <label class="form-check-label text-primary">
+                                                                        {{ $value['title'] }}
+                                                                    </label>
+                                                                </th>
+                                                                <th class="text-center">R</th>
+                                                                <th class="text-center">W</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -78,12 +83,14 @@
                                                                        <tr>
                                                                             <td>
                                                                                 <div class="form-check">
-                                                                                    <input class="form-check-input" type="checkbox" name="access[]" class="uaccess" id="{{ $v['id'] }}" value="{{ $v['link'] }}" >
+                                                                                    <input class="form-check-input item_{{ $key }} uaccess" type="checkbox" name="access[]" id="{{ $v['id'] }}" value="{{ $v['link'] }}" >
                                                                                     <label class="form-check-label" for="{{ $v['id'] }}">
-                                                                                    {{ $v['header'] }}
+                                                                                        {{ $v['header'] }}
                                                                                     </label>
                                                                                 </div>
                                                                             </td>
+                                                                            <td class="mid"><input class="read_{{ $key }}" type="checkbox" name="read[]" id="read_{{ $v['id'] }}" value="1" ></td>
+                                                                            <td class="mid"><input class="write_{{ $key }}" type="checkbox" name="write[]" id="write_{{ $v['id'] }}" value="1" ></td>
                                                                         </tr>
                                                                        @php
                                                                     }

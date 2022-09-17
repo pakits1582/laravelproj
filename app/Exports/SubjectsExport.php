@@ -54,7 +54,6 @@ class SubjectsExport implements FromCollection, ShouldAutoSize, WithMapping, Wit
     public function map($subject): array
     {
         return [
-            ++$this->row,
             $subject->code,
             $subject->name,
             $subject->units,

@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Subject;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -52,8 +53,14 @@ class SubjectsImport implements
     public function rules(): array
     {
         return [
-            // '*.code' => 'unique:subjects,code|unique:programs,name',
-            // '*.name' => 'unique:programs,name|unique:programs,code',
+            '*.code' => 'unique:subjects,code|unique:subjects,name',
+            '*.name' => 'unique:subjects,name|unique:subjects,code',
+            // '*.code' => ['required',  Rule::unique('subjects')->where(fn ($query) => $query->where('name', $this->name)
+            //                                                                             ->where('units', $this->name))],
+            // '*.name' => ['required',  Rule::unique('subjects')->where(fn ($query) => $query->where('code', $this->code)
+            //                                                                             ->where('units', $this->name))],
+            // '*.units' => ['required',  Rule::unique('subjects')->where(fn ($query) => $query->where('code', $this->code)
+            //                                                                              ->where('name', $this->name))],
         ];
     }
 

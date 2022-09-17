@@ -39,35 +39,42 @@ class UserController extends Controller
 
     public function store(UserFormRequest $request)
     {
-        $alertCLass = 'alert-success';
-        $alertMessage = 'User sucessfully added!';
-
-        try {
-            DB::beginTransaction();
-
-            $user = User::create([
-                'idno' => $request->idno,
-                'password' => Hash::make('password'),
-                'utype' => 0,
-            ]);
-
-            $info = new Userinfo(['name' => $request->name]);
-            $user->info()->save($info);
-
-            $accesses = $this->userService->returnUserAccesses($request->access);
-            $user->access()->saveMany($accesses);
-
-            DB::commit();
-        } catch (\Exception $e) {
-            Log::error(get_called_class(), [
-                //'createdBy' => $user->userLoggedinName(),
-                'body' => $request->all(),
-                'error' => $e->getMessage(),
-                'line' => $e->getLine(),
-            ]);
+        //dd($request);
+        foreach ($request->access as $key => $value) {
+            $read = ($_REQUEST['read'][$key]) ? 1 : 0;
+            $write = ($_REQUEST['write'][$key]) ? 1 : 0;
+            
+            echo $value.'-'.$key.'-'.$read.'-'.$write.'<br>';
         }
+        // $alertCLass = 'alert-success';
+        // $alertMessage = 'User sucessfully added!';
 
-        return back()->with(['alert-class' => $alertCLass, 'message' => $alertMessage]);
+        // try {
+        //     DB::beginTransaction();
+
+        //     $user = User::create([
+        //         'idno' => $request->idno,
+        //         'password' => Hash::make('password'),
+        //         'utype' => 0,
+        //     ]);
+
+        //     $info = new Userinfo(['name' => $request->name]);
+        //     $user->info()->save($info);
+
+        //     $accesses = $this->userService->returnUserAccesses($request->access);
+        //     $user->access()->saveMany($accesses);
+
+        //     DB::commit();
+        // } catch (\Exception $e) {
+        //     Log::error(get_called_class(), [
+        //         //'createdBy' => $user->userLoggedinName(),
+        //         'body' => $request->all(),
+        //         'error' => $e->getMessage(),
+        //         'line' => $e->getLine(),
+        //     ]);
+        // }
+
+        // return back()->with(['alert-class' => $alertCLass, 'message' => $alertMessage]);
     }
 
     public function edit(User $user)

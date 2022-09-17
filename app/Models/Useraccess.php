@@ -17,6 +17,7 @@ class Useraccess extends Model
         'title',
         'category',
         'read_only',
+        'write_only'
     ];
 
     public function user()

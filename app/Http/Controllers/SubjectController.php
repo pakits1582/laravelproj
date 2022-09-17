@@ -120,7 +120,7 @@ class SubjectController extends Controller
             $import->import($file);
 
             //return errors
-            return $import->failures();
+            dd($import->failures());
         }
     }
 
