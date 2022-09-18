@@ -16,7 +16,7 @@
                         @if(Session::has('message'))
                             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                         @endif
-                      <form method="POST" action="{{ route('users.store') }}"  role="form">
+                      <form method="POST" action="{{ route('users.store') }}"  role="form" id="create_user_form">
                         @csrf
                         <div class="form-group">
                             <label for="code" class="m-0 font-weight-bold text-primary">* ID Number</label>
@@ -89,8 +89,8 @@
                                                                                     </label>
                                                                                 </div>
                                                                             </td>
-                                                                            <td class="mid"><input class="read_{{ $key }}" type="checkbox" name="read[]" id="read_{{ $v['id'] }}" value="1" ></td>
-                                                                            <td class="mid"><input class="write_{{ $key }}" type="checkbox" name="write[]" id="write_{{ $v['id'] }}" value="1" ></td>
+                                                                            <td class="mid"><input class="read_{{ $key }}" type="checkbox" id="read_{{ $v['id'] }}" value="1" ></td>
+                                                                            <td class="mid"><input class="write_{{ $key }}" type="checkbox" id="write_{{ $v['id'] }}" value="1" ></td>
                                                                         </tr>
                                                                        @php
                                                                     }

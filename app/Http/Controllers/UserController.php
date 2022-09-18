@@ -39,12 +39,12 @@ class UserController extends Controller
 
     public function store(UserFormRequest $request)
     {
-        //dd($request);
+        // print_r($request->access);
         foreach ($request->access as $key => $value) {
-            $read = ($_REQUEST['read'][$key]) ? 1 : 0;
-            $write = ($_REQUEST['write'][$key]) ? 1 : 0;
+            $write = $request->write;
+            $read = $request->read;
             
-            echo $value.'-'.$key.'-'.$read.'-'.$write.'<br>';
+            echo $value.'-'.$read[$key].'-'.$write[$key].'<br>';
         }
         // $alertCLass = 'alert-success';
         // $alertMessage = 'User sucessfully added!';
