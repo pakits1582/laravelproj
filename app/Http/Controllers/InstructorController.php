@@ -2,41 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreInstructorRequest;
-use App\Http\Requests\UpdateInstructorRequest;
+use App\Models\User;
 use App\Libs\Helpers;
 use App\Models\Instructor;
-use App\Models\User;
 use App\Models\Useraccess;
-use App\Services\InstructorService;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Services\InstructorService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreInstructorRequest;
+use App\Http\Requests\UpdateInstructorRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class InstructorController extends Controller
 {
-    // protected $instructorService;
+    protected $instructorService;
 
-    // public function __construct(InstructorService $instructorService)
-    // {
-    //     $this->instructorService = $instructorService;
-    //     Helpers::setLoad(['jquery_instructor.js']);
-    // }
+    public function __construct(InstructorService $instructorService)
+    {
+        $this->instructorService = $instructorService;
+        Helpers::setLoad(['jquery_instructor.js']);
+    }
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$instructors = Instructor::all();
-        // $instructors->load('user', 'collegeinfo', 'deptinfo');
-        $instructors = Instructor::with(['user', 'collegeinfo', 'deptinfo'])->get();
+        $instructors = $this->instructorService->returnInstructors($request);
 
-        //dd($instructors);
-
+        if($request->ajax()){
+            return view('instructor.return_instructors', compact('instructors'));
+        }
         return view('instructor.index', compact('instructors'));
     } 
 
@@ -164,5 +165,33 @@ class InstructorController extends Controller
     public function destroy(Instructor $instructor)
     {
         //
+    }
+
+    // public function import(Request $request)
+    // {
+    //     if ($request->hasFile('file')) {
+    //         $file = $request->file('file');
+
+    //         $import = new ProgramsImport;
+    //         $import->import($file);
+
+    //         //return errors
+    //         dd($import->failures());
+    //     }
+    // }
+
+    // public function export(Request $request)
+    // {
+    //     $import = new ProgramsExport();
+        
+    //     return $import->download('programs.xlsx');
+    // }
+
+    public function generatepdf(Request $request)
+    {
+        $instructors = $this->instructorService->returnInstructors($request, true);
+
+        $pdf = PDF::loadView('instructor.generatepdf', ['instructors' => $instructors]);
+        return $pdf->stream('instructors.pdf');
     }
 }

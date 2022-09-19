@@ -39,42 +39,36 @@ class UserController extends Controller
 
     public function store(UserFormRequest $request)
     {
-        // print_r($request->access);
-        foreach ($request->access as $key => $value) {
-            $write = $request->write;
-            $read = $request->read;
-            
-            echo $value.'-'.$read[$key].'-'.$write[$key].'<br>';
+        try {
+            DB::beginTransaction();
+
+            $user = User::create([
+                'idno' => $request->idno,
+                'password' => Hash::make('password'),
+                'utype' => 0,
+            ]);
+
+            $info = new Userinfo(['name' => $request->name]);
+            $user->info()->save($info);
+
+            $accesses = $this->userService->returnUserAccesses($request);
+            $user->access()->saveMany($accesses);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error(get_called_class(), [
+                //'createdBy' => $user->userLoggedinName(),
+                'body' => $request->all(),
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+            ]);
         }
-        // $alertCLass = 'alert-success';
-        // $alertMessage = 'User sucessfully added!';
 
-        // try {
-        //     DB::beginTransaction();
-
-        //     $user = User::create([
-        //         'idno' => $request->idno,
-        //         'password' => Hash::make('password'),
-        //         'utype' => 0,
-        //     ]);
-
-        //     $info = new Userinfo(['name' => $request->name]);
-        //     $user->info()->save($info);
-
-        //     $accesses = $this->userService->returnUserAccesses($request->access);
-        //     $user->access()->saveMany($accesses);
-
-        //     DB::commit();
-        // } catch (\Exception $e) {
-        //     Log::error(get_called_class(), [
-        //         //'createdBy' => $user->userLoggedinName(),
-        //         'body' => $request->all(),
-        //         'error' => $e->getMessage(),
-        //         'line' => $e->getLine(),
-        //     ]);
-        // }
-
-        // return back()->with(['alert-class' => $alertCLass, 'message' => $alertMessage]);
+        return response()->json([
+            'success' => true,
+            'message' => 'User sucessfully added!',
+            'alert' => 'alert-success'
+        ], 200);
     }
 
     public function edit(User $user)
@@ -91,9 +85,7 @@ class UserController extends Controller
     public function update(UserUpdateFormRequest $request, User $user)
     {
         $user = $user->load('info', 'access');
-        $alertCLass = 'alert-success';
-        $alertMessage = 'User sucessfully updated!';
-
+      
         try {
             DB::beginTransaction();
 
@@ -102,7 +94,7 @@ class UserController extends Controller
 
             Useraccess::where('user_id', $user->id)->delete();
 
-            $accesses = $this->userService->returnUserAccesses($request->access);
+            $accesses = $this->userService->returnUserAccesses($request);
             $user->access()->saveMany($accesses);
 
             DB::commit();
@@ -115,7 +107,11 @@ class UserController extends Controller
             ]);
         }
 
-        return back()->with(['alert-class' => $alertCLass, 'message' => $alertMessage]);
+        return response()->json([
+            'success' => true,
+            'message' => 'User sucessfully updated!',
+            'alert' => 'alert-success'
+        ], 200);
     }
 
     // public function show(User $User)

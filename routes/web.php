@@ -48,17 +48,21 @@ Route::group(['middleware' => ['auth']], function () {
         ->missing(function (Request $request) {
             return Redirect::route('users.index');
         });
-
-    Route::resource('instructors', InstructorController::class)->except(['show', 'destroy'])->middleware(['inaccess:instructors'])
-        ->missing(function (Request $request) {
+    Route::group(['middleware' => ['inaccess:instructors']], function () {
+        Route::view('/instructors/import', 'instructor.import')->name('instructors.import');
+        Route::post('/instructors/import', [InstructorController::class, 'import'])->name('instructors.uploadimport');
+        Route::post('/instructors/export', [InstructorController::class, 'export'])->name('instructors.downloadexcel');
+        Route::post('/instructors/generatepdf', [InstructorController::class, 'generatepdf'])->name('instructors.generatepdf');
+        Route::resource('instructors', InstructorController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('instructors.index');
         });
+    });
 
     Route::resource('colleges', CollegeController::class)->except(['show', 'destroy'])->middleware(['inaccess:colleges'])
         ->missing(function (Request $request) {
             return Redirect::route('colleges.index');
         });
-
+    
     Route::resource('departments', DepartmentController::class)->except(['show', 'destroy'])->middleware(['inaccess:departments'])
         ->missing(function (Request $request) {
             return Redirect::route('departments.index');

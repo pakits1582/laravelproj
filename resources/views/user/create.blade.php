@@ -24,6 +24,7 @@
                             @error('idno')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
+                            <div id="error_idno"></div>
                         </div>
                         <div class="form-group">
                             <label for="code" class="m-0 font-weight-bold text-primary">* Name</label>
@@ -31,11 +32,12 @@
                             @error('name')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
+                            <div id="error_name"></div>
                         </div>
                         <div class="form-group">
                             <label for="code" class="m-0 font-weight-bold text-primary">* User Access</label>
                             {{-- <input type="text" name="address" placeholder="" class="form-control text-uppercase" value="{{ old('address') }}"> --}}
-                            
+                            <div id="error_access"></div>
                             @error('access')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
@@ -52,12 +54,12 @@
                                                 foreach (Helpers::userAccessArray() as $key => $value) {
                                                     if($i%5 == 0 && $i != 0) { 
                                                     @endphp
-                                                                </div>
-                                                            </div>
-                                                        </section>  
-                                                        <section class="">
-                                                            <div class="">
-                                                                <div class="row g-4">  
+                                        </div>
+                                    </div>
+                                </section>  
+                                <section class="">
+                                    <div class="">
+                                        <div class="row g-4">  
                                                     @php
                                                     }
 

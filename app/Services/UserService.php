@@ -12,17 +12,27 @@ class UserService
 
     protected $user;
 
-    public function returnUserAccesses($userAccesses)
+    public function returnUserAccesses($request)
     {
-        // //LOOP THROUGH ALL USERACCESS SELECTED AND ADD TO USERS_ACCESS TABLE
-        foreach ($userAccesses as $key => $access) {
+        // foreach ($request->access as $key => $value) {
+        //     $write = $request->write;
+        //     $read = $request->read;
+            
+        //     echo $value.'-'.$read[$key].'-'.$write[$key].'<br>';
+        // }
+
+        foreach ($request->access as $key => $access) {
             //GET USER ACCESS FROM HELPERS CLASS
             $a = Helpers::searchUSerAccess(Helpers::userAccessArray(), $access, 'link');
+            $write = $request->write;
+            $read = $request->read;
             //ADD VALUES TO ACCESS ARRAY FOR MULTIPLE INPUT
             $accesses[] = new Useraccess([
                 'access' => $a['link'],
                 'title' => $a['header'],
                 'category' => $a['title'],
+                'read_only' => $read[$key],
+                'write_only' => $write[$key]
             ]);
         }
 

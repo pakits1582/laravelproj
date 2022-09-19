@@ -18,59 +18,60 @@
                     </span>
                     <span class="text">Add new instructor</span>
                 </a>
+                <a href="#" class="btn btn-danger btn-icon-split" id="generate_pdf">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-print"></i>
+                    </span>
+                    <span class="text">Print PDF</span>
+                </a>
+                <a href="#" class="btn btn-success btn-icon-split" id="download_excel">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-download"></i>
+                    </span>
+                    <span class="text">Download Excel</span>
+                </a>
+                <a href="{{ route('programs.import') }}" class="btn btn-secondary btn-icon-split" id="upload_excel" data-field="programs">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="text">Upload Excel</span>
+                </a>
+                <div>
+                    <form method="POST" action="" id="filter_form" target="_blank">
+                        @csrf
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                        <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
+                                        @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="college" class="m-0 font-weight-bold text-primary">College</label>
+                                        @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="college" class="m-0 font-weight-bold text-primary">Department</label>
+                                        @include('partials.departments.dropdown', ['fieldname' => 'department', 'fieldid' => 'department', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="instructorTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>ID Number</th>
-                                <th>Name</th>
-                                <th>College</th>
-                                <th>Educ Level</th>
-                                <th>Department</th>
-                                <th>Designation</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($instructors)
-                                @unless (count($instructors) == 0)
-                                    @foreach ($instructors as $instructor)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $instructor->user->idno }}</td>
-                                            <td>{{ $instructor->name }}</td>
-                                            <td>{{ $instructor->collegeinfo->code }}</td>
-                                            <td>{{ $instructor->educlevel->level }}</td>
-                                            <td>{{ $instructor->deptcode  }}</td>
-                                            <td>{{ Helpers::getDesignation($instructor->designation) }}</td>
-                                            <td>{{ ($instructor->user->is_active == 1) ? 'Active' : 'Inactive'  }}</td>
-                                            <td class="center">
-                                                <a href="{{ route('instructors.edit', ['instructor' => $instructor->id ]) }}" class="btn btn-primary btn-circle btn-sm" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-success btn-circle btn-sm" title="Activate">
-                                                    <i class="fas fa-power-off"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-info btn-circle btn-sm" title="Reset Password">
-                                                    <i class="fas fa-undo"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-danger btn-circle btn-sm" title="Deactivate">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('instructor.return_instructors')
             </div>
         </div>
 

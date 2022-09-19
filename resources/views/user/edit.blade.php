@@ -15,7 +15,7 @@
                         @if(Session::has('message'))
                             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                         @endif
-                      <form method="POST" action="{{ route('users.update', ['user' => $userdetails->id]) }}"  role="form">
+                      <form method="POST" action="{{ route('users.update', ['user' => $userdetails->id]) }}"  role="form" id="update_user_form">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
@@ -24,6 +24,7 @@
                             @error('idno')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
+                            <div id="error_idno"></div>
                         </div>
                         <div class="form-group">
                             <label for="code" class="m-0 font-weight-bold text-primary">* Name</label>
@@ -31,23 +32,30 @@
                             @error('name')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
+                            <div id="error_name"></div>
                         </div>
                         <div class="form-group">
                             <label for="code" class="m-0 font-weight-bold text-primary">* User Access</label>
                             @error('access')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
+                            <div id="error_access"></div>
                         </div>
+                        {{-- {{ dd($userdetails) }} --}}
                         @php
                             $arrAccess = [];
+                            if ($userdetails->access)
+                            {
+                                foreach ($userdetails->access as $key => $access)
+                                {
+                                    $arrAccess[] = [
+                                        'access' => $access->access,
+                                        'read' => $access->read_only,
+                                        'write' => $access->write_only
+                                    ];
+                                }
+                            }
                         @endphp
-                        @if ($userdetails->access)
-                            @foreach ($userdetails->access as $access)
-                                @php    
-                                    $arrAccess[] =  $access->access
-                                @endphp    
-                            @endforeach
-                        @endif
                         @php
                             if (Helpers::userAccessArray()) {
                         @endphp
@@ -59,15 +67,14 @@
                                                 foreach (Helpers::userAccessArray() as $key => $value) {
                                                     if($i%5 == 0 && $i != 0) { 
                                                     @endphp
-                                                                </div>
-                                                            </div>
-                                                        </section>  
-                                                        <section class="">
-                                                            <div class="">
-                                                                <div class="row g-4">  
+                                        </div>
+                                    </div>
+                                </section>  
+                                <section class="">
+                                    <div class="">
+                                        <div class="row g-4">  
                                                     @php
                                                     }
-
                                                     @endphp            
                                                     <div class="col-md">
                                                         <table class="table table-sm table-bordered table-striped">
@@ -90,14 +97,14 @@
                                                                        <tr>
                                                                             <td>
                                                                                 <div class="form-check">
-                                                                                    <input class="form-check-input item_{{ $key }} uaccess" type="checkbox" name="access[]" id="{{ $v['id'] }}" value="{{ $v['link'] }}" {{ ($userdetails->access) ? (in_array($v['link'], $arrAccess)) ? 'checked' : '' : '' }}>
+                                                                                    <input class="form-check-input item_{{ $key }} uaccess" type="checkbox" name="access[]" id="{{ $v['id'] }}" value="{{ $v['link'] }}" {{ ($userdetails->access) ? (Helpers::is_column_in_array($v['link'], 'access', $arrAccess) !== false) ? 'checked' : '' : '' }}>
                                                                                     <label class="form-check-label" for="{{ $v['id'] }}">
                                                                                     {{ $v['header'] }}
                                                                                     </label>
                                                                                 </div>
                                                                             </td>
-                                                                            <td class="mid"><input class="read_{{ $key }}" type="checkbox" name="read[]" id="read_{{ $v['id'] }}" value="1" ></td>
-                                                                            <td class="mid"><input class="write_{{ $key }}" type="checkbox" name="write[]" id="write_{{ $v['id'] }}" value="1" ></td>
+                                                                            <td class="mid"><input class="read_{{ $key }}" type="checkbox"  id="read_{{ $v['id'] }}" value="1" {{ ($userdetails->access) ? (Helpers::is_column_in_array($v['link'], 'access', $arrAccess) !== false) ? (($arrAccess[Helpers::is_column_in_array($v['link'], 'access', $arrAccess)]['read'] == 1) ? 'checked' : '') : '' : '' }}></td>
+                                                                            <td class="mid"><input class="write_{{ $key }}" type="checkbox" id="write_{{ $v['id'] }}" value="1" {{ ($userdetails->access) ? (Helpers::is_column_in_array($v['link'], 'access', $arrAccess) !== false) ? (($arrAccess[Helpers::is_column_in_array($v['link'], 'access', $arrAccess)]['write'] == 1) ? 'checked' : '') : '' : '' }}></td>
                                                                         </tr>
                                                                        @php
                                                                     }

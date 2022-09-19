@@ -273,4 +273,14 @@ class Helpers
                 break;
         }
     }
+
+    public static function  is_column_in_array($value,$column,$array)
+    {
+       
+        $key = array_search($value, array_column($array, $column));
+        if ($key !== false) {
+            return $key;
+        }
+        return false;
+    }
 }
