@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title') {{ 'Upload Program' }} @endsection
+@section('title') {{ 'Upload Instructors' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -7,7 +7,7 @@
         <!-- Page Heading -->
         <div class="container py-2">       
             <div class="container">
-                <form method="POST" action="{{ route('programs.uploadimport') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('instructors.uploadimport') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <div class="input-group">

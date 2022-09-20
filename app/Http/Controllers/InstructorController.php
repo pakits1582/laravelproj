@@ -7,14 +7,16 @@ use App\Libs\Helpers;
 use App\Models\Instructor;
 use App\Models\Useraccess;
 use Illuminate\Http\Request;
+use App\Exports\InstructorsExport;
 use Illuminate\Support\Facades\DB;
 use App\Services\InstructorService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use App\Imports\InstructorsImport;
 
 class InstructorController extends Controller
 {
@@ -167,25 +169,25 @@ class InstructorController extends Controller
         //
     }
 
-    // public function import(Request $request)
-    // {
-    //     if ($request->hasFile('file')) {
-    //         $file = $request->file('file');
+    public function import(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
 
-    //         $import = new ProgramsImport;
-    //         $import->import($file);
+            $import = new InstructorsImport;
+            $import->import($file);
 
-    //         //return errors
-    //         dd($import->failures());
-    //     }
-    // }
+            //return errors
+            dd($import->failures());
+        }
+    }
 
-    // public function export(Request $request)
-    // {
-    //     $import = new ProgramsExport();
+    public function export(Request $request)
+    {
+        $import = new InstructorsExport();
         
-    //     return $import->download('programs.xlsx');
-    // }
+        return $import->download('instructors.xlsx');
+    }
 
     public function generatepdf(Request $request)
     {

@@ -30,7 +30,7 @@
                     </span>
                     <span class="text">Download Excel</span>
                 </a>
-                <a href="{{ route('programs.import') }}" class="btn btn-secondary btn-icon-split" id="upload_excel" data-field="programs">
+                <a href="{{ route('instructors.import') }}" class="btn btn-secondary btn-icon-split" id="upload_excel" data-field="programs">
                     <span class="icon text-white-50">
                         <i class="fas fa-upload"></i>
                     </span>

@@ -11,7 +11,7 @@ class InstructorService
     //
     public function returnInstructors($request, $all = false)
     {
-        $query = Instructor::with(['collegeinfo', 'deptinfo']);
+        $query = Instructor::with(['collegeinfo', 'deptinfo'])->orderBy('last_name')->orderBy('first_name');
 
         if($request->has('keyword') && !empty($request->keyword)) {
             $query->where('last_name', 'like', '%'.$request->keyword.'%')
@@ -32,7 +32,7 @@ class InstructorService
         }
 
         if($all){
-            return $query->orderBy('last_name')->orderBy('first_name')->get();
+            return $query->get();
         }
     
         return $query->paginate(10);
