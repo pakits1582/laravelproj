@@ -3,7 +3,12 @@
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
-
+        {{-- @if(Session::has('errors'))
+            {{ dd($errors) }}
+        @endif --}}
+        @if(Session::has('message'))
+            <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+        @endif
         <!-- Page Heading -->
         <div class="container py-2">       
             <div class="container">

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('educational_level_id')->references('id')->on('educational_levels');
             $table->unsignedBigInteger('college_id')->nullable()->index();
             $table->foreign('college_id')->references('id')->on('colleges');
-            $table->tinyInteger('year')->default(0)->nullable();
+            $table->tinyInteger('year')->nullable();
             $table->date('date_from')->nullable();
             $table->date('date_to')->nullable();
             $table->unsignedBigInteger('period_id')->nullable()->index();

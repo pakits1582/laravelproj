@@ -57,5 +57,48 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on("click", ".instructor_action", function(e)
+    {
+        var id = $(this).attr('id');
+        var action = $(this).attr('data-action');
+
+        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm '+action+'</div><div class="message">Are you sure you want to perform '+action+'?</div>').dialog({
+			show: 'fade',
+			resizable: false,	
+			draggable: false,
+			width: 350,
+			height: 'auto',
+			modal: true,
+			buttons: {
+					'Cancel':function(){
+						$(this).dialog('close');
+					},
+					'OK':function(){
+						$(this).dialog('close');
+						$.ajax({
+							url: 'instructors/'+id+'/instructoraction/'+action,
+							type: 'POST',
+							dataType: 'json',
+							success: function(data){
+								showSuccess(data.message);
+                                
+								var finalURL="/instructors?"+$("#filter_form").serialize();
+                                filterinstructors(finalURL);
+							},
+							error: function (data) {
+								var errors = data.responseJSON;
+								if ($.isEmptyObject(errors) == false) {
+									showError('Something went wrong! Can not perform requested action! '+errors.message);
+								}
+							}
+						});
+					}//end of ok button	
+				}//end of buttons
+		});//end of dialogbox
+		$(".ui-dialog-titlebar").hide();
+		//end of dialogbox
+        e.preventDefault();
+    });
+
 
 });

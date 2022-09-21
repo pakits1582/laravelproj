@@ -25,19 +25,23 @@
                         <td>{{ $instructor->deptcode  }}</td>
                         <td>{{ Helpers::getDesignation($instructor->designation) }}</td>
                         <td>{{ ($instructor->user->is_active == 1) ? 'Active' : 'Inactive'  }}</td>
-                        <td class="center">
+                        <td class="mid">
                             <a href="{{ route('instructors.edit', ['instructor' => $instructor->id ]) }}" class="btn btn-primary btn-circle btn-sm" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="#" class="btn btn-success btn-circle btn-sm" title="Activate">
-                                <i class="fas fa-power-off"></i>
-                            </a>
-                            <a href="#" class="btn btn-info btn-circle btn-sm" title="Reset Password">
+                            @if ($instructor->user->is_active == 1)
+                                <a href="#" class="btn btn-danger btn-circle btn-sm instructor_action" id="{{ $instructor->id }}" data-action="deactivate" title="Deactivate">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            @else
+                                <a href="#" class="btn btn-success btn-circle btn-sm instructor_action" id="{{ $instructor->id }}" data-action="activate" title="Activate">
+                                    <i class="fas fa-power-off"></i>
+                                </a>  
+                            @endif
+                            <a href="#" class="btn btn-info btn-circle btn-sm instructor_action" id="{{ $instructor->id }}" data-action="reset" title="Reset Password">
                                 <i class="fas fa-undo"></i>
                             </a>
-                            <a href="#" class="btn btn-danger btn-circle btn-sm" title="Deactivate">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                           
                         </td>
                     </tr>
                 @endforeach

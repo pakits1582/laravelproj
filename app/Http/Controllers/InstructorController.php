@@ -174,11 +174,16 @@ class InstructorController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
 
-            $import = new InstructorsImport;
-            $import->import($file);
+            try {
+                $import = new InstructorsImport;
+                $import->import($file);
 
-            //return errors
-            dd($import->failures());
+                $errors = $import->failures();
+                return back()->with(['alert-class' => 'alert-success', 'message' => 'Sucessfully imported!', 'errors' => $errors]);
+    
+            } catch (\Exception $e) {
+                return back()->with(['alert-class' => 'alert-danger', 'message' => 'Something went wrong! Import unsuccessful!']);
+            }
         }
     }
 
@@ -196,4 +201,13 @@ class InstructorController extends Controller
         $pdf = PDF::loadView('instructor.generatepdf', ['instructors' => $instructors]);
         return $pdf->stream('instructors.pdf');
     }
+
+    public function instructoraction(Instructor $instructor, $action)
+    {
+        $status = ($action == 'open') ? 1 : 0;
+        $instructor->update(['status' => $status]);
+
+        return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Application action successfully excuted!']);
+    }
+
 }
