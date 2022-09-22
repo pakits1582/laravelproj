@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Libs\Helpers;
+use App\Models\Permission;
 use App\Models\User;
 use App\Models\Useraccess;
 
@@ -37,5 +38,17 @@ class UserService
         }
 
         return $accesses;
+    }
+
+    public function userPermissions($request)
+    {
+        foreach ($request->permissions as $key => $permission) {
+            //ADD VALUES TO ACCESS ARRAY FOR MULTIPLE INPUT
+            $permissions[] = new Permission([
+                'permission' => $permission
+            ]);
+        }
+
+        return $permissions;
     }
 }

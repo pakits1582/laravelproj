@@ -97,6 +97,11 @@ class User extends Authenticatable
         return $this->hasMany(Useraccess::class, 'user_id', 'id');
     }
 
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class, 'user_id', 'id');
+    }
+
     public function setup()
     {
         $config = Configuration::take(1)->first();

@@ -202,12 +202,11 @@ class InstructorController extends Controller
         return $pdf->stream('instructors.pdf');
     }
 
-    public function instructoraction(Instructor $instructor, $action)
+    public function instructoraction(User $user, $action)
     {
-        $status = ($action == 'open') ? 1 : 0;
-        $instructor->update(['status' => $status]);
+        $this->instructorService->instructorActions($user, $action);
 
-        return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Application action successfully excuted!']);
+        return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Selected action successfully excuted!']);
     }
 
 }

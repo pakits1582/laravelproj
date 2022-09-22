@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserFormRequest;
 use App\Http\Requests\UserUpdateFormRequest;
 use App\Libs\Helpers;
+use App\Models\Permission;
 use App\Models\User;
 use App\Models\Useraccess;
 use App\Models\Userinfo;
@@ -54,6 +55,9 @@ class UserController extends Controller
             $accesses = $this->userService->returnUserAccesses($request);
             $user->access()->saveMany($accesses);
 
+            $permissions = $this->userService->userPermissions($request);
+            $user->permissions()->saveMany($permissions);
+
             DB::commit();
         } catch (\Exception $e) {
             Log::error(get_called_class(), [
@@ -74,7 +78,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         try {
-            $user->load('info', 'access');
+            $user->load('info', 'access', 'permissions');
 
             return view('user.edit', ['userdetails' => $user]);
         } catch (ModelNotFoundException $e) {
@@ -93,9 +97,13 @@ class UserController extends Controller
             $user->info->save();
 
             Useraccess::where('user_id', $user->id)->delete();
+            Permission::where('user_id', $user->id)->delete();
 
             $accesses = $this->userService->returnUserAccesses($request);
             $user->access()->saveMany($accesses);
+
+            $permissions = $this->userService->userPermissions($request);
+            $user->permissions()->saveMany($permissions);
 
             DB::commit();
         } catch (\Exception $e) {

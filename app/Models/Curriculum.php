@@ -29,7 +29,7 @@ class Curriculum extends Model
             $query->where('head', $user->info->id);
         }
 
-        $programs = $query->get();
+        $programs = $query->where('source', 1)->where('active', 1)->get();
 
         return $programs;
     }

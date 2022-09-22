@@ -35,6 +35,62 @@
                             <div id="error_name"></div>
                         </div>
                         <div class="form-group">
+                            <label for="code" class="m-0 font-weight-bold text-primary">User Permissions</label>
+                            {{-- <input type="text" name="address" placeholder="" class="form-control text-uppercase" value="{{ old('address') }}"> --}}
+                            <div id="error_permissions"></div>
+                            @error('permission')
+                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check form-check-solid">
+                                        <input class="form-check-input" id="can_prerequisite" type="checkbox" value="can_prerequisite" name="permissions[]">
+                                        <label for="can_prerequisite" class="m-0 font-weight-bold text-dark">Can accept pre-requisite deficiency</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-check-solid">
+                                        <input class="form-check-input" id="can_overloadunits" type="checkbox" value="can_overloadunits" name="permissions[]">
+                                        <label for="can_overloadunits" class="m-0 font-weight-bold text-dark">Can accept overload units</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check form-check-solid">
+                                        <input class="form-check-input" id="can_withbalance" type="checkbox" value="can_withbalance" name="permissions[]">
+                                        <label for="can_withbalance" class="m-0 font-weight-bold text-dark">Can accept student with balance</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-check-solid">
+                                        <input class="form-check-input" id="can_conflicts" type="checkbox" value="can_conflicts" name="permissions[]">
+                                        <label for="can_conflicts" class="m-0 font-weight-bold text-dark">Can accept conflict schedule</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check form-check-solid">
+                                        <input class="form-check-input" id="can_zeroslot" type="checkbox" value="can_zeroslot" name="permissions[]">
+                                        <label for="can_zeroslot" class="m-0 font-weight-bold text-dark">Can override zero remaining slot</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-check-solid">
+                                        <input class="form-check-input" id="can_evaluatetwice" type="checkbox" value="can_evaluatetwice" name="permissions[]">
+                                        <label for="can_evaluatetwice" class="m-0 font-weight-bold text-dark">Can evaluate a subject twice in student grade file</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="code" class="m-0 font-weight-bold text-primary">* User Access</label>
                             {{-- <input type="text" name="address" placeholder="" class="form-control text-uppercase" value="{{ old('address') }}"> --}}
                             <div id="error_access"></div>
@@ -42,7 +98,6 @@
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror
                         </div>
-
                         @php
                             if (Helpers::userAccessArray()) {
                         @endphp
@@ -74,8 +129,8 @@
                                                                         {{ $value['title'] }}
                                                                     </label>
                                                                 </th>
-                                                                <th class="text-center">R</th>
-                                                                <th class="text-center">W</th>
+                                                                <th class="text-center text-dark">R</th>
+                                                                <th class="text-center text-dark">W</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>

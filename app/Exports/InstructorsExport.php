@@ -75,7 +75,7 @@ class InstructorsExport implements FromCollection, ShouldAutoSize, WithMapping, 
             'LEVEL',
             'DEPARTMENT',
             'DESIGNATION',
-            'ACTIVE',
+            'STATUS',
         ];
     }
 

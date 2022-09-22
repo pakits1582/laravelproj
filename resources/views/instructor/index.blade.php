@@ -53,16 +53,26 @@
                                         @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="college" class="m-0 font-weight-bold text-primary">College</label>
                                         @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'dropdownfilter'])
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="college" class="m-0 font-weight-bold text-primary">Department</label>
                                         @include('partials.departments.dropdown', ['fieldname' => 'department', 'fieldid' => 'department', 'fieldclass' => 'dropdownfilter'])
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="designation" class="m-0 font-weight-bold text-primary">Status</label>
+                                        <select name="status" class="form-control dropdownfilter" id="status">
+                                            <option value="">- select status -</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

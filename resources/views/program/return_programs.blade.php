@@ -41,4 +41,5 @@
         </tbody>
     </table>
     {{ $programs->onEachSide(1)->links() }}
+    Showing {{ $programs->firstItem() }} to {{ $programs->lastItem() }} of total {{$programs->total()}} entries
 </div>

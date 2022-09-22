@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/instructors/import', [InstructorController::class, 'import'])->name('instructors.uploadimport');
         Route::post('/instructors/export', [InstructorController::class, 'export'])->name('instructors.downloadexcel');
         Route::post('/instructors/generatepdf', [InstructorController::class, 'generatepdf'])->name('instructors.generatepdf');
+        Route::post('/instructors/{user}/instructoraction/{action}', [InstructorController::class, 'instructoraction']);
         Route::resource('instructors', InstructorController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('instructors.index');
         });

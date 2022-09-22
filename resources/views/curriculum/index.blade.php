@@ -7,11 +7,11 @@
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">Curriculum Management</h1>
         <p class="mb-4">List of all programs in the database</p>
-
+        
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary">All programs under deanship/headship</h1>
+                <h1 class="h3 text-800 text-primary">All programs under Deanship/Headship</h1>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

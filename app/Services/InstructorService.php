@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Libs\Helpers;
 use App\Models\Instructor;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
 
 class InstructorService
@@ -30,6 +31,11 @@ class InstructorService
         if($request->has('department') && !empty($request->department)) {
             $query->where('department_id', $request->department);
         }
+        if($request->has('status') && ($request->status == '0' || $request->status == '1')) {
+            $query->orWhereHas('user', function (Builder $query) use($request) {
+                $query->where('is_active', $request->status);
+            });
+        }
 
         if($all){
             return $query->get();
@@ -37,5 +43,22 @@ class InstructorService
     
         return $query->paginate(10);
         
+    }
+
+    public function instructorActions($user, $action)
+    {
+        switch ($action) {
+            case 'activate':
+                $arr = ['is_active' => 1];
+                break;
+            case 'deactivate':
+                $arr = ['is_active' => 0];
+                break;
+            case 'reset':
+                $arr = ['password' => Hash::make('password')];
+                break;
+        }
+
+        return $user->update($arr);
     }
 }

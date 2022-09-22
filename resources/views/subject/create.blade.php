@@ -109,7 +109,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-check-solid">
-                                    <input class="form-check-input" id="flexCheckSolidChecked" type="checkbox" value="1" name="exclusive" {{ (old('exclusive')) ? 'cehcked' : '' }}>
+                                    <input class="form-check-input" id="flexCheckSolidChecked" type="checkbox" value="1" name="exclusive" {{ (old('exclusive')) ? 'checked' : '' }}>
                                     <label for="exclusive" class="m-0 font-weight-bold text-primary">Exclusive subject of college</label>
                                 </div>
                                 @error('exclusive')
@@ -118,7 +118,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-check-solid">
-                                    <input class="form-check-input" id="professional" type="checkbox" value="1" name="professional" {{ (old('professional')) ? 'cehcked' : '' }}>
+                                    <input class="form-check-input" id="professional" type="checkbox" value="1" name="professional" {{ (old('professional')) ? 'checked' : '' }}>
                                     <label for="professional" class="m-0 font-weight-bold text-primary">Is professional subject</label>
                                 </div>
                                 @error('professional')
@@ -127,7 +127,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-check-solid">
-                                    <input class="form-check-input" id="laboratory" type="checkbox" value="1" name="laboratory" {{ (old('laboratory')) ? 'cehcked' : '' }} >
+                                    <input class="form-check-input" id="laboratory" type="checkbox" value="1" name="laboratory" {{ (old('laboratory')) ? 'checked' : '' }} >
                                     <label for="laboratory" class="m-0 font-weight-bold text-primary">Is laboratory subject</label>                                 
                                 </div>
                                 @error('laboratory')
@@ -136,7 +136,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-check-solid">
-                                    <input class="form-check-input" id="notuition" type="checkbox" value="1" name="notuition" {{ (old('notuition')) ? 'cehcked' : '' }} >
+                                    <input class="form-check-input" id="notuition" type="checkbox" value="1" name="notuition" {{ (old('notuition')) ? 'checked' : '' }} >
                                     <label for="notuition" class="m-0 font-weight-bold text-primary">No Tuition (Do not compute tuition fee)</label>
                                 </div>
                                 @error('notuition')
@@ -145,7 +145,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-check-solid">
-                                    <input class="form-check-input" id="nograde" type="checkbox" value="1" name="nograde" {{ (old('nograde')) ? 'cehcked' : '' }} >
+                                    <input class="form-check-input" id="nograde" type="checkbox" value="1" name="nograde" {{ (old('nograde')) ? 'checked' : '' }} >
                                     <label for="nograde" class="m-0 font-weight-bold text-primary">No Grade (Do not display in OTR)</label>
                                 </div>
                                 @error('nograde')
@@ -154,7 +154,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-check-solid">
-                                    <input class="form-check-input" id="gwa" type="checkbox" value="1" name="gwa" {{ (old('gwa')) ? 'cehcked' : '' }}>
+                                    <input class="form-check-input" id="gwa" type="checkbox" value="1" name="gwa" {{ (old('gwa')) ? 'checked' : '' }}>
                                     <label for="gwa" class="m-0 font-weight-bold text-primary">Exclude in computation of GWA</label>
                                 </div>
                                 @error('gwa')

@@ -1,5 +1,10 @@
 //DOCUMENT READY
 $(function(){
+    $.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
 
     $(document).on("click",".pagination a",function(e){
         e.preventDefault();
@@ -82,10 +87,12 @@ $(function(){
 							success: function(data){
 								showSuccess(data.message);
                                 
-								var finalURL="/instructors?"+$("#filter_form").serialize();
+                                var currentpage=$('.pagination li.active').text();
+                                var finalURL="/instructors?page="+currentpage+"&"+$("#filter_form").serialize();
                                 filterinstructors(finalURL);
 							},
 							error: function (data) {
+                                console.log(data);
 								var errors = data.responseJSON;
 								if ($.isEmptyObject(errors) == false) {
 									showError('Something went wrong! Can not perform requested action! '+errors.message);
