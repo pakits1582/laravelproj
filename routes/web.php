@@ -44,10 +44,19 @@ Route::group(['middleware' => ['auth']], function () {
             return Redirect::route('schools.index');
         });
 
-    Route::resource('users', UserController::class)->except(['show', 'destroy'])->middleware(['inaccess:users'])
-        ->missing(function (Request $request) {
+    
+
+    Route::group(['middleware' => ['inaccess:users']], function () {
+        // Route::view('/instructors/import', 'instructor.import')->name('instructors.import');
+        // Route::post('/instructors/import', [InstructorController::class, 'import'])->name('instructors.uploadimport');
+        // Route::post('/instructors/export', [InstructorController::class, 'export'])->name('instructors.downloadexcel');
+        // Route::post('/instructors/generatepdf', [InstructorController::class, 'generatepdf'])->name('instructors.generatepdf');
+        Route::post('/users/{user}/useraction/{action}', [UserController::class, 'useraction']);
+        Route::resource('users', UserController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('users.index');
         });
+    });
+
     Route::group(['middleware' => ['inaccess:instructors']], function () {
         Route::view('/instructors/import', 'instructor.import')->name('instructors.import');
         Route::post('/instructors/import', [InstructorController::class, 'import'])->name('instructors.uploadimport');

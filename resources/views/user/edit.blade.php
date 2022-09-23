@@ -149,8 +149,8 @@
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col" class="text-center">
-                                                                    <input type="checkbox" class="form-check-input selectall" data-id="{{ $key }}" />
-                                                                    <label class="form-check-label text-primary">
+                                                                    <input type="checkbox" class="form-check-input selectall" id="selectall_{{ $key }}" data-id="{{ $key }}" />
+                                                                    <label class="form-check-label text-primary" for="selectall_{{ $key }}">
                                                                         {{ $value['title'] }}
                                                                     </label>
                                                                 </th>

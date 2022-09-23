@@ -8,15 +8,17 @@ use App\Models\Instructor;
 use App\Models\Useraccess;
 use Illuminate\Http\Request;
 use App\Exports\InstructorsExport;
+use App\Imports\InstructorsImport;
 use Illuminate\Support\Facades\DB;
 use App\Services\InstructorService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use App\Http\Controllers\UserController;
 use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
+use App\Services\UserService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Imports\InstructorsImport;
 
 class InstructorController extends Controller
 {
@@ -204,7 +206,7 @@ class InstructorController extends Controller
 
     public function instructoraction(User $user, $action)
     {
-        $this->instructorService->instructorActions($user, $action);
+        (new UserService())->userAction($user, $action);
 
         return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Selected action successfully excuted!']);
     }

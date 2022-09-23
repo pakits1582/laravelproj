@@ -15,7 +15,7 @@ $(function(){
         var finalURL=url+append+$("#filter_form").serialize();
         
         filterinstructors(finalURL);
-    })
+    });
 
     function filterinstructors(finalURL)
     {

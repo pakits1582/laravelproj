@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Libs\Helpers;
+use App\Models\Userinfo;
+use App\Models\Permission;
+use App\Models\Useraccess;
+use Illuminate\Http\Request;
+use App\Services\UserService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserFormRequest;
 use App\Http\Requests\UserUpdateFormRequest;
-use App\Libs\Helpers;
-use App\Models\Permission;
-use App\Models\User;
-use App\Models\Useraccess;
-use App\Models\Userinfo;
-use App\Services\UserService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -25,11 +26,13 @@ class UserController extends Controller
         Helpers::setLoad(['jquery_user.js']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::where('utype', 0)->get();
-        $users->load('info', 'access');
-
+        $users = $this->userService->returnUsers($request);
+        
+        if($request->ajax()){
+            return view('user.return_users', compact('users'));
+        }
         return view('user.index', compact('users'));
     }
 
@@ -40,7 +43,7 @@ class UserController extends Controller
 
     public function store(UserFormRequest $request)
     {
-        try {
+        //try {
             DB::beginTransaction();
 
             $user = User::create([
@@ -59,14 +62,14 @@ class UserController extends Controller
             $user->permissions()->saveMany($permissions);
 
             DB::commit();
-        } catch (\Exception $e) {
-            Log::error(get_called_class(), [
-                //'createdBy' => $user->userLoggedinName(),
-                'body' => $request->all(),
-                'error' => $e->getMessage(),
-                'line' => $e->getLine(),
-            ]);
-        }
+        // } catch (\Exception $e) {
+        //     Log::error(get_called_class(), [
+        //         //'createdBy' => $user->userLoggedinName(),
+        //         'body' => $request->all(),
+        //         'error' => $e->getMessage(),
+        //         'line' => $e->getLine(),
+        //     ]);
+        // }
 
         return response()->json([
             'success' => true,
@@ -133,4 +136,11 @@ class UserController extends Controller
 
     //     return redirect()->route('Userindex')->with(['alert-class' => 'alert-success', 'message' => 'User sucessfully deleted!']);
     // }
+
+    public function useraction(User $user, $action)
+    {
+        $this->userService->userAction($user, $action);
+
+        return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Selected action successfully excuted!']);
+    }
 }

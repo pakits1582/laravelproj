@@ -44,21 +44,4 @@ class InstructorService
         return $query->paginate(10);
         
     }
-
-    public function instructorActions($user, $action)
-    {
-        switch ($action) {
-            case 'activate':
-                $arr = ['is_active' => 1];
-                break;
-            case 'deactivate':
-                $arr = ['is_active' => 0];
-                break;
-            case 'reset':
-                $arr = ['password' => Hash::make('password')];
-                break;
-        }
-
-        return $user->update($arr);
-    }
 }

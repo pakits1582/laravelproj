@@ -18,61 +18,62 @@
                     </span>
                     <span class="text">Add new user</span>
                 </a>
+                <a href="#" class="btn btn-danger btn-icon-split" id="generate_pdf">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-print"></i>
+                    </span>
+                    <span class="text">Print PDF</span>
+                </a>
+                <a href="#" class="btn btn-success btn-icon-split" id="download_excel">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-download"></i>
+                    </span>
+                    <span class="text">Download Excel</span>
+                </a>
+                <a href="{{ route('subjects.import') }}" class="btn btn-secondary btn-icon-split" id="upload_excel" data-field="subjects">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="text">Upload Excel</span>
+                </a>
+                <div>
+                    <form method="POST" action="" id="filter_form" target="_blank">
+                        @csrf
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="designation" class="m-0 font-weight-bold text-primary">User Type</label>
+                                        <select name="type" class="form-control dropdownfilter" id="type">
+                                            <option value="0" selected>Admin</option>
+                                            <option value="1">Instructor</option>
+                                            <option value="2">Student</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                        <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="designation" class="m-0 font-weight-bold text-primary">Status</label>
+                                        <select name="status" class="form-control dropdownfilter" id="status">
+                                            <option value="">- select status -</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>ID Number</th>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </tfoot> --}}
-                        <tbody>
-                            @if ($users)
-                                @unless (count($users) == 0)
-                                    @foreach ($users as $user)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $user->idno }}</td>
-                                            <td>{{ $user->info->name }}</td>
-                                            <td>{{ ($user->is_active == 1) ? 'Active' : 'Inactive'  }}</td>
-                                            <td class="center">
-                                                <a href="{{ route('users.edit', ['user' => $user->id ]) }}" class="btn btn-primary btn-circle btn-sm" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-success btn-circle btn-sm" title="Activate">
-                                                    <i class="fas fa-power-off"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-info btn-circle btn-sm" title="Reset Password">
-                                                    <i class="fas fa-undo"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-danger btn-circle btn-sm" title="Deactivate">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('user.return_users')
             </div>
         </div>
 

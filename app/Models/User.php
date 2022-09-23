@@ -27,7 +27,7 @@ class User extends Authenticatable
     ];
 
     const TYPE_ADMIN = 0;
-    const TYPE_INTRUCTOR = 1;
+    const TYPE_INSTRUCTOR = 1;
     const TYPE_STUDENT = 2;
 
     /**
@@ -63,17 +63,17 @@ class User extends Authenticatable
 
     public function info()
     {
-        switch ($this->utype) {
-            case 0:
-                return $this->hasOne(Userinfo::class, 'user_id', 'id');
-                break;
-            case 1:
-                return $this->hasOne(Instructor::class, 'user_id', 'id');
-                break;
-            case 2:
-                return $this->hasOne(Student::class, 'user_id', 'id');
-                break;
-        }
+        return $this->hasOne(Userinfo::class, 'user_id', 'id');
+    }
+
+    public function instructorinfo()
+    {
+        return $this->hasOne(Instructor::class, 'user_id', 'id');
+    }
+
+    public function studentinfo()
+    {
+        return $this->hasOne(Student::class, 'user_id', 'id');
     }
 
     public function scopeAdmin($query)
