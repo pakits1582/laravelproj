@@ -65,9 +65,13 @@ class UserService
         $query = User::query();
         switch ($request->type) {
             case 1:
-                $query->join('instructors', 'users.id', 'instructors.user_id')
-                    ->orderBy('instructors.last_name')
-                    ->select('users.*', DB::raw("CONCAT(instructors.last_name,', ',instructors.first_name) as name"));
+                $query->select('users.idno',
+                                'users.id AS userid',
+                                'users.is_active',
+                                'users.utype',
+                                DB::raw("CONCAT(instructors.last_name,', ',instructors.first_name,' ',instructors.middle_name) as name"))
+                    ->join('instructors', 'users.id', 'instructors.user_id')
+                    ->orderBy('instructors.last_name');
                 if($request->has('keyword') && !empty($request->keyword))
                 {
                     $query->where('instructors.last_name', 'like', '%'.$request->keyword.'%');
@@ -82,9 +86,13 @@ class UserService
                 // }]);
                 break;
             default:
-                $query->join('userinfo', 'users.id', 'userinfo.user_id')
-                    ->orderBy('userinfo.name')
-                    ->select('users.*','userinfo.*');
+                $query->select('users.idno',
+                                'users.id AS userid',
+                                'users.is_active',
+                                'users.utype',
+                                'userinfo.*')
+                    ->join('userinfo', 'users.id', 'userinfo.user_id')
+                    ->orderBy('userinfo.name');
                 if($request->has('keyword') && !empty($request->keyword))
                 {
                     $query->where('userinfo.name', 'like', '%'.$request->keyword.'%');

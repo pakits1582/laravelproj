@@ -18,19 +18,19 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ ($user->is_active == 1) ? 'Active' : 'Inactive'  }}</td>
                         <td class="mid">
-                            <a href="{{ route('users.edit', ['user' => $user->id ]) }}" class="btn btn-primary btn-circle btn-sm" title="Edit">
+                            <a href="{{ route('users.edit', ['user' => $user->userid ]) }}" class="btn btn-primary btn-circle btn-sm" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             @if ($user->is_active == 1)
-                            <a href="#" class="btn btn-danger btn-circle btn-sm user_action" id="{{ $user->id }}" data-action="deactivate" title="Deactivate">
+                            <a href="#" class="btn btn-danger btn-circle btn-sm user_action" id="{{ $user->userid }}" data-action="deactivate" title="Deactivate">
                                 <i class="fas fa-trash"></i>
                             </a>
                             @else
-                                <a href="#" class="btn btn-success btn-circle btn-sm user_action" id="{{ $user->id }}" data-action="activate" title="Activate">
+                                <a href="#" class="btn btn-success btn-circle btn-sm user_action" id="{{ $user->userid }}" data-action="activate" title="Activate">
                                     <i class="fas fa-power-off"></i>
                                 </a>  
                             @endif
-                            <a href="#" class="btn btn-info btn-circle btn-sm user_action" id="{{ $user->id }}" data-action="reset" title="Reset Password">
+                            <a href="#" class="btn btn-info btn-circle btn-sm user_action" id="{{ $user->userid }}" data-action="reset" title="Reset Password">
                                 <i class="fas fa-undo"></i>
                             </a>
                         </td>

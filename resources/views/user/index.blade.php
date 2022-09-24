@@ -37,7 +37,7 @@
                     <span class="text">Upload Excel</span>
                 </a>
                 <div>
-                    <form method="POST" action="" id="filter_form" target="_blank">
+                    <form method="POST" action="" id="filter_form" target="_blank" data-field="users">
                         @csrf
                         <div class="mt-3">
                             <div class="row">

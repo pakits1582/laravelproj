@@ -43,7 +43,7 @@ class UserController extends Controller
 
     public function store(UserFormRequest $request)
     {
-        //try {
+        try {
             DB::beginTransaction();
 
             $user = User::create([
@@ -62,14 +62,14 @@ class UserController extends Controller
             $user->permissions()->saveMany($permissions);
 
             DB::commit();
-        // } catch (\Exception $e) {
-        //     Log::error(get_called_class(), [
-        //         //'createdBy' => $user->userLoggedinName(),
-        //         'body' => $request->all(),
-        //         'error' => $e->getMessage(),
-        //         'line' => $e->getLine(),
-        //     ]);
-        // }
+        } catch (\Exception $e) {
+            Log::error(get_called_class(), [
+                //'createdBy' => $user->userLoggedinName(),
+                'body' => $request->all(),
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+            ]);
+        }
 
         return response()->json([
             'success' => true,

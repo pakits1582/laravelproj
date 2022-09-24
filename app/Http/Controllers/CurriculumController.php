@@ -104,5 +104,12 @@ class CurriculumController extends Controller
     {
         //
     }
+
+    public function returncurricula(Request $request)
+    {
+        $curricula = Curriculum::where('program_id', $request->program)->orderBy('id', 'DESC')->get();
+
+        return response()->json(['data' => $curricula]);
+    }
     
 }

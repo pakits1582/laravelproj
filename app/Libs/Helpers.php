@@ -131,6 +131,22 @@ class Helpers
         ];
     }
 
+    public static function studentDefaultAccesses()
+    {
+        $studentAccesses = [
+            ['access' => 'assessments/studentassessment', 'title' => 'Assessment', 'category' => 'Student Menu'], 
+            ['access' => 'evaluations/studentevaluation', 'title' => 'Evaluation', 'category' => 'Student Menu'], 
+            ['access' => 'grades/studentgrade', 'title' => 'Grades', 'category' => 'Student Menu'], 
+            ['access' => 'registration', 'title' => 'Registration', 'category' => 'Student Menu'],
+            ['access' => 'students/profile', 'title' => 'Profile', 'category' => 'Student Menu'], 
+            ['access' => 'studentledgers/studentaccountledger', 'title' => 'Account', 'category' => 'Student Menu'],
+            ['access' => 'attendances/studentattendance', 'title' => 'Attendance', 'category' => 'Student Menu'],
+            ['access' => 'facultyevaluations/studentfacultyevaluation', 'title' => 'Faculty Evaluation', 'category' => 'Student Menu']
+        ];
+
+        return $studentAccesses;
+    }
+
     public static function searchUSerAccess($array, $val, $column)
     {
         foreach ($array as $key => $value) {
@@ -276,11 +292,58 @@ class Helpers
 
     public static function  is_column_in_array($value,$column,$array)
     {
-       
         $key = array_search($value, array_column($array, $column));
         if ($key !== false) {
             return $key;
         }
         return false;
+    }
+
+    public static function academicStatus($status)
+    {
+        switch ($status) {
+            case 1:
+                return 'Old';
+                break;
+            case 2:
+                return 'New';
+                break;
+            case 3:
+                return 'Graduated';
+                break;
+            case 4:
+                return 'Expelled';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+
+    public static function yearLevel($level)
+    {
+        switch ($level) {
+            case 1:
+                return 'First Year';
+                break;
+            case 2:
+                return 'Second Year';
+                break;
+            case 3:
+                return 'Third Year';
+                break;
+            case 4:
+                return 'Fourth Year';
+                break;
+            case 5:
+                return 'Fifth Year';
+                break;
+            case 6:
+                return 'Sixth Year';
+                break;
+            default:
+                return '';
+                break;
+        }
     }
 }

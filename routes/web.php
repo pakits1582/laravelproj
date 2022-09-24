@@ -11,6 +11,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DepartmentController;
@@ -65,6 +66,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/instructors/{user}/instructoraction/{action}', [InstructorController::class, 'instructoraction']);
         Route::resource('instructors', InstructorController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('instructors.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:students']], function () {
+        // Route::view('/students/import', 'student.import')->name('students.import');
+        // Route::post('/students/import', [StudentController::class, 'import'])->name('students.uploadimport');
+        // Route::post('/students/export', [StudentController::class, 'export'])->name('students.downloadexcel');
+        // Route::post('/students/generatepdf', [StudentController::class, 'generatepdf'])->name('students.generatepdf');
+        // Route::post('/students/{user}/instructoraction/{action}', [StudentController::class, 'studentaction']);
+        Route::resource('students', StudentController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+            return Redirect::route('students.index');
         });
     });
 
@@ -130,6 +142,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->name('curriculum.manage');
+    Route::post('/curriculum/returncurricula', [CurriculumController::class, 'returncurricula']);
     Route::resource('curriculum', CurriculumController::class)->except(['show', 'destroy'])->middleware(['inaccess:curriculum'])
             ->missing(function (Request $request) {
                 return Redirect::route('curriculum.index');
