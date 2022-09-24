@@ -204,11 +204,4 @@ class InstructorController extends Controller
         return $pdf->stream('instructors.pdf');
     }
 
-    public function instructoraction(User $user, $action)
-    {
-        (new UserService())->userAction($user, $action);
-
-        return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Selected action successfully excuted!']);
-    }
-
 }

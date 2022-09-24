@@ -46,7 +46,6 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
     
-
     Route::group(['middleware' => ['inaccess:users']], function () {
         // Route::view('/instructors/import', 'instructor.import')->name('instructors.import');
         // Route::post('/instructors/import', [InstructorController::class, 'import'])->name('instructors.uploadimport');
@@ -63,7 +62,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/instructors/import', [InstructorController::class, 'import'])->name('instructors.uploadimport');
         Route::post('/instructors/export', [InstructorController::class, 'export'])->name('instructors.downloadexcel');
         Route::post('/instructors/generatepdf', [InstructorController::class, 'generatepdf'])->name('instructors.generatepdf');
-        Route::post('/instructors/{user}/instructoraction/{action}', [InstructorController::class, 'instructoraction']);
         Route::resource('instructors', InstructorController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('instructors.index');
         });
@@ -74,7 +72,6 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/students/import', [StudentController::class, 'import'])->name('students.uploadimport');
         // Route::post('/students/export', [StudentController::class, 'export'])->name('students.downloadexcel');
         // Route::post('/students/generatepdf', [StudentController::class, 'generatepdf'])->name('students.generatepdf');
-        // Route::post('/students/{user}/instructoraction/{action}', [StudentController::class, 'studentaction']);
         Route::resource('students', StudentController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('students.index');
         });
