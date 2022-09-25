@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->index();
             $table->string('name')->index();
-            $table->unsignedBigInteger('term_id')->nullable();
+            $table->unsignedBigInteger('term_id')->nullable()->index();
             $table->foreign('term_id')->references('id')->on('terms');
             $table->integer('year')->index();
             $table->date('class_start')->nullable();

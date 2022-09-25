@@ -31,9 +31,20 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             try {
                 $user = User::findOrfail(Auth::id());
-                $user->load('info', 'access');
+                switch ($user->utype) {
+                    case User::TYPE_INSTRUCTOR:
+                        $info = 'instructorinfo';
+                        break;
+                    case User::TYPE_STUDENT:
+                        $info = 'studentinfo';
+                        break;
+                    default:
+                         $info = 'info';
+                        break;
+                }
+                $user->load($info, 'access');
 
-                $view->with('user', $user);
+                $view->with(['user' => $user, 'info' => ['info' => $info]]);
             } catch (\Exception $e) {
                 Log::error(get_called_class(), [
                     'error' => $e->getMessage(),

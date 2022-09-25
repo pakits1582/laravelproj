@@ -90,25 +90,9 @@ class UserController extends Controller
     }
 
     public function update(UserUpdateFormRequest $request, User $user)
-    {
-        $user = $user->load('info', 'access');
-      
-        try {
-            DB::beginTransaction();
-
-            $user->info->name = $request->name;
-            $user->info->save();
-
-            Useraccess::where('user_id', $user->id)->delete();
-            Permission::where('user_id', $user->id)->delete();
-
-            $accesses = $this->userService->returnUserAccesses($request);
-            $user->access()->saveMany($accesses);
-
-            $permissions = $this->userService->userPermissions($request);
-            $user->permissions()->saveMany($permissions);
-
-            DB::commit();
+    {      
+       try {
+            $this->userService->updateUser($user, $request);
         } catch (\Exception $e) {
             Log::error(get_called_class(), [
                 //'createdBy' => $user->userLoggedinName(),

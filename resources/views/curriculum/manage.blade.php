@@ -1,1 +1,1 @@
-{{ dd($subjects) }}
+{{ dd($terms) }}

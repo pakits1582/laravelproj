@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\User;
+use App\Libs\Helpers;
+use App\Models\Curriculum;
+use App\Models\Instructor;
+use App\Services\ProgramService;
+use Illuminate\Database\Eloquent\Builder;
+
+class CurriculumService
+{
+    public function handleUser($user, $request)
+    {
+        if($user->utype === User::TYPE_INSTRUCTOR)
+        {
+            $user->load('instructorinfo');
+
+            if($user->instructorinfo->designation === Instructor::TYPE_PROGRAM_HEAD)
+            {
+                $programs = (new ProgramService())->programHeadship($user);
+            }
+
+            if($user->instructorinfo->designation === Instructor::TYPE_DEAN)
+            {
+                $programs = (new ProgramService())->programDeanship($user);
+            }
+        }else{
+            $programs = (new ProgramService())->returnPrograms($request,false,true);
+        }
+
+        return $programs;
+    }
+}

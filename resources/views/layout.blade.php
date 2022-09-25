@@ -53,7 +53,7 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="mr-2 d-none d-lg-inline text-gray-600 small">
                         @auth
-                            {{ Auth::user()->info->name }}
+                            {{ Auth::user()->{ $info['info'] }->name }}
                             <p class="mb-0  font-weight-bold text-success">{{ session('periodname') }}</p>
                         @endauth
                     </div>

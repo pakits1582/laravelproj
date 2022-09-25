@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Libs\Helpers;
 use App\Models\Instructor;
-use App\Models\Useraccess;
 use Illuminate\Http\Request;
 use App\Exports\InstructorsExport;
 use App\Imports\InstructorsImport;
@@ -14,10 +13,8 @@ use App\Services\InstructorService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
-use App\Http\Controllers\UserController;
 use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
-use App\Services\UserService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class InstructorController extends Controller
@@ -83,23 +80,8 @@ class InstructorController extends Controller
                 'name_suffix' => $request->name_suffix,
             ], array_merge($request->validated(), ['user_id' => $user->id])
             );
-            //INSERT INSTRUCTOR'S DEFAULT ACCESS
-            $instructorAccesses = [
-                ['access' => 'facultyloads/facultyload', 'title' => 'Faculty Load', 'category' => 'Faculty Menu'],
-                ['access' => 'classlist/facultyclasslist', 'title' => 'Faculty Class List', 'category' => 'Faculty Menu'],
-                ['access' => 'instructors/profile', 'title' => 'Faculty Profile', 'category' => 'Faculty Menu'],
-                ['access' => 'gradingsheets', 'title' => 'Grading Sheet', 'category' => 'Faculty Menu'],
-                ['access' => 'gradegenerator', 'title' => 'Grade Generator', 'category' => 'Faculty Menu'],
-            ];
-
-            // //LOOP THROUGH ALL USERACCESS AND ADD TO USERS_ACCESS TABLE
-            foreach ($instructorAccesses as $key => $access) {
-                $accesses[] = new Useraccess([
-                    'access' => $access['access'],
-                    'title' => $access['title'],
-                    'category' => $access['category'],
-                ]);
-            }
+            
+            $accesses = $this->instructorService->returnInstructorAccesses();
             $user->access()->saveMany($accesses);
 
             DB::commit();

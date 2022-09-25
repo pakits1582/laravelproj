@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Libs\Helpers;
 use App\Models\Instructor;
+use App\Models\Useraccess;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -42,6 +43,20 @@ class InstructorService
         }
     
         return $query->paginate(10);
-        
+    }
+
+    public function returnInstructorAccesses()
+    {
+        foreach (Helpers::instructorDefaultAccesses() as $key => $access) {
+            $accesses[] = new Useraccess([
+                'access' => $access['access'],
+                'title' => $access['title'],
+                'category' => $access['category'],
+                'read_only' => 1,
+                'write_only' => 1
+            ]);
+        }
+
+        return $accesses;
     }
 }

@@ -8,14 +8,17 @@ use App\Models\Curriculum;
 use App\Models\Program;
 use App\Models\Subject;
 use App\Models\Term;
+use App\Services\CurriculumService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CurriculumController extends Controller
 {
+    protected $curriculumService;
 
-    public function __construct()
+    public function __construct(CurriculumService $curriculumService)
     {
+        $this->curriculumService = $curriculumService;
         Helpers::setLoad(['jquery_curriculum.js']);
     }
     /**
@@ -23,11 +26,16 @@ class CurriculumController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Curriculum $curriculum)
+    public function index(Request $request)
     {
-        $programs = $curriculum->getPrograms(Auth::user());
+        $programs = $this->curriculumService->handleUser(Auth::user(), $request);
         
-        return view('curriculum.index', ['programs' => $programs]);
+        
+        if($request->ajax()){
+            return view('curriculum.return_programs', compact('programs'));
+        }
+
+        return view('curriculum.index', compact('programs'));
     }
 
     /**
@@ -42,11 +50,16 @@ class CurriculumController extends Controller
 
     public function manage(Program $program)
     {
-        $program->load('curricula');
-        $terms = Term::all();
-        $subjects = Subject::all();
+        if (Helpers::getAccessAbility(Auth::user()->access->toArray(), 'curriculum', 'write_only') === 1)
+        {
+            $program->load('curricula');
+            $terms = Term::where('source', 1)->get();
+            $subjects = Subject::all();
 
-        return view('curriculum.manage', compact(['program', 'terms', 'subjects']));
+            return view('curriculum.manage', compact(['program', 'terms', 'subjects']));
+        }
+        
+        return abort(404, 'Page Not Found');
     }
 
     /**

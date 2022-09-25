@@ -26,6 +26,7 @@ class StoreTermRequest extends FormRequest
         return [
             'term' => ['required', 'max:255'],
             'type' => ['required'],
+            'source' => ['required']
         ];
     }
 }

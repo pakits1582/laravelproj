@@ -28,7 +28,7 @@
                         </div>
                         <div class="form-group">
                             <label for="code" class="m-0 font-weight-bold text-primary">* Name</label>
-                            <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ $userdetails->info->name }}">
+                            <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ ($userdetails->utype == 1) ? $userdetails->instructorinfo->name : $userdetails->info->name }}">
                             @error('name')
                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                             @enderror

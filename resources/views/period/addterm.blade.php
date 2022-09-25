@@ -30,15 +30,29 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="code"  class="m-0 font-weight-bold text-primary">* Type</label>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-9">
                                             <label for="regular"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="type" value="1" id="regular" checked> Regular Term </label>
                                             <label for="short"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="type" value="2" id="short"> Short Term </label>
                                         </div>
                                     </div>
                                     <div id="error_type"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for=""  class="m-0 font-weight-bold text-primary">* Source</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <label for="term_internal"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="source" value="1" id="term_internal" checked> Internal </label>
+                                            <label for="term_external"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="source" value="2" id="term_external"> External </label>    
+                                        </div>
+                                    </div>
+                                    @error('source')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
                                 </div>
                                 <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Term</button>
                                 </form>

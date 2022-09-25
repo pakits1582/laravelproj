@@ -18,7 +18,7 @@
                     </span>
                     <span class="text">Add new user</span>
                 </a>
-                <a href="#" class="btn btn-danger btn-icon-split" id="generate_pdf">
+                {{-- <a href="#" class="btn btn-danger btn-icon-split" id="generate_pdf">
                     <span class="icon text-white-50">
                         <i class="fas fa-print"></i>
                     </span>
@@ -35,7 +35,7 @@
                         <i class="fas fa-upload"></i>
                     </span>
                     <span class="text">Upload Excel</span>
-                </a>
+                </a> --}}
                 <div>
                     <form method="POST" action="" id="filter_form" target="_blank" data-field="users">
                         @csrf

@@ -16,7 +16,30 @@ class UserService
 
     protected $user;
 
-    public function returnUserAccesses($request)
+    public function updateUser($user, $request)
+    {
+        DB::beginTransaction();
+
+        if($user->utype === User::TYPE_ADMIN)
+        {
+            $user->info->name = $request->name;
+            $user->info->save();
+        }
+
+        Useraccess::where('user_id', $user->id)->delete();
+        Permission::where('user_id', $user->id)->delete();
+
+        $accesses = $this->returnUserAccesses($request, $user->utype);
+        $user->access()->saveMany($accesses);
+
+        $permissions = $this->userPermissions($request);
+        $user->permissions()->saveMany($permissions);
+
+        return DB::commit();
+
+    }
+
+    public function returnUserAccesses($request, $utype = User::TYPE_ADMIN)
     {
         // foreach ($request->access as $key => $value) {
         //     $write = $request->write;
@@ -24,6 +47,7 @@ class UserService
             
         //     echo $value.'-'.$read[$key].'-'.$write[$key].'<br>';
         // }
+        $accesses = [];
 
         foreach ($request->access as $key => $access) {
             //GET USER ACCESS FROM HELPERS CLASS
@@ -38,6 +62,19 @@ class UserService
                 'read_only' => $read[$key],
                 'write_only' => $write[$key]
             ]);
+        }
+
+        if($utype === User::TYPE_INSTRUCTOR)
+        {
+            foreach (Helpers::instructorDefaultAccesses() as $key => $access) {
+                $accesses[] = new Useraccess([
+                    'access' => $access['access'],
+                    'title' => $access['title'],
+                    'category' => $access['category'],
+                    'read_only' => 1,
+                    'write_only' => 1
+                ]);
+            }
         }
 
         return $accesses;
@@ -81,9 +118,20 @@ class UserService
                 }
                 break;
             case 2:
-                // $query->where('utype', User::TYPE_STUDENT)->with(['info' => function ($q){
-                //     $q->orderBy('last_name');
-                // }]);
+                $query->select('users.idno',
+                                'users.id AS userid',
+                                'users.is_active',
+                                'users.utype',
+                                DB::raw("CONCAT(students.last_name,', ',students.first_name,' ',students.middle_name) as name"))
+                    ->join('students', 'users.id', 'students.user_id')
+                    ->orderBy('students.last_name');
+                if($request->has('keyword') && !empty($request->keyword))
+                {
+                    $query->where('students.last_name', 'like', '%'.$request->keyword.'%');
+                    $query->orwhere('students.middle_name', 'like', '%'.$request->keyword.'%');
+                    $query->orwhere('students.first_name', 'like', '%'.$request->keyword.'%');
+                    $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                }
                 break;
             default:
                 $query->select('users.idno',

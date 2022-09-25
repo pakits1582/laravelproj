@@ -2,6 +2,8 @@
 
 namespace App\Libs;
 
+use App\Models\Useraccess;
+
 class Helpers
 {
     public static $load;
@@ -113,7 +115,7 @@ class Helpers
                     ['header' => 'Grade File', 'link' => 'grades', 'id' => 'grade'],
                     ['header' => 'External Grades', 'link' => 'gradeexternals', 'id' => 'gradeexternal'],
                     ['header' => 'Internal Grades', 'link' => 'gradeinternals', 'id' => 'gradeinternal'],
-                    ['header' => 'Grading Sheet', 'link' => 'gradingsheets', 'id' => 'gradingsheet'],
+                    ['header' => 'Grading Sheet', 'link' => 'gradingsheets/faculty', 'id' => 'gradingsheet'],
                 ],
             ],
 
@@ -145,6 +147,19 @@ class Helpers
         ];
 
         return $studentAccesses;
+    }
+
+    public static function instructorDefaultAccesses()
+    {
+        $instructorAccesses = [
+            ['access' => 'facultyloads/facultyload', 'title' => 'Faculty Load', 'category' => 'Faculty Menu'],
+            ['access' => 'classlist/facultyclasslist', 'title' => 'Faculty Class List', 'category' => 'Faculty Menu'],
+            ['access' => 'instructors/profile', 'title' => 'Faculty Profile', 'category' => 'Faculty Menu'],
+            ['access' => 'gradingsheets', 'title' => 'Grading Sheet', 'category' => 'Faculty Menu'],
+            ['access' => 'gradegenerator', 'title' => 'Grade Generator', 'category' => 'Faculty Menu'],
+        ];
+
+        return $instructorAccesses;
     }
 
     public static function searchUSerAccess($array, $val, $column)
@@ -345,5 +360,15 @@ class Helpers
                 return '';
                 break;
         }
+    }
+
+    public static function getAccessAbility($accesses, $access, $ability)
+    {
+        $key = self::is_column_in_array($access, 'access', $accesses);
+
+        if($key !== false){
+            return $accesses[$key][$ability];
+        }
+       
     }
 }

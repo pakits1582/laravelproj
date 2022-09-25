@@ -83,7 +83,7 @@ $(function(){
 		//end of dialogbox
 	});
 
-	$(document).on("click", ".deleteconfigsched", function(){
+	$(document).on("click", ".deleteconfigsched", function(e){
 		var id = $(this).attr("id");
 
 		$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to delete configuration schedule?</div>').dialog({
@@ -123,6 +123,7 @@ $(function(){
 			});//end of dialogbox
 			$(".ui-dialog-titlebar").hide();
 		//end of dialogbox
+		e.preventDefault();
 	});
 
 });
