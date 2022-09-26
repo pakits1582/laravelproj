@@ -27,10 +27,9 @@ class ConfigurationController extends Controller
      */
     public function index()
     {
-        $periods = Period::where('display', 1)->orderBy('year', 'DESC')->get();
+        $periods = Period::with('terminfo')->where('display', 1)->orderBy('year', 'DESC')->get();
         $configuration = Configuration::take(1)->first();
-        $configscheds = ConfigurationSchedule::with(['collegeinfo', 'level'])->where('period_id', session('current_period'))->get();
-        $configgrouped = $configscheds->groupBy('type');
+        $configgrouped = ConfigurationSchedule::with(['collegeinfo', 'level'])->where('period_id', session('current_period'))->get()->groupBy('type');
 
         return view('configuration.index', compact('periods', 'configuration', 'configgrouped'));
     }

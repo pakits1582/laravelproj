@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -90,6 +91,20 @@ class User extends Authenticatable
     // {
     //     return $query->info->where('designation', Instructor::TYPE_PROGRAM_HEAD);
     // }
+
+    public function scopeCreateWithRole($query, $request, $usertype)
+    {
+        $user = $query->firstOrCreate(
+            ['idno' => $request->idno], 
+            [
+                'idno' => $request->idno,
+                'password' => Hash::make('password'),
+                'utype' => $usertype,
+            ]
+        );
+
+        return $user;
+    }
 
 
     public function access()

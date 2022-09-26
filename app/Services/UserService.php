@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Libs\Helpers;
+use App\Models\Userinfo;
 use App\Models\Permission;
 use App\Models\Useraccess;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,17 @@ class UserService
     //
 
     protected $user;
+
+    public function createAdminUser($request)
+    {
+        DB::beginTransaction();
+
+        $user = $this->createUser($request, User::TYPE_ADMIN);
+                $this->createUserinfo($user, $request);
+                $this->adminAccesses($user, $request);
+                $this->userPermissions($user, $request);
+        DB::commit();
+    }
 
     public function updateUser($user, $request)
     {
@@ -29,24 +41,37 @@ class UserService
         Useraccess::where('user_id', $user->id)->delete();
         Permission::where('user_id', $user->id)->delete();
 
-        $accesses = $this->returnUserAccesses($request, $user->utype);
-        $user->access()->saveMany($accesses);
+        $this->adminAccesses($user, $request);
+        $this->userPermissions($user, $request);
 
-        $permissions = $this->userPermissions($request);
-        $user->permissions()->saveMany($permissions);
+        if($user->utype === User::TYPE_INSTRUCTOR)
+        {
+            $this->instructorAccesses($user);
+        }
 
-        return DB::commit();
+        DB::commit();
 
     }
 
-    public function returnUserAccesses($request, $utype = User::TYPE_ADMIN)
+    public function createUser($request, $usertype)
     {
-        // foreach ($request->access as $key => $value) {
-        //     $write = $request->write;
-        //     $read = $request->read;
-            
-        //     echo $value.'-'.$read[$key].'-'.$write[$key].'<br>';
-        // }
+        $user = User::create([
+            'idno' => $request->idno,
+            'password' => Hash::make('password'),
+            'utype' => $usertype,
+        ]);
+
+        return $user;
+    }
+
+    public function createUserinfo($user, $request)
+    {
+        $info = new Userinfo(['name' => $request->name]);
+        $user->info()->save($info);
+    }
+
+    public function adminAccesses($user, $request)
+    {
         $accesses = [];
 
         foreach ($request->access as $key => $access) {
@@ -64,23 +89,38 @@ class UserService
             ]);
         }
 
-        if($utype === User::TYPE_INSTRUCTOR)
-        {
-            foreach (Helpers::instructorDefaultAccesses() as $key => $access) {
-                $accesses[] = new Useraccess([
-                    'access' => $access['access'],
-                    'title' => $access['title'],
-                    'category' => $access['category'],
-                    'read_only' => 1,
-                    'write_only' => 1
-                ]);
-            }
+        return $user->access()->saveMany($accesses);
+    }
+
+    public function instructorAccesses($user)
+    {
+        foreach (Helpers::instructorDefaultAccesses() as $key => $access) {
+            $accesses[] = new Useraccess([
+                'access' => $access['access'],
+                'title' => $access['title'],
+                'category' => $access['category'],
+                'read_only' => 1,
+                'write_only' => 1
+            ]);
+        }
+
+        return $user->access()->saveMany($accesses);
+    }
+
+    public function studentAccesses()
+    {
+        foreach (Helpers::studentDefaultAccesses() as $key => $access) {
+            $accesses[] = new Useraccess([
+                'access' => $access['access'],
+                'title' => $access['title'],
+                'category' => $access['category'],
+            ]);
         }
 
         return $accesses;
     }
 
-    public function userPermissions($request)
+    public function userPermissions($user, $request)
     {
         if($request->permissions)
         {
@@ -91,7 +131,7 @@ class UserService
                 ]);
             }
 
-            return $permissions;
+            return $user->permissions()->saveMany($permissions);;
         }
 
        return [];

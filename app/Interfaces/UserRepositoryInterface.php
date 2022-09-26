@@ -14,7 +14,4 @@ interface UserRepositoryInterface
 
     public function getUseraccess($userId);
 
-    // public function checkDuplicateOnUpdate(array $array);
-    // public function updateUser($UserId, array $newDetails);
-    // public function deleteUser($UserId);
 }

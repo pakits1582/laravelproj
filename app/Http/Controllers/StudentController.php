@@ -75,7 +75,7 @@ class StudentController extends Controller
             $user = User::create([
                 'idno' => $request->idno,
                 'password' => Hash::make('password'),
-                'utype' => 2,
+                'utype' => User::TYPE_STUDENT,
             ]);
             //INSERT TO INSTRUCTOR TABLE
             Student::firstOrCreate([

@@ -28,7 +28,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        $instructors = Instructor::where('designation', 3)->get()->sortBy('lname');
+        $instructors = Instructor::where('designation', Instructor::TYPE_DEPARTMENT_HEAD)->get()->sortBy('lname');
 
         return view('department.create', compact('instructors'));
     }
@@ -69,7 +69,7 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        $instructors = Instructor::where('designation', 3)->get()->sortBy('lname');
+        $instructors = Instructor::where('designation', Instructor::TYPE_DEPARTMENT_HEAD)->get()->sortBy('lname');
 
         return view('department.edit', compact('department', 'instructors'));
     }

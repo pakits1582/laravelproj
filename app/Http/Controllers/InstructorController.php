@@ -36,7 +36,8 @@ class InstructorController extends Controller
     {
         $instructors = $this->instructorService->returnInstructors($request);
 
-        if($request->ajax()){
+        if($request->ajax())
+        {
             return view('instructor.return_instructors', compact('instructors'));
         }
         return view('instructor.index', compact('instructors'));
@@ -70,7 +71,7 @@ class InstructorController extends Controller
             $user = User::create([
                 'idno' => $request->idno,
                 'password' => Hash::make('password'),
-                'utype' => 1,
+                'utype' => User::TYPE_INSTRUCTOR,
             ]);
             //INSERT TO INSTRUCTOR TABLE
             Instructor::firstOrCreate([

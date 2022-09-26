@@ -71,7 +71,8 @@ $(function(){
             $('.alert').remove();
 
             $(formName).prepend('<p class="alert '+data.alert+'">'+data.message+'</p>');
-
+            window.scrollTo(0, 0);
+            
             if(action === 'reload')
             {
                window.setTimeout(function(){
@@ -84,7 +85,7 @@ $(function(){
             }			
          },
          error: function (data) {
-            //console.log(data);
+            console.log(data);
             var errors = data.responseJSON;
             if ($.isEmptyObject(errors) == false) {
                 $.each(errors.errors, function (key, value) {

@@ -138,12 +138,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('/configurations/{configsched}', [ConfigurationController::class, 'destroy']);
     });
 
-    Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->name('curriculum.manage');
-    Route::post('/curriculum/returncurricula', [CurriculumController::class, 'returncurricula']);
-    Route::resource('curriculum', CurriculumController::class)->except(['show', 'destroy'])->middleware(['inaccess:curriculum'])
-            ->missing(function (Request $request) {
-                return Redirect::route('curriculum.index');
-            });
+    Route::group(['middleware' => ['inaccess:curriculum']], function () {
+        Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->middleware(['writeability:curriculum'])->name('curriculum.manage');
+        Route::post('/curriculum/returncurricula', [CurriculumController::class, 'returncurricula']);
+        Route::resource('curriculum', CurriculumController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+            return Redirect::route('curriculum.index');
+        });
+    });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
 });

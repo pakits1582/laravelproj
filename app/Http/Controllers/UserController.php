@@ -44,24 +44,9 @@ class UserController extends Controller
     public function store(UserFormRequest $request)
     {
         try {
-            DB::beginTransaction();
-
-            $user = User::create([
-                'idno' => $request->idno,
-                'password' => Hash::make('password'),
-                'utype' => 0,
-            ]);
-
-            $info = new Userinfo(['name' => $request->name]);
-            $user->info()->save($info);
-
-            $accesses = $this->userService->returnUserAccesses($request);
-            $user->access()->saveMany($accesses);
-
-            $permissions = $this->userService->userPermissions($request);
-            $user->permissions()->saveMany($permissions);
-
-            DB::commit();
+            
+            $this->userService->createAdminUser($request);
+           
         } catch (\Exception $e) {
             Log::error(get_called_class(), [
                 //'createdBy' => $user->userLoggedinName(),
@@ -92,7 +77,9 @@ class UserController extends Controller
     public function update(UserUpdateFormRequest $request, User $user)
     {      
        try {
+        
             $this->userService->updateUser($user, $request);
+            
         } catch (\Exception $e) {
             Log::error(get_called_class(), [
                 //'createdBy' => $user->userLoggedinName(),

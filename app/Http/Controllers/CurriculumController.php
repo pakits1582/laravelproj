@@ -50,16 +50,11 @@ class CurriculumController extends Controller
 
     public function manage(Program $program)
     {
-        if (Helpers::getAccessAbility(Auth::user()->access->toArray(), 'curriculum', 'write_only') === 1)
-        {
-            $program->load('curricula');
-            $terms = Term::where('source', 1)->get();
-            $subjects = Subject::all();
+        $program->load('curricula');
+        $terms = Term::where('source', 1)->get();
+        $subjects = Subject::all();
 
-            return view('curriculum.manage', compact(['program', 'terms', 'subjects']));
-        }
-        
-        return abort(404, 'Page Not Found');
+        return view('curriculum.manage', compact(['program', 'terms', 'subjects']));
     }
 
     /**
