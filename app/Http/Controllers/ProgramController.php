@@ -48,7 +48,7 @@ class ProgramController extends Controller
      */
     public function create()
     {
-        $heads = Instructor::where('designation', 2)->get()->sortBy('lname');
+        $heads = Instructor::where('designation',  Instructor::TYPE_PROGRAM_HEAD)->get()->sortBy('last_name');
 
         return view('program.create', compact('heads'));
     }
@@ -89,7 +89,7 @@ class ProgramController extends Controller
      */
     public function edit(Program $program)
     {
-        $heads = Instructor::where('designation', 2)->get()->sortBy('lname');
+        $heads = Instructor::where('designation', Instructor::TYPE_PROGRAM_HEAD)->get()->sortBy('last_name');
 
         return view('program.edit', compact('program', 'heads'));
     }

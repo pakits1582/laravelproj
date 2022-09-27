@@ -18,53 +18,32 @@
                     </span>
                     <span class="text">Add new period</span>
                 </a>
+                <form method="POST" action="" id="filter_form" target="_blank" data-field="periods">
+                    @csrf
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                    <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="source" class="m-0 font-weight-bold text-primary">Source</label>
+                                    <select name="source" class="form-control dropdownfilter" id="source">
+                                        <option value="">- select source -</option>
+                                        <option value="1">Internal</option>
+                                        <option value="2">External</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="periodTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Term</th>
-                                <th>Year</th>
-                                <th>Enroll Start</th>
-                                <th>Add Drop Start</th>
-                                <th>Priority</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($periods)
-                                @unless (count($periods) == 0)
-                                    @foreach ($periods as $period)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $period->code }}</td>
-                                            <td>{{ $period->name }}</td>
-                                            <td>{{ $period->terminfo->term }}</td>
-                                            <td>{{ $period->year }}</td>
-                                            <td>{{ $period->enroll_start  }}</td>
-                                            <td>{{ $period->adddrop_start  }}</td>
-                                            <td>{{ $period->priority_lvl }}</td>
-                                            <td class="cente">
-                                                <a href="{{ route('periods.edit', ['period' => $period->id ]) }}" class="btn btn-primary btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="text">Edit</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('period.return_periods')
             </div>
         </div>
 

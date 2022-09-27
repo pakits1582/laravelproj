@@ -13,15 +13,18 @@ class InstructorService
     //
     public function returnInstructors($request, $all = false)
     {
-        $query = Instructor::with(['collegeinfo', 'deptinfo'])->orderBy('last_name')->orderBy('first_name');
+        $query = Instructor::with(['collegeinfo', 'deptinfo', 'user', 'educlevel'])->orderBy('last_name')->orderBy('first_name');
 
         if($request->has('keyword') && !empty($request->keyword)) {
-            $query->where('last_name', 'like', '%'.$request->keyword.'%')
+            $query->where(function($query) use($request){
+                $query->where('last_name', 'like', '%'.$request->keyword.'%')
                     ->orWhere('first_name', 'like', '%'.$request->keyword.'%')
                     ->orWhere('middle_name', 'like', '%'.$request->keyword.'%')
                     ->orWhereHas('user', function (Builder $query) use($request) {
                         $query->where('idno', 'like', '%'.$request->keyword.'%');
                     });
+            });
+            
         }
         if($request->has('educational_level') && !empty($request->educational_level)) {
             $query->where('educational_level_id', $request->educational_level);
@@ -33,7 +36,7 @@ class InstructorService
             $query->where('department_id', $request->department);
         }
         if($request->has('status') && ($request->status == '0' || $request->status == '1')) {
-            $query->orWhereHas('user', function (Builder $query) use($request) {
+            $query->WhereHas('user', function (Builder $query) use($request) {
                 $query->where('is_active', $request->status);
             });
         }

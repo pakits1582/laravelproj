@@ -28,9 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('*', function ($view) {
+        View::composer('layout', function ($view) {
             try {
-                $user = User::findOrfail(Auth::id());
+                $user = Auth::user();
                 switch ($user->utype) {
                     case User::TYPE_INSTRUCTOR:
                         $info = 'instructorinfo';
@@ -42,7 +42,6 @@ class AppServiceProvider extends ServiceProvider
                          $info = 'info';
                         break;
                 }
-                $user->load($info, 'access');
 
                 $view->with(['user' => $user, 'info' => ['info' => $info]]);
             } catch (\Exception $e) {

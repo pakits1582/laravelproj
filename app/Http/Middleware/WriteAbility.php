@@ -26,9 +26,9 @@ class WriteAbility
                 return $next($request);
             }
 
-            return abort(404, 'Page Not Found');
+            return abort(403, 'Unauthorized Access');
         }
 
-        return abort(404, 'Page Not Found');
+        return abort(403, 'Unauthorized Access');
     }
 }

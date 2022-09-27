@@ -91,69 +91,7 @@
     <div id="wrapper">
         
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
-                <div class="sidebar-brand-text mx-3">SIAMS V2.0</div>
-            </a>
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                User Menu
-            </div>
-            @php
-                if(isset($user)){
-                    $userAccesses = Helpers::userAccessCategories($user->access->toArray());
-                    if($userAccesses){
-                        foreach ($userAccesses as $access){
-                            @endphp
-                                <!-- Nav Item - Pages Collapse Menu -->
-                                <li class="nav-item">
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse{{ $access['category'] }}"
-                                        aria-expanded="true" aria-controls="collapse{{ $access['category'] }}">
-                                        <i class="fas fa-fw {{ Helpers::menuCategoryIcon($access['category']) }}"></i>
-                                        <span>{{ $access['category'] }}</span>
-                                    </a>
-                                    <div id="collapse{{ $access['category'] }}" class="collapse" aria-labelledby="heading{{ $access['category'] }}" data-parent="#accordionSidebar">
-                                        <div class="bg-white py-2 collapse-inner rounded">
-                                            <h6 class="collapse-header">Category Menu</h6>
-                                            @php
-                                                foreach ($access['access'] as $key => $v) {
-                                                    @endphp
-                                                        <a class="collapse-item" href="/{{ $v['access'] }}">{{ $v['title'] }}</a>
-                                                    @php
-                                                }
-                                            @endphp
-                                        </div>
-                                    </div>
-                                </li>
-                            @php
-                        }
-                    }
-                }
-            @endphp
-             
-            {{-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-folder-open"></i>
-                    <span>Offerings</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="/courses">Courses</a>
-                        <a class="collapse-item" href="/curriculum">Curriculum</a>
-                        <a class="collapse-item" href="/instructors">Instructors</a>
-                        <a class="collapse-item" href="/rooms">Rooms</a>
-                        <a class="collapse-item" href="/sections">Sections</a>
-                        <a class="collapse-item" href="/subjects">Subjects</a>
-                    </div>
-                </div>
-            </li> --}}
-        </ul>
+        @include('partials.user_menu')
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -231,8 +169,6 @@
     <script src="{{ asset('js/common.js') }}"></script>
     <script src="{{ asset('js/moment.js') }}"></script>
     @php
-        
-   
         if(Helpers::getLoad()){ 
     		if(is_array(Helpers::getLoad())){
     			foreach(Helpers::getLoad() as $links){

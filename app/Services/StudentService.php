@@ -16,12 +16,15 @@ class StudentService
         $query = Student::with(['program', 'curriculum'])->orderBy('last_name')->orderBy('first_name');
 
         if($request->has('keyword') && !empty($request->keyword)) {
-            $query->where('last_name', 'like', '%'.$request->keyword.'%')
+            $query->where(function($query) use($request){
+                $query->where('last_name', 'like', '%'.$request->keyword.'%')
                     ->orWhere('first_name', 'like', '%'.$request->keyword.'%')
                     ->orWhere('middle_name', 'like', '%'.$request->keyword.'%')
                     ->orWhereHas('user', function (Builder $query) use($request) {
                         $query->where('idno', 'like', '%'.$request->keyword.'%');
-                    });
+                });
+            });
+            
         }
         if($request->has('program') && !empty($request->program)) {
             $query->where('program_id', $request->program);

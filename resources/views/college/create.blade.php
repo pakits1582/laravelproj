@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="container py-2">       
             <div class="row">
-              <div class="col-lg-7 mx-auto">
+              <div class="col-lg-8 mx-auto">
                 <div class="bg-white rounded-lg shadow-sm p-5">
                     <h1 class="h3 mb-0 text-primary font-weight-bold">Add New College</h1>
                     <p class="mb-2">Add new record in the database</p>

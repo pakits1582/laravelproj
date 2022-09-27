@@ -7,16 +7,17 @@ use App\Http\Requests\StoreTermRequest;
 use App\Http\Requests\UpdatePeriodRequest;
 use App\Libs\Helpers;
 use App\Models\Period;
-use App\Models\SetupPeriod;
 use App\Models\Term;
+use App\Services\PeriodService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PeriodController extends Controller
 {
-    public function __construct()
+    protected $periodService;
+
+    public function __construct(PeriodService $periodService)
     {
-        //$this->instructorService = $instructorService;
+        $this->periodService = $periodService;
         Helpers::setLoad(['jquery_period.js']);
     }
 
@@ -25,10 +26,14 @@ class PeriodController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$periods = Period::all();
-        $periods = Period::with('terminfo')->orderBy('year')->orderBy('priority_lvl')->get();
+        $periods = $this->periodService->returnPeriods($request);
+
+        if($request->ajax())
+        {
+            return view('period.return_periods', compact('periods'));
+        }
 
         return view('period.index', compact('periods'));
     }
@@ -53,10 +58,7 @@ class PeriodController extends Controller
      */
     public function store(StorePeriodRequest $request)
     {
-        $lastprioritylvl = Period::where('year', $request->validated('year'))->max('priority_lvl');
-        $prioritylvl = ($lastprioritylvl) ? $lastprioritylvl + 1 : 1;
-
-        $insert = Period::firstOrCreate(['code' => $request->code, 'term_id' => $request->term, 'year' => $request->year], array_merge($request->validated(), ['priority_lvl' => $prioritylvl]));
+        $insert = $this->periodService->insertPeriod($request);
 
         if ($insert->wasRecentlyCreated) {
             return back()->with(['alert-class' => 'alert-success', 'message' => 'Period sucessfully added!']);
@@ -103,17 +105,6 @@ class PeriodController extends Controller
         return back()->with(['alert-class' => 'alert-success', 'message' => 'Period sucessfully updated!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Period  $period
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Period $period)
-    {
-        //
-    }
-
     public function storeterm(StoreTermRequest $request)
     {
         $insert = Term::firstOrCreate(['term' => $request->term, 'type' => $request->type], $request->validated());
@@ -139,22 +130,8 @@ class PeriodController extends Controller
 
     public function saveperiod(Request $request)
     {
-        $validated = $request->validate([
-            'period' => 'required',
-        ]);
-
-        $period = Period::find($validated['period']);
-
-        SetupPeriod::where('user_id', Auth::id())->delete();
-
-        SetupPeriod::create([
-            'user_id' => Auth::id(),
-            'period_id' => $validated['period'],
-        ]);
-
-        session()->put('current_period', $period->id);
-        session()->put('periodname', $period->name);
-
+        $this->periodService->saveUserCurrentPeriod($request);
+        
         return response()->json([
             'success' => true,
             'message' => 'Period successfully changed!',

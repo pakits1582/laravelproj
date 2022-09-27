@@ -13,7 +13,10 @@ class SubjectService
         $query = Subject::with(['collegeinfo', 'educlevel'])->orderBy('code');
 
         if($request->has('keyword') && !empty($request->keyword)) {
-            $query->where('code', 'like', '%'.$request->keyword.'%')->orWhere('name', 'like', '%'.$request->keyword.'%');
+            $query->where(function($query) use($request){
+                $query->where('code', 'like', '%'.$request->keyword.'%')
+                ->orWhere('name', 'like', '%'.$request->keyword.'%');
+            });
         }
         if($request->has('educational_level') && !empty($request->educational_level)) {
             $query->where('educational_level_id', $request->educational_level);

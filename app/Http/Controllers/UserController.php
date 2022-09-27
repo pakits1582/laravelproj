@@ -4,14 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Libs\Helpers;
-use App\Models\Userinfo;
-use App\Models\Permission;
-use App\Models\Useraccess;
 use Illuminate\Http\Request;
 use App\Services\UserService;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserFormRequest;
 use App\Http\Requests\UserUpdateFormRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -66,9 +61,10 @@ class UserController extends Controller
     public function edit(User $user)
     {
         try {
-            $user->load('info', 'access', 'permissions');
 
+            $user->load('info', 'access', 'permissions');
             return view('user.edit', ['userdetails' => $user]);
+
         } catch (ModelNotFoundException $e) {
             return redirect()->route('userindex');
         }
@@ -76,7 +72,7 @@ class UserController extends Controller
 
     public function update(UserUpdateFormRequest $request, User $user)
     {      
-       try {
+        try {
         
             $this->userService->updateUser($user, $request);
             

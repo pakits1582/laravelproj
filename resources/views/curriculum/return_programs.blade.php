@@ -24,12 +24,12 @@
                             <td>{{ $program->headName }}</td>
                             <td class="mid">
                                 <div class="btn-group">
-                                    @if (Helpers::getAccessAbility($user->access->toArray(), 'curriculum', 'write_only'))
+                                    @if (Helpers::getAccessAbility(Auth::user()->access->toArray(), 'curriculum', 'write_only'))
                                         <a href="{{ route('curriculum.manage', ['program' => $program->id ]) }}" class="btn btn-primary btn-circle btn-sm  inline-block"  title="Manage CUrriculum">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     @endif
-                                    @if (Helpers::getAccessAbility($user->access->toArray(), 'curriculum', 'read_only'))
+                                    @if (Helpers::getAccessAbility(Auth::user()->access->toArray(), 'curriculum', 'read_only'))
                                         <a href="#" class="btn btn-success btn-circle btn-sm inline-block"  title="View Curriculum">
                                             <i class="fas fa-eye"></i>
                                         </a>

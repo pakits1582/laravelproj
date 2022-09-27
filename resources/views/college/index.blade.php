@@ -31,16 +31,6 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </tfoot> --}}
                         <tbody>
                             @if ($colleges)
                                 @unless (count($colleges) == 0)
@@ -50,7 +40,7 @@
                                             <td>{{ $college->code }}</td>
                                             <td>{{ $college->name }}</td>
                                             <td>{{ $college->deanName }}</td>
-                                            <td class="cente">
+                                            <td class="mid">
                                                 <a href="{{ route('colleges.edit', ['college' => $college->id ]) }}" class="btn btn-primary btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>

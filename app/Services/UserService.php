@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Libs\Helpers;
+use App\Models\User;
 use App\Models\Userinfo;
 use App\Models\Permission;
 use App\Models\Useraccess;
@@ -151,10 +151,12 @@ class UserService
                     ->orderBy('instructors.last_name');
                 if($request->has('keyword') && !empty($request->keyword))
                 {
-                    $query->where('instructors.last_name', 'like', '%'.$request->keyword.'%');
-                    $query->orwhere('instructors.middle_name', 'like', '%'.$request->keyword.'%');
-                    $query->orwhere('instructors.first_name', 'like', '%'.$request->keyword.'%');
-                    $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                    $query->where(function($query) use($request){
+                        $query->where('instructors.last_name', 'like', '%'.$request->keyword.'%');
+                        $query->orwhere('instructors.middle_name', 'like', '%'.$request->keyword.'%');
+                        $query->orwhere('instructors.first_name', 'like', '%'.$request->keyword.'%');
+                        $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                    });
                 }
                 break;
             case 2:
@@ -167,10 +169,12 @@ class UserService
                     ->orderBy('students.last_name');
                 if($request->has('keyword') && !empty($request->keyword))
                 {
-                    $query->where('students.last_name', 'like', '%'.$request->keyword.'%');
-                    $query->orwhere('students.middle_name', 'like', '%'.$request->keyword.'%');
-                    $query->orwhere('students.first_name', 'like', '%'.$request->keyword.'%');
-                    $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                    $query->where(function($query) use($request){
+                        $query->where('students.last_name', 'like', '%'.$request->keyword.'%');
+                        $query->orwhere('students.middle_name', 'like', '%'.$request->keyword.'%');
+                        $query->orwhere('students.first_name', 'like', '%'.$request->keyword.'%');
+                        $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                    });
                 }
                 break;
             default:
@@ -183,8 +187,10 @@ class UserService
                     ->orderBy('userinfo.name');
                 if($request->has('keyword') && !empty($request->keyword))
                 {
-                    $query->where('userinfo.name', 'like', '%'.$request->keyword.'%');
-                    $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                    $query->where(function($query) use($request){
+                        $query->where('userinfo.name', 'like', '%'.$request->keyword.'%');
+                        $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                    });
                 }
                 break;
         }

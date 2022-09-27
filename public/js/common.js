@@ -216,6 +216,7 @@ $(function(){
 
     function filterRecords(finalURL)
     {
+        //console.log(finalURL);
         $.ajax({
             url: finalURL,
             success: function(data){
