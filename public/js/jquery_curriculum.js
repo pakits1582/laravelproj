@@ -9,20 +9,9 @@ $(function(){
     function returnCurriculum(program, curriculum)
     {
 		$.ajax({url: "/curriculum/"+program+"/curriculum/"+curriculum, success: function(data){
-				console.log(data);
+				$("#view_curriculum").html(data);
 			}
 		});	
-        // $.ajax({
-        //     url: "/curriculum/viewcurriculum",
-        //     type: 'POST',
-        //     data: ({'program' : program, 'curriculum' : curriculum}),
-        //     success: function(response){
-        //         console.log(response);
-        //     },
-        //     error: function (data) {
-        //         console.log(data);
-        //     }
-        // });
     }
 
     $(document).on("change","#curriculum", function(e){
@@ -51,9 +40,6 @@ $(function(){
         var postData = $(this).serializeArray();
         var url = $(this).attr('data-action');
 
-		var curriculum  = $("#curriculum").val();
-		var program     = $("#program_id").val();
-
         $.ajax({
             url: url,
             type: 'POST',
@@ -67,9 +53,6 @@ $(function(){
                 if(data.success){
                     $('#curriculum option:last').before($("<option></option>").attr("value", data.id).text(data.curriculum));
                 }
-				$("#selected_subjects").html("");
-				returnCurriculum(program, curriculum);
-				
             },
             error: function (data) {
                 console.log(data);
@@ -143,6 +126,9 @@ $(function(){
 		var url = $(this).attr('action');
       	var postData = $(this).serializeArray();
 
+		var curriculum  = $("#curriculum").val();
+		var program     = $("#program_id").val();
+
 		$.ajax({
 			url: url,
 			type: 'POST',
@@ -155,6 +141,8 @@ $(function(){
 			   $("#form_addsubjectincurriculum").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>');
 			   window.scrollTo(0, 0);
 
+			   $("#selected_subjects").html("");
+			   returnCurriculum(program, curriculum);
 			},
 			error: function (data) {
 			   console.log(data);

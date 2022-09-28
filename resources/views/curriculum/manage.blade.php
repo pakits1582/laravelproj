@@ -115,13 +115,13 @@
                                             </div>
                                             <div class="col-md-2 mid  my-auto">
                                                 <div class="form-group">
-                                                    <a href="#" class="btn btn-primary btn-icon-split" id="button_moveright">
+                                                    <a href="#" class="btn btn-primary btn-icon-split mb-2" id="button_moveright">
                                                         <span class="icon text-white-50">
                                                             <i class="fas fa-plus-square"></i>
                                                         </span>
                                                         <span class="text">==></span>
                                                     </a>
-                                                    <a href="#" class="btn btn-primary btn-icon-split" id="button_moveleft">
+                                                    <a href="#" class="btn btn-primary btn-icon-split mb-2" id="button_moveleft">
                                                         <span class="text"><==</span>
                                                         <span class="icon text-white-50">
                                                             <i class="fas fa-plus-square"></i>

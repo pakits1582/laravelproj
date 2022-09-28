@@ -38,11 +38,12 @@ class CurriculumService
     public function storeCurriculumSubejects($request)
     {
         $curriculum = Curriculum::with('subjects')->find($request->curriculum_id);
+
         foreach ($request->subjects as $key => $subject) {
             $subjects[] = new CurriculumSubjects([
                 'program_id' => $request->program_id,
                 'subject_id' => $subject,
-                'term_id' => $request->term_id,
+                'term_id'    => $request->term_id,
                 'year_level' => $request->year_level
             ]);
         }
@@ -66,6 +67,8 @@ class CurriculumService
 
     public function viewCurriculum($program, $curriculum)
     {
+        $curriculum_subjects = Curriculum::with('subjects')->find($curriculum);
         
+        return ['curriculum_subjects' => $curriculum_subjects, 'program' => $program];
     }
 }

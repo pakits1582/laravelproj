@@ -98,8 +98,9 @@ class CurriculumController extends Controller
 
     public function viewcurriculum(Program $program, Curriculum $curriculum)
     {
-        dd($program);
-        //$curriculuminfo = $this->curriculumService->viewCurriculum($program, $curriculum);
+        $curriculuminfo = $this->curriculumService->viewCurriculum($program, $curriculum);
+        
+        return view('curriculum.view_curriculum', $curriculuminfo);
     }
 
 }
