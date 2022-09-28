@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Term;
 use App\Models\User;
 use App\Libs\Helpers;
-use App\Models\Curriculum;
 use App\Models\Program;
 use App\Models\Subject;
-use App\Models\Term;
-use App\Services\CurriculumService;
+use App\Models\Curriculum;
 use Illuminate\Http\Request;
+use App\Services\CurriculumService;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreCurriculumRequest;
+use App\Http\Requests\StoreCurriculumSubjectsRequest;
 
 class CurriculumController extends Controller
 {
@@ -38,16 +40,6 @@ class CurriculumController extends Controller
         return view('curriculum.index', compact('programs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     public function manage(Program $program)
     {
         $program->load('curricula');
@@ -57,67 +49,57 @@ class CurriculumController extends Controller
         return view('curriculum.manage', compact(['program', 'terms', 'subjects']));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Curriculum  $curriculum
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Curriculum $curriculum)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Curriculum  $curriculum
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Curriculum $curriculum)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Curriculum  $curriculum
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Curriculum $curriculum)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Curriculum  $curriculum
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Curriculum $curriculum)
-    {
-        //
-    }
-
     public function returncurricula(Request $request)
     {
         $curricula = Curriculum::where('program_id', $request->program)->orderBy('id', 'DESC')->get();
 
         return response()->json(['data' => $curricula]);
     }
-    
+
+    public function addnewcurriculum(Program $program)
+    {
+        return view('curriculum.addnewcurriculum', compact('program'));
+    }
+
+    public function storecurriculum(StoreCurriculumRequest $request)
+    {
+        $insert = Curriculum::firstOrCreate(['program_id' => $request->program_id, 'curriculum' => $request->curriculum], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Curriculum successfully added!',
+                'alert' => 'alert-success',
+                'id' => $insert->id,
+                'curriculum' => $request->curriculum,
+            ], 200);
+        }
+
+        return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, curriculum already exists!']);
+    }
+
+    public function searchsubject(Request $request)
+    {
+        $subjects = $this->curriculumService->searchSubjects($request);
+
+        return response()->json(['data' => $subjects]);
+    }
+
+    public function storesubjects(StoreCurriculumSubjectsRequest $request)
+    {
+        $this->curriculumService->storeCurriculumSubejects($request);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Subjects sucessfully added!',
+            'alert' => 'alert-success'
+        ], 200);
+    }
+
+    public function viewcurriculum(Program $program, Curriculum $curriculum)
+    {
+        dd($program);
+        //$curriculuminfo = $this->curriculumService->viewCurriculum($program, $curriculum);
+    }
+
 }

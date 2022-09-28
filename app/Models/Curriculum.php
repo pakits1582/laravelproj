@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Curriculum extends Model
 {
+    protected $table = 'curricula';
+    protected $fillable = ['program_id', 'curriculum'];
+    
     use HasFactory;
 
     public function getPrograms($user)
@@ -38,4 +41,10 @@ class Curriculum extends Model
     {
         return $this->hasOne(Program::class, 'program_id', 'id');
     }
+
+    public function subjects()
+    {
+        return $this->hasMany(CurriculumSubjects::class, 'curriculum_id', 'id');
+    }
+
 }

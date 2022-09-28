@@ -139,8 +139,15 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:curriculum']], function () {
+        Route::get('/curriculum/{program}/addnewcurriculum', [CurriculumController::class, 'addnewcurriculum']);
+        Route::post('/curriculum/savecurriculum', [CurriculumController::class, 'storecurriculum'])->name('curriculum.savecurriculum');
+        Route::post('/curriculum/searchsubject', [CurriculumController::class, 'searchsubject']);
+        Route::post('/curriculum/storesubjects', [CurriculumController::class, 'storesubjects'])->middleware(['writeability:curriculum'])->name('curriculum.storesubjects');
         Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->middleware(['writeability:curriculum'])->name('curriculum.manage');
+        
+
         Route::post('/curriculum/returncurricula', [CurriculumController::class, 'returncurricula']);
+        Route::get('/curriculum/{program}/curriculum/{curriculum}', [CurriculumController::class, 'viewcurriculum'])->middleware(['readability:curriculum'])->name('curriculum.viewcurriculum');
         Route::resource('curriculum', CurriculumController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('curriculum.index');
         });

@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Libs\Helpers;
+use App\Models\Subject;
 use App\Models\Curriculum;
 use App\Models\Instructor;
 use App\Services\ProgramService;
+use App\Models\CurriculumSubjects;
 use Illuminate\Database\Eloquent\Builder;
 
 class CurriculumService
@@ -31,5 +33,39 @@ class CurriculumService
         }
 
         return $programs;
+    }
+
+    public function storeCurriculumSubejects($request)
+    {
+        $curriculum = Curriculum::with('subjects')->find($request->curriculum_id);
+        foreach ($request->subjects as $key => $subject) {
+            $subjects[] = new CurriculumSubjects([
+                'program_id' => $request->program_id,
+                'subject_id' => $subject,
+                'term_id' => $request->term_id,
+                'year_level' => $request->year_level
+            ]);
+        }
+
+        return $curriculum->subjects()->saveMany($subjects);
+    }
+
+    public function searchSubjects($request)
+    {
+        $query = Subject::orderBy('code');
+
+        if($request->has('keyword') && !empty($request->keyword)) {
+            $query->where(function($query) use($request){
+                $query->where('code', 'like', $request->keyword.'%')
+                ->orWhere('name', 'like', $request->keyword.'%');
+            });
+        }
+
+       return $query->get();
+    }
+
+    public function viewCurriculum($program, $curriculum)
+    {
+        
     }
 }

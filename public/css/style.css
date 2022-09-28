@@ -235,3 +235,13 @@
 .w850{
 	width:850px !important;	
 }
+
+.select option:nth-child(odd) {
+	background-color:#f2f2f2;
+}
+
+.currsubadding option{
+	padding:5px 0px;
+	font-size: 14px !important;
+	color: black;
+}

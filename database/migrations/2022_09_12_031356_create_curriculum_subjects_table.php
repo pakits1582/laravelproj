@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects');
             $table->unsignedBigInteger('term_id')->nullable()->index();
             $table->foreign('term_id')->references('id')->on('terms');
-            $table->integer('year')->default(0)->nullable();
+            $table->integer('year_level')->default(0)->nullable()->index();
             $table->string('quota')->nullable();
             $table->timestamps();
         });
