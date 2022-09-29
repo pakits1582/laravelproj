@@ -13,6 +13,7 @@ use App\Services\CurriculumService;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCurriculumRequest;
 use App\Http\Requests\StoreCurriculumSubjectsRequest;
+use App\Models\CurriculumSubjects;
 
 class CurriculumController extends Controller
 {
@@ -99,8 +100,13 @@ class CurriculumController extends Controller
     public function viewcurriculum(Program $program, Curriculum $curriculum)
     {
         $curriculuminfo = $this->curriculumService->viewCurriculum($program, $curriculum);
-        
+
         return view('curriculum.view_curriculum', $curriculuminfo);
+    }
+
+    public function managecurriculumsubject(CurriculumSubjects $curriculum_subject)
+    {
+        return view('curriculum.manage_curriculum_subject', ['curriculum_subject' => $curriculum_subject]);
     }
 
 }

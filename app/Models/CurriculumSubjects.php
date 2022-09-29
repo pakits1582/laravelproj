@@ -7,6 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class CurriculumSubjects extends Model
 {
-    protected $fillable = ['program_id', 'curriculum_id', 'subject_id', 'term_id', 'year_level', 'quota'];
+    protected $fillable = ['curriculum_id', 'subject_id', 'term_id', 'year_level', 'quota'];
     use HasFactory;
+
+
+    public function subjectinfo()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id', 'id');
+    }
+
+    public function terminfo()
+    {
+        return $this->belongsTo(Term::class, 'term_id', 'id');
+    }
+
+    public function curriculum()
+    {
+        return $this->belongsTo(Curriculum::class, 'curriculum_id', 'id');
+    }
 }

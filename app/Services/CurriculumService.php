@@ -41,7 +41,6 @@ class CurriculumService
 
         foreach ($request->subjects as $key => $subject) {
             $subjects[] = new CurriculumSubjects([
-                'program_id' => $request->program_id,
                 'subject_id' => $subject,
                 'term_id'    => $request->term_id,
                 'year_level' => $request->year_level
@@ -67,8 +66,9 @@ class CurriculumService
 
     public function viewCurriculum($program, $curriculum)
     {
-        $curriculum_subjects = Curriculum::with('subjects')->find($curriculum);
+        $curriculum_subjects = CurriculumSubjects::with(['subjectinfo', 'terminfo'])->where('curriculum_id', $curriculum->id)->get();
+        $grouped = $curriculum_subjects->groupBy(['year_level', 'terminfo.term']);
         
-        return ['curriculum_subjects' => $curriculum_subjects, 'program' => $program];
+        return ['curriculum_subjects' => $grouped, 'program' => $program, 'curriculum' => $curriculum];
     }
 }

@@ -15,8 +15,6 @@ return new class extends Migration
     {
         Schema::create('curriculum_subjects', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('program_id')->nullable()->index();
-            $table->foreign('program_id')->references('id')->on('programs');
             $table->unsignedBigInteger('curriculum_id')->nullable()->index();
             $table->foreign('curriculum_id')->references('id')->on('curricula');
             $table->unsignedBigInteger('subject_id')->nullable()->index();

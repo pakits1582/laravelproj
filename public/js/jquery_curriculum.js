@@ -134,27 +134,50 @@ $(function(){
 			type: 'POST',
 			data: postData,
 			dataType: 'json',
+			beforeSend: function() {
+				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+			},
 			success: function(data){
-			   console.log(data);
-			   $('.alert').remove();
-   
-			   $("#form_addsubjectincurriculum").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>');
-			   window.scrollTo(0, 0);
+				$("#confirmation").dialog('close');
+				console.log(data);
+				$('.alert').remove();
 
-			   $("#selected_subjects").html("");
-			   returnCurriculum(program, curriculum);
+				$("#form_addsubjectincurriculum").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>');
+				window.scrollTo(0, 0);
+
+				$("#selected_subjects").html("");
+				returnCurriculum(program, curriculum);
 			},
 			error: function (data) {
-			   console.log(data);
-			   var errors = data.responseJSON;
-			   if ($.isEmptyObject(errors) == false) {
-				   $.each(errors.errors, function (key, value) {
-					   $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
-				   });
-			   }
+				console.log(data);
+				var errors = data.responseJSON;
+				if ($.isEmptyObject(errors) == false) {
+					$.each(errors.errors, function (key, value) {
+						$('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+					});
+				}
 		    }
 		});
 
+		e.preventDefault();
+	});
+
+	$(document).on("click", ".manage_curriculum_subject", function(e){
+		var curriculum_subject_id = $(this).attr("id");
+
+		$.ajax({url: "/curriculum/managecurriculumsubject/"+curriculum_subject_id, success: function(data){
+				$('#ui_content').html(data);
+				$("#modalll").modal('show');
+			}
+		});	
 		e.preventDefault();
 	});
 });

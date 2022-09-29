@@ -144,7 +144,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/curriculum/searchsubject', [CurriculumController::class, 'searchsubject']);
         Route::post('/curriculum/storesubjects', [CurriculumController::class, 'storesubjects'])->middleware(['writeability:curriculum'])->name('curriculum.storesubjects');
         Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->middleware(['writeability:curriculum'])->name('curriculum.manage');
-        
+        Route::get('/curriculum/managecurriculumsubject/{curriculum_subject}', [CurriculumController::class, 'managecurriculumsubject']);
 
         Route::post('/curriculum/returncurricula', [CurriculumController::class, 'returncurricula']);
         Route::get('/curriculum/{program}/curriculum/{curriculum}', [CurriculumController::class, 'viewcurriculum'])->middleware(['readability:curriculum'])->name('curriculum.viewcurriculum');
