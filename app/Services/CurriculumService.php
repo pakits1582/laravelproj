@@ -54,7 +54,7 @@ class CurriculumService
     {
         $query = Subject::orderBy('code');
 
-        if($request->has('keyword') && !empty($request->keyword)) {
+        if(!empty($request->keyword)) {
             $query->where(function($query) use($request){
                 $query->where('code', 'like', $request->keyword.'%')
                 ->orWhere('name', 'like', $request->keyword.'%');
@@ -70,5 +70,28 @@ class CurriculumService
         $grouped = $curriculum_subjects->groupBy(['year_level', 'terminfo.term']);
         
         return ['curriculum_subjects' => $grouped, 'program' => $program, 'curriculum' => $curriculum];
+    }
+
+    public function searchCurriculumSubjects($request)
+    {
+        if($request->saveto === 'equiv'){
+            $subjects =  $this->searchSubjects($request);
+        }else{
+            $query = CurriculumSubjects::with(['subjectinfo'])->where("curriculum_id", $request->curriculum_id);
+            if($request->has('keyword') && !empty($request->keyword)) {
+                $query->WhereHas('subjectinfo', function (Builder $query) use($request) {
+                    $query->where('code', 'like', $request->keyword.'%');
+                    $query->orwhere('name', 'like', $request->keyword.'%');
+                });
+            }
+            $subjects = $query->get();
+        }
+
+        return $subjects;
+    }
+
+    public function storeManageCurriculumSubject($request)
+    {
+        return $request->curriculum_subject;
     }
 }

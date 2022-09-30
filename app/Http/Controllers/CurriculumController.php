@@ -106,7 +106,26 @@ class CurriculumController extends Controller
 
     public function managecurriculumsubject(CurriculumSubjects $curriculum_subject)
     {
-        return view('curriculum.manage_curriculum_subject', ['curriculum_subject' => $curriculum_subject]);
+        $curriculum_subjects = CurriculumSubjects::where("curriculum_id", $curriculum_subject->curriculum->id)->get();
+
+        return view('curriculum.manage_curriculum_subject', ['curriculum_subject' => $curriculum_subject, 'curriculum_subjects' => $curriculum_subjects]);
     }
 
+    public function searchcurriculumsubjects(Request $request)
+    {
+        $subjects = $this->curriculumService->searchCurriculumSubjects($request);
+    
+        return response()->json(['data' => $subjects]);
+    }
+
+    public function storemanagecurriculumsubject(Request $request)
+    {
+        return $this->curriculumService->storeManageCurriculumSubject($request);
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Curriculum successfully added!',
+        //     'alert' => 'alert-success'
+        // ], 200);
+    }
 }

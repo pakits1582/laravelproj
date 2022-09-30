@@ -107,7 +107,7 @@
                                                     <select  class="form-control select currsubadding" id="search_result" multiple size="15">
                                                         @if ($subjects)
                                                             @foreach ($subjects as $subject)
-                                                                <option value="{{ $subject->id }}" id="option_{{ $subject->id }}">({{ $subject->units }}) - [ {{ $subject->code }} ] {{ $subject->name }}</option>
+                                                                <option value="{{ $subject->id }}" id="option_{{ $subject->id }}" title="{{ $subject->name }}">({{ $subject->units }}) - [ {{ $subject->code }} ] {{ $subject->name }}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>
