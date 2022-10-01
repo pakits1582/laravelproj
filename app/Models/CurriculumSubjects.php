@@ -25,4 +25,20 @@ class CurriculumSubjects extends Model
     {
         return $this->belongsTo(Curriculum::class, 'curriculum_id', 'id');
     }
+
+    public function prerequisites()
+    {
+        return $this->hasMany(Prerequisite::class, 'curriculum_subject_id', 'id');
+    }
+
+    public function corequisites()
+    {
+        return $this->hasMany(Corequisite::class, 'curriculum_subject_id', 'id');
+    }
+
+    public function equivalents()
+    {
+        return $this->hasMany(Equivalent::class, 'curriculum_subject_id', 'id');
+    }
+
 }

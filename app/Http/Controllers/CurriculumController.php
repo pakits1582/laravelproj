@@ -106,7 +106,7 @@ class CurriculumController extends Controller
 
     public function managecurriculumsubject(CurriculumSubjects $curriculum_subject)
     {
-        $curriculum_subjects = CurriculumSubjects::where("curriculum_id", $curriculum_subject->curriculum->id)->get();
+        $curriculum_subjects = CurriculumSubjects::with('subjectinfo')->where("curriculum_id", $curriculum_subject->curriculum->id)->get();
 
         return view('curriculum.manage_curriculum_subject', ['curriculum_subject' => $curriculum_subject, 'curriculum_subjects' => $curriculum_subjects]);
     }
@@ -120,12 +120,30 @@ class CurriculumController extends Controller
 
     public function storemanagecurriculumsubject(Request $request)
     {
-        return $this->curriculumService->storeManageCurriculumSubject($request);
+        $this->curriculumService->storeManageCurriculumSubject($request);
 
-        // return response()->json([
-        //     'success' => true,
-        //     'message' => 'Curriculum successfully added!',
-        //     'alert' => 'alert-success'
-        // ], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Curriculum subject '.$request->saveto.' successfully added!',
+            'alert' => 'alert-success'
+        ], 200);
+    }
+
+    public function deleteitem($id, $table)
+    {
+        $this->curriculumService->deleteItem($id, $table);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Selected item successfully deleted!',
+            'alert' => 'alert-success'
+        ], 200);
+    }
+
+    public function returncurriculumsubject(Request $request)
+    {
+        $curriculum_subject =  $this->curriculumService->returnCurriculumSubject($request->curriculum_subject);
+
+        return view('curriculum.return_curriculum_subject_item', ['curriculum_subject' => $curriculum_subject, 'table' => $request->table]);
     }
 }

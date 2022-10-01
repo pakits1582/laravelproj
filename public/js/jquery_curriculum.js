@@ -200,10 +200,10 @@ $(function(){
 				
 				var subjects = '';
 				$.each(response.data, function(k, v){
-					if(saveto === 'equiv'){
+					if(saveto === 'equivalents'){
 						subjects += '<option value="'+v.id+'" id="option_'+v.id+'" title="'+v.name+'">('+v.units+') - [ '+v.code+' ] '+v.name+'</option>';       
 					}else{
-						subjects += '<option value="'+v.subjectinfo.id+'" id="option_'+v.subjectinfo.id+'"  title="'+v.subjectinfo.name+'">('+v.subjectinfo.units+') - [ '+v.subjectinfo.code+' ] '+v.subjectinfo.name+'</option>';       
+						subjects += '<option value="'+v.id+'" id="option_'+v.subjectinfo.id+'"  title="'+v.subjectinfo.name+'">('+v.subjectinfo.units+') - [ '+v.subjectinfo.code+' ] '+v.subjectinfo.name+'</option>';       
 					}
 				});
 				$("#search_result_currsubmgmt").html(subjects);
@@ -291,8 +291,9 @@ $(function(){
 				$("#form_manage_curriculum_subject").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>');
 				window.scrollTo(0, 0);
 
-				$("#selected_subjects").html("");
+				$("#selected_subjects_currsubmgmt").html('<option value="">- Add at least one subject -</option>');
 				returnCurriculum(program, curriculum);
+				returnCurriculumSubject(curriculum_subject, saveto);
 			},
 			error: function (data) {
 				$("#confirmation").dialog('close');
@@ -308,5 +309,72 @@ $(function(){
 
 		e.preventDefault();
 	});
+
+	$(document).on("click", ".delete_item", function(e){
+		var table = $(this).attr("data-action");
+		var id = $(this).attr("id");
+		var curriculum_subject = $("#curriculum_subject").val();
+
+		$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to delete selected item?</div>').dialog({
+			show: 'fade',
+			resizable: false,	
+			draggable: false,
+			width: 350,
+			height: 'auto',
+			modal: true,
+			buttons: {
+					'Cancel':function(){
+						$(this).dialog('close');
+					},
+					'OK':function(){
+						$(this).dialog('close');
+						$.ajax({
+							url: '/curriculum/deleteitem/'+id+'/table/'+table,
+							type: 'DELETE',
+							dataType: 'json',
+							success: function(data){
+								console.log(data);
+								showSuccess(data.message);
+
+								if(table !== 'curriculum_subject'){
+									returnCurriculumSubject(curriculum_subject, table);
+								}
+								
+								var curriculum = $("#curriculum_id").val();
+								var program    = $("#program_id").val();
+
+								returnCurriculum(program, curriculum);
+							},
+							error: function (data) {
+								console.log(data);
+								var errors = data.responseJSON;
+								if ($.isEmptyObject(errors) == false) {
+									showError('Something went wrong! Can not perform requested action! '+errors.message);
+								}
+							}
+						});
+					}//end of ok button	
+				}//end of buttons
+			});//end of dialogbox
+			$(".ui-dialog-titlebar").hide();
+		//end of dialogbox
+		e.preventDefault();
+	});
+
+	function returnCurriculumSubject(curriculum_subject, table)
+	{
+		$.ajax({
+			url: "/curriculum/returncurriculumsubject",
+			type: 'POST',
+			data: ({ 'curriculum_subject' : curriculum_subject, 'table' : table }),
+			success: function(data){
+				console.log(data);
+				$("#return_"+table).html(data);
+			},
+			error: function (data) {
+				console.log(data);
+			}
+		});
+	}
 
 });

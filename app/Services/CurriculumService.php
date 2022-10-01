@@ -9,6 +9,10 @@ use App\Models\Curriculum;
 use App\Models\Instructor;
 use App\Services\ProgramService;
 use App\Models\CurriculumSubjects;
+use App\Models\Prerequisite;
+use App\Models\Corequisite;
+use App\Models\Equivalent;
+
 use Illuminate\Database\Eloquent\Builder;
 
 class CurriculumService
@@ -66,7 +70,7 @@ class CurriculumService
 
     public function viewCurriculum($program, $curriculum)
     {
-        $curriculum_subjects = CurriculumSubjects::with(['subjectinfo', 'terminfo'])->where('curriculum_id', $curriculum->id)->get();
+        $curriculum_subjects = CurriculumSubjects::with(['subjectinfo', 'terminfo','prerequisites'])->where('curriculum_id', $curriculum->id)->get();
         $grouped = $curriculum_subjects->groupBy(['year_level', 'terminfo.term']);
         
         return ['curriculum_subjects' => $grouped, 'program' => $program, 'curriculum' => $curriculum];
@@ -74,7 +78,7 @@ class CurriculumService
 
     public function searchCurriculumSubjects($request)
     {
-        if($request->saveto === 'equiv'){
+        if($request->saveto === 'equivalents'){
             $subjects =  $this->searchSubjects($request);
         }else{
             $query = CurriculumSubjects::with(['subjectinfo'])->where("curriculum_id", $request->curriculum_id);
@@ -90,8 +94,65 @@ class CurriculumService
         return $subjects;
     }
 
+    public function returnCurriculumSubject($curriculum_subject_id)
+    {
+        return CurriculumSubjects::with(['subjectinfo', 'prerequisites', 'corequisites', 'equivalents'])->where("id", $curriculum_subject_id)->firstOrFail();
+    }
+
     public function storeManageCurriculumSubject($request)
     {
-        return $request->curriculum_subject;
+        $curriculum_subject = $this->returnCurriculumSubject($request->curriculum_subject);
+
+        switch ($request->saveto) {
+            case 'prerequisites':
+                $model = Prerequisite::class;
+                $saveto = 'prerequisite';
+                break;
+            case 'corequisites':
+                $model = Corequisite::class;
+                $saveto = 'corequisite';
+                break;
+            case 'equivalents':
+                $model = Equivalent::class;
+                $saveto = 'equivalent';
+                break;
+        }
+
+        foreach ($request->subjects as $key => $subject) {
+            $subjects[] = new $model([
+                $saveto => $subject,
+            ]);
+        }
+
+        return $curriculum_subject->{$request->saveto}()->saveMany($subjects);
+
     }
+
+    public function deleteItem($id, $table)
+    {
+        switch ($table) {
+            case 'prerequisites':
+                $item = Prerequisite::findorfail($id);
+                //return $item->id.'-'.$item->curriculum_subject_id.'-'.$item->prerequisite;
+                $item->delete();
+                break;
+            case 'corequisites':
+                $item = Corequisite::findorfail($id);
+                $item->delete();
+                break;
+            case 'equivalents':
+                $item = Equivalent::findorfail($id);
+                $item->delete();
+                break;
+            case 'curriculum_subject':
+                $item = CurriculumSubjects::findorfail($id);
+                // return $item->id.'-'.$item->curriculum_id.'-'.$item->subject_id;
+                $item->delete();
+                break;
+        }
+
+
+
+    }
+
 }

@@ -4,16 +4,17 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h1 class="h3 text-800 text-primary">Curriculum {{ $curriculum->curriculum }}</h1>
+            <input type="hidden" name="curriculum_id" value="{{ $curriculum->id }}" id="curriculum_id" />
         </div> 
         <div class="card-body">
             @if ($program)
                 @for ($x=1; $x <= $program->years; $x++)
                     <h1 class="h3 text-800 text-primary mid">{{ Helpers::yearLevel($x) }}</h1>
                     <div class="row">
-                        @foreach ($curriculum_subjects as $yearlevel => $currsub)
+                        @foreach ($curriculum_subjects as $yearlevel => $curriculum_subject)
                         @if ($yearlevel === $x)
                         
-                            @foreach ($currsub as $term => $subjects)
+                            @foreach ($curriculum_subject as $term => $subjects)
                             <div class="col-md-6">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
@@ -38,12 +39,24 @@
                                                     @foreach ($subjects as $subject)
                                                         <tr>
                                                             <td>
-                                                                <a href="#" class="btn btn-danger btn-circle btn-sm delete_curriculum_subject" id="{{ $subject->id }}" data-action="delete" title="Delete">
+                                                                <a href="#" class="btn btn-danger btn-circle btn-sm delete_item" id="{{ $subject->id }}" data-action="curriculum_subject" title="Delete">
                                                                     <i class="fas fa-trash"></i>
                                                                 </a>
                                                             </td>
                                                             <td><a href="#" id="{{ $subject->id }}" class="font-weight-bold text-primary manage_curriculum_subject">{{ $subject->subjectinfo->code }}</a></td>
-                                                            <td>{{ $subject->subjectinfo->name }}</td>
+                                                            <td>
+                                                                {{ $subject->subjectinfo->name }}
+                                                                @if (count($subject->prerequisites) > 0)
+                                                                    <span class="font-weight-bold text-dark">
+                                                                        (
+                                                                        @foreach ($subject->prerequisites as $prerequisite)
+                                                                            {{ $loop->first ? '' : ', ' }}
+                                                                            {{ $prerequisite->curriculumsubject->subjectinfo->code }}
+                                                                        @endforeach
+                                                                        )
+                                                                    </span>
+                                                                @endif
+                                                            </td>
                                                             <td>{{ $subject->quota }}</td>
                                                             <td class="mid">{{ $subject->subjectinfo->units }}</td>
                                                         </tr>

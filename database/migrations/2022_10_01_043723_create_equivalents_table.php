@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prerequisites', function (Blueprint $table) {
+        Schema::create('equivalents', function (Blueprint $table) {
             $table->engine = "InnoDB"; 
             $table->id();
             $table->unsignedBigInteger('curriculum_subject_id')->nullable()->index();
             $table->foreign('curriculum_subject_id')->references('id')->on('curriculum_subjects');
-            $table->unsignedBigInteger('prerequisite')->nullable()->index();
-            $table->foreign('prerequisite')->references('id')->on('curriculum_subjects');
+            $table->unsignedBigInteger('equivalent')->nullable()->index();
+            $table->foreign('equivalent')->references('id')->on('curriculum_subjects');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prerequisites');
+        Schema::dropIfExists('equivalents');
     }
 };

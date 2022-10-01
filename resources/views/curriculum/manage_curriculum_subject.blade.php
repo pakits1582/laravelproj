@@ -25,34 +25,27 @@
                                             <tr>
                                                 <th class="w150">Course No.</th>
                                                 <th class="mid">Descriptive Title</th>
-                                                <th class="w20">Units</th>
+                                                <th class="w20 mid">Units</th>
                                                 <th class="w20 mid"><i class="fas fa-fw fa-cog"></i></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="text-black">
-                                            {{-- @php
-                                                $totalunits = 0;
-                                            @endphp
-                                            @foreach ($subjects as $subject)
-                                                <tr>
-                                                    <td>
-                                                        <a href="#" class="btn btn-danger btn-circle btn-sm delete_curriculum_subject" id="{{ $subject->id }}" data-action="delete" title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                    <td><a href="#" id="{{ $subject->id }}" class="font-weight-bold text-primary manage_curriculum_subject">{{ $subject->subjectinfo->code }}</a></td>
-                                                    <td>{{ $subject->subjectinfo->name }}</td>
-                                                    <td>{{ $subject->quota }}</td>
-                                                    <td class="mid">{{ $subject->subjectinfo->units }}</td>
-                                                </tr>
-                                                @php
-                                                    $totalunits += $subject->subjectinfo->units
-                                                @endphp
-                                            @endforeach
-                                            <tr>
-                                                <td colspan="4" class="text-right  font-weight-bold text-primary">Total Units</td>
-                                                <td class="mid  font-weight-bold text-primary">{{ $totalunits }}</td>
-                                            </tr> --}}
+                                        <tbody class="text-black" id="return_prerequisites">
+                                            @if(count($curriculum_subject->prerequisites) > 0)
+                                                @foreach ($curriculum_subject->prerequisites as $prerequisite)
+                                                    <tr>
+                                                        <td>{{ $prerequisite->curriculumsubject->subjectinfo->code }}</td>
+                                                        <td>{{ $prerequisite->curriculumsubject->subjectinfo->name }}</td>
+                                                        <td class="mid">{{ $prerequisite->curriculumsubject->subjectinfo->units }}</td>
+                                                        <td class="mid">
+                                                            <a href="#" class="btn btn-danger btn-circle btn-sm delete_item" id="{{ $prerequisite->id }}" data-action="prerequisites" title="Delete">
+                                                                <i class="fas fa-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr><td colspan="4" class="mid">No records to be displayed</td></tr>
+                                            @endif
                                         </tbody>
 
                                     </table>
@@ -79,30 +72,23 @@
                                                 <th class="w20 mid"><i class="fas fa-fw fa-cog"></i></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="text-black">
-                                            {{-- @php
-                                                $totalunits = 0;
-                                            @endphp
-                                            @foreach ($subjects as $subject)
-                                                <tr>
-                                                    <td>
-                                                        <a href="#" class="btn btn-danger btn-circle btn-sm delete_curriculum_subject" id="{{ $subject->id }}" data-action="delete" title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                    <td><a href="#" id="{{ $subject->id }}" class="font-weight-bold text-primary manage_curriculum_subject">{{ $subject->subjectinfo->code }}</a></td>
-                                                    <td>{{ $subject->subjectinfo->name }}</td>
-                                                    <td>{{ $subject->quota }}</td>
-                                                    <td class="mid">{{ $subject->subjectinfo->units }}</td>
-                                                </tr>
-                                                @php
-                                                    $totalunits += $subject->subjectinfo->units
-                                                @endphp
-                                            @endforeach
-                                            <tr>
-                                                <td colspan="4" class="text-right  font-weight-bold text-primary">Total Units</td>
-                                                <td class="mid  font-weight-bold text-primary">{{ $totalunits }}</td>
-                                            </tr> --}}
+                                        <tbody class="text-black" id="return_corequisites">
+                                            @if(count($curriculum_subject->corequisites) > 0)
+                                                @foreach ($curriculum_subject->corequisites as $corequisite)
+                                                    <tr>
+                                                        <td>{{ $corequisite->curriculumsubject->subjectinfo->code }}</td>
+                                                        <td>{{ $corequisite->curriculumsubject->subjectinfo->name }}</td>
+                                                        <td class="mid">{{ $corequisite->curriculumsubject->subjectinfo->units }}</td>
+                                                        <td class="mid">
+                                                            <a href="#" class="btn btn-danger btn-circle btn-sm delete_item" id="{{ $corequisite->id }}" data-action="corequisites" title="Delete">
+                                                                <i class="fas fa-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr><td colspan="4" class="mid">No records to be displayed</td></tr>
+                                            @endif
                                         </tbody>
 
                                     </table>
@@ -129,30 +115,23 @@
                                                 <th class="w20 mid"><i class="fas fa-fw fa-cog"></i></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="text-black">
-                                            {{-- @php
-                                                $totalunits = 0;
-                                            @endphp
-                                            @foreach ($subjects as $subject)
-                                                <tr>
-                                                    <td>
-                                                        <a href="#" class="btn btn-danger btn-circle btn-sm delete_curriculum_subject" id="{{ $subject->id }}" data-action="delete" title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                    <td><a href="#" id="{{ $subject->id }}" class="font-weight-bold text-primary manage_curriculum_subject">{{ $subject->subjectinfo->code }}</a></td>
-                                                    <td>{{ $subject->subjectinfo->name }}</td>
-                                                    <td>{{ $subject->quota }}</td>
-                                                    <td class="mid">{{ $subject->subjectinfo->units }}</td>
-                                                </tr>
-                                                @php
-                                                    $totalunits += $subject->subjectinfo->units
-                                                @endphp
-                                            @endforeach
-                                            <tr>
-                                                <td colspan="4" class="text-right  font-weight-bold text-primary">Total Units</td>
-                                                <td class="mid  font-weight-bold text-primary">{{ $totalunits }}</td>
-                                            </tr> --}}
+                                        <tbody class="text-black" id="return_equivalents">
+                                            @if(count($curriculum_subject->equivalents) > 0)
+                                                @foreach ($curriculum_subject->equivalents as $equivalent)
+                                                    <tr>
+                                                        <td>{{ $equivalent->curriculumsubject->subjectinfo->code }}</td>
+                                                        <td>{{ $equivalent->curriculumsubject->subjectinfo->name }}</td>
+                                                        <td class="mid">{{ $equivalent->curriculumsubject->subjectinfo->units }}</td>
+                                                        <td class="mid">
+                                                            <a href="#" class="btn btn-danger btn-circle btn-sm delete_item" id="{{ $equivalent->id }}" data-action="equivalents" title="Delete">
+                                                                <i class="fas fa-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr><td colspan="4" class="mid">No records to be displayed</td></tr>
+                                            @endif
                                         </tbody>
 
                                     </table>
@@ -184,9 +163,9 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <select name="saveto" class="form-control" id="saveto" required>
-                                                            <option value="prereq" selected>Pre-requisites subjects</option>
-                                                            <option value="coreq">Co-requisites subjects</option>
-                                                            <option value="equiv">Equivalent subjects</option>
+                                                            <option value="prerequisites" selected>Pre-requisites subjects</option>
+                                                            <option value="corequisites">Co-requisites subjects</option>
+                                                            <option value="equivalents">Equivalent subjects</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -210,7 +189,7 @@
                                                             <select  class="form-control select currsubadding" id="search_result_currsubmgmt" multiple size="10">
                                                                 @if ($curriculum_subjects)
                                                                     @foreach ($curriculum_subjects as $curr_subject)
-                                                                        <option value="{{ $curr_subject->subjectinfo->id }}" id="option_{{ $curr_subject->subjectinfo->id }}" title="{{ $curr_subject->subjectinfo->name }}">({{ $curr_subject->subjectinfo->units }}) - [ {{ $curr_subject->subjectinfo->code }} ] {{ $curr_subject->subjectinfo->name }}</option>
+                                                                        <option value="{{ $curr_subject->id }}" id="option_{{ $curr_subject->subjectinfo->id }}" title="{{ $curr_subject->subjectinfo->name }}">({{ $curr_subject->subjectinfo->units }}) - [ {{ $curr_subject->subjectinfo->code }} ] {{ $curr_subject->subjectinfo->name }}</option>
                                                                     @endforeach
                                                                 @endif
                                                             </select>
@@ -249,7 +228,6 @@
                                                 </div>
                                             </div>
                                             <input type="hidden" name="curriculum_subject" value="{{ $curriculum_subject->id }}" id="curriculum_subject" />
-                                            <input type="hidden" name="curriculum_id" value="{{ $curriculum_subject->curriculum->id }}" id="curriculum_id" />
                                             <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Subjects</button>
                                         </form>
                                     </div>

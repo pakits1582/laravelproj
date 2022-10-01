@@ -5,26 +5,26 @@
 	background:url(../images/check2.png) #2ecc71 no-repeat center center;
 	padding-top:100px;
 	background-size:75px 75px;	
-	z-index:1000;
+	z-index:100000;
 	width: 100%;
 }
 .errorpop{
 	background:url(../images/wrong2.png) #e74c3c no-repeat center center;
 	padding-top:100px;
 	background-size:75px 75px;
-	z-index:1000;
+	z-index:100000;
 	width: 100%;
 }
 .confirmation{
 	background:url(../images/help.png) #3498db no-repeat center center;
 	padding-top:100px;
 	background-size:75px 75px;
-	z-index:1000;
+	z-index:100000;
 	width: 100%;
 }
 .popups{
 	clear:both;
-	z-index:1000;
+	z-index:100000;
 	word-wrap:break-word;
 	background-color:#fff;
 	width:30%;
@@ -268,4 +268,6 @@
 
 
 @media (max-width: 1399.98px) {  }
+
+.ui-dialog { z-index: 10000 !important; }
 
