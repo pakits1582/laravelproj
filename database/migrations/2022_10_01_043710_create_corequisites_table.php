@@ -17,7 +17,7 @@ return new class extends Migration
             $table->engine = "InnoDB"; 
             $table->id();
             $table->unsignedBigInteger('curriculum_subject_id')->nullable()->index();
-            $table->foreign('curriculum_subject_id')->references('id')->on('curriculum_subjects');
+            $table->foreign('curriculum_subject_id')->references('id')->on('curriculum_subjects')->onDelete('cascade');
             $table->unsignedBigInteger('corequisite')->nullable()->index();
             $table->foreign('corequisite')->references('id')->on('curriculum_subjects');
             $table->timestamps();

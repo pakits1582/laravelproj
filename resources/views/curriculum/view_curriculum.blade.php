@@ -1,5 +1,4 @@
 {{-- {{ dd($curriculum_subjects) }} --}}
-<div class="container-fluid">
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -52,6 +51,7 @@
                                                                         @foreach ($subject->prerequisites as $prerequisite)
                                                                             {{ $loop->first ? '' : ', ' }}
                                                                             {{ $prerequisite->curriculumsubject->subjectinfo->code }}
+                                                                            {{-- {{ $prerequisite }} --}}
                                                                         @endforeach
                                                                         )
                                                                     </span>
@@ -83,4 +83,3 @@
             @endif
         </div>
     </div>
-</div>

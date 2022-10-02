@@ -70,7 +70,7 @@ class CurriculumService
 
     public function viewCurriculum($program, $curriculum)
     {
-        $curriculum_subjects = CurriculumSubjects::with(['subjectinfo', 'terminfo','prerequisites'])->where('curriculum_id', $curriculum->id)->get();
+        $curriculum_subjects = CurriculumSubjects::with(['subjectinfo', 'terminfo','prerequisites', 'prerequisites.curriculumsubject', 'prerequisites.curriculumsubject.subjectinfo'])->where('curriculum_id', $curriculum->id)->get();
         $grouped = $curriculum_subjects->groupBy(['year_level', 'terminfo.term']);
         
         return ['curriculum_subjects' => $grouped, 'program' => $program, 'curriculum' => $curriculum];

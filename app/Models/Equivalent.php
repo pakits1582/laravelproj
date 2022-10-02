@@ -10,8 +10,8 @@ class Equivalent extends Model
     protected $fillable = ['curriculum_subject_id', 'equivalent'];
     use HasFactory;
 
-    public function curriculumsubject()
+    public function subjectinfo()
     {
-        return $this->belongsTo(CurriculumSubjects::class, 'equivalent', 'id');
+        return $this->belongsTo(Subject::class, 'equivalent', 'id');
     }
 }
