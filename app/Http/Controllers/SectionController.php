@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Section;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreSectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
-use App\Models\Section;
 
 class SectionController extends Controller
 {
@@ -13,11 +14,22 @@ class SectionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$sections = Section::all();
-        $sections = Section::with('programinfo')->orderBy('code')->get();
+        $query = Section::with('programinfo')->orderBy('code');
 
+        if($request->has('keyword') && !empty($request->keyword)) {
+            $query->where(function($query) use($request){
+                $query->where('code', 'like', '%'.$request->keyword.'%')
+                ->orWhere('name', 'like', '%'.$request->keyword.'%');
+            });
+        }
+        $sections =  $query->paginate(10);
+
+        if($request->ajax())
+        {
+            return view('section.return_sections', compact('sections'));
+        }
         return view('section.index', compact('sections'));
     }
 

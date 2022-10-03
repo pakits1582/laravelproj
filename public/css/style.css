@@ -246,17 +246,17 @@
 	color: black;
 }
 
-.text-black{
+.text-black, .table, .table tr:hover{
 	color: black !important;
 }
+
 
 
 @media (max-width: 575.98px) { 
 	.h3{
 		font-size: 3vw !important;
 	}
- }
-
+}
 
 @media (max-width: 767.98px) {  }
 

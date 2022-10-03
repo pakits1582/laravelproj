@@ -16,7 +16,7 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add new period</span>
+                    <span class="text">Add New Period</span>
                 </a>
                 <form method="POST" action="" id="filter_form" target="_blank" data-field="periods">
                     @csrf

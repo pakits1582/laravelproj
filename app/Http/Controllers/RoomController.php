@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
-use App\Models\Room;
 
 class RoomController extends Controller
 {
@@ -13,10 +14,22 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $rooms = Room::all();
+        $query = Room::query()->orderBy('code');
+        if($request->has('keyword') && !empty($request->keyword)) {
+            $query->where(function($query) use($request){
+                $query->where('code', 'like', '%'.$request->keyword.'%')
+                ->orWhere('name', 'like', '%'.$request->keyword.'%');
+            });
+        }
 
+        $rooms =  $query->paginate(10);
+
+        if($request->ajax())
+        {
+            return view('room.return_rooms', compact('rooms'));
+        }
         return view('room.index', compact('rooms'));
     }
 

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDepartmentRequest;
-use App\Http\Requests\UpdateDepartmentRequest;
 use App\Models\Department;
 use App\Models\Instructor;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreDepartmentRequest;
+use App\Http\Requests\UpdateDepartmentRequest;
 
 class DepartmentController extends Controller
 {
@@ -14,9 +15,23 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $departments = Department::with('headinfo')->orderBy('code')->get();
+        $query = Department::with('headinfo')->orderBy('code');
+
+        if($request->has('keyword') && !empty($request->keyword)) {
+            $query->where(function($query) use($request){
+                $query->where('code', 'like', '%'.$request->keyword.'%')
+                ->orWhere('name', 'like', '%'.$request->keyword.'%');
+            });
+        }
+
+        $departments =  $query->paginate(10);
+
+        if($request->ajax())
+        {
+            return view('department.return_departments', compact('departments'));
+        }
 
         return view('department.index', compact('departments'));
     }

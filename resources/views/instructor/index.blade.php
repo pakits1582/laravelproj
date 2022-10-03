@@ -16,7 +16,7 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add new instructor</span>
+                    <span class="text">Add New Instructor</span>
                 </a>
                 <a href="#" class="btn btn-danger btn-icon-split" id="generate_pdf">
                     <span class="icon text-white-50">

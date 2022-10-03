@@ -16,70 +16,24 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add new school</span>
+                    <span class="text">Add New School</span>
                 </a>
+                <form method="POST" action="" id="filter_form" target="_blank" data-field="schools">
+                    @csrf
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                    <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="schoolTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Actions</th>
-                                {{-- <th>Delete</th> --}}
-                            </tr>
-                        </thead>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </tfoot> --}}
-                        <tbody>
-                            @if ($schools)
-                                @unless (count($schools) == 0)
-                                    @foreach ($schools as $school)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $school->code }}</td>
-                                            <td>{{ $school->name }}</td>
-                                            <td>{{ $school->address }}</td>
-                                            <td class="">
-                                                <a href="{{ route('schools.edit', ['school' => $school->id ]) }}" class="btn btn-primary btn-icon-split" title="Edit School">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="text">Edit</span>
-                                                </a>
-                                            </td>
-                                            {{-- <td>
-                                                <form method="POST" action="{{ route('deleteschool', ['school' => $school->id ]) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-danger btn-icon-split">
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </span>
-                                                        <span class="text">Delete</span>
-                                                    </button>
-                                                </form>
-                                            </td> --}}
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('school.return_schools')
             </div>
         </div>
 

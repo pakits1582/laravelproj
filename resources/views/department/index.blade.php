@@ -16,57 +16,24 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add new department</span>
+                    <span class="text">Add New Department</span>
                 </a>
+                <form method="POST" action="" id="filter_form" target="_blank" data-field="departments">
+                    @csrf
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                    <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="departmentTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Head</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </tfoot> --}}
-                        <tbody>
-                            @if ($departments)
-                                @unless (count($departments) == 0)
-                                    @foreach ($departments as $department)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $department->code }}</td>
-                                            <td>{{ $department->name }}</td>
-                                            <td>{{ $department->headName }}</td>
-                                            <td class="">
-                                                <a href="{{ route('departments.edit', ['department' => $department->id ]) }}" class="btn btn-primary btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="text">Edit</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('department.return_departments')
             </div>
         </div>
 

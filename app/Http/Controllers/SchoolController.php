@@ -2,17 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\School;
+use Illuminate\Http\Request;
 use App\Http\Requests\SchoolFormRequest;
 use App\Http\Requests\SchoolUpdateFormRequest;
-use App\Models\School;
+
 
 class SchoolController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $schools = School::all()->sortBy('code');
-        $schools->load('addedby');
+        $query = School::orderBy('code');
+        if($request->has('keyword') && !empty($request->keyword)) {
+            $query->where(function($query) use($request){
+                $query->where('code', 'like', '%'.$request->keyword.'%')
+                ->orWhere('name', 'like', '%'.$request->keyword.'%');
+            });
+        }
 
+        $schools =  $query->paginate(10);
+
+        if($request->ajax())
+        {
+            return view('school.return_schools', compact('schools'));
+        }
         return view('school.index', compact('schools'));
     }
 

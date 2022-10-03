@@ -16,61 +16,24 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add new section</span>
+                    <span class="text">Add New Section</span>
                 </a>
+                <form method="POST" action="" id="filter_form" target="_blank" data-field="sections">
+                    @csrf
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                    <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="sectionTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Program</th>
-                                <th>Year Level</th>
-                                <th>Min Enrollee</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </tfoot> --}}
-                        <tbody>
-                            @if ($sections)
-                                @unless (count($sections) == 0)
-                                    @foreach ($sections as $section)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $section->code }}</td>
-                                            <td>{{ $section->name }}</td>
-                                            <td>{{ $section->programinfo->code }}</td>
-                                            <td>{{ $section->year }}</td>
-                                            <td>{{ $section->minenrollee }}</td>
-                                            <td class="">
-                                                <a href="{{ route('sections.edit', ['section' => $section->id ]) }}" class="btn btn-primary btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="text">Edit</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('section.return_sections')
             </div>
         </div>
 

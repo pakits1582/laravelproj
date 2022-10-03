@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CollegeFormRequest;
-use App\Http\Requests\CollegeUpdateFormRequest;
 use App\Models\College;
 use App\Models\Instructor;
+use Illuminate\Http\Request;
+use App\Http\Requests\CollegeFormRequest;
+use App\Http\Requests\CollegeUpdateFormRequest;
 
 class CollegeController extends Controller
 {
@@ -14,10 +15,23 @@ class CollegeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $colleges = College::with('deaninfo')->get();
+        $query = College::with('deaninfo');
 
+        if($request->has('keyword') && !empty($request->keyword)) {
+            $query->where(function($query) use($request){
+                $query->where('code', 'like', '%'.$request->keyword.'%')
+                ->orWhere('name', 'like', '%'.$request->keyword.'%');
+            });
+        }
+
+        $colleges =  $query->paginate(10);
+
+        if($request->ajax())
+        {
+            return view('college.return_colleges', compact('colleges'));
+        }
         return view('college.index', compact('colleges'));
     }
 

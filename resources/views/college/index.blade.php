@@ -16,47 +16,24 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add new college</span>
+                    <span class="text">Add New College</span>
                 </a>
+                <form method="POST" action="" id="filter_form" target="_blank" data-field="colleges">
+                    @csrf
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                    <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="collegeTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Dean</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($colleges)
-                                @unless (count($colleges) == 0)
-                                    @foreach ($colleges as $college)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $college->code }}</td>
-                                            <td>{{ $college->name }}</td>
-                                            <td>{{ $college->deanName }}</td>
-                                            <td class="mid">
-                                                <a href="{{ route('colleges.edit', ['college' => $college->id ]) }}" class="btn btn-primary btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="text">Edit</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endunless
-                            @else
-                                <tr><td colspan="6">No records to be displayed!</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                @include('college.return_colleges')
             </div>
         </div>
 
