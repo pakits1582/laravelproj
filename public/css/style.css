@@ -237,7 +237,7 @@
 }
 
 .select option:nth-child(odd) {
-	background-color:#f2f2f2;
+	background-color:#f2f2f2 !important;
 }
 
 .currsubadding option{
@@ -271,3 +271,45 @@
 
 .ui-dialog { z-index: 10000 !important; }
 
+.legend{
+	display:inline-block;
+	height:30px;
+	min-width: 100%;	
+}
+
+.dissolved{
+	background-color:rgba(231, 76, 60,.5) !important; 
+ }
+
+ .selected{
+	 background-color:rgba(52, 152, 219,0.5) !important;	
+ }
+
+ .selected:hover{
+	 background-color:rgba(52, 152, 219,0.5) !important;	
+ }
+
+ .editable{
+	background-color:rgba(231, 76, 60,.5) !important;
+	word-wrap:break-word;
+	font-weight:bold;
+ }
+ .tutorial{
+	background-color:rgba(46, 204, 113,.5) !important; 
+ }
+ 
+ .f2f{
+	background-color:rgba(230, 126, 34,.5) !important; 
+ }
+
+ .tagged{
+	background-color:rgba(243, 156, 18,.5) !important; 
+ }
+
+ .blued{
+	 background-color:rgba(52, 152, 219,0.5) !important;	
+ }
+
+ .select2 {
+	width: 100%!important;
+}

@@ -62,4 +62,15 @@ class InstructorService
 
         return $accesses;
     }
+
+    public function getInstructor($instructor_id = '')
+    {
+        $query = Instructor::with(['collegeinfo', 'deptinfo', 'user', 'educlevel'])->orderBy('last_name')->orderBy('first_name');
+
+        if($instructor_id !== '') {
+            $query->where('id', $instructor_id);
+        }
+
+        return $query->get();
+    }
 }

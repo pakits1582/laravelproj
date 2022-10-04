@@ -69,4 +69,15 @@ class ProgramService
 
         return $query->get();
     }
+
+    public function getProgram($program_id = '')
+    {
+        $query = Program::with(['level', 'collegeinfo', 'headinfo'])->orderBy('code');
+
+        if($program_id !== '') {
+            $query->where('id', $program_id);
+        }
+
+        return $query->get();
+    }
 }

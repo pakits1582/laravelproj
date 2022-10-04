@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('section_id')->index();
             $table->foreign('section_id')->references('id')->on('sections');
             $table->unsignedBigInteger('curiculum_subject_id')->nullable()->index();
-            $table->foreign('curiculum_subject_id')->references('id')->on('curiculum_subjects');
+            $table->foreign('curiculum_subject_id')->references('id')->on('curriculum_subjects');
             $table->float('units')->nullable();
             $table->float('tfunits')->nullable();
             $table->float('loadunits')->nullable();
@@ -30,7 +30,8 @@ return new class extends Migration
             $table->float('hours')->nullable();
             $table->unsignedBigInteger('instructor_id')->nullable()->index();
             $table->foreign('instructor_id')->references('id')->on('instructors');
-            $table->string('schedule')->nullable();
+            $table->unsignedBigInteger('schedule_id')->nullable()->index();
+            $table->foreign('schedule_id')->references('id')->on('schedules');
             $table->integer('slots')->nullable();
             $table->boolean('tutorial')->default(false);
             $table->boolean('dissolved')->default(false);
@@ -41,7 +42,7 @@ return new class extends Migration
             $table->boolean('evaluation')->default(false);
             $table->unsignedBigInteger('evaluated_by')->nullable()->index();
             $table->foreign('evaluated_by')->references('id')->on('instructors');
-            $table->integer('slots')->nullable()->default(0);
+            $table->integer('evaluation_status')->nullable()->default(0);
             $table->timestamps();
         });
     }

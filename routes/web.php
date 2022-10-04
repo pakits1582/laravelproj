@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SectionController;
@@ -118,6 +119,8 @@ Route::group(['middleware' => ['auth']], function () {
             ->missing(function (Request $request) {
                 return Redirect::route('sections.index');
             });
+    Route::post('/sections/getsections', [SectionController::class, 'getsections']);
+
 
     Route::group(['middleware' => ['inaccess:subjects']], function () {
             Route::view('/subjects/import', 'subject.import')->name('subjects.import');
@@ -156,6 +159,27 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/curriculum/{program}/curriculum/{curriculum}', [CurriculumController::class, 'viewcurriculum'])->middleware(['readability:curriculum'])->name('curriculum.viewcurriculum');
         Route::resource('curriculum', CurriculumController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('curriculum.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:classes']], function () {
+        // Route::group(['middleware' => ['writeability:curriculum']], function () {
+        //     Route::get('/curriculum/{program}/addnewcurriculum', [CurriculumController::class, 'addnewcurriculum']);
+        //     Route::post('/curriculum/savecurriculum', [CurriculumController::class, 'storecurriculum'])->name('curriculum.savecurriculum');
+        //     Route::post('/curriculum/searchsubject', [CurriculumController::class, 'searchsubject']);
+        //     Route::post('/curriculum/storesubjects', [CurriculumController::class, 'storesubjects'])->name('curriculum.storesubjects');
+        //     Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->name('curriculum.manage');
+        //     Route::get('/curriculum/managecurriculumsubject/{curriculum_subject}', [CurriculumController::class, 'managecurriculumsubject']);
+        //     Route::post('/curriculum/searchcurriculumsubjects', [CurriculumController::class, 'searchcurriculumsubjects']);
+        //     Route::post('/curriculum/storemanagecurriculumsubject', [CurriculumController::class, 'storemanagecurriculumsubject'])->name('curriculum.storemanagecurriculumsubject');
+        //     Route::delete('/curriculum/deleteitem/{id}/table/{table}', [CurriculumController::class, 'deleteitem']);
+        //     Route::post('/curriculum/returncurriculumsubject', [CurriculumController::class, 'returncurriculumsubject']);
+        // });
+
+        // Route::post('/curriculum/returncurricula', [CurriculumController::class, 'returncurricula']);
+        // Route::get('/curriculum/{program}/curriculum/{curriculum}', [CurriculumController::class, 'viewcurriculum'])->middleware(['readability:curriculum'])->name('curriculum.viewcurriculum');
+        Route::resource('classes', ClassesController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+            return Redirect::route('classes.index');
         });
     });
 

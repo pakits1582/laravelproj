@@ -105,4 +105,20 @@ class SectionController extends Controller
     {
         //
     }
+
+    public function getsections(Request $request)
+    {
+        $query = Section::with('programinfo')->orderBy('code');
+
+        if($request) {
+            $query->where(function($query) use($request){
+                $query->where('program_id', $request->program_id)
+                ->where('year', $request->year_level);
+            });
+        }
+
+        $sections = $query->get();
+
+        return response()->json(['data' => $sections]);
+    }
 }
