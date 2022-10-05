@@ -122,11 +122,11 @@ class CurriculumController extends Controller
     {
         return $this->curriculumService->storeManageCurriculumSubject($request);
 
-        // return response()->json([
-        //     'success' => true,
-        //     'message' => 'Curriculum subject '.$request->saveto.' successfully added!',
-        //     'alert' => 'alert-success'
-        // ], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Curriculum subject '.$request->saveto.' successfully added!',
+            'alert' => 'alert-success'
+        ], 200);
     }
 
     public function deleteitem($id, $table)

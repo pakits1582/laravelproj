@@ -53,6 +53,6 @@ class Program extends Model
 
     public function curricula()
     {
-        return $this->hasMany(Curriculum::class);
+        return $this->hasMany(Curriculum::class)->orderBy('curriculum', 'DESC');
     }
 }

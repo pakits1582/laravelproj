@@ -144,6 +144,32 @@ $(function(){
         e.preventDefault();
     });
 
+/*****************************************************
+*** FUNCTION TABLE ROW SELECTION TRIGGER CHECKBOX  ***
+*****************************************************/
+	$(document).on("click",".label", function(e){
+        if (e.target.type !== 'checkbox') {
+           $(':checkbox', this).trigger('click');
+       }
+   });
+
+/*****************************************
+*** FUNCTION CHECKBOX SUBJECT SELECTION ***
+*****************************************/
+	$(document).on("change",".checks", function(){
+		if($(this).is(':checked')){
+			$('.actions').prop('disabled', false);
+			//$(this).prop("disabled", true);
+			 $(this).closest('tr').addClass('selected');
+		}else{
+			$('.actions').prop('disabled', true);
+			$('input.checks').not(".checks:checked").prop('disabled', false); 	
+			$(this).closest('tr').removeClass('selected');
+		}
+		$('.checks').not(this).prop('checked', false);
+		$('.checks').not(this).closest('tr').removeClass('selected')
+	});
+
 /*************************************
 *** FUNCTION UPDATE CURRENT PERIOD ***
 *************************************/

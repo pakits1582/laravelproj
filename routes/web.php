@@ -167,17 +167,18 @@ Route::group(['middleware' => ['auth']], function () {
         //     Route::get('/curriculum/{program}/addnewcurriculum', [CurriculumController::class, 'addnewcurriculum']);
         //     Route::post('/curriculum/savecurriculum', [CurriculumController::class, 'storecurriculum'])->name('curriculum.savecurriculum');
         //     Route::post('/curriculum/searchsubject', [CurriculumController::class, 'searchsubject']);
-        //     Route::post('/curriculum/storesubjects', [CurriculumController::class, 'storesubjects'])->name('curriculum.storesubjects');
+        Route::post('/classes/storeclasssubject', [ClassesController::class, 'storeclasssubject'])->name('classes.storeclasssubject');
         //     Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->name('curriculum.manage');
         //     Route::get('/curriculum/managecurriculumsubject/{curriculum_subject}', [CurriculumController::class, 'managecurriculumsubject']);
-        //     Route::post('/curriculum/searchcurriculumsubjects', [CurriculumController::class, 'searchcurriculumsubjects']);
+        Route::post('/classes/filtercurriculumsubjects', [ClassesController::class, 'filtercurriculumsubjects']);
         //     Route::post('/curriculum/storemanagecurriculumsubject', [CurriculumController::class, 'storemanagecurriculumsubject'])->name('curriculum.storemanagecurriculumsubject');
         //     Route::delete('/curriculum/deleteitem/{id}/table/{table}', [CurriculumController::class, 'deleteitem']);
-        //     Route::post('/curriculum/returncurriculumsubject', [CurriculumController::class, 'returncurriculumsubject']);
+        Route::post('/classes/sectionclasssubjects', [ClassesController::class, 'sectionclasssubjects']);
         // });
 
         // Route::post('/curriculum/returncurricula', [CurriculumController::class, 'returncurricula']);
         // Route::get('/curriculum/{program}/curriculum/{curriculum}', [CurriculumController::class, 'viewcurriculum'])->middleware(['readability:curriculum'])->name('curriculum.viewcurriculum');
+        Route::get('/classes/{section}/addclassoffering', [ClassesController::class, 'addclassoffering']);
         Route::resource('classes', ClassesController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('classes.index');
         });

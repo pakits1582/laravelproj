@@ -154,19 +154,19 @@
                                         </div>
                                     </div>
                                     <div class="form-group mid d-none" id="button_group">
-                                        <button type="submit" class="btn btn-success btn-icon-split">
+                                        <button type="submit" class="btn btn-success btn-icon-split" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-save"></i>
                                             </span>
                                             <span class="text">Save Changes</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-icon-split">
+                                        <button type="button" class="btn btn-primary btn-icon-split actions" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-edit"></i>
                                             </span>
                                             <span class="text">Edit</span>
                                         </button>
-                                        <button type="button" class="btn btn-danger btn-icon-split">
+                                        <button type="button" class="btn btn-danger btn-icon-split actions" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-times"></i>
                                             </span>
@@ -202,7 +202,7 @@
                                             </span>
                                             <span class="text">Print All Class of Course</span>
                                         </button>
-                                        <button type="button" class="btn btn-success btn-icon-split">
+                                        <button type="button" class="btn btn-success btn-icon-split" id="add_subjects">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-plus-square"></i>
                                             </span>

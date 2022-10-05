@@ -222,7 +222,7 @@ $(function(){
 					if(saveto === 'equivalents'){
 						subjects += '<option value="'+v.id+'" id="option_'+v.id+'" title="'+v.name+'">('+v.units+') - [ '+v.code+' ] '+v.name+'</option>';       
 					}else{
-						subjects += '<option value="'+v.id+'" id="option_'+v.subjectinfo.id+'"  title="'+v.subjectinfo.name+'">('+v.subjectinfo.units+') - [ '+v.subjectinfo.code+' ] '+v.subjectinfo.name+'</option>';       
+						subjects += '<option value="'+v.id+'" id="option_'+v.id+'"  title="'+v.subjectinfo.name+'">('+v.subjectinfo.units+') - [ '+v.subjectinfo.code+' ] '+v.subjectinfo.name+'</option>';       
 					}
 				});
 				$("#search_result_currsubmgmt").html(subjects);

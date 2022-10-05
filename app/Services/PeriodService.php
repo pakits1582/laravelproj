@@ -60,5 +60,6 @@ class PeriodService
 
         session()->put('current_period', $period->id);
         session()->put('periodname', $period->name);
+        session()->put('periodterm', $period->term_id);
     }
 }

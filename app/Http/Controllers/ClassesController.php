@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Term;
 use App\Libs\Helpers;
 use App\Models\Classes;
+use App\Models\Section;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
 use App\Services\CurriculumService;
@@ -28,6 +31,62 @@ class ClassesController extends Controller
         $instructors = $instructorService->getInstructor();
 
         return view('class.index', compact('instructors'));
+    }
+
+    public function addclassoffering(Section $section)
+    {
+        $terms = Term::where('source', Term::SOURCE_INTERNAL)->get();
+
+        $curriculum_subjects = $this->classesService->curriculumSubjects($section->programinfo->curricula()->first()->id, Session('periodterm'), $section->year);
+
+        return view('class.addclassoffering', compact('terms', 'section', 'curriculum_subjects'));
+    }
+
+    public function filtercurriculumsubjects(Request $request)
+    {
+        $curriculum_subjects = $this->classesService->curriculumSubjects($request->curriculum, $request->term, $request->year_level);
+
+        return response()->json(['data' => $curriculum_subjects]);
+    }
+
+    public function storeclasssubject(Request $request, CurriculumService $curriculumService)
+    {
+        $validated = $request->validate([
+            'subjects' => 'required'
+        ]);
+
+        $classes = [];
+        foreach ($request->subjects as $key => $subject) {
+            $curriculum_subject = $curriculumService->returnCurriculumSubject($subject);
+            $classes[] = [
+                'period_id' => session('current_period'),
+                'section_id'    => $request->section,
+                'curriculum_subject_id' => $subject,
+                'units' => $curriculum_subject->subjectinfo->units,
+                'tfunits' => $curriculum_subject->subjectinfo->tfunits,
+                'loadunits' => $curriculum_subject->subjectinfo->loadunits,
+                'lecunits' => $curriculum_subject->subjectinfo->lecunits,
+                'labunits' => $curriculum_subject->subjectinfo->labunits,
+                'hours' => $curriculum_subject->subjectinfo->hours,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ];
+        }
+
+        Classes::insert($classes);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Selected subjects successfully added!',
+            'alert' => 'alert-success'
+        ], 200);
+    }
+
+    public function sectionclasssubjects(Request $request)
+    {
+        $section_subjects = Classes::with(['curriculumsubject', 'instructor'])->where('section_id', $request->section)->where('period_id', session('current_period'))->get();
+
+        return view('class.return_sectionclasssubjects', compact('section_subjects'));
     }
 
     /**

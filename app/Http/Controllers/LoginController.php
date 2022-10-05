@@ -35,9 +35,11 @@ class LoginController extends Controller
             if (is_null(Auth::user()->setup->period)) {
                 session()->put('current_period', Auth::user()->setup->id);
                 session()->put('periodname', Auth::user()->setup->name);
+                session()->put('periodterm', Auth::user()->setup->term);
             } else {
                 session()->put('current_period', Auth::user()->setup->period->id);
                 session()->put('periodname', Auth::user()->setup->period->name);
+                session()->put('periodterm', Auth::user()->setup->period->term_id);
             }
 
             return redirect()->intended('home');

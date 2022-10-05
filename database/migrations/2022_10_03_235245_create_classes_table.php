@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->unsignedBigInteger('period_id')->index();
             $table->foreign('period_id')->references('id')->on('periods');
             $table->unsignedBigInteger('section_id')->index();
             $table->foreign('section_id')->references('id')->on('sections');
-            $table->unsignedBigInteger('curiculum_subject_id')->nullable()->index();
-            $table->foreign('curiculum_subject_id')->references('id')->on('curriculum_subjects');
+            $table->unsignedBigInteger('curriculum_subject_id')->nullable()->index();
+            $table->foreign('curriculum_subject_id')->references('id')->on('curriculum_subjects');
             $table->float('units')->nullable();
             $table->float('tfunits')->nullable();
             $table->float('loadunits')->nullable();

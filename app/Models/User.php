@@ -121,6 +121,6 @@ class User extends Authenticatable
     {
         $config = Configuration::take(1)->first();
 
-        return $this->hasOne(SetupPeriod::class, 'user_id', 'id')->withDefault(['id' => $config->currentperiod->id ?? '', 'name' => $config->currentperiod->name ?? '']);
+        return $this->hasOne(SetupPeriod::class, 'user_id', 'id')->withDefault(['id' => $config->currentperiod->id ?? '', 'name' => $config->currentperiod->name ?? '', 'term' => $config->currentperiod->term_id ?? '']);
     }
 }
