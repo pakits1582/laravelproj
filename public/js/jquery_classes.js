@@ -189,4 +189,121 @@ $(function(){
         e.preventDefault()
     });
 
+    $(document).on("click","#edit", function(){
+		var class_id = $(".checks:checked").attr("data-classid");
+
+		if($(".checks:checked").length === 0)
+        {
+			showError('Please select atleast one checkbox/subject to edit!');	
+		}else{
+            
+            $.ajax({
+                url: "/classes/"+class_id+"/edit",
+                dataType: 'json',
+                success: function(response){
+                    if(!jQuery.isEmptyObject(response)){
+
+                        $('#delete').prop("disabled", true);
+                        $('#edit').prop("disabled", true);
+                        $('input.checks').prop('disabled', true); 
+                        $('#save_class').prop("disabled", false);
+
+                        $('#subject_code').val(response.data.curriculumsubject.subjectinfo.code);
+                        $('#subject_name').val(response.data.curriculumsubject.subjectinfo.name);
+                        $('#units').val(response.data.units);
+                        $('#loadunits').val(response.data.loadunits);
+                        $('#tfunits').val(response.data.tfunits);
+                        $('#lecunits').val(response.data.lecunits);
+                        $('#labunits').val(response.data.labunits);
+                        $('#hours').val(response.data.hours);
+                        $('#slots').val(response.data.slots);
+                        $('#schedule').val(response.data.schedule.schedule);
+                        $('#instructor').val(response.data.instructor_id).trigger('change');
+                        if (response.datatutorial === 1){ $('#tutorial').prop('checked', true) }
+                        if (response.datadissolved === 1){ $('#dissolved').prop('checked', true) }
+                        if (response.dataf2f === 1){ $('#f2f').prop('checked', true) }
+                    }else{
+                        showError('Oppss! Something went wrong! Can not fetch class subject data!');
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    });
+
+/******************************************************
+*** FUNCTION ONCLICK CANCEL ENABLE/DISABLE BUTTONS  ***
+******************************************************/
+	$(document).on("click","#cancel", function(){
+        //buttons
+        $('#save_class').prop("disabled", true);
+		$('#delete').prop("disabled", true);
+		$('#edit').prop("disabled", true);
+        //form fields
+		$('.clearable').val("");
+		$('input.checks').prop('disabled', false).prop('checked', false);
+		$('#dissolved, #tutorial, #f2f').prop("checked", false);
+		$('.checks').closest('tr').removeClass('selected');
+	});
+
+/**************************************************
+*** FUNCTION CHECK IF SCHEDULE FORMAT IS VALID  ***
+**************************************************/
+    function checkScheduleFormat(schedule){
+        var schedule_format = /\b((1[0-2]|0?[1-9]):([0-5]\d) ([AP]M))-((1[0-2]|0?[1-9]):([0-5]\d) ([AP]M)) (?=.)M?T?W?(?:TH)?F?S?(?:SU)? (?=.)[a-z\d]*([-_.][a-z\d]*)?/;
+        var schedule_error = "";
+        //CHECK SCHEDULE FORMAT
+        if(schedule !== ""){
+            var schedules = schedule.split(',');
+            $.each( schedules, function( key, value ) {
+                if(!schedule_format.test(value)) {
+                    schedule_error += 'Schedule '+value+" is invalid format!</br>";
+                }
+            });
+        }
+        return schedule_error;
+    }
+
+    function checkRoomSchedule(schedule, class_id){
+        if(schedule){
+            $.ajax({
+                url: "/classes/checkroomschedule",
+                type: 'POST',
+                data: ({ 'schedule' : schedule, 'class_id' : class_id}),
+                dataType: 'json',
+                success: function(response){
+                    console.log(response);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    }
+
+/*********************************************************
+*** FUNCTION ON SUBMIT FORM SAVE UPDATE CLASS SUBJECT  ***
+*********************************************************/
+    $(document).on("submit", "#form_classoffering", function(e){
+        var checkedbox = $(".checks:checked");
+
+        if(checkedbox.length == 0){
+			showError('Please select checkbox to be updated!');
+		}else{
+            var postData = $(this).serializeArray();
+            var url = $(this).attr('action');
+            var class_id   = $(".checks:checked").attr("data-classid");
+            var schedule = $("#schedule").val();
+            postData.push({name: "class_id", value: class_id });
+
+            if(checkScheduleFormat(schedule)){
+                showError(checkScheduleFormat(schedule));
+            }else{
+                checkRoomSchedule(schedule, class_id);
+            }
+        }
+        e.preventDefault();
+    });
 });

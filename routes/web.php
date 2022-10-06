@@ -174,12 +174,12 @@ Route::group(['middleware' => ['auth']], function () {
         //     Route::post('/curriculum/storemanagecurriculumsubject', [CurriculumController::class, 'storemanagecurriculumsubject'])->name('curriculum.storemanagecurriculumsubject');
         //     Route::delete('/curriculum/deleteitem/{id}/table/{table}', [CurriculumController::class, 'deleteitem']);
         Route::post('/classes/sectionclasssubjects', [ClassesController::class, 'sectionclasssubjects']);
+        Route::post('/classes/checkroomschedule', [ClassesController::class, 'checkroomschedule']);
         // });
-
-        // Route::post('/curriculum/returncurricula', [CurriculumController::class, 'returncurricula']);
+       
         // Route::get('/curriculum/{program}/curriculum/{curriculum}', [CurriculumController::class, 'viewcurriculum'])->middleware(['readability:curriculum'])->name('curriculum.viewcurriculum');
         Route::get('/classes/{section}/addclassoffering', [ClassesController::class, 'addclassoffering']);
-        Route::resource('classes', ClassesController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+        Route::resource('classes', ClassesController::class)->missing(function (Request $request) {
             return Redirect::route('classes.index');
         });
     });

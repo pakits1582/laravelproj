@@ -23,7 +23,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action=""  role="form" id="form_classoffering">
+                                <form method="POST" action="{{ route('classes.store') }}"  role="form" id="form_classoffering">
                                     @csrf
                                     <div class="form-group">
                                         <div class="row">
@@ -38,7 +38,7 @@
                                             <div class="col-md-2">
                                                 <label for="code"  class="m-0 font-weight-bold text-primary">* Year Level</label>
                                                 <select name="year_level" class="form-control" id="year_level">
-                                                    <option value="">- select year level -</option>
+                                                    <option value="">- select year -</option>
                                                     <option value="1">First Year</option>
                                                     <option value="2">Second Year</option>
                                                     <option value="3">Third Year</option>
@@ -59,31 +59,31 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">* Subject Code</label>
-                                                <input type="text" id="search_subject" class="form-control text-uppercase" value="" placeholder="">
+                                                <input type="text" id="subject_code" class="form-control text-uppercase clearable" value="" placeholder="">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Credited</label>
-                                                <input type="text" name="units" id="units" class="form-control" value="" placeholder="Units">
+                                                <input type="text" name="units" id="units" class="form-control clearable" value="" placeholder="Units">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Tuition</label>
-                                                <input type="text" name="tfunits" id="tfunits" class="form-control" value="" placeholder="Units">
+                                                <input type="text" name="tfunits" id="tfunits" class="form-control clearable" value="" placeholder="Units">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Load</label>
-                                                <input type="text" name="loadunits" id="loadunits" class="form-control" value="" placeholder="Units">
+                                                <input type="text" name="loadunits" id="loadunits" class="form-control clearable" value="" placeholder="Units">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Lecture</label>
-                                                <input type="text" name="lecunits" id="lecunits" class="form-control" value="" placeholder="Units">
+                                                <input type="text" name="lecunits" id="lecunits" class="form-control clearable" value="" placeholder="Units">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Lab</label>
-                                                <input type="text" name="labunits" id="labunits" class="form-control" value="" placeholder="Units">
+                                                <input type="text" name="labunits" id="labunits" class="form-control clearable" value="" placeholder="Units">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Hours</label>
-                                                <input type="text" name="hours" id="hours" class="form-control" value="" placeholder="Hours">
+                                                <input type="text" name="hours" id="hours" class="form-control clearable" value="" placeholder="Hours">
                                             </div>
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Subject Description</label>
-                                                <input type="text" id="subject_name" class="form-control text-uppercase" value="" placeholder="">
+                                                <input type="text" id="subject_name" class="form-control text-uppercase clearable" value="" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@
                                         <label for="term" class="m-0 font-weight-bold text-primary">Instructor</label>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <select name="instructor" class="form-control select" id="instructor">
+                                                <select name="instructor" class="form-control select clearable" id="instructor">
                                                     <option value="">- select instructor -</option>
                                                     @if ($instructors)
                                                         @foreach ($instructors as $instructor)
@@ -141,11 +141,11 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Schedule</label>
-                                                <input type="text" name="schedule" id="schedule" class="form-control text-uppercase" value="" placeholder="(time AM|PM-time AM|PM) (DAYS) (room), (time AM|PM-time AM|PM) (DAYS) (room)">
+                                                <input type="text" name="schedule" id="schedule" class="form-control text-uppercase clearable" value="" placeholder="(time AM|PM-time AM|PM) (DAYS) (room), (time AM|PM-time AM|PM) (DAYS) (room)">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Slots</label>
-                                                <input type="text" name="slots" id="slots" class="form-control" value="" placeholder="">
+                                                <input type="text" name="slots" id="slots" class="form-control clearable" value="" placeholder="">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Search</label>
@@ -154,55 +154,61 @@
                                         </div>
                                     </div>
                                     <div class="form-group mid d-none" id="button_group">
-                                        <button type="submit" class="btn btn-success btn-icon-split" disabled>
+                                        <button type="submit" id="save_class" class="btn btn-success btn-icon-split mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-save"></i>
                                             </span>
                                             <span class="text">Save Changes</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-icon-split actions" disabled>
+                                        <button type="button" id="edit" class="btn btn-primary btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-edit"></i>
                                             </span>
                                             <span class="text">Edit</span>
                                         </button>
-                                        <button type="button" class="btn btn-danger btn-icon-split actions" disabled>
+                                        <button type="button" id="delete" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-trash"></i>
+                                            </span>
+                                            <span class="text">Delete</span>
+                                        </button>
+                                        <button type="button" id="cancel" class="btn btn-danger btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-times"></i>
                                             </span>
                                             <span class="text">Cancel</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-icon-split">
+                                        <button type="button" class="btn btn-primary btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-retweet"></i>
                                             </span>
                                             <span class="text">Generate Code</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-icon-split">
+                                        <button type="button" class="btn btn-primary btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-copy"></i>
                                             </span>
                                             <span class="text">Copy Class</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-icon-split">
+                                        <button type="button" class="btn btn-primary btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-eye"></i>
                                             </span>
                                             <span class="text">Display Enroled</span>
                                         </button>
-                                        <button type="button" class="btn btn-danger btn-icon-split">
+                                        <button type="button" class="btn btn-danger btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-print"></i>
                                             </span>
                                             <span class="text">Print Class</span>
                                         </button>
-                                        <button type="button" class="btn btn-danger btn-icon-split">
+                                        <button type="button" class="btn btn-danger btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-print"></i>
                                             </span>
                                             <span class="text">Print All Class of Course</span>
                                         </button>
-                                        <button type="button" class="btn btn-success btn-icon-split" id="add_subjects">
+                                        <button type="button" class="btn btn-success btn-icon-split mb-2" id="add_subjects">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-plus-square"></i>
                                             </span>

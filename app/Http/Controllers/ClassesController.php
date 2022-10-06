@@ -7,8 +7,8 @@ use App\Models\Term;
 use App\Libs\Helpers;
 use App\Models\Classes;
 use App\Models\Section;
-use App\Models\Instructor;
 use Illuminate\Http\Request;
+use App\Services\ClassesService;
 use App\Services\CurriculumService;
 use App\Services\InstructorService;
 
@@ -16,7 +16,7 @@ class ClassesController extends Controller
 {
     protected $classesService;
 
-    public function __construct(CurriculumService $classesService)
+    public function __construct(ClassesService $classesService)
     {
         $this->classesService = $classesService;
         Helpers::setLoad(['jquery_classes.js', 'select2.full.min.js']);
@@ -37,14 +37,14 @@ class ClassesController extends Controller
     {
         $terms = Term::where('source', Term::SOURCE_INTERNAL)->get();
 
-        $curriculum_subjects = $this->classesService->curriculumSubjects($section->programinfo->curricula()->first()->id, Session('periodterm'), $section->year);
+        $curriculum_subjects = $this->classesService->filterCurriculumSubjects($section->programinfo->curricula()->first()->id, Session('periodterm'), $section->year, $section->id);
 
         return view('class.addclassoffering', compact('terms', 'section', 'curriculum_subjects'));
     }
 
     public function filtercurriculumsubjects(Request $request)
     {
-        $curriculum_subjects = $this->classesService->curriculumSubjects($request->curriculum, $request->term, $request->year_level);
+        $curriculum_subjects = $this->classesService->filterCurriculumSubjects($request->curriculum, $request->term, $request->year_level, $request->section);
 
         return response()->json(['data' => $curriculum_subjects]);
     }
@@ -52,7 +52,8 @@ class ClassesController extends Controller
     public function storeclasssubject(Request $request, CurriculumService $curriculumService)
     {
         $validated = $request->validate([
-            'subjects' => 'required'
+            'subjects' => 'required',
+            'section'  => 'required'
         ]);
 
         $classes = [];
@@ -84,7 +85,7 @@ class ClassesController extends Controller
 
     public function sectionclasssubjects(Request $request)
     {
-        $section_subjects = Classes::with(['curriculumsubject', 'instructor'])->where('section_id', $request->section)->where('period_id', session('current_period'))->get();
+        $section_subjects = $this->classesService->classSubjects($request);
 
         return view('class.return_sectionclasssubjects', compact('section_subjects'));
     }
@@ -118,7 +119,7 @@ class ClassesController extends Controller
      */
     public function show(Classes $classes)
     {
-        //
+
     }
 
     /**
@@ -127,9 +128,11 @@ class ClassesController extends Controller
      * @param  \App\Models\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function edit(Classes $classes)
+    public function edit(Classes $class)
     {
-        //
+        $class->load(['curriculumsubject.subjectinfo', 'instructor', 'schedule']);
+
+        return response()->json(['data' => $class]);
     }
 
     /**
@@ -153,5 +156,20 @@ class ClassesController extends Controller
     public function destroy(Classes $classes)
     {
         //
+    }
+
+    public function checkroomschedule(Request $request)
+    {
+        if($request->schedule !== ''){
+            $schedules = explode(", ", $request->schedule);
+            foreach($schedules as $schedule){
+				$splits = preg_split('/ ([MTWHFSU]+) /', $schedule, -1, PREG_SPLIT_DELIM_CAPTURE);
+				//print_r($splits);
+				$times = $splits[0];
+				$days  = $splits[1];
+				$room  = $splits[2];
+
+            }
+        }
     }
 }
