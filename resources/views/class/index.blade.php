@@ -141,7 +141,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Schedule</label>
-                                                <input type="text" name="schedule" id="schedule" class="form-control text-uppercase clearable" value="" placeholder="(time AM|PM-time AM|PM) (DAYS) (room), (time AM|PM-time AM|PM) (DAYS) (room)">
+                                                <input type="text" name="schedule" id="schedule" class="form-control text-uppercase uppercase clearable" value="" placeholder="(time AM|PM-time AM|PM) (DAYS) (room), (time AM|PM-time AM|PM) (DAYS) (room)">
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Slots</label>

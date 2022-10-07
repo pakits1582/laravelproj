@@ -9,8 +9,10 @@ use App\Models\Classes;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use App\Services\ClassesService;
+use Illuminate\Support\Facades\DB;
 use App\Services\CurriculumService;
 use App\Services\InstructorService;
+use Illuminate\Database\Eloquent\Builder;
 
 class ClassesController extends Controller
 {
@@ -160,16 +162,6 @@ class ClassesController extends Controller
 
     public function checkroomschedule(Request $request)
     {
-        if($request->schedule !== ''){
-            $schedules = explode(", ", $request->schedule);
-            foreach($schedules as $schedule){
-				$splits = preg_split('/ ([MTWHFSU]+) /', $schedule, -1, PREG_SPLIT_DELIM_CAPTURE);
-				//print_r($splits);
-				$times = $splits[0];
-				$days  = $splits[1];
-				$room  = $splits[2];
-
-            }
-        }
+        return $this->classesService->checkRoomSchedule($request);
     }
 }

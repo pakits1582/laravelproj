@@ -33,4 +33,8 @@ class Classes extends Model
     {
         return $this->belongsTo(Schedule::class, 'schedule_id', 'id')->withDefault(['schedule' => '']);
     }
+
+    public function classschedules(){
+        return $this->hasMany(ClassesSchedule::class, 'classes_id', 'id');
+    }
 }

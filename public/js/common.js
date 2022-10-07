@@ -144,6 +144,13 @@ $(function(){
         e.preventDefault();
     });
 
+/*********************************
+**** FORCE INPUT TO UPPERCASE ****
+*********************************/
+	$(document).on("keyup",".uppercase", function(){
+		this.value = this.value.toUpperCase();
+	});
+
 /*****************************************************
 *** FUNCTION TABLE ROW SELECTION TRIGGER CHECKBOX  ***
 *****************************************************/
