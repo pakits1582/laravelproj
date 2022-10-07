@@ -50,7 +50,7 @@ class ClassesService
 
     public function checkConflictRoom($class_id, $room_id, $start_time, $end_time, $day)
     {
-        $query = Classes::with(['curriculumsubject.subjectinfo', 'instructor', 'schedule', 'classschedules'])
+        $query = Classes::with(['sectioninfo', 'curriculumsubject.subjectinfo', 'instructor', 'schedule', 'classschedules'])
                 ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.classes_id')
                 ->leftJoin('rooms', function($join) {
                     $join->on('classes_schedules.room_id', '=', 'rooms.id');
@@ -64,19 +64,16 @@ class ClassesService
                       ->where('classes.dissolved', '!=', 1)
                       ->where('classes.id', '!=', $class_id);
 
-        $result = $query->get();
+        $result = $query->distinct()->get();
 
-        $errors = [];
-
-
-
+        return $result;
 
     }
 
     public function checkRoomSchedule($request)
     {
         $schedule = strtoupper(preg_replace('/\s+/', ' ', trim($request->schedule)));
-        $errors = [];
+        $error = '';
 
         if($schedule !== ''){
             $schedules = explode(", ", $schedule);
@@ -89,24 +86,32 @@ class ClassesService
 
                 $room_info = $this->checkScheduleRoomifExist($room);
                 if(!$room_info){
-                    $errors[] = 'Room <strong>'.$room.'</strong> does not exists!';
+                    $error = 'Room '.$room.' does not exist!';
+                }else{
+                    //check if time is valid
+                    $times    = explode("-", $times);
+                    $timefrom = Carbon::parse($times[0])->format('H:i:s');
+                    $timeto   = Carbon::parse($times[1])->format('H:i:s');
+
+                    if($timefrom >= $timeto){
+                        $error = 'Schedule '.$sched.' TIME FROM is greater than TIME TO!';
+                    }else{
+                        $splitdays = preg_split('/(.[HU]?)/', $days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+                        $conflicts = [];
+                        foreach($splitdays as $day){
+                            $room_conflicts = $this->checkConflictRoom($request->class_id, $room_info->id, $timefrom, $timeto, $day);
+
+                            if(!$room_conflicts->isEmpty())
+                            {
+                                foreach ($room_conflicts as $key => $room_conflict) {
+                                    $conflicts[] = 'Room Conflict: ('.$room_conflict->sectioninfo->code.') ['.$room_conflict->curriculumsubject->subjectinfo->code.']  - '.$room_conflict->schedule->schedule;;
+                                }
+                            }
+                        }
+                        $error = array_unique($conflicts);
+                    }
                 }
-
-                //check if time is valid
-                $times    = explode("-", $times);
-                $timefrom = Carbon::parse($times[0])->format('H:i:s');
-                $timeto   = Carbon::parse($times[1])->format('H:i:s');
-
-                if($timefrom >= $timeto){
-                    $errors[] = 'Schedule <strong>'.$sched.'</strong> FROM is greater than TO!';
-                }
-
-                $splitdays = preg_split('/(.[HU]?)/', $days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
-                foreach($splitdays as $day){
-                    return $this->checkConflictRoom($request->class_id, $room_info->id, $timefrom, $timeto, $day);
-                }
-
-                return $errors;
+                return $error;
             }
         }
     }

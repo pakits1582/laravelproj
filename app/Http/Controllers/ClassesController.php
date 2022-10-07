@@ -162,6 +162,9 @@ class ClassesController extends Controller
 
     public function checkroomschedule(Request $request)
     {
-        return $this->classesService->checkRoomSchedule($request);
+        $return = $this->classesService->checkRoomSchedule($request);
+
+        return response()->json(['error' => $return]);
+
     }
 }

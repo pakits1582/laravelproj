@@ -265,24 +265,7 @@ $(function(){
         }
         return schedule_error;
     }
-
-    function checkRoomSchedule(schedule, class_id){
-        if(schedule){
-            $.ajax({
-                url: "/classes/checkroomschedule",
-                type: 'POST',
-                data: ({ 'schedule' : schedule, 'class_id' : class_id}),
-                dataType: 'json',
-                success: function(response){
-                    console.log(response);
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
-        }
-    }
-
+    
 /*********************************************************
 *** FUNCTION ON SUBMIT FORM SAVE UPDATE CLASS SUBJECT  ***
 *********************************************************/
@@ -301,7 +284,24 @@ $(function(){
             if(checkScheduleFormat(schedule)){
                 showError(checkScheduleFormat(schedule));
             }else{
-                checkRoomSchedule(schedule, class_id);
+                if(schedule){
+                    $.ajax({
+                        url: "/classes/checkroomschedule",
+                        type: 'POST',
+                        data: ({ 'schedule' : schedule, 'class_id' : class_id}),
+                        dataType: 'json',
+                        success: function(response){
+                            if ($.isEmptyObject(response.error) === false) {
+                                showError(response.error);
+                            }else{
+                                console.log('proceed');
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                }                
             }
         }
         e.preventDefault();
