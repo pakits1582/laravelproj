@@ -265,6 +265,65 @@ $(function(){
         }
         return schedule_error;
     }
+
+    function checkConflicts(postData){
+        $.ajax({
+            url: "/classes/checkconflicts",
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                if ($.isEmptyObject(response.error) === false) {
+                    var errors = '<div id="conflicts_table"><table class="table table-sm table-striped table-bordered" style="font-size: 14px;">';
+                        errors += '<thead>';
+                        errors += '<tr>';
+                        errors += '<th class="w100">Conflict</th>';
+                        errors += '<th class="w70">Code</th>';
+                        errors += '<th class="w120">Section</th>';
+                        errors += '<th class="w120">Subcode</th>';
+                        errors += '<th class="w300">Schedule</th>';
+                        errors += '</tr>';
+                        errors += '</thead>';
+                        errors += '<tbody>';
+                    $.each( response.error, function( key, value ) {
+                            errors += '<tr>';
+                            errors += '<td>'+value.conflict_from+'</td>';
+                            errors += '<td>'+value.class_code+'</td>';
+                            errors += '<td>'+value.section_code+'</td>';
+                            errors += '<td>'+value.subject_code+'</td>';
+                            errors += '<td>'+value.schedule+'</td>';
+                            errors += '</tr>';
+                    });
+                    errors += '</body></table></div>';
+
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Conflicts Detected!</div><div class="message">'+errors+'<br>Accept Conflicts?</div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 'auto',
+                        height: 'auto',
+                        modal: true,
+                        buttons: {
+                            'Cancel':function(){
+                                $(this).dialog('close');						
+                            },
+                            'OK':function(){
+                                $(this).dialog('close');
+                                updateCLassSubject(postData);
+                                }//end of ok button	
+                            }//end of buttons
+                        });//end of dialogbox
+                    $(".ui-dialog-titlebar").hide();
+                }else{
+                    console.log(response);
+                    updateCLassSubject(postData);
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
     
 /*********************************************************
 *** FUNCTION ON SUBMIT FORM SAVE UPDATE CLASS SUBJECT  ***
@@ -281,29 +340,92 @@ $(function(){
             var schedule = $("#schedule").val();
             postData.push({name: "class_id", value: class_id });
 
-            if(checkScheduleFormat(schedule)){
-                showError(checkScheduleFormat(schedule));
-            }else{
-                if(schedule){
+            if(schedule){
+                if(checkScheduleFormat(schedule)){
+                    showError(checkScheduleFormat(schedule));
+                }else{
                     $.ajax({
                         url: "/classes/checkroomschedule",
                         type: 'POST',
                         data: ({ 'schedule' : schedule, 'class_id' : class_id}),
                         dataType: 'json',
                         success: function(response){
+                            console.log(response);
                             if ($.isEmptyObject(response.error) === false) {
                                 showError(response.error);
                             }else{
-                                console.log('proceed');
+                                //CHECK CONFLICT SECTION, INSTRUCTOR
+                                checkConflicts(postData);
                             }
                         },
                         error: function (data) {
                             console.log(data);
                         }
                     });
-                }                
+                }
+            }else{
+                updateCLassSubject(postData);
             }
         }
         e.preventDefault();
     });
+
+    function updateCLassSubject(postData)
+    {
+        var class_id   = $(".checks:checked").attr("data-classid");
+
+        if($('#dissolved').is(':checked')){
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Dissolved</div><div class="message">Are you sure you want to dissolved selected subject? <br>The subject/s will be removed from the enrolled subjects and will be subject to reassessment. Continue?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: false,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $("#confirmation").dialog('close');
+                        },
+                        'OK':function(){
+                            $("#confirmation").dialog('close');
+                            saveUpdatedClassSubject(postData, class_id);
+                        }//end of ok button	
+                    }//end of buttons
+                });//end of dialogbox
+                $(".ui-dialog-titlebar").hide();
+            //end of dialogbox
+        }else{
+            saveUpdatedClassSubject(postData, class_id);
+        }
+    }
+
+    function saveUpdatedClassSubject(postData, class_id)
+    {
+        $.ajax({
+            url: "/classes/saveupdatedclasssubject/"+class_id,
+            type: 'post',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons:false
+                });
+                $(".ui-dialog-titlebar").hide();
+            },
+            success: function(data){
+                $("#confirmation").dialog('close');
+                alert('xxxx');
+                console.log(data);
+            },
+            error: function (data) {
+                $("#confirmation").dialog('close');
+                console.log(data);
+            }
+        });//end of ajax updateclass
+    }
 });

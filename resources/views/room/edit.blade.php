@@ -47,8 +47,8 @@
                                         <label for="excludechecking"  class="m-0 font-weight-bold text-primary">Exclude Conflict Checking</label>
                                     </div>
                                     <div class="col-md-5">
-                                        <label for="no"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="excludechecking" value="0" id="no" {{ ($room->excludecehcking == 0) ? 'checked' : '' }}> No </label>
-                                        <label for="yes"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="excludechecking" value="1" id="yes" {{ ($room->excludecehcking == 1) ? 'checked' : '' }}> Yes </label>
+                                        <label for="no"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="excludechecking" value="0" id="no" {{ ($room->excludechecking === 0) ? 'checked' : '' }}> No </label>
+                                        <label for="yes"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="excludechecking" value="1" id="yes" {{ ($room->excludechecking === 1) ? 'checked' : '' }}> Yes </label>
                                     </div>
                                 </div>
                                 @error('source')

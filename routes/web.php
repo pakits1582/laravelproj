@@ -164,17 +164,14 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:classes']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-        //     Route::get('/curriculum/{program}/addnewcurriculum', [CurriculumController::class, 'addnewcurriculum']);
-        //     Route::post('/curriculum/savecurriculum', [CurriculumController::class, 'storecurriculum'])->name('curriculum.savecurriculum');
-        //     Route::post('/curriculum/searchsubject', [CurriculumController::class, 'searchsubject']);
+        
         Route::post('/classes/storeclasssubject', [ClassesController::class, 'storeclasssubject'])->name('classes.storeclasssubject');
-        //     Route::get('/curriculum/{program}', [CurriculumController::class, 'manage'])->name('curriculum.manage');
-        //     Route::get('/curriculum/managecurriculumsubject/{curriculum_subject}', [CurriculumController::class, 'managecurriculumsubject']);
         Route::post('/classes/filtercurriculumsubjects', [ClassesController::class, 'filtercurriculumsubjects']);
-        //     Route::post('/curriculum/storemanagecurriculumsubject', [CurriculumController::class, 'storemanagecurriculumsubject'])->name('curriculum.storemanagecurriculumsubject');
-        //     Route::delete('/curriculum/deleteitem/{id}/table/{table}', [CurriculumController::class, 'deleteitem']);
         Route::post('/classes/sectionclasssubjects', [ClassesController::class, 'sectionclasssubjects']);
         Route::post('/classes/checkroomschedule', [ClassesController::class, 'checkroomschedule']);
+        Route::post('/classes/checkconflicts', [ClassesController::class, 'checkconflicts']);
+        Route::post('/classes/saveupdatedclasssubject/{class}', [ClassesController::class, 'saveupdatedclasssubject']);
+
         // });
        
         // Route::get('/curriculum/{program}/curriculum/{curriculum}', [CurriculumController::class, 'viewcurriculum'])->middleware(['readability:curriculum'])->name('curriculum.viewcurriculum');

@@ -65,9 +65,48 @@ class ClassesService
                       ->where('classes.id', '!=', $class_id);
 
         $result = $query->distinct()->get();
-
+                
         return $result;
 
+    }
+
+    public function checkConflictSection($section_id, $start_time, $end_time, $day, $class_id)
+    {
+        $query = Classes::with(['sectioninfo', 'curriculumsubject.subjectinfo', 'instructor', 'schedule'])
+                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.classes_id')
+                ->where('classes.period_id', session('current_period'))
+                ->where('classes.section_id', $section_id);
+                $query->where(function($query) use($start_time, $end_time){
+                    $query->where('classes_schedules.from_time', '>=', $start_time)->Where('classes_schedules.from_time', '<', $end_time)
+                    ->orwhere('classes_schedules.to_time', '>', $start_time)->Where('classes_schedules.to_time', '<=', $end_time);
+                });
+                $query->where('classes_schedules.day', '=', $day)
+                      ->where('classes.dissolved', '!=', 1)
+                      ->where('classes.id', '!=', $class_id);
+
+        $result = $query->distinct()->get();
+
+                
+        return $result;
+    }
+
+    public function checkConflictFaculty($start_time, $end_time, $day, $class_id, $instructor_id)
+    {
+        $query = Classes::with(['sectioninfo', 'curriculumsubject.subjectinfo', 'instructor', 'schedule'])
+                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.classes_id')
+                ->where('classes.period_id', session('current_period'));
+                $query->where(function($query) use($start_time, $end_time){
+                    $query->where('classes_schedules.from_time', '>=', $start_time)->Where('classes_schedules.from_time', '<', $end_time)
+                    ->orwhere('classes_schedules.to_time', '>', $start_time)->Where('classes_schedules.to_time', '<=', $end_time);
+                });
+                $query->where('classes_schedules.day', '=', $day)
+                    ->where('classes.dissolved', '!=', 1)
+                    ->where('classes.id', '!=', $class_id)
+                    ->where('classes.instructor_id', $instructor_id);
+
+        $result = $query->distinct()->get();
+                
+        return $result;
     }
 
     public function checkRoomSchedule($request)
@@ -86,7 +125,7 @@ class ClassesService
 
                 $room_info = $this->checkScheduleRoomifExist($room);
                 if(!$room_info){
-                    $error = 'Room '.$room.' does not exist!';
+                    $error .= 'Room '.$room.' does not exist!';
                 }else{
                     //check if time is valid
                     $times    = explode("-", $times);
@@ -94,7 +133,7 @@ class ClassesService
                     $timeto   = Carbon::parse($times[1])->format('H:i:s');
 
                     if($timefrom >= $timeto){
-                        $error = 'Schedule '.$sched.' TIME FROM is greater than TIME TO!';
+                        $error .= 'Schedule '.$sched.' TIME FROM is greater than TIME TO!';
                     }else{
                         $splitdays = preg_split('/(.[HU]?)/', $days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
                         $conflicts = [];
@@ -104,16 +143,89 @@ class ClassesService
                             if(!$room_conflicts->isEmpty())
                             {
                                 foreach ($room_conflicts as $key => $room_conflict) {
-                                    $conflicts[] = 'Room Conflict: ('.$room_conflict->sectioninfo->code.') ['.$room_conflict->curriculumsubject->subjectinfo->code.']  - '.$room_conflict->schedule->schedule;;
+                                    $conflicts[] = 'Room Conflict: ('.$room_conflict->sectioninfo->code.') ['.$room_conflict->curriculumsubject->subjectinfo->code.']  - '.$room_conflict->schedule->schedule.'</br>';
                                 }
+                                break;
                             }
                         }
                         $error = array_unique($conflicts);
                     }
                 }
-                return $error;
             }
         }
+        return $error;
+    }
+
+    public function checkConflicts($request)
+    {
+        $allconflicts = [];
+
+        if($request->schedule !== '')
+        {
+            $schedule   = preg_replace('/\s+/', ' ', trim($request->schedule));
+            $schedules = explode(", ", $schedule);
+			foreach($schedules as $sched)
+            {
+				$splits = preg_split('/ ([MTWHFSU]+) /', $sched, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+                $times = $splits[0];
+				$days  = $splits[1];
+				$room  = $splits[2];
+
+				$times = explode("-", $times);
+				$timefrom = Carbon::parse($times[0])->format('H:i:s');
+                $timeto   = Carbon::parse($times[1])->format('H:i:s');
+
+				$splitdays = preg_split('/(.[HU]?)/' ,$days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+                $conflicts = [];
+				foreach($splitdays as $key => $day){
+					//CHECK CONFLICT SECTION
+					$section_conflicts = $this->checkConflictSection($request->section,$timefrom,$timeto,$day,$request->class_id);
+					
+                    if(!$section_conflicts->isEmpty())
+                    {
+                        foreach ($section_conflicts as $key => $section_conflict) {
+                            $conflicts[] = 
+                                        [
+                                            'class_code'   => ($section_conflict->code) ?? '',
+                                            'section_code' => $section_conflict->sectioninfo->code,
+                                            'subject_code' => $section_conflict->curriculumsubject->subjectinfo->code,
+                                            'schedule' => $section_conflict->schedule->schedule,
+                                            'conflict_from' => 'Section'
+                                        ];
+                        }
+                    }
+
+                    if($request->instructor)
+                    {
+                        //CHECK CONFLICT INSTRUCTOR
+                        $faculty_conflicts = $this->checkConflictFaculty($timefrom,$timeto,$day,$request->class_id, $request->instructor);
+                        if(!$faculty_conflicts->isEmpty())
+                        {
+                            foreach ($faculty_conflicts as $key => $faculty_conflict) {
+                                $conflicts[] = 
+                                            [
+                                                'class_code'   => ($faculty_conflict->code) ?? '',
+                                                'section_code' => $faculty_conflict->sectioninfo->code,
+                                                'subject_code' => $faculty_conflict->curriculumsubject->subjectinfo->code,
+                                                'schedule' => $faculty_conflict->schedule->schedule,
+                                                'conflict_from' => 'Faculty'
+                                            ];
+                            }
+                        }
+                    }
+				}//end of split days
+            }
+            $temp = array_unique(array_column($conflicts, 'conflict_from'));
+            $allconflicts = array_intersect_key($conflicts, $temp);
+        }
+        
+        return $allconflicts;
+    }
+
+    public function saveUpdatedClassSubject($class, $request)
+    {
+        
     }
 
 }

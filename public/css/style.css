@@ -122,6 +122,11 @@
 	font-weight:bold;
 }
 
+#conflicts_table{
+	max-height: 200px !important;
+	overflow-y: auto;
+}
+
 .mid{
 	text-align: center !important;
 }

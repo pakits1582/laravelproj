@@ -11,7 +11,22 @@
             <td class="mid">{{ $section_subject->lecunits }}</td>
             <td class="mid">{{ $section_subject->labunits }}</td>
             <td class="mid">{{ $section_subject->hours }}</td>
-            <td></td>
+            @php
+                $faculty = '';
+            @endphp
+            @if ($section_subject->instructor_id)
+                @php
+                    $fname = explode(" ", $section_subject->instructor->first_name);
+                    $acronym = "";
+                    foreach ($fname as $w) {
+                        $acronym .= $w[0];
+                    }
+                    $callname = ($section_subject->instructor->first_name === '(TBA)') ? 'TBA' : $acronym.'. '.$section_subject->instructor->last_name;
+
+                    $faculty = $callname;
+                @endphp
+            @endif
+            <td>{{ $faculty }}</td>
             <td>{{ $section_subject->schedule->schedule }}</td>
             <td>{{ $section_subject->slots }}</td>
         </tr>

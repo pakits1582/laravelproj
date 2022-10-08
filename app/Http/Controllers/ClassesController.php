@@ -119,9 +119,11 @@ class ClassesController extends Controller
      * @param  \App\Models\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function show(Classes $classes)
+    public function show(Classes $class)
     {
+        $class->load(['curriculumsubject.subjectinfo', 'instructor', 'schedule']);
 
+        return response()->json(['data' => $class]);
     }
 
     /**
@@ -166,5 +168,20 @@ class ClassesController extends Controller
 
         return response()->json(['error' => $return]);
 
+    }
+
+    public function checkconflicts(Request $request)
+    {
+        $return = $this->classesService->checkConflicts($request);
+
+        return response()->json(['error' => $return]);
+
+    }
+
+    public function saveupdatedclasssubject(Classes $class, Request $request)
+    {
+        $return = $this->classesService->saveUpdatedClassSubject($class, $request);
+
+        return response()->json(['data' => $return]);
     }
 }
