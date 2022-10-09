@@ -170,7 +170,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/classes/sectionclasssubjects', [ClassesController::class, 'sectionclasssubjects']);
         Route::post('/classes/checkroomschedule', [ClassesController::class, 'checkroomschedule']);
         Route::post('/classes/checkconflicts', [ClassesController::class, 'checkconflicts']);
-        Route::post('/classes/saveupdatedclasssubject/{class}', [ClassesController::class, 'saveupdatedclasssubject']);
+        Route::post('/classes/updateclasssubject/{class}', [ClassesController::class, 'updateclasssubject']);
 
         // });
        

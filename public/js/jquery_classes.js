@@ -402,7 +402,7 @@ $(function(){
     function saveUpdatedClassSubject(postData, class_id)
     {
         $.ajax({
-            url: "/classes/saveupdatedclasssubject/"+class_id,
+            url: "/classes/updateclasssubject/"+class_id,
             type: 'post',
             data: postData,
             dataType: 'json',
@@ -418,8 +418,13 @@ $(function(){
                 $(".ui-dialog-titlebar").hide();
             },
             success: function(data){
+                showSuccess('Class Subject Successfully Updated!');
+                $('#cancel').trigger('click');
+
                 $("#confirmation").dialog('close');
-                alert('xxxx');
+                var section = $("#section").val();
+
+                returnClassSubjects(section)
                 console.log(data);
             },
             error: function (data) {

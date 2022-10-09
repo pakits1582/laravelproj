@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClassesSchedule extends Model
 {
+    protected $fillable = ['classes_id', 'from_time', 'to_time', 'day', 'room_id', 'schedule_id'];
+
     use HasFactory;
 
     public function roominfo()

@@ -5,7 +5,9 @@ namespace App\Services;
 use Carbon\Carbon;
 use App\Models\Room;
 use App\Models\Classes;
+use App\Models\ClassesSchedule;
 use App\Models\CurriculumSubjects;
+use App\Models\Schedule;
 
 class ClassesService
 {
@@ -223,9 +225,60 @@ class ClassesService
         return $allconflicts;
     }
 
-    public function saveUpdatedClassSubject($class, $request)
+    public function updateClassSubject($class, $request)
     {
-        
+        if($request->schedule !== '')
+        {
+            if($request->schedule !== $class->schedule->schedule)
+            {
+                $schedule_info = Schedule::firstOrCreate(['schedule' => $request->schedule], ['schedule' => $request->schedule]);
+
+                $this->deleteClassSchedules($class->id);
+
+                $schedule   = preg_replace('/\s+/', ' ', trim($request->schedule));
+                $schedules = explode(", ", $schedule);
+                foreach($schedules as $sched)
+                {
+                    $splits = preg_split('/ ([MTWHFSU]+) /', $sched, -1, PREG_SPLIT_DELIM_CAPTURE);
+    
+                    $times = $splits[0];
+                    $days  = $splits[1];
+                    $room  = $splits[2];
+    
+                    $times = explode("-", $times);
+                    $timefrom = Carbon::parse($times[0])->format('H:i:s');
+                    $timeto   = Carbon::parse($times[1])->format('H:i:s');
+
+                    $room_info = $this->checkScheduleRoomifExist($room);
+    
+                    $splitdays = preg_split('/(.[HU]?)/' ,$days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+                    $classesSchedules = [];
+                    foreach($splitdays as $key => $day)
+                    {
+                        $classesSchedules[] =  new ClassesSchedule([
+                            'from_time' => $timefrom,
+                            'to_time' => $timeto,
+                            'day' => $day,
+                            'room_id' => $room_info->id,
+                            'schedule_id' => $schedule_info->id
+                        ]);
+                    }//end of split days
+                }
+
+                $class->classschedules()->saveMany($classesSchedules);
+                
+            }
+        }
+
+        $class->update($request->validated()+['schedule_id' => $schedule_info->id]);
+
+        //IF DISSOVED IS EQUAL TO 1, REMOVE ALL STUDENTS ENROLLED IN THE SUBJECT THEN RE-ASSESS
+
+    }
+
+    public function deleteClassSchedules($classes_id)
+    {
+        ClassesSchedule::where('classes_id', $classes_id)->delete();
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateClassRequest;
 use Carbon\Carbon;
 use App\Models\Term;
 use App\Libs\Helpers;
@@ -178,10 +179,11 @@ class ClassesController extends Controller
 
     }
 
-    public function saveupdatedclasssubject(Classes $class, Request $request)
+    public function updateclasssubject(Classes $class, UpdateClassRequest $request)
     {
-        $return = $this->classesService->saveUpdatedClassSubject($class, $request);
+        $return = $this->classesService->UpdateClassSubject($class, $request);
 
-        return response()->json(['data' => $return]);
+        return $return;
+        //return response()->json(['data' => $return]);
     }
 }

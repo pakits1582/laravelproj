@@ -99,7 +99,7 @@
                                         <label for="term" class="m-0 font-weight-bold text-primary">Instructor</label>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <select name="instructor" class="form-control select clearable" id="instructor">
+                                                <select name="instructor_id" class="form-control select clearable" id="instructor">
                                                     <option value="">- select instructor -</option>
                                                     @if ($instructors)
                                                         @foreach ($instructors as $instructor)
