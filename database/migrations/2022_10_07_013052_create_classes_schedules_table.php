@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('classes_schedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('classes_id')->index();
-            $table->foreign('classes_id')->references('id')->on('classes');
+            $table->foreign('classes_id')->references('id')->on('classes')->onDelete('cascade');
             $table->time('from_time')->nullable();
             $table->time('to_time')->nullable();
             $table->string('day')->nullable();

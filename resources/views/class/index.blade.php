@@ -64,26 +64,32 @@
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Credited</label>
                                                 <input type="text" name="units" id="units" class="form-control clearable" value="" placeholder="Units">
+                                                <div id="error_units" class="errors"></div>
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Tuition</label>
                                                 <input type="text" name="tfunits" id="tfunits" class="form-control clearable" value="" placeholder="Units">
+                                                <div id="error_tfunits" class="errors"></div>
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Load</label>
                                                 <input type="text" name="loadunits" id="loadunits" class="form-control clearable" value="" placeholder="Units">
+                                                <div id="error_loadunits" class="errors"></div>
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Lecture</label>
                                                 <input type="text" name="lecunits" id="lecunits" class="form-control clearable" value="" placeholder="Units">
+                                                <div id="error_lecunits" class="errors"></div>
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Lab</label>
                                                 <input type="text" name="labunits" id="labunits" class="form-control clearable" value="" placeholder="Units">
+                                                <div id="error_labunits" class="errors"></div>
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Hours</label>
                                                 <input type="text" name="hours" id="hours" class="form-control clearable" value="" placeholder="Hours">
+                                                <div id="error_hours" class="errors"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -146,6 +152,7 @@
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Slots</label>
                                                 <input type="text" name="slots" id="slots" class="form-control clearable" value="" placeholder="">
+                                                <div id="error_slots" class="errors"></div>
                                             </div>
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Search</label>
@@ -178,7 +185,7 @@
                                             </span>
                                             <span class="text">Cancel</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-icon-split mb-2">
+                                        <button type="button" id="generatecode" class="btn btn-primary btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-retweet"></i>
                                             </span>
@@ -239,8 +246,8 @@
                                         <th class="w120 mid">Subject</th>
                                         <th>Description</th>
                                         <th class="w40 mid">Units</th>
-                                        <th class="w50 mid">Load</th>
                                         <th class="w35 mid">TF</th>
+                                        <th class="w50 mid">Load</th>
                                         <th class="w35 mid">Lec</th>
                                         <th class="w35 mid">Lab</th>
                                         <th class="w35 mid">Hrs</th>

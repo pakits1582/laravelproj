@@ -10,10 +10,9 @@ use App\Models\Classes;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use App\Services\ClassesService;
-use Illuminate\Support\Facades\DB;
 use App\Services\CurriculumService;
 use App\Services\InstructorService;
-use Illuminate\Database\Eloquent\Builder;
+
 
 class ClassesController extends Controller
 {
@@ -52,32 +51,9 @@ class ClassesController extends Controller
         return response()->json(['data' => $curriculum_subjects]);
     }
 
-    public function storeclasssubject(Request $request, CurriculumService $curriculumService)
+    public function store(Request $request, CurriculumService $curriculumService)
     {
-        $validated = $request->validate([
-            'subjects' => 'required',
-            'section'  => 'required'
-        ]);
-
-        $classes = [];
-        foreach ($request->subjects as $key => $subject) {
-            $curriculum_subject = $curriculumService->returnCurriculumSubject($subject);
-            $classes[] = [
-                'period_id' => session('current_period'),
-                'section_id'    => $request->section,
-                'curriculum_subject_id' => $subject,
-                'units' => $curriculum_subject->subjectinfo->units,
-                'tfunits' => $curriculum_subject->subjectinfo->tfunits,
-                'loadunits' => $curriculum_subject->subjectinfo->loadunits,
-                'lecunits' => $curriculum_subject->subjectinfo->lecunits,
-                'labunits' => $curriculum_subject->subjectinfo->labunits,
-                'hours' => $curriculum_subject->subjectinfo->hours,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ];
-        }
-
-        Classes::insert($classes);
+        $this->classesService->storeClassSubject($request, $curriculumService);
 
         return response()->json([
             'success' => true,
@@ -104,17 +80,6 @@ class ClassesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Classes  $classes
@@ -122,9 +87,11 @@ class ClassesController extends Controller
      */
     public function show(Classes $class)
     {
-        $class->load(['curriculumsubject.subjectinfo', 'instructor', 'schedule']);
+        // $class->load(['curriculumsubject.subjectinfo', 'instructor', 'schedule']);
 
-        return response()->json(['data' => $class]);
+        // return response()->json(['data' => $class]);
+
+        return $this->classesService->processSchedule('9:00 AM-10:30 AM TTH ONLINE, 7:30 AM-9:00 AM TTH ONLINE');
     }
 
     /**
@@ -183,7 +150,13 @@ class ClassesController extends Controller
     {
         $return = $this->classesService->UpdateClassSubject($class, $request);
 
-        return $return;
-        //return response()->json(['data' => $return]);
+        return response()->json(['data' => $return]);
+    }
+
+    public function generatecode()
+    {
+        $this->classesService->generateCode();
+
+        return with('Code generated successfully!');
     }
 }

@@ -65,7 +65,7 @@ class InstructorService
 
     public function getInstructor($instructor_id = '')
     {
-        $query = Instructor::with(['collegeinfo', 'deptinfo', 'user', 'educlevel'])->orderBy('last_name')->orderBy('first_name');
+        $query = Instructor::with(['collegeinfo', 'deptinfo', 'educlevel'])->orderBy('last_name')->orderBy('first_name');
 
         if($instructor_id !== '') {
             $query->where('id', $instructor_id);

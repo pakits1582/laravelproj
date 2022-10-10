@@ -5,6 +5,10 @@ $(function(){
 		}
 	});
 
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+    });
+
     $("#instructor, #program_id").select2({
 	    dropdownParent: $("#ui_content3")
 	});
@@ -63,8 +67,10 @@ $(function(){
         var section = $(this).val();
         if(section){
             $("#button_group").removeClass('d-none');
-
             returnClassSubjects(section);
+        }else{
+            $("#button_group").addClass('d-none');
+            $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
         }
         e.preventDefault();
     });
@@ -246,6 +252,9 @@ $(function(){
 		$('input.checks').prop('disabled', false).prop('checked', false);
 		$('#dissolved, #tutorial, #f2f').prop("checked", false);
 		$('.checks').closest('tr').removeClass('selected');
+
+        $('#instructor').val("").trigger('change'); 
+        $('.errors').remove();  
 	});
 
 /**************************************************
@@ -430,7 +439,40 @@ $(function(){
             error: function (data) {
                 $("#confirmation").dialog('close');
                 console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
+                }
             }
         });//end of ajax updateclass
     }
+
+    $(document).on("click","#generatecode", function(){
+		var section   = $("#section").val();
+		
+		$.ajax({
+			url: "/classes/generatecode/",
+			type: 'GET',
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons:false
+                });
+                $(".ui-dialog-titlebar").hide();
+            },
+			success: function(data){
+                console.log(data);
+                
+                $("#confirmation").dialog('close');
+                showSuccess(data);
+                returnClassSubjects(section);
+			}
+		});	
+	});
 });

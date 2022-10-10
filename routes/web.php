@@ -165,16 +165,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:classes']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
         
-        Route::post('/classes/storeclasssubject', [ClassesController::class, 'storeclasssubject'])->name('classes.storeclasssubject');
         Route::post('/classes/filtercurriculumsubjects', [ClassesController::class, 'filtercurriculumsubjects']);
         Route::post('/classes/sectionclasssubjects', [ClassesController::class, 'sectionclasssubjects']);
         Route::post('/classes/checkroomschedule', [ClassesController::class, 'checkroomschedule']);
         Route::post('/classes/checkconflicts', [ClassesController::class, 'checkconflicts']);
         Route::post('/classes/updateclasssubject/{class}', [ClassesController::class, 'updateclasssubject']);
-
+        Route::get('/classes/generatecode', [ClassesController::class, 'generatecode']);
         // });
        
-        // Route::get('/curriculum/{program}/curriculum/{curriculum}', [CurriculumController::class, 'viewcurriculum'])->middleware(['readability:curriculum'])->name('curriculum.viewcurriculum');
         Route::get('/classes/{section}/addclassoffering', [ClassesController::class, 'addclassoffering']);
         Route::resource('classes', ClassesController::class)->missing(function (Request $request) {
             return Redirect::route('classes.index');

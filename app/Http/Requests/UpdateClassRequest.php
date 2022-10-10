@@ -16,6 +16,19 @@ class UpdateClassRequest extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'units.numeric' => 'Must be a number.',
+            'tfunits.numeric' =>  'Must be a number.',
+            'loadunits.numeric' =>  'Must be a number.',
+            'lecunits.numeric' =>  'Must be a number.',
+            'labunits.numeric' =>  'Must be a number.',
+            'hours.numeric' =>  'Must be a number.',
+            'slots.integer' => 'Must be a number.',
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -30,7 +43,7 @@ class UpdateClassRequest extends FormRequest
             'lecunits' =>  'numeric',
             'labunits' =>  'numeric',
             'hours' =>  'numeric',
-            'slots' => 'integer',
+            'slots' => 'sometimes|integer|nullable',
             'tutorial' => [],
             'dissolved' => [],
             'f2f' => [],

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name')->index();
             $table->unsignedBigInteger('dean')->nullable();
             $table->foreign('dean')->references('id')->on('instructors');
+            $table->string('class_code')->index()->nullable();
             $table->timestamps();
         });
     }

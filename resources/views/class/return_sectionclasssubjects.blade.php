@@ -2,7 +2,7 @@
     @foreach ($section_subjects as $section_subject)
         <tr class="label" id="check_{{ $section_subject->id }}">
             <td><input type="checkbox" data-classid="{{ $section_subject->id }}" class="checks" id="check_{{ $section_subject->id }}" /></td>
-            <td></td>
+            <td class="mid font-weight-bold">{{ $section_subject->code }}</td>
             <td>{{ $section_subject->curriculumsubject->subjectinfo->code }}</td>
             <td>{{ $section_subject->curriculumsubject->subjectinfo->name }}</td>
             <td class="mid">{{ $section_subject->units }}</td>
@@ -28,7 +28,7 @@
             @endif
             <td>{{ $faculty }}</td>
             <td>{{ $section_subject->schedule->schedule }}</td>
-            <td>{{ $section_subject->slots }}</td>
+            <td class="mid">{{ $section_subject->slots }}</td>
         </tr>
     @endforeach
 @else

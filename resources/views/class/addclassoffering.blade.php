@@ -25,7 +25,7 @@
                                         @if(Session::has('message'))
                                             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                         @endif
-                                        <form method="POST" action="{{ route('classes.storeclasssubject') }}"  role="form" id="form_addsubject_class_offering">
+                                        <form method="POST" action="{{ route('classes.store') }}"  role="form" id="form_addsubject_class_offering">
                                             @csrf
                                             <div class="form-group">
                                                 <div class="row">

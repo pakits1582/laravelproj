@@ -42,12 +42,14 @@
 	text-align:center;
 	color:#2ecc71;
 	font-size:18px;
+	font-weight: bold;
 }
 .ui_title_error{
 	margin:2%;
 	text-align:center;
 	color:#e74c3c;
 	font-size:18px;
+	font-weight: bold;
 }
 .ui_title_confirm{
 	margin:2%;
@@ -318,3 +320,4 @@
  .select2 {
 	width: 100%!important;
 }
+
