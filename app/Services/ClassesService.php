@@ -237,6 +237,7 @@ class ClassesService
 
             foreach ($schedule_array as $key => $sched) 
             {
+                $conflicts = [];
                 foreach ($sched['days'] as $key => $day) {
                     //CHECK CONFLICT SECTION
 					$section_conflicts = $this->checkConflictSection($request->section, $sched['timefrom'], $sched['timeto'], $day, $request->class_id);
@@ -256,82 +257,26 @@ class ClassesService
 
                     if($request->instructor_id)
                     {
-                        return ['xxxx'];
-                        // //CHECK CONFLICT INSTRUCTOR
-                        // $faculty_conflicts = $this->checkConflictFaculty($timefrom,$timeto,$day,$request->class_id, $request->instructor);
-                        // if(!$faculty_conflicts->isEmpty())
-                        // {
-                        //     foreach ($faculty_conflicts as $key => $faculty_conflict) {
-                        //         $conflicts[] = 
-                        //                     [
-                        //                         'class_code'   => ($faculty_conflict->code) ?? '',
-                        //                         'section_code' => $faculty_conflict->sectioninfo->code,
-                        //                         'subject_code' => $faculty_conflict->curriculumsubject->subjectinfo->code,
-                        //                         'schedule' => $faculty_conflict->schedule->schedule,
-                        //                         'conflict_from' => 'Faculty'
-                        //                     ];
-                        //     }
-                        // }
+                        //CHECK CONFLICT INSTRUCTOR
+                        $faculty_conflicts = $this->checkConflictFaculty($sched['timefrom'], $sched['timeto'], $day, $request->class_id, $request->instructor_id);
+                        if(!$faculty_conflicts->isEmpty())
+                        {
+                            foreach ($faculty_conflicts as $key => $faculty_conflict) {
+                                $conflicts[] = [
+                                    'class_code'   => ($faculty_conflict->code) ?? '',
+                                    'section_code' => $faculty_conflict->sectioninfo->code,
+                                    'subject_code' => $faculty_conflict->curriculumsubject->subjectinfo->code,
+                                    'schedule' => $faculty_conflict->schedule->schedule,
+                                    'conflict_from' => 'Faculty'
+                                ];
+                            }
+                        }
                     }
-                }
-
+                }//end of days
             }
-            // $schedule   = preg_replace('/\s+/', ' ', trim($request->schedule));
-            // $schedules = explode(", ", $schedule);
-			// foreach($schedules as $sched)
-            // {
-			// 	$splits = preg_split('/ ([MTWHFSU]+) /', $sched, -1, PREG_SPLIT_DELIM_CAPTURE);
-
-            //     $times = $splits[0];
-			// 	$days  = $splits[1];
-			// 	$room  = $splits[2];
-
-			// 	$times = explode("-", $times);
-			// 	$timefrom = Carbon::parse($times[0])->format('H:i:s');
-            //     $timeto   = Carbon::parse($times[1])->format('H:i:s');
-
-			// 	$splitdays = preg_split('/(.[HU]?)/' ,$days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
-            //     $conflicts = [];
-			// 	foreach($splitdays as $key => $day){
-			// 		//CHECK CONFLICT SECTION
-			// 		$section_conflicts = $this->checkConflictSection($request->section,$timefrom,$timeto,$day,$request->class_id);
-					
-            //         if(!$section_conflicts->isEmpty())
-            //         {
-            //             foreach ($section_conflicts as $key => $section_conflict) {
-            //                 $conflicts[] = 
-            //                             [
-            //                                 'class_code'   => ($section_conflict->code) ?? '',
-            //                                 'section_code' => $section_conflict->sectioninfo->code,
-            //                                 'subject_code' => $section_conflict->curriculumsubject->subjectinfo->code,
-            //                                 'schedule' => $section_conflict->schedule->schedule,
-            //                                 'conflict_from' => 'Section'
-            //                             ];
-            //             }
-            //         }
-
-            //         if($request->instructor)
-            //         {
-            //             //CHECK CONFLICT INSTRUCTOR
-            //             $faculty_conflicts = $this->checkConflictFaculty($timefrom,$timeto,$day,$request->class_id, $request->instructor);
-            //             if(!$faculty_conflicts->isEmpty())
-            //             {
-            //                 foreach ($faculty_conflicts as $key => $faculty_conflict) {
-            //                     $conflicts[] = 
-            //                                 [
-            //                                     'class_code'   => ($faculty_conflict->code) ?? '',
-            //                                     'section_code' => $faculty_conflict->sectioninfo->code,
-            //                                     'subject_code' => $faculty_conflict->curriculumsubject->subjectinfo->code,
-            //                                     'schedule' => $faculty_conflict->schedule->schedule,
-            //                                     'conflict_from' => 'Faculty'
-            //                                 ];
-            //                 }
-            //             }
-            //         }
-			// 	}//end of split days
-            // }
-            // $temp = array_unique(array_column($conflicts, 'conflict_from'));
-            // $allconflicts = array_intersect_key($conflicts, $temp);
+           
+            $temp = array_unique(array_column($conflicts, 'conflict_from'));
+            $allconflicts = array_intersect_key($conflicts, $temp);
         }
         
         return $allconflicts;
@@ -349,34 +294,22 @@ class ClassesService
 
                 $this->deleteClassSchedules($class->id);
 
-                $schedule   = preg_replace('/\s+/', ' ', trim($request->schedule));
-                $schedules = explode(", ", $schedule);
-                foreach($schedules as $sched)
+                $schedule_array = $this->processSchedule($request->schedule);
+               
+                foreach ($schedule_array as $key => $sched) 
                 {
-                    $splits = preg_split('/ ([MTWHFSU]+) /', $sched, -1, PREG_SPLIT_DELIM_CAPTURE);
-    
-                    $times = $splits[0];
-                    $days  = $splits[1];
-                    $room  = $splits[2];
-    
-                    $times = explode("-", $times);
-                    $timefrom = Carbon::parse($times[0])->format('H:i:s');
-                    $timeto   = Carbon::parse($times[1])->format('H:i:s');
+                    $room_info = $this->checkScheduleRoomifExist($sched['room']);
 
-                    $room_info = $this->checkScheduleRoomifExist($room);
-    
-                    $splitdays = preg_split('/(.[HU]?)/' ,$days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
                     $classesSchedules = [];
-                    foreach($splitdays as $key => $day)
-                    {
+                    foreach ($sched['days'] as $key => $day) {
                         $classesSchedules[] =  new ClassesSchedule([
-                            'from_time' => $timefrom,
-                            'to_time' => $timeto,
-                            'day' => $day,
-                            'room_id' => $room_info->id,
-                            'schedule_id' => $schedule_info->id
-                        ]);
-                    }//end of split days
+                                        'from_time' => $sched['timefrom'],
+                                        'to_time' => $sched['timeto'],
+                                        'day' => $day,
+                                        'room_id' => $room_info->id,
+                                        'schedule_id' => $schedule_info->id
+                                    ]);
+                    }//end of days
                 }
 
                 $class->classschedules()->saveMany($classesSchedules);
