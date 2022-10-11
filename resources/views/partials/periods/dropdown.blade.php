@@ -1,4 +1,4 @@
-<select name="{{ $fieldname ?? 'period' }}" id="{{ $fieldid ?? 'period' }}" class="form-control">
+<select name="{{ $fieldname ?? 'period' }}" id="{{ $fieldid ?? 'period' }}" class="form-control {{ $fieldclass ?? 'period' }}">
     <option value="">- select period -</option>
     @if ($periods)
         @foreach ($periods as $period)

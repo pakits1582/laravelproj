@@ -191,7 +191,7 @@
                                             </span>
                                             <span class="text">Generate Code</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-icon-split mb-2">
+                                        <button type="button" id="copy_class" class="btn btn-primary btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-copy"></i>
                                             </span>

@@ -475,4 +475,117 @@ $(function(){
 			}
 		});	
 	});
+
+    $(document).on("click", "#copy_class", function(e){
+        var section = $("#section").val();
+
+        if(section){
+            $.ajax({url: "/classes/"+section+"/copyclass",success: function(data){
+                    //console.log(data);
+                    $('#ui_content').html(data);
+                    $("#modalll").modal('show');
+                }
+            });	
+        }else{
+            showError('Please select section first!');
+        }
+
+        e.preventDefault();
+    });
+
+    $(document).on("change", ".copyclass_dropdown", function(e){
+        var section = $("#section_copyfrom").val();
+        var period  = $("#period_copyfrom").val();
+
+        if(section && period){
+            $.ajax({
+                url: "/classes/sectionclasssubjects",
+                type: 'POST',
+                data: ({ 'section' : section, 'period' : period}),
+                success: function(response){
+                    var table = '';
+                    if ($.isEmptyObject(response.data) === false) {
+                        $.each( response.data, function( key, value ) {
+                            table += '<tr>';
+                                table += '<td>'+value.sectioninfo.code+'</td>';
+                                table += '<td>'+value.curriculumsubject.subjectinfo.code+'</td>';
+                                table += '<td>'+value.curriculumsubject.subjectinfo.name+'</td>';
+                                table += '<td class="mid">'+value.units+'</td>';
+                                table += '<td class="mid">'+value.tfunits+'</td>';
+                                table += '<td class="mid">'+value.loadunits+'</td>';
+                                table += '<td class="mid">'+value.lecunits+'</td>';
+                                table += '<td class="mid">'+value.labunits+'</td>';
+                                table += '<td class="mid">'+value.hours+'</td>';
+                                var slots = (value.slots !== null) ? value.slots : '';
+                                table += '<td class="mid">'+slots+'</td>';
+                            table += '</tr>';
+                        });
+                    }else{
+                        table = 'tr><td colspan="10" class="mid">No records to be displayed</td></tr>';
+                    }
+                    $("#return_copy_classsubjects").html(table);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+        e.preventDefault();
+    });
+
+    $(document).on("submit","#form_copyclass", function(e){
+        var section_copyfrom = $("#section_copyfrom").val();
+        var period_copyfrom  = $("#period_copyfrom").val();
+
+        var url = $(this).attr('action');
+      	var postData = $(this).serializeArray();
+
+        if(section_copyfrom && period_copyfrom){
+            var section_copyto = $("#section_copyto").val();
+            var period_copyto  = $("#period_copyto").val();
+
+            if(section_copyfrom === section_copyto  && period_copyfrom === period_copyto)
+            {
+                showError('You are trying to copy from the same section where you want to save!');
+            }else{
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: postData,
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                            show: 'fade',
+                            resizable: false,	
+                            width: 350,
+                            height: 'auto',
+                            modal: true,
+                            buttons:false
+                        });
+                        $(".ui-dialog-titlebar").hide();
+                    },
+                    success: function(response){
+                        $("#confirmation").dialog('close');
+                        console.log(response);
+                        if(response.success){
+                            var section = $("#section").val();
+                            showSuccess(response.message);
+                            $("#modalll").modal('hide');
+                            returnClassSubjects(section);
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        var errors = data.responseJSON;
+                        if ($.isEmptyObject(errors) === false) {
+                            showError(errors.message);
+                        }
+                    }
+                });
+            }
+        }else{
+            showError('Please select section and period first!');
+        }
+        e.preventDefault();
+    });
 });

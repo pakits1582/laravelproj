@@ -64,19 +64,14 @@ class ClassesController extends Controller
 
     public function sectionclasssubjects(Request $request)
     {
-        $section_subjects = $this->classesService->classSubjects($request);
+        $section_subjects = $this->classesService->classSubjects($request->section, $request->period ?? session('current_period'));
+        
+        if($request->has('period'))
+        {
+            return response()->json(['data' => $section_subjects]);
+        }
 
         return view('class.return_sectionclasssubjects', compact('section_subjects'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -87,10 +82,6 @@ class ClassesController extends Controller
      */
     public function show(Classes $class)
     {
-        // $class->load(['curriculumsubject.subjectinfo', 'instructor', 'schedule']);
-
-        // return response()->json(['data' => $class]);
-
         return $this->classesService->processSchedule('9:00 AM-10:30 AM TTH ONLINE, 7:30 AM-9:00 AM TTH ONLINE');
     }
 
@@ -158,5 +149,22 @@ class ClassesController extends Controller
         $this->classesService->generateCode();
 
         return with('Code generated successfully!');
+    }
+
+    public function copyclass(Section $section)
+    {
+        $section_subjects = $this->classesService->classSubjects($section->id, session('current_period'));
+
+        $sections = Section::with('programinfo')->where('program_id', $section->programinfo->id)->orderBy('code')->get();
+
+        return view('class.copyclass', compact('section', 'section_subjects', 'sections'));
+    }
+
+    public function storecopyclass(Request $request)
+    {
+        $return = $this->classesService->storeCopyClass($request);
+        
+        return response()->json($return);
+
     }
 }

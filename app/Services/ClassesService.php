@@ -5,6 +5,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use App\Models\Room;
 use App\Models\Classes;
+use App\Models\Section;
 use App\Models\Schedule;
 use App\Models\ClassesSchedule;
 use App\Models\CurriculumSubjects;
@@ -62,9 +63,9 @@ class ClassesService
         Classes::insert($classes);
     }
 
-    public function classSubjects($request)
+    public function classSubjects($section, $period)
     {
-        return Classes::with(['curriculumsubject.subjectinfo', 'instructor', 'schedule'])->where('section_id', $request->section)->where('period_id', session('current_period'))->get();
+        return Classes::with(['sectioninfo','curriculumsubject.subjectinfo', 'instructor', 'schedule'])->where('section_id', $section)->where('period_id', $period)->get();
     }
 
     public function classSubject($class_id)
@@ -311,17 +312,67 @@ class ClassesService
                                     ]);
                     }//end of days
                 }
-
                 $class->classschedules()->saveMany($classesSchedules);
 
                 $data = $request->validated()+['schedule_id' => $schedule_info->id];
             } 
         }
-
         $class->update($data);
 
         //IF DISSOVED IS EQUAL TO 1, REMOVE ALL STUDENTS ENROLLED IN THE SUBJECT THEN RE-ASSESS
 
+    }
+
+    public function storeCopyClass($request)
+    {
+        if($request->section_copyfrom === $request->section_copyto  && $request->period_copyfrom === $request->period_copyto)
+        {
+            return [
+                'success' => false,
+                'message' => 'You are trying to copy from the same section where you want to save!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
+        }else{
+            $section_subjects = $this->classSubjects($request->section_copyfrom, $request->period_copyfrom);
+
+            if(!$section_subjects->isEmpty())
+            {
+                $classes = [];
+                foreach ($section_subjects as $key => $section_subject) {
+                    $classes[] = [
+                        'period_id' => session('current_period'),
+                        'section_id' => $request->section,
+                        'curriculum_subject_id' => $section_subject->curriculumsubject->id,
+                        'units' => $section_subject->units,
+                        'tfunits' => $section_subject->tfunits,
+                        'loadunits' => $section_subject->loadunits,
+                        'lecunits' => $section_subject->lecunits,
+                        'labunits' => $section_subject->labunits,
+                        'hours' => $section_subject->hours,
+                        'slots' => $section_subject->slots,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now()
+                    ];
+                }
+
+                Classes::insert($classes);
+
+                return [
+                    'success' => true,
+                    'message' => 'Section class subjects successfully copied!',
+                    'alert' => 'alert-success',
+                    'status' => 200
+                ];
+            }
+
+            return [
+                    'success' => false,
+                    'message' => 'Section has no class subjects, nothing to copy!',
+                    'alert' => 'alert-danger',
+                    'status' => 401
+                ];
+        }
     }
 
 }
