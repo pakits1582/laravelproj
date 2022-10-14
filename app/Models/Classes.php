@@ -44,6 +44,6 @@ class Classes extends Model
     }
 
     public function classschedules(){
-        return $this->hasMany(ClassesSchedule::class, 'classes_id', 'id');
+        return $this->hasMany(ClassesSchedule::class, 'class_id', 'id');
     }
 }

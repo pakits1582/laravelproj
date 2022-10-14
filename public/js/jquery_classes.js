@@ -5,11 +5,7 @@ $(function(){
 		}
 	});
 
-    $(document).on('select2:open', () => {
-        document.querySelector('.select2-search__field').focus();
-    });
-
-    $("#instructor, #program_id").select2({
+    $("#instructor").select2({
 	    dropdownParent: $("#ui_content3")
 	});
 
@@ -17,29 +13,48 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
+    $(document).on("change", "#program_id", function(e){
+        var program_id = $(this).val();
+
+        if(!program_id)
+        {
+            $("#year_level, #section").val("");
+            $("#button_group").addClass('d-none');
+            $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+        }
+        e.preventDefault();
+    });
+
     $(document).on("change", "#year_level", function(e){
         var program_id = $("#program_id").val();
         var year_level = $("#year_level").val();
 
-        if(program_id && year_level)
+        if(program_id)
         {
-            $.ajax({
-                url: "/sections/getsections",
-                type: 'POST',
-                data: ({ 'program_id' : program_id, 'year_level' : year_level}),
-                dataType: 'json',
-                success: function(response){
-                    //console.log(response);
-                    var sections = '<option value="">- select section -</option>';
-                    $.each(response.data, function(k, v){
-                        sections += '<option value="'+v.id+'">'+v.code+'</option>';       
-                    });
-                    $("#section").html(sections);
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
+            if(year_level)
+            {
+                $.ajax({
+                    url: "/sections/getsections",
+                    type: 'POST',
+                    data: ({ 'program_id' : program_id, 'year_level' : year_level}),
+                    dataType: 'json',
+                    success: function(response){
+                        //console.log(response);
+                        var sections = '<option value="">- select section -</option>';
+                        $.each(response.data, function(k, v){
+                            sections += '<option value="'+v.id+'">'+v.code+'</option>';       
+                        });
+                        $("#section").html(sections);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }else{
+                $("#section").val("");
+                $("#button_group").addClass('d-none');
+                $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+            }
         }else{
             showError('Please select program first!');
             $(this).prop("selectedIndex", 0);
@@ -202,7 +217,6 @@ $(function(){
         {
 			showError('Please select atleast one checkbox/subject to edit!');	
 		}else{
-            
             $.ajax({
                 url: "/classes/"+class_id+"/edit",
                 dataType: 'json',
@@ -575,9 +589,10 @@ $(function(){
                         }
                     },
                     error: function (data) {
+                        $("#confirmation").dialog('close');
                         console.log(data);
                         var errors = data.responseJSON;
-                        if ($.isEmptyObject(errors) === false) {
+                        if ($.isEmptyObject(errors) == false) {
                             showError(errors.message);
                         }
                     }
@@ -585,6 +600,52 @@ $(function(){
             }
         }else{
             showError('Please select section and period first!');
+        }
+        e.preventDefault();
+    });
+
+    $(document).on("click", "#delete", function(e){
+
+        var class_id = $(".checks:checked").attr("data-classid");
+
+		if($(".checks:checked").length === 0)
+        {
+			showError('Please select atleast one checkbox/subject to delete!');	
+		}else{
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">All items related to this class subject will also be deleted. Do you want to continue?<br>You can not undo this process?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: false,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $("#confirmation").dialog('close');
+                            $('#cancel').trigger('click');
+                        },
+                        'OK':function(){
+                            $("#confirmation").dialog('close');
+                            $.ajax({
+                                url: '/classes/'+class_id,
+                                type: 'DELETE',
+                                dataType: 'json',
+                                success: function(data){
+                                    console.log(data);
+                                    
+                                },
+                                error: function (data) {
+                                    console.log(data);
+                                    // var errors = data.responseJSON;
+                                    // if ($.isEmptyObject(errors) == false) {
+                                    //     showError('Something went wrong! Can not perform requested action! '+errors.message);
+                                    // }
+                                }
+                            });
+                        }//end of ok button	
+                     }//end of buttons
+            });//end of dialogbox
+            $(".ui-dialog-titlebar").hide();
         }
         e.preventDefault();
     });

@@ -16,6 +16,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\ConfigurationController;
 
@@ -181,6 +182,27 @@ Route::group(['middleware' => ['auth']], function () {
             return Redirect::route('classes.index');
         });
     });
+
+    Route::group(['middleware' => ['inaccess:enrolments']], function () {
+        // Route::group(['middleware' => ['writeability:curriculum']], function () {
+        
+        // Route::post('/classes/filtercurriculumsubjects', [ClassesController::class, 'filtercurriculumsubjects']);
+        // Route::post('/classes/sectionclasssubjects', [ClassesController::class, 'sectionclasssubjects']);
+        // Route::post('/classes/checkroomschedule', [ClassesController::class, 'checkroomschedule']);
+        // Route::post('/classes/checkconflicts', [ClassesController::class, 'checkconflicts']);
+        // Route::post('/classes/updateclasssubject/{class}', [ClassesController::class, 'updateclasssubject']);
+        // Route::post('/classes/storecopyclass', [ClassesController::class, 'storecopyclass'])->name('classes.storecopyclass');
+        // Route::get('/classes/generatecode', [ClassesController::class, 'generatecode']);
+        // });
+       
+        // Route::get('/classes/{section}/addclassoffering', [ClassesController::class, 'addclassoffering']);
+        // Route::get('/classes/{section}/copyclass', [ClassesController::class, 'copyclass']);
+
+        Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
+            return Redirect::route('enrolments.index');
+        });
+    });
+
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
 });

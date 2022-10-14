@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClassesSchedule extends Model
 {
-    protected $fillable = ['classes_id', 'from_time', 'to_time', 'day', 'room_id', 'schedule_id'];
+    protected $fillable = ['class_id', 'from_time', 'to_time', 'day', 'room_id', 'schedule_id'];
 
     use HasFactory;
 
@@ -18,7 +18,7 @@ class ClassesSchedule extends Model
 
     public function classinfo()
     {
-        return $this->belongsTo(Classes::class, 'classes_id', 'id');
+        return $this->belongsTo(Classes::class, 'class_id', 'id');
     }
 
     public function schedule()

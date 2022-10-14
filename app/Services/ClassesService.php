@@ -9,6 +9,7 @@ use App\Models\Section;
 use App\Models\Schedule;
 use App\Models\ClassesSchedule;
 use App\Models\CurriculumSubjects;
+use App\Models\SectionMonitoring;
 use Illuminate\Support\Facades\DB;
 
 class ClassesService
@@ -35,7 +36,7 @@ class ClassesService
         return $query->get();
     }
 
-    public function storeClassSubject($request, $curriculumService)
+    public function storeClassSubjects($request, $curriculumService)
     {
         $validated = $request->validate([
             'subjects' => 'required',
@@ -47,7 +48,7 @@ class ClassesService
             $curriculum_subject = $curriculumService->returnCurriculumSubject($subject);
             $classes[] = [
                 'period_id' => session('current_period'),
-                'section_id'    => $request->section,
+                'section_id' => $request->section,
                 'curriculum_subject_id' => $subject,
                 'units' => $curriculum_subject->subjectinfo->units,
                 'tfunits' => $curriculum_subject->subjectinfo->tfunits,
@@ -61,6 +62,9 @@ class ClassesService
         }
 
         Classes::insert($classes);
+
+       $this->insertSectionMonitoring($request->section);
+
     }
 
     public function classSubjects($section, $period)
@@ -81,7 +85,7 @@ class ClassesService
     public function checkConflictRoom($class_id, $room_id, $start_time, $end_time, $day)
     {
         $query = Classes::with(['sectioninfo', 'curriculumsubject.subjectinfo', 'instructor', 'schedule', 'classschedules'])
-                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.classes_id')
+                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id')
                 ->leftJoin('rooms', function($join) {
                     $join->on('classes_schedules.room_id', '=', 'rooms.id');
                 });
@@ -100,7 +104,7 @@ class ClassesService
     public function checkConflictSection($section_id, $start_time, $end_time, $day, $class_id)
     {
         $query = Classes::with(['sectioninfo', 'curriculumsubject.subjectinfo', 'instructor', 'schedule'])
-                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.classes_id')
+                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id')
                 ->where('classes.period_id', session('current_period'))
                 ->where('classes.section_id', $section_id);
                 $query->where(function($query) use($start_time, $end_time){
@@ -117,7 +121,7 @@ class ClassesService
     public function checkConflictFaculty($start_time, $end_time, $day, $class_id, $instructor_id)
     {
         $query = Classes::with(['sectioninfo', 'curriculumsubject.subjectinfo', 'instructor', 'schedule'])
-                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.classes_id')
+                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id')
                 ->where('classes.period_id', session('current_period'));
                 $query->where(function($query) use($start_time, $end_time){
                     $query->where('classes_schedules.from_time', '>=', $start_time)->Where('classes_schedules.from_time', '<', $end_time)
@@ -131,9 +135,9 @@ class ClassesService
         return $query->distinct()->get();
     }
 
-    public function deleteClassSchedules($classes_id)
+    public function deleteClassSchedules($class_id)
     {
-        ClassesSchedule::where('classes_id', $classes_id)->delete();
+        ClassesSchedule::where('class_id', $class_id)->delete();
     }
 
     public function generateCode()
@@ -142,7 +146,7 @@ class ClassesService
 
         if(count($classes_withnocode)){
             foreach ($classes_withnocode as $key => $class_withnocode) {
-                $class_code = $class_withnocode->sectioninfo->programinfo->collegeinfo->class_code;
+                $class_code = $class_withnocode->sectioninfo->programinfo->collegeinfo->class_code ?? 'NC';
 
                 $last_code = DB::table('classes')->select(DB::raw('MAX(CAST(SUBSTRING(code, 2, length(code) -1) AS UNSIGNED)) AS lastcode')) ->where('code','like', $class_code.'%')->get()[0];
                 $oldcode = ($last_code->lastcode) ? $last_code->lastcode : 0;
@@ -358,6 +362,8 @@ class ClassesService
 
                 Classes::insert($classes);
 
+                $this->insertSectionMonitoring($request->section);
+
                 return [
                     'success' => true,
                     'message' => 'Section class subjects successfully copied!',
@@ -373,6 +379,41 @@ class ClassesService
                     'status' => 401
                 ];
         }
+    }
+
+    public function insertSectionMonitoring($section_id)
+    {
+        $section = Section::with('programinfo')->findOrFail($section_id);
+
+        if($section)
+        {
+            $arr = [
+                'section_id' => $section->id,
+                'minimum_enrollees' => $section->minenrollee,
+                'period_id' => session('current_period')
+            ];
+
+            SectionMonitoring::firstOrCreate($arr, $arr);
+        }
+    }
+
+    public function deleteClassSubject($class)
+    {
+        if($class->withCount('enrolledStudents')->get() > 0)
+        {
+            return [
+                'success' => false,
+                'message' => 'There are students that are currently enrolled in the class subject. You can not delete selected class subject!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
+        }
+
+		//delete from classes
+		//delete from classes_schedules
+		//delete from enrolled_classes
+		//delete from enrolled_classes_schedules
+		//check if last class in the section, if true delete in section_monitorings
     }
 
 }

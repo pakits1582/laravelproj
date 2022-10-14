@@ -57,10 +57,18 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="term" class="m-0 font-weight-bold text-primary">* Subject Code</label>
-                                                <input type="text" id="subject_code" class="form-control text-uppercase clearable" value="" placeholder="">
+                                            <div class="col-md-4">
+                                                <label for="term" class="m-0 font-weight-bold text-primary">Subject Code</label>
+                                                <input type="text" id="subject_code" class="form-control text-uppercase clearable" readonly value="" placeholder="">
                                             </div>
+                                            <div class="col-md-8">
+                                                <label for="term" class="m-0 font-weight-bold text-primary">Subject Description</label>
+                                                <input type="text" id="subject_name" class="form-control text-uppercase clearable" readonly value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row align-items-center">
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Credited</label>
                                                 <input type="text" name="units" id="units" class="form-control clearable" value="" placeholder="Units">
@@ -91,29 +99,6 @@
                                                 <input type="text" name="hours" id="hours" class="form-control clearable" value="" placeholder="Hours">
                                                 <div id="error_hours" class="errors"></div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label for="term" class="m-0 font-weight-bold text-primary">Subject Description</label>
-                                                <input type="text" id="subject_name" class="form-control text-uppercase clearable" value="" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="term" class="m-0 font-weight-bold text-primary">Instructor</label>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <select name="instructor_id" class="form-control select clearable" id="instructor">
-                                                    <option value="">- select instructor -</option>
-                                                    @if ($instructors)
-                                                        @foreach ($instructors as $instructor)
-                                                            <option value="{{ $instructor->id }}">{{ $instructor->last_name.', '.$instructor->first_name }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>                                            
-                                            </div>
                                             <div class="col-md-1">
                                                 <div class="form-check form-check-solid">
                                                     <input class="form-check-input" id="dissolved" type="checkbox" value="1" name="dissolved" >
@@ -141,10 +126,25 @@
                                             <div class="col-md-1">
                                                 <div class="legend f2f"></div>        
                                             </div>
+                                            {{-- <div class="col-md-1">
+                                                <label for="term" class="m-0 font-weight-bold text-primary">Search</label>
+                                                <input type="text" id="findclass" class="form-control" value="" placeholder="Code">
+                                            </div> --}}
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
+                                            <div class="col-md-5">
+                                                <label for="term" class="m-0 font-weight-bold text-primary">Instructor</label>
+                                                <select name="instructor_id" class="form-control select clearable" id="instructor">
+                                                    <option value="">- select instructor -</option>
+                                                    @if ($instructors)
+                                                        @foreach ($instructors as $instructor)
+                                                            <option value="{{ $instructor->id }}">{{ $instructor->last_name.', '.$instructor->first_name.' '.$instructor->middle_name }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>                                            
+                                            </div>
                                             <div class="col-md-6">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Schedule</label>
                                                 <input type="text" name="schedule" id="schedule" class="form-control text-uppercase uppercase clearable" value="" placeholder="(time AM|PM-time AM|PM) (DAYS) (room), (time AM|PM-time AM|PM) (DAYS) (room)">
@@ -153,10 +153,6 @@
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Slots</label>
                                                 <input type="text" name="slots" id="slots" class="form-control clearable" value="" placeholder="">
                                                 <div id="error_slots" class="errors"></div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <label for="term" class="m-0 font-weight-bold text-primary">Search</label>
-                                                <input type="text" id="findclass" class="form-control" value="" placeholder="Code">
                                             </div>
                                         </div>
                                     </div>

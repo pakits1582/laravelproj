@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title') {{ 'Add New Instructor' }} @endsection
+@section('title') {{ 'Add New Student' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">

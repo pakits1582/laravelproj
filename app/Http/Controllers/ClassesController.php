@@ -53,7 +53,7 @@ class ClassesController extends Controller
 
     public function store(Request $request, CurriculumService $curriculumService)
     {
-        $this->classesService->storeClassSubject($request, $curriculumService);
+        $this->classesService->storeClassSubjects($request, $curriculumService);
 
         return response()->json([
             'success' => true,
@@ -116,9 +116,11 @@ class ClassesController extends Controller
      * @param  \App\Models\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Classes $classes)
+    public function destroy(Classes $class)
     {
-        //
+        $return = $this->classesService->deleteClassSubject($class);
+        
+        return response()->json($return, $return['status'] ?? '');
     }
 
     public function checkroomschedule(Request $request)
@@ -164,7 +166,7 @@ class ClassesController extends Controller
     {
         $return = $this->classesService->storeCopyClass($request);
         
-        return response()->json($return);
+        return response()->json($return,$return['status'] ?? '');
 
     }
 }

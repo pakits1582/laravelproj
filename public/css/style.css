@@ -247,6 +247,10 @@
 	background-color:#f2f2f2 !important;
 }
 
+.currsubadding{
+	height: 300px !important;
+}
+
 .currsubadding option{
 	padding:5px 0px;
 	font-size: 14px !important;

@@ -5,6 +5,10 @@ $(function(){
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+    
+    $("#program_id").select2({
+	    dropdownParent: $("#ui_content2")
+	});
 
     $(document).on("change", "#program_id", function(){
 		var program = $(this).val();

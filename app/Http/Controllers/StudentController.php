@@ -29,7 +29,7 @@ class StudentController extends Controller
     {
         $this->studentService = $studentService;
 
-        Helpers::setLoad(['jquery_student.js']);
+        Helpers::setLoad(['jquery_student.js', 'select2.full.min.js']);
     }
 
     /**
