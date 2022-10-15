@@ -5,12 +5,82 @@ $(function(){
 		}
 	});
 
-    // $("#instructor").select2({
-	//     dropdownParent: $("#ui_content3")
-	// });
+    $("#student").select2({
+	    dropdownParent: $("#ui_content3")
+	});
 
-    // $("#program_id").select2({
-	//     dropdownParent: $("#ui_content2")
-	// });
+    $("#program").select2({
+	    dropdownParent: $("#ui_content2")
+	});
+
+    $(document).on("change","#student", function(e){
+        var student_id = $(this).val();
+
+        
+        e.preventDefault();
+    });
+
+    $(document).on("change","#program", function(e){
+        var program_id = $(this).val();
+
+        if(program_id)
+        {
+            $.ajax({
+                url: "/programs/"+program_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response){
+                    //console.log(response);
+                    var curricula = '<option value="">- select curriculum -</option>';
+                    $.each(response.program.curricula, function(k, v){
+                        curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
+                    });
+                    $("#curriculum").html(curricula);
+                    $("#year_level").val('');
+                    $("#section").html('<option value="">- select section -</option>');
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }else{
+            $("#curriculum").html('<option value="">- select curriculum -</option>');
+            $("#year_level").val('');
+            $("#section").html('<option value="">- select section -</option>');
+        }
+
+        e.preventDefault();
+    });
+
+    $(document).on("change","#year_level", function(e){
+        var program_id = $("#program").val();
+        var year_level = $(this).val();
+
+        if(program_id && year_level)
+        {
+            $.ajax({
+                url: "/sections/getsections",
+                type: 'POST',
+                data: ({ 'program_id' : program_id, 'year_level' : year_level}),
+                dataType: 'json',
+                success: function(response){
+                    console.log(response);
+                    var sections = '<option value="">- select section -</option>';
+                    $.each(response.data, function(k, v){
+                        sections += '<option value="'+v.id+'">'+v.code+'</option>';       
+                    });
+                    $("#section").html(sections);
+                    
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }else{
+            $("#section").html('<option value="">- select section -</option>');
+        }
+
+        e.preventDefault();
+    });
 
 });

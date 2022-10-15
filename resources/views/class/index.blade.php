@@ -23,7 +23,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action="{{ route('classes.store') }}"  role="form" id="form_classoffering">
+                                <form method="POST" action="{{ route('enrolments.store') }}"  role="form" id="form_classoffering">
                                     @csrf
                                     <div class="form-group">
                                         <div class="row">
@@ -68,7 +68,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="row align-items-center">
+                                        <div class="row align-items-end">
                                             <div class="col-md-1">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Credited</label>
                                                 <input type="text" name="units" id="units" class="form-control clearable" value="" placeholder="Units">

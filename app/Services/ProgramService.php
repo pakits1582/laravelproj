@@ -72,7 +72,7 @@ class ProgramService
 
     public function getProgram($program_id = '')
     {
-        $query = Program::with(['level', 'collegeinfo', 'headinfo'])->orderBy('code');
+        $query = Program::with(['level', 'collegeinfo', 'headinfo', 'curricula'])->orderBy('code');
 
         if($program_id !== '') {
             $query->where('id', $program_id);

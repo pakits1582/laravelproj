@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('name_suffix')->nullable();
             $table->tinyInteger('sex')->nullable();
             $table->unsignedBigInteger('program_id')->nullable()->index();
-            $table->foreign('program_id')->references('id')->on('users');
+            $table->foreign('program_id')->references('id')->on('programs');
             $table->tinyInteger('year_level')->nullable();
             $table->unsignedBigInteger('curriculum_id')->nullable()->index();
             $table->foreign('curriculum_id')->references('id')->on('curricula');

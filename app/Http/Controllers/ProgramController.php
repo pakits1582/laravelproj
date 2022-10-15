@@ -78,7 +78,9 @@ class ProgramController extends Controller
      */
     public function show(Program $program)
     {
-        //
+        $program->load('curricula');
+        
+        return response()->json(['program' => $program]);
     }
 
     /**

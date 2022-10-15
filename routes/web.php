@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/students/import', [StudentController::class, 'import'])->name('students.uploadimport');
         // Route::post('/students/export', [StudentController::class, 'export'])->name('students.downloadexcel');
         // Route::post('/students/generatepdf', [StudentController::class, 'generatepdf'])->name('students.generatepdf');
-        Route::resource('students', StudentController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+        Route::resource('students', StudentController::class)->except(['destroy'])->missing(function (Request $request) {
             return Redirect::route('students.index');
         });
     });
@@ -106,7 +106,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/programs/export', [ProgramController::class, 'export'])->name('programs.downloadexcel');
         Route::post('/programs/generatepdf', [ProgramController::class, 'generatepdf'])->name('programs.generatepdf');
         
-        Route::resource('programs', ProgramController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+        Route::resource('programs', ProgramController::class)->except(['destroy'])->missing(function (Request $request) {
             return Redirect::route('programs.index');
         });
     });
@@ -116,7 +116,7 @@ Route::group(['middleware' => ['auth']], function () {
                 return Redirect::route('rooms.index');
             });
 
-    Route::resource('sections', SectionController::class)->except(['show', 'destroy'])->middleware(['inaccess:sections'])
+    Route::resource('sections', SectionController::class)->except(['destroy'])->middleware(['inaccess:sections'])
             ->missing(function (Request $request) {
                 return Redirect::route('sections.index');
             });

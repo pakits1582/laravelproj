@@ -29,8 +29,10 @@ return new class extends Migration
             $table->boolean('new')->default(false);
             $table->boolean('old')->default(false);
             $table->boolean('transferee')->default(false);
+            $table->boolean('cross_enrollee')->default(false);
             $table->boolean('foreigner')->default(false);
             $table->boolean('returnee')->default(false);
+            $table->boolean('probationary')->default(false);
             $table->boolean('acctok')->default(false);
             $table->boolean('assessed')->default(false);
             $table->boolean('validated')->default(false);

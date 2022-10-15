@@ -47,4 +47,9 @@ class Curriculum extends Model
         return $this->hasMany(CurriculumSubjects::class, 'curriculum_id', 'id');
     }
 
+    public function sumSubjectsUnits()
+    {
+        return $this->subjects()->subjectinfo()->sum('units');
+    }
+
 }

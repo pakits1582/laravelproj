@@ -37,14 +37,14 @@ class InstructorsExport implements FromCollection, ShouldAutoSize, WithMapping, 
                         $query->where('idno', 'like', '%'.$input['keyword'].'%');
                     });
         }
-        if(!empty($request['educational_level'])) {
-            $query->where('educational_level_id', $request['educational_level']);
+        if(!empty($input['educational_level'])) {
+            $query->where('educational_level_id', $input['educational_level']);
         }
-        if(!empty($request['college'])) {
-            $query->where('college_id', $request['college']);
+        if(!empty($input['college'])) {
+            $query->where('college_id', $input['college']);
         }
-        if(!empty($request['department'])) {
-            $query->where('department_id', $request['department']);
+        if(!empty($input['department'])) {
+            $query->where('department_id', $input['department']);
         }
 
         return $query->orderBy('last_name')->orderBy('first_name')->get();

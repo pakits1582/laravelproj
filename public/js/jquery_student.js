@@ -6,7 +6,7 @@ $(function(){
 		}
 	});
     
-    $("#program_id").select2({
+    $("#program_id, #program").select2({
 	    dropdownParent: $("#ui_content2")
 	});
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Services\Enrollment\EnrollmentService;
+use App\Services\StudentService;
 use Illuminate\Http\Request;
 
 class EnrollmentController extends Controller
@@ -20,10 +21,15 @@ class EnrollmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, StudentService $studentService)
     {
-        //
-        return view('enrollment.index');
+        //$request->request->add(['status' => 0]);
+
+        $request->query->set('status', 1);
+
+        $students = $studentService->returnStudents($request, true);
+
+        return view('enrollment.index', compact('students'));
     }
 
     /**

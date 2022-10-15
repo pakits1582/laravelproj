@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Libs\Helpers;
+use App\Models\Student;
 use App\Models\Instructor;
 use App\Models\Useraccess;
 use Illuminate\Http\Request;
@@ -15,10 +16,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
-use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
+use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
-use App\Models\Student;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StudentController extends Controller
@@ -108,7 +109,7 @@ class StudentController extends Controller
      * @param  \App\Models\Instructor  $instructor
      * @return \Illuminate\Http\Response
      */
-    public function show(Instructor $instructor)
+    public function show(Student $student)
     {
         //
     }
@@ -119,14 +120,15 @@ class StudentController extends Controller
      * @param  \App\Models\Instructor  $instructor
      * @return \Illuminate\Http\Response
      */
-    public function edit(Instructor $instructor)
+    public function edit(Student $student)
     {
         try {
-            $instructor->load('user');
+            $student->load('user');
 
-            return view('instructor.edit', compact('instructor'));
+            return view('student.edit', compact('student'));
         } catch (ModelNotFoundException $e) {
-            return redirect()->route('instructorindex');
+
+            return redirect()->route('studentindex');
         }
     }
 
@@ -134,61 +136,61 @@ class StudentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Instructor  $instructor
+     * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInstructorRequest $request, Instructor $instructor)
+    public function update(UpdateStudentRequest $request, Student $student)
     {
-        $instructor->user->idno = $request->idno;
-        $instructor->user->save();
+        $student->user->idno = $request->idno;
+        $student->user->save();
 
-        $instructor->update($request->validated());
+        $student->update($request->validated());
 
-        return back()->with(['alert-class' => 'alert-success', 'message' => 'Instructor sucessfully updated!']);
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Student sucessfully updated!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Instructor  $instructor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Instructor $instructor)
-    {
-        //
-    }
+    // /**
+    //  * Remove the specified resource from storage.
+    //  *
+    //  * @param  \App\Models\Instructor  $instructor
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function destroy(Instructor $instructor)
+    // {
+    //     //
+    // }
 
-    public function import(Request $request)
-    {
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
+    // public function import(Request $request)
+    // {
+    //     if ($request->hasFile('file')) {
+    //         $file = $request->file('file');
 
-            try {
-                $import = new InstructorsImport;
-                $import->import($file);
+    //         try {
+    //             $import = new InstructorsImport;
+    //             $import->import($file);
 
-                $errors = $import->failures();
-                return back()->with(['alert-class' => 'alert-success', 'message' => 'Sucessfully imported!', 'errors' => $errors]);
+    //             $errors = $import->failures();
+    //             return back()->with(['alert-class' => 'alert-success', 'message' => 'Sucessfully imported!', 'errors' => $errors]);
     
-            } catch (\Exception $e) {
-                return back()->with(['alert-class' => 'alert-danger', 'message' => 'Something went wrong! Import unsuccessful!']);
-            }
-        }
-    }
+    //         } catch (\Exception $e) {
+    //             return back()->with(['alert-class' => 'alert-danger', 'message' => 'Something went wrong! Import unsuccessful!']);
+    //         }
+    //     }
+    // }
 
-    public function export(Request $request)
-    {
-        $import = new InstructorsExport();
+    // public function export(Request $request)
+    // {
+    //     $import = new InstructorsExport();
         
-        return $import->download('instructors.xlsx');
-    }
+    //     return $import->download('instructors.xlsx');
+    // }
 
-    public function generatepdf(Request $request)
-    {
-        $instructors = $this->instructorService->returnInstructors($request, true);
+    // public function generatepdf(Request $request)
+    // {
+    //     $instructors = $this->instructorService->returnInstructors($request, true);
 
-        $pdf = PDF::loadView('instructor.generatepdf', ['instructors' => $instructors]);
-        return $pdf->stream('instructors.pdf');
-    }
+    //     $pdf = PDF::loadView('instructor.generatepdf', ['instructors' => $instructors]);
+    //     return $pdf->stream('instructors.pdf');
+    // }
 
 }

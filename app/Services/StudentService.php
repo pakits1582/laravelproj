@@ -13,7 +13,7 @@ class StudentService
     //
     public function returnStudents($request, $all = false)
     {
-        $query = Student::with(['program', 'curriculum'])->orderBy('last_name')->orderBy('first_name');
+        $query = Student::with(['program', 'curriculum', 'user'])->orderBy('last_name')->orderBy('first_name');
 
         if($request->has('keyword') && !empty($request->keyword)) {
             $query->where(function($query) use($request){
