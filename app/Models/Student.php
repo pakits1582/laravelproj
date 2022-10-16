@@ -59,7 +59,7 @@ class Student extends Model
 
     public function curriculum()
     {
-        return $this->belongsTo(Curriculum::class);
+        return $this->belongsTo(Curriculum::class)->withDefault(['id' => '', 'curriculum' => '']);
     }
 
     public function program()
