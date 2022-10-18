@@ -16,7 +16,7 @@ return new class() extends Migration
         Schema::create('user_access', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('access', 150)->index();
             $table->string('title', 150)->index();
             $table->string('category', 100);
