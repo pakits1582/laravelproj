@@ -16,7 +16,7 @@ class StudentSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(5000)->create(['utype' => 2])->each(function($user) {
+        User::factory(50000)->create(['utype' => 2])->each(function($user) {
             Student::factory()->create([
                 'user_id' => $user->id,
             ]);
