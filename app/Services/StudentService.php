@@ -60,8 +60,6 @@ class StudentService
 
     public function dropdownSelectSearch($request)
     {
-        $data = [];
-
         if($request->searchTerm)
         {
             $query = Student::with(['program', 'curriculum', 'user'])->orderBy('last_name')->orderBy('first_name');
@@ -80,15 +78,20 @@ class StudentService
 
             $students = $query->limit(20)->get();
 
-           
+            $data = [];
             if(!$students->isEmpty())
             {
                 foreach ($students as $key => $student) {
                     $data[] = ['id' => $student->id, 'text' => '('.$student->user->idno.') '.$student->name];
                 }
             } 
-        }
 
-        return $data;
+            return $data;
+        }
+    }
+
+    public function returnStudentInfo($student_id)
+    {
+        
     }
 }

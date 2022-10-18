@@ -57,7 +57,7 @@
                                                     <div class="form-group">
                                                         <label for="term" class="m-0 font-weight-bold text-primary">* Student</label>
                                                         <select name="student_id" class="form-control select clearable" id="student">
-                                                            <option value="">- select student -</option>
+                                                            <option value="">- search student -</option>
                                                             {{-- @if ($students)
                                                                 @foreach ($students as $student)
                                                                     <option value="{{ $student->id }}">{{ $student->user->idno }} - {{ $student->name }}</option>
