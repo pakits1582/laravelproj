@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Requests\StoreInstructorRequest;
@@ -147,6 +148,13 @@ class StudentController extends Controller
         $student->update($request->validated());
 
         return back()->with(['alert-class' => 'alert-success', 'message' => 'Student sucessfully updated!']);
+    }
+
+    public function dropdownselectsearch(Request $request)
+    {
+        $data = $this->studentService->dropdownSelectSearch($request);
+
+        return response()->json($data);
     }
 
     // /**

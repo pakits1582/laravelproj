@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
+    Route::get('/students/dropdownselectsearch', [StudentController::class, 'dropdownselectsearch']);
     Route::group(['middleware' => ['inaccess:students']], function () {
         // Route::view('/students/import', 'student.import')->name('students.import');
         // Route::post('/students/import', [StudentController::class, 'import'])->name('students.uploadimport');
@@ -203,6 +204,6 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
-
+    Route::get('/students/dropdownselectsearch', [StudentController::class, 'dropdownselectsearch']);
     Route::get('/home', [LoginController::class, 'home'])->name('home');
 });

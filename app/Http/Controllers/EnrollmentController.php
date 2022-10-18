@@ -25,11 +25,12 @@ class EnrollmentController extends Controller
     {
         //$request->request->add(['status' => 0]);
 
-        $request->query->set('status', 1);
+        // $request->query->set('status', 1);
 
-        $students = $studentService->returnStudents($request, true);
+        // $students = $studentService->returnStudents($request);
 
-        return view('enrollment.index', compact('students'));
+        // return view('enrollment.index', compact('students'));
+        return view('enrollment.index');
     }
 
     /**

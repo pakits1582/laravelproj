@@ -20,14 +20,17 @@ $(function(){
                 };
             },
             processResults: function(data) {
+
                 return {
-                  results: $.map(data, function(item) {
-                    return {
-                      text: item.name,
-                      id: item.id
-                    }
-                  })
+                    results: $.map(data, function(item) {
+                        return {
+                        text: item.text,
+                        id: item.id
+                        }
+                    })
                 };
+
+
             },
             cache: true
         }
@@ -40,7 +43,7 @@ $(function(){
     $(document).on("change","#student", function(e){
         var student_id = $(this).val();
 
-        
+        alert(student_id);
         e.preventDefault();
     });
 

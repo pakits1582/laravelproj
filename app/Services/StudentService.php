@@ -57,4 +57,38 @@ class StudentService
 
         return $accesses;
     }
+
+    public function dropdownSelectSearch($request)
+    {
+        $data = [];
+
+        if($request->searchTerm)
+        {
+            $query = Student::with(['program', 'curriculum', 'user'])->orderBy('last_name')->orderBy('first_name');
+
+            if($request->has('searchTerm') && !empty($request->searchTerm)) 
+            {
+                $query->where(function($query) use($request){
+                    $query->where('last_name', 'like', '%'.$request->searchTerm.'%')
+                        ->orWhere('first_name', 'like', '%'.$request->searchTerm.'%')
+                        ->orWhere('middle_name', 'like', '%'.$request->searchTerm.'%')
+                        ->orWhereHas('user', function (Builder $query) use($request) {
+                            $query->where('idno', 'like', '%'.$request->searchTerm.'%');
+                    });
+                });
+            }
+
+            $students = $query->limit(20)->get();
+
+           
+            if(!$students->isEmpty())
+            {
+                foreach ($students as $key => $student) {
+                    $data[] = ['id' => $student->id, 'text' => '('.$student->user->idno.') '.$student->name];
+                }
+            } 
+        }
+
+        return $data;
+    }
 }
