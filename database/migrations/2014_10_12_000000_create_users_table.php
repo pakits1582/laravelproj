@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class() extends Migration
 {
@@ -21,6 +22,14 @@ return new class() extends Migration
             $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
+
+        User::create([
+            'idno' => '19640486',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'utype' => 0,
+            'is_active' => 1,
+        ]);
+        
     }
 
     /**

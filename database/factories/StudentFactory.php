@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,6 +23,7 @@ class StudentFactory extends Factory
         $datetime = $this->faker->dateTimeBetween('-1 month', 'now');
 
         return [
+            'user_id' => User::factory(),
             'last_name' => $this->faker->lastName(),
             'first_name' => $this->faker->firstName(),
             'middle_name' => $this->faker->lastName(),

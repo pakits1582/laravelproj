@@ -325,9 +325,6 @@
                                         @endisset
                                     </div>
                                 </div>
-                                @error('current_period')
-                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                @enderror
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
