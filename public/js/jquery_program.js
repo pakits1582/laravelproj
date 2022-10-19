@@ -43,6 +43,7 @@ $(function(){
                 $("#addlevel_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
                 if(data.success){
                     $('#educational_level_id option:last').before($("<option></option>").attr("value", data.level_id).text(data.level));
+                    $('#addlevel_form')[0].reset();
                 }
             },
             error: function (data) {
