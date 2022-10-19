@@ -40,7 +40,29 @@ $(function(){
     $(document).on("change","#student", function(){
         var student_id = $(this).val();
 
-        alert(student_id);
+        if(student_id){
+            $.ajax({
+                url: "/enrolments/getstudent",
+                type: 'POST',
+                dataType: 'json',
+                data: ({ 'student_id' : student_id }),
+                success: function(response){
+                    console.log(response);
+                    if(response.data.success === false)
+                    {
+                        showError(response.data.message);
+                        $("#student").val(null).trigger('change');
+                    }else{
+                        //CHECK ENROLMENT INFORMATION
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }else{
+            
+        }
     });
 
     $(document).on("change","#program", function(e){
