@@ -6,7 +6,7 @@ $(function(){
 	});
 
     $("#student").select2({
-	    dropdownParent: $("#ui_content3"),
+	    // dropdownParent: $("#ui_content3"),
         minimumInputLength: 2,
         tags: [],
         minimumResultsForSearch: 20, // at least 20 results must be displayed
@@ -20,17 +20,14 @@ $(function(){
                 };
             },
             processResults: function(data) {
-
                 return {
                     results: $.map(data, function(item) {
                         return {
-                        text: item.text,
-                        id: item.id
+                            text: item.text,
+                            id: item.id
                         }
                     })
                 };
-
-
             },
             cache: true
         }
@@ -40,11 +37,10 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
-    $(document).on("change","#student", function(e){
+    $(document).on("change","#student", function(){
         var student_id = $(this).val();
 
         alert(student_id);
-        e.preventDefault();
     });
 
     $(document).on("change","#program", function(e){
