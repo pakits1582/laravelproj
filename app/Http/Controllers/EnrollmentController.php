@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Student;
 use App\Services\Enrollment\EnrollmentService;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
@@ -23,13 +24,6 @@ class EnrollmentController extends Controller
      */
     public function index(Request $request, StudentService $studentService)
     {
-        //$request->request->add(['status' => 0]);
-
-        // $request->query->set('status', 1);
-
-        // $students = $studentService->returnStudents($request);
-
-        // return view('enrollment.index', compact('students'));
         return view('enrollment.index');
     }
 
@@ -97,5 +91,13 @@ class EnrollmentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getstudent(Request $request, StudentService $studentService)
+    {
+        $data = $studentService->returnStudentInfo($request->student_id);
+        
+        return response()->json(['data' => $data]);
+       
     }
 }

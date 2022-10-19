@@ -61,6 +61,7 @@ $(function(){
                 $("#addcurriculum_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
                 if(data.success){
                     $('#curriculum option:last').before($("<option></option>").attr("value", data.id).text(data.curriculum));
+					$('#addcurriculum_form')[0].reset();
                 }
             },
             error: function (data) {

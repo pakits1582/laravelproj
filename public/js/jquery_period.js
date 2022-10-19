@@ -93,6 +93,7 @@ $(function(){
                 $("#addterm_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
                 if(data.success){
                     $('#term option:last').before($("<option></option>").attr("value", data.term_id).attr("data-type", data.type).text(data.term));
+                    $('#addterm_form')[0].reset();
                 }
             },
             error: function (data) {

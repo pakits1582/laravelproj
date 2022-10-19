@@ -92,6 +92,20 @@ class StudentService
 
     public function returnStudentInfo($student_id)
     {
-        
+        $student = Student::with(['program', 'curriculum', 'user'])->where('id', $student_id)->first();
+
+        if($student)
+        {
+            return  [
+                'success' => true,
+                'values' => $student
+            ];
+        }
+
+        return [
+            'success' => false,
+            'message' => 'Please check selection! Student does not exist!',
+            'alert' => 'alert-danger'
+        ];
     }
 }
