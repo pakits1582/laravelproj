@@ -198,6 +198,7 @@ Route::group(['middleware' => ['auth']], function () {
        
         // Route::get('/classes/{section}/addclassoffering', [ClassesController::class, 'addclassoffering']);
         Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
+        Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
 
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
             return Redirect::route('enrolments.index');

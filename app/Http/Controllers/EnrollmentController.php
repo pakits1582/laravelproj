@@ -100,4 +100,11 @@ class EnrollmentController extends Controller
         return response()->json(['data' => $data]);
        
     }
+
+    public function enrolmentinfo(Request $request)
+    {
+        $data = $this->enrollmentService->studentEnrollmentInfo($request->student_id);
+        
+        return response()->json(['data' => $data]);
+    }
 }

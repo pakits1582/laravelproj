@@ -37,6 +37,22 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
+    function enrollmetInfo(student_id)
+    {
+        $.ajax({
+            url: "/enrolments/enrolmentinfo ",
+            type: 'POST',
+            dataType: 'json',
+            data: ({ 'student_id' : student_id }),
+            success: function(response){
+                console.log(response);
+                
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
     $(document).on("change","#student", function(){
         var student_id = $(this).val();
 
@@ -54,6 +70,7 @@ $(function(){
                         $("#student").val(null).trigger('change');
                     }else{
                         //CHECK ENROLMENT INFORMATION
+                        enrollmetInfo(student_id);
                     }
                 },
                 error: function (data) {
@@ -61,7 +78,7 @@ $(function(){
                 }
             });
         }else{
-            
+            $('#form_enrollment')[0].reset();
         }
     });
 
