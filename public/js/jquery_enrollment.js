@@ -37,13 +37,13 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
-    function enrollmetInfo(student_id)
+    function enrollmetInfo(student_id, studentinfo)
     {
         $.ajax({
             url: "/enrolments/enrolmentinfo ",
             type: 'POST',
             dataType: 'json',
-            data: ({ 'student_id' : student_id }),
+            data: ({ 'student_id' : student_id, 'studentinfo' : studentinfo }),
             success: function(response){
                 console.log(response);
                 
@@ -70,7 +70,7 @@ $(function(){
                         $("#student").val(null).trigger('change');
                     }else{
                         //CHECK ENROLMENT INFORMATION
-                        enrollmetInfo(student_id);
+                        enrollmetInfo(student_id, response.data.values);
                     }
                 },
                 error: function (data) {
