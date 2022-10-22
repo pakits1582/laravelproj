@@ -46,13 +46,55 @@ $(function(){
             data: ({ 'student_id' : student_id, 'studentinfo' : studentinfo }),
             success: function(response){
                 console.log(response);
-                
+                if(response.data.enrolled === 1){
+                    showError('Student is already enrolled!');
+                    $("#student").val(null).trigger('change');
+                }else{
+                    if(response.data.probi === 1 || response.data.balance.hasbal === 1){
+                        var message = '<h2>'+response.data.student.last_name+'</h2><ul class="left">';
+						if(response.data.probi === 1){
+							message += '<li>The student was on academic probation in the previous semester enrolled. The student is advised to report to Academic Dean.<p></p></li>';
+						}
+						if(response.data.balance.hasbal === 1){
+							message += '<li>The student has previous balance last semester enrolled. The student is advised to report in Accounting Office.<p>'+response.data.balance.previous_balance.period+'</p><h1 class="nomargin mid" style="color:red">P '+response.data.balance.previous_balance.balance+'</h1></li>';
+						}
+						message += '</ul>';
+
+                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Continue Enrollment?</div><div class="message">'+message+'<p></p>Continue student enrollment?</div>').dialog({
+							show: 'fade',
+							resizable: false,	
+							draggable: true,
+							width: 500,
+							height: 'auto',
+							modal: true,
+							buttons: {
+									'Cancel':function(){
+										$(this).dialog('close');	
+										clearformandtable();
+									},
+									'OK':function(){
+										$(this).dialog('close');	
+										insertenrollment(data.student,data.probi);
+									}	
+								}//end of buttons
+							});//end of dialogbox
+						$(".ui-dialog-titlebar").hide();
+                    }else{
+                        insertStudentEnrollment(studentinfo);
+                    }
+                }
             },
             error: function (data) {
                 console.log(data);
             }
         });
     }
+
+    function insertStudentEnrollment(studentinfo)
+    {
+        alert('insert');
+    }
+
     $(document).on("change","#student", function(){
         var student_id = $(this).val();
 
