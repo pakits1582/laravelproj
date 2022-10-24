@@ -45,7 +45,9 @@ class EnrollmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $this->enrollmentService->insertStudentEnrollment($request->studentinfo);
+        
+        return response()->json(['data' => $data]);
     }
 
     /**

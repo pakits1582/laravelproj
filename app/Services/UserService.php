@@ -131,7 +131,7 @@ class UserService
                 ]);
             }
 
-            return $user->permissions()->saveMany($permissions);;
+            return $user->permissions()->saveMany($permissions);
         }
 
        return [];

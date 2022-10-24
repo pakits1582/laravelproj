@@ -51,7 +51,7 @@ $(function(){
                     $("#student").val(null).trigger('change');
                 }else{
                     if(response.data.probi === 1 || response.data.balance.hasbal === 1){
-                        var message = '<h2>'+response.data.student.last_name+'</h2><ul class="left">';
+                        var message = '<h3>'+response.data.student.last_name+', '+response.data.student.first_name+' '+response.data.student.middle_name+'</h3><ul class="left">';
 						if(response.data.probi === 1){
 							message += '<li>The student was on academic probation in the previous semester enrolled. The student is advised to report to Academic Dean.<p></p></li>';
 						}
@@ -74,13 +74,13 @@ $(function(){
 									},
 									'OK':function(){
 										$(this).dialog('close');	
-										insertenrollment(data.student,data.probi);
+										insertenrollment(response);
 									}	
 								}//end of buttons
 							});//end of dialogbox
 						$(".ui-dialog-titlebar").hide();
                     }else{
-                        insertStudentEnrollment(studentinfo);
+                        insertStudentEnrollment(response);
                     }
                 }
             },
@@ -92,7 +92,26 @@ $(function(){
 
     function insertStudentEnrollment(studentinfo)
     {
-        alert('insert');
+        $.ajax({
+            url: "/enrolments",
+            type: 'POST',
+            dataType: 'json',
+            data: ({ 'studentinfo' : studentinfo }),
+            success: function(response){
+                console.log(response);
+                // if(response.data.success === false)
+                // {
+                //     showError(response.data.message);
+                //     $("#student").val(null).trigger('change');
+                // }else{
+                //     //CHECK ENROLMENT INFORMATION
+                //     enrollmetInfo(student_id, response.data.values);
+                // }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
     }
 
     $(document).on("change","#student", function(){
