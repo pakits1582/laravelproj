@@ -46,41 +46,59 @@ $(function(){
             data: ({ 'student_id' : student_id, 'studentinfo' : studentinfo }),
             success: function(response){
                 console.log(response);
-                if(response.data.enrolled === 1){
-                    showError('Student is already enrolled!');
-                    $("#student").val(null).trigger('change');
-                }else{
-                    if(response.data.probi === 1 || response.data.balance.hasbal === 1){
-                        var message = '<h3>'+response.data.student.last_name+', '+response.data.student.first_name+' '+response.data.student.middle_name+'</h3><ul class="left">';
-						if(response.data.probi === 1){
-							message += '<li>The student was on academic probation in the previous semester enrolled. The student is advised to report to Academic Dean.<p></p></li>';
-						}
-						if(response.data.balance.hasbal === 1){
-							message += '<li>The student has previous balance last semester enrolled. The student is advised to report in Accounting Office.<p>'+response.data.balance.previous_balance.period+'</p><h1 class="nomargin mid" style="color:red">P '+response.data.balance.previous_balance.balance+'</h1></li>';
-						}
-						message += '</ul>';
+                if(response.data.enrollment)
+                {
+                    if(response.data.enrollment.acctok === 0){
+                        //alert(response.data.enrollment.curriculum_id+'-'+response.data.enrollment.year_level);
+                        
+                        //DISPLAY ENROLLMENT
+                        $("#program").val(response.data.enrollment.program_id).trigger('change');
+                        $("#year_level").val(response.data.enrollment.year_level).trigger('change');
 
-                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Continue Enrollment?</div><div class="message">'+message+'<p></p>Continue student enrollment?</div>').dialog({
-							show: 'fade',
-							resizable: false,	
-							draggable: true,
-							width: 500,
-							height: 'auto',
-							modal: true,
-							buttons: {
-									'Cancel':function(){
-										$(this).dialog('close');	
-										clearformandtable();
-									},
-									'OK':function(){
-										$(this).dialog('close');	
-										insertenrollment(response);
-									}	
-								}//end of buttons
-							});//end of dialogbox
-						$(".ui-dialog-titlebar").hide();
+                        //triggerClick('curriculum', response.data.enrollment.curriculum_id);
                     }else{
-                        insertStudentEnrollment(response);
+                        showError('Student is already enrolled!');
+                        $("#student").val(null).trigger('change');
+                    }
+                }else{
+                    //INSERT ENROLLMENT
+                    if(response.data.student.program_id === null)
+                    {
+                        showError('Student has no program. Please update student information!');
+                        $("#student").val(null).trigger('change');
+                        
+                    }else{
+                        if(response.data.probi === 1 || response.data.balance.hasbal === 1){
+                            var message = '<h3>'+response.data.student.last_name+', '+response.data.student.first_name+' '+response.data.student.middle_name+'</h3><ul class="left">';
+                            if(response.data.probi === 1){
+                                message += '<li>The student was on academic probation in the previous semester enrolled. The student is advised to report to Academic Dean.<p></p></li>';
+                            }
+                            if(response.data.balance.hasbal === 1){
+                                message += '<li>The student has previous balance last semester enrolled. The student is advised to report in Accounting Office.<p>'+response.data.balance.previous_balance.period+'</p><h1 class="nomargin mid" style="color:red">P '+response.data.balance.previous_balance.balance+'</h1></li>';
+                            }
+                            message += '</ul>';
+                    
+                            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Continue Enrollment?</div><div class="message">'+message+'<p></p>Continue student enrollment?</div>').dialog({
+                                show: 'fade',
+                                resizable: false,	
+                                draggable: true,
+                                width: 500,
+                                height: 'auto',
+                                modal: true,
+                                buttons: {
+                                        'Cancel':function(){
+                                            $(this).dialog('close');	
+                                        },
+                                        'OK':function(){
+                                            $(this).dialog('close');	
+                                            insertStudentEnrollment(response);
+                                        }	
+                                    }//end of buttons
+                                });//end of dialogbox
+                            $(".ui-dialog-titlebar").hide();
+                        }else{
+                            insertStudentEnrollment(response);
+                        }
                     }
                 }
             },
@@ -99,14 +117,7 @@ $(function(){
             data: ({ 'studentinfo' : studentinfo }),
             success: function(response){
                 console.log(response);
-                // if(response.data.success === false)
-                // {
-                //     showError(response.data.message);
-                //     $("#student").val(null).trigger('change');
-                // }else{
-                //     //CHECK ENROLMENT INFORMATION
-                //     enrollmetInfo(student_id, response.data.values);
-                // }
+                
             },
             error: function (data) {
                 console.log(data);
@@ -144,7 +155,7 @@ $(function(){
     });
 
     $(document).on("change","#program", function(e){
-        var program_id = $(this).val();
+        var program_id = $("#program").val();
 
         if(program_id)
         {
@@ -159,8 +170,6 @@ $(function(){
                         curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
                     });
                     $("#curriculum").html(curricula);
-                    $("#year_level").val('');
-                    $("#section").html('<option value="">- select section -</option>');
                 },
                 error: function (data) {
                     console.log(data);
@@ -177,7 +186,7 @@ $(function(){
 
     $(document).on("change","#year_level", function(e){
         var program_id = $("#program").val();
-        var year_level = $(this).val();
+        var year_level = $("#year_level").val();
 
         if(program_id && year_level)
         {

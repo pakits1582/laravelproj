@@ -92,7 +92,7 @@ class StudentService
 
     public function returnStudentInfo($student_id)
     {
-        $student = Student::with(['program', 'curriculum', 'user'])->where('id', $student_id)->first();
+        $student = Student::with(['program', 'curriculum', 'user', 'program.curricula'])->where('id', $student_id)->first();
 
         if($student)
         {
