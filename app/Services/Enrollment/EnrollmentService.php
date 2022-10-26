@@ -2,11 +2,12 @@
 
 namespace App\Services\Enrollment;
 
-use App\Models\Enrollment;
 use App\Models\Term;
+use App\Libs\Helpers;
+use App\Models\Enrollment;
 use App\Services\CurriculumService;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use function PHPUnit\Framework\returnSelf;
 
 class EnrollmentService
@@ -24,11 +25,11 @@ class EnrollmentService
         $last_enrollment = $this->studentLastEnrollment($student_id);
         
         if($last_enrollment !== false)
-        {
+        // {
             $data['probi'] = $this->checkIfStudentIsOnProbation($student_id, '$last_enrollment->period_id');
             $data['balance'] = $this->checkIfstudentHasAccountBalance($student_id, '$last_enrollment->period_id');
             
-        }
+        //}
         
         $data['allowed_units'] = $this->studentEnrollmentUnitsAllowed($studentinfo['curriculum_id'], session('periodterm'), $studentinfo['year_level'], $data['probi']);
 
@@ -74,8 +75,8 @@ class EnrollmentService
     {
         $data = [];
 
-        // $data['hasbal'] = 1;
-        // $data['previous_balance'] = ['period' => 'First Semester, 2021-2022', 'balance' => 5000];
+        $data['hasbal'] = 1;
+        $data['previous_balance'] = ['period' => 'First Semester, 2021-2022', 'balance' => 5000];
 
         return $data;
     }
@@ -115,28 +116,52 @@ class EnrollmentService
     {
         $student = $studentinfo['data'];
 
-        if($this->studentAllEnrollments($student['student']['id']) === false){
-            $isnew = 1;
-        }else{
-            $isOld = 1;
+        if($student['balance'])
+        {
+            $user_permissions = Auth::user()->permissions;
+            
+            if($user_permissions)
+            {
+                if(Helpers::is_column_in_array('can_withbalance', 'permission', $user_permissions->toArray())){
+                    return 'insert mo!';
+                }
+            }
+
+            return [
+                'success' => false,
+                'message' => 'Your account doest not have a permission to enroll student with account balance!',
+                'alert' => 'alert-danger'
+            ];
         }
 
-        // $allowed_units = $this->studentEnrollmentUnitsAllowed($student['student']['curriculum_id'], session('periodterm'), $student['student']['year_level'], $student['probi']);
-        $year_level = $this->studentYearLevel($student['student']['year_level'], $student['student']['program']['years'], $student['probi'], $isnew, session('periodterm'));
+        // if($this->studentAllEnrollments($student['student']['id']) === false){
+        //     $isnew = 1;
+        // }else{
+        //     $isOld = 1;
+        // }
 
-        $data = [
-            'period_id' => session('current_period'),
-            'student_id' => $student['student']['id'],
-            'program_id' => $student['student']['program_id'],
-            'curriculum_id' => $student['student']['curriculum_id'],
-            'year_level' => $year_level,
-            'new' => $isnew ?? 0,
-            'old' => $isOld ?? 0,
-            'user_id' => Auth::user()->id
-        ];
+        // //$allowed_units = $this->studentEnrollmentUnitsAllowed($student['student']['curriculum_id'], session('periodterm'), $student['student']['year_level'], $student['probi']);
+        // $year_level = $this->studentYearLevel($student['student']['year_level'], $student['student']['program']['years'], $student['probi'], $isnew, session('periodterm'));
 
-        return Enrollment::insert($data);
+        // $data = [
+        //     'period_id' => session('current_period'),
+        //     'student_id' => $student['student']['id'],
+        //     'program_id' => $student['student']['program_id'],
+        //     'curriculum_id' => $student['student']['curriculum_id'],
+        //     'year_level' => $year_level,
+        //     'new' => $isnew ?? 0,
+        //     'old' => $isOld ?? 0,
+        //     'probationary' => $student['probi'],
+        //     'user_id' => Auth::user()->id
+        // ];
 
+        // $enrollment = Enrollment::firstOrCreate(['period_id' => session('current_period'), 'student_id' => $student['student']['id']], $data);
+        // $data['id'] = $enrollment->id;
+
+        // $studentinfo['data']['enrollment'] = $data;
+
+        // return $studentinfo;
+        
     }
 
 }

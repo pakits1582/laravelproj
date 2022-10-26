@@ -47,7 +47,7 @@ class EnrollmentController extends Controller
     {
         $data = $this->enrollmentService->insertStudentEnrollment($request->studentinfo);
         
-        return response()->json(['data' => $data]);
+        return response()->json($data);
     }
 
     /**

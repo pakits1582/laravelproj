@@ -55,7 +55,7 @@ class CollegeController extends Controller
      */
     public function store(CollegeFormRequest $request)
     {
-        $insert = College::firstOrCreate(['code' => $request->code, 'name' => $request->name], $request->validated());
+        $insert = College::firstOrCreate(['code' => $request->code, 'name' => $request->name, 'class_code' => $request->class_code], $request->validated());
 
         if ($insert->wasRecentlyCreated) {
             return back()->with(['alert-class' => 'alert-success', 'message' => 'College sucessfully added!']);

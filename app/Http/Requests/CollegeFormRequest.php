@@ -26,6 +26,8 @@ class CollegeFormRequest extends FormRequest
         return [
             'code' => 'required',
             'name' => 'required',
+            'dean' => '',
+            'class_code' => 'required|alpha|min:1|max:2|unique:colleges,class_code',
         ];
     }
 }

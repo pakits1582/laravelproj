@@ -20,23 +20,23 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
-                                    <label for="code">College Code</label>
+                                    <label for="code" class="m-0 font-weight-bold text-primary">* Code</label>
                                     <input type="text" name="code" placeholder="" class="form-control text-uppercase" value="{{ $college->code }}">
                                     @error('code')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">College Name</label>
+                                    <label for="name" class="m-0 font-weight-bold text-primary">* Name</label>
                                     <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ $college->name }}">
                                     @error('name')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">College Dean</label>
+                                    <label for="username" class="m-0 font-weight-bold text-primary">Dean</label>
                                     <select name="dean" class="form-control">
-                                        <option value="">- select college dean -</option>
+                                        <option value="">- select dean -</option>
                                         @if ($instructors)
                                             @foreach ($instructors as $instructor)
                                                 <option value="{{ $instructor->id }}" {{ ($college->dean == $instructor->id) ? 'selected' : '' }}>{{ $instructor->last_name.', '.$instructor->first_name.' '.$instructor->middle_name }}</option>
@@ -44,6 +44,13 @@
                                         @endif
                                     </select>    
                                     @error('dean')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="class_code" class="m-0 font-weight-bold text-primary">* Class Code</label>
+                                    <input type="text" name="class_code" placeholder="Must be unique single character, to be used in class offering" class="form-control text-uppercase" value="{{ $college->class_code }}">
+                                    @error('class_code')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
                                 </div>

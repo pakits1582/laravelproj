@@ -45,8 +45,8 @@ class UpdatePeriodRequest extends FormRequest
                                                                                 ->where('year', $this->year)
             )->ignore($this->period->id)],
             'year' => ['required', Rule::unique('periods')->where(fn ($query) => $query
-            ->where('code', $this->code)
-            ->where('term_id', $this->term_id)
+                                                                                ->where('code', $this->code)
+                                                                                ->where('term_id', $this->term_id)
             )->ignore($this->period->id)],
             'name' => ['required'],
             'class_start' => ['required', 'date'],

@@ -10,7 +10,7 @@ class College extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'code', 'dean'];
+    protected $fillable = ['name', 'code', 'dean', 'class_code'];
 
     public function code(): Attribute
     {

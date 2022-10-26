@@ -37,6 +37,45 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
+    function displayEnrollment(response)
+    {
+        if(response.data)
+        {
+            //DISPLAY ENROLLMENT
+            $("#program").val(response.data.enrollment.program_id).trigger('change.select2');
+
+            var curricula = '<option value="">- select curriculum -</option>';
+            $.each(response.data.student.program.curricula, function(k, v){
+                curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
+            });
+            $("#curriculum").html(curricula).val(response.data.enrollment.curriculum_id);
+            $("#year_level").val(response.data.enrollment.year_level).trigger('change');
+            $("#enrollment_id").val(response.data.enrollment.id);
+            $("#units_allowed").val(response.data.allowed_units);
+
+            $("#educational_level").val(response.data.student.program.level.code);
+            $("#college").val(response.data.student.program.collegeinfo.code);
+
+            $("#new").prop("checked", (response.data.enrollment.new === 1) ? true : false);
+            $("#old").prop("checked", (response.data.enrollment.old === 1) ? true : false);
+            $("#returnee").prop("checked", (response.data.enrollment.returnee === 1) ? true : false);
+            $("#transferee").prop("checked", (response.data.enrollment.transferee === 1) ? true : false);      
+            $("#cross").prop("checked", (response.data.enrollment.cross_enrollee === 1) ? true : false);
+            $("#foreigner").prop("checked", (response.data.enrollment.foreigner === 1) ? true : false);      
+            $("#probationary").prop("checked", (response.data.enrollment.probationary === 1) ? true : false);  
+        }
+    }
+
+    function studentEnrolledSubjects(enrollment_id)
+    {
+
+    }
+
+    function enrollmentScheduleTable(enrollment_id)
+    {
+        
+    }
+
     function enrollmetInfo(student_id, studentinfo)
     {
         $.ajax({
@@ -48,14 +87,9 @@ $(function(){
                 console.log(response);
                 if(response.data.enrollment)
                 {
-                    if(response.data.enrollment.acctok === 0){
-                        //alert(response.data.enrollment.curriculum_id+'-'+response.data.enrollment.year_level);
-                        
-                        //DISPLAY ENROLLMENT
-                        $("#program").val(response.data.enrollment.program_id).trigger('change');
-                        $("#year_level").val(response.data.enrollment.year_level).trigger('change');
-
-                        //triggerClick('curriculum', response.data.enrollment.curriculum_id);
+                    if(response.data.enrollment.acctok === 0)
+                    {
+                        displayEnrollment(response);
                     }else{
                         showError('Student is already enrolled!');
                         $("#student").val(null).trigger('change');
@@ -117,7 +151,7 @@ $(function(){
             data: ({ 'studentinfo' : studentinfo }),
             success: function(response){
                 console.log(response);
-                
+                displayEnrollment(response);
             },
             error: function (data) {
                 console.log(data);
@@ -170,6 +204,8 @@ $(function(){
                         curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
                     });
                     $("#curriculum").html(curricula);
+                    $("#year_level").val('');
+                    $("#section").html('<option value="">- select section -</option>');
                 },
                 error: function (data) {
                     console.log(data);

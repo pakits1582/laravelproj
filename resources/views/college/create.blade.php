@@ -20,19 +20,19 @@
                         <div class="form-group">
                           <label for="code" class="m-0 font-weight-bold text-primary">* Code</label>
                           <input type="text" name="code" placeholder="" class="form-control text-uppercase" value="{{ old('code') }}">
-                        @error('code')
-                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                        @enderror
-                        </div>
+                            @error('code')
+                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                            @enderror
+                            </div>
                         <div class="form-group">
                             <label for="name" class="m-0 font-weight-bold text-primary">* Name</label>
                             <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ old('name') }}">
-                        @error('name')
-                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                        @enderror
+                            @error('name')
+                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="form-group">
-                            <label for="dean">Dean</label>
+                            <label for="dean" class="m-0 font-weight-bold text-primary">Dean</label>
                             <select name="dean" class="form-control">
                                 <option value="">- select dean -</option>
                                 @if ($instructors)
@@ -41,11 +41,17 @@
                                     @endforeach
                                 @endif
                             </select>
-                        @error('dean')
-                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                        @enderror
+                            @error('dean')
+                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                            @enderror
                         </div>
-                        
+                        <div class="form-group">
+                            <label for="class_code" class="m-0 font-weight-bold text-primary">* Class Code</label>
+                            <input type="text" name="class_code" placeholder="Must be unique single character, to be used in class offering" class="form-control text-uppercase" value="{{ old('class_code') }}">
+                            @error('class_code')
+                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                            @enderror
+                        </div>
                         <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm"> Save College  </button>
                       </form>
                     </div>
