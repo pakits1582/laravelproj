@@ -109,4 +109,11 @@ class EnrollmentController extends Controller
         
         return response()->json(['data' => $data]);
     }
+
+    public function checksectionslot(Request $request)
+    {
+        $data = $this->enrollmentService->checkSectionSlot($request->section_id);
+        
+        return response()->json(['data' => $data]);
+    }
 }

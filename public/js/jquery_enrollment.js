@@ -49,7 +49,10 @@ $(function(){
                 curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
             });
             $("#curriculum").html(curricula).val(response.data.enrollment.curriculum_id);
-            $("#year_level").val(response.data.enrollment.year_level).trigger('change');
+            $("#year_level").val(response.data.enrollment.year_level);
+
+            getSections(response.data.enrollment.program_id, response.data.enrollment.year_level, response.data.enrollment.section_id);
+
             $("#enrollment_id").val(response.data.enrollment.id);
             $("#units_allowed").val(response.data.allowed_units);
 
@@ -62,7 +65,12 @@ $(function(){
             $("#transferee").prop("checked", (response.data.enrollment.transferee === 1) ? true : false);      
             $("#cross").prop("checked", (response.data.enrollment.cross_enrollee === 1) ? true : false);
             $("#foreigner").prop("checked", (response.data.enrollment.foreigner === 1) ? true : false);      
-            $("#probationary").prop("checked", (response.data.enrollment.probationary === 1) ? true : false);  
+            $("#probationary").prop("checked", (response.data.enrollment.probationary === 1) ? true : false); 
+            
+            $(".actions").prop("disabled", false);
+        }else{
+            $(".actions").prop("disabled", true);
+            $('#form_enrollment')[0].reset();
         }
     }
 
@@ -138,6 +146,11 @@ $(function(){
             },
             error: function (data) {
                 console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#student").val(null).trigger('change');
+                }
             }
         });
     }
@@ -151,10 +164,20 @@ $(function(){
             data: ({ 'studentinfo' : studentinfo }),
             success: function(response){
                 console.log(response);
-                displayEnrollment(response);
+                if(response.success === false){
+                    showError(response.message);
+                    $("#student").val(null).trigger('change');
+                }else{
+                    displayEnrollment(response);
+                }
             },
             error: function (data) {
                 console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#student").val(null).trigger('change');
+                }
             }
         });
     }
@@ -181,6 +204,11 @@ $(function(){
                 },
                 error: function (data) {
                     console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) {
+                        showError('Something went wrong! Can not perform requested action!');
+                        $("#student").val(null).trigger('change');
+                    }
                 }
             });
         }else{
@@ -209,6 +237,11 @@ $(function(){
                 },
                 error: function (data) {
                     console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) {
+                        showError('Something went wrong! Can not perform requested action!');
+                        $("#student").val(null).trigger('change');
+                    }
                 }
             });
         }else{
@@ -220,34 +253,89 @@ $(function(){
         e.preventDefault();
     });
 
+    function getSections(program_id, year_level, selected_value)
+    {
+        $.ajax({
+            url: "/sections/getsections",
+            type: 'POST',
+            data: ({ 'program_id' : program_id, 'year_level' : year_level }),
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                var sections = '<option value="">- select section -</option>';
+                $.each(response.data, function(k, v){
+                    sections += '<option value="'+v.id+'"';
+                    sections += (selected_value === v.id) ? 'selected' : ''; 
+                    sections += '>'+v.code+'</option>';       
+                });
+
+                $("#section").html(sections).val(selected_value);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#student").val(null).trigger('change');
+                }
+            }
+        });
+    }
+
+    function unitsAllowed()
+    {
+        var curriculum_id = $("#curriculum").val();
+        
+    }
+
     $(document).on("change","#year_level", function(e){
         var program_id = $("#program").val();
         var year_level = $("#year_level").val();
 
         if(program_id && year_level)
         {
-            $.ajax({
-                url: "/sections/getsections",
-                type: 'POST',
-                data: ({ 'program_id' : program_id, 'year_level' : year_level}),
-                dataType: 'json',
-                success: function(response){
-                    console.log(response);
-                    var sections = '<option value="">- select section -</option>';
-                    $.each(response.data, function(k, v){
-                        sections += '<option value="'+v.id+'">'+v.code+'</option>';       
-                    });
-                    $("#section").html(sections);
-                    
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
+            getSections(program_id, year_level, '');
+
+
+
         }else{
             $("#section").html('<option value="">- select section -</option>');
         }
 
+        e.preventDefault();
+    });
+
+    function enrollSection(student, section)
+    {
+
+    }
+
+    $(document).on("change", "#section", function(e){
+        var section_id = $(this).val();
+        
+        $.ajax({
+                url: "/enrolments/checksectionslot",
+                type: 'POST',
+                data: ({ 'section_id' : section_id }),
+                dataType: 'json',
+                success: function(response){
+                    console.log(response);
+                    if(response.data.success === false){
+                        showError(response.data.message);
+                        $("#section").val('');
+                    }else{
+                        alert('got to section!');
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) {
+                        showError('Something went wrong! Can not perform requested action!');
+                        $("#student").val(null).trigger('change');
+                    }
+                }
+            });
         e.preventDefault();
     });
 

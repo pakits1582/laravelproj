@@ -71,7 +71,7 @@ $(function(){
 							},
 							error: function (data) {
 								var errors = data.responseJSON;
-								if ($.isEmptyObject(errors) == false) {
+								if ($.isEmptyObject(errors) === false) {
 									showError('Something went wrong! Can not perform requested action! '+errors.message);
 								}
 							}
@@ -113,7 +113,7 @@ $(function(){
 							error: function (data) {
 								//console.log(data);
 								var errors = data.responseJSON;
-								if ($.isEmptyObject(errors) == false) {
+								if ($.isEmptyObject(errors) === false) {
 									showError('Something went wrong! Can not perform requested action! '+errors.message);
 								}
 							}

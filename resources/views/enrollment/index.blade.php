@@ -127,13 +127,13 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group" id="button_group">
-                                            <button type="submit" id="save_enrollment" class="btn btn-success btn-icon-split mb-2" disabled>
+                                            <button type="submit" id="save_enrollment" class="btn btn-success btn-icon-splitactions mb-2" disabled>
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-save"></i>
                                                 </span>
                                                 <span class="text">Save Enrollment</span>
                                             </button>
-                                            <button type="button" class="btn btn-primary btn-icon-split mb-2" id="add_subjects" disabled>
+                                            <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2" disabled>
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-plus-square"></i>
                                                 </span>

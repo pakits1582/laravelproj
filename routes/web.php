@@ -192,7 +192,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/classes/checkroomschedule', [ClassesController::class, 'checkroomschedule']);
         // Route::post('/classes/checkconflicts', [ClassesController::class, 'checkconflicts']);
         // Route::post('/classes/updateclasssubject/{class}', [ClassesController::class, 'updateclasssubject']);
-        // Route::post('/classes/storecopyclass', [ClassesController::class, 'storecopyclass'])->name('classes.storecopyclass');
+        Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
         // Route::get('/classes/generatecode', [ClassesController::class, 'generatecode']);
         // });
        

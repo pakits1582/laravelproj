@@ -5,6 +5,7 @@ namespace App\Services\Enrollment;
 use App\Models\Term;
 use App\Libs\Helpers;
 use App\Models\Enrollment;
+use App\Models\SectionMonitoring;
 use App\Services\CurriculumService;
 
 use Illuminate\Support\Facades\Auth;
@@ -25,11 +26,11 @@ class EnrollmentService
         $last_enrollment = $this->studentLastEnrollment($student_id);
         
         if($last_enrollment !== false)
-        // {
+        {
             $data['probi'] = $this->checkIfStudentIsOnProbation($student_id, '$last_enrollment->period_id');
             $data['balance'] = $this->checkIfstudentHasAccountBalance($student_id, '$last_enrollment->period_id');
             
-        //}
+        }
         
         $data['allowed_units'] = $this->studentEnrollmentUnitsAllowed($studentinfo['curriculum_id'], session('periodterm'), $studentinfo['year_level'], $data['probi']);
 
@@ -112,6 +113,13 @@ class EnrollmentService
         return $year_level;
     }
 
+    public function countEnrolledinsSection($section_id, $period_id)
+    {
+        $enrolledin_section = Enrollment::where('section_id', $section_id)->where('period_id', $period_id)->count();
+
+        return $enrolledin_section;
+    }
+
     public function insertStudentEnrollment($studentinfo)
     {
         $student = $studentinfo['data'];
@@ -122,46 +130,78 @@ class EnrollmentService
             
             if($user_permissions)
             {
-                if(Helpers::is_column_in_array('can_withbalance', 'permission', $user_permissions->toArray())){
-                    return 'insert mo!';
+                if(!Helpers::is_column_in_array('can_withbalance', 'permission', $user_permissions->toArray())){
+                    return [
+                        'success' => false,
+                        'message' => 'Your account does not have permission to enroll students with an account balance!',
+                        'alert' => 'alert-danger'
+                    ];
                 }
             }
 
             return [
                 'success' => false,
-                'message' => 'Your account doest not have a permission to enroll student with account balance!',
+                'message' => 'Your account does not have permission to enroll students with an account balance!',
                 'alert' => 'alert-danger'
             ];
         }
 
-        // if($this->studentAllEnrollments($student['student']['id']) === false){
-        //     $isnew = 1;
-        // }else{
-        //     $isOld = 1;
-        // }
+        if($this->studentAllEnrollments($student['student']['id']) === false){
+            $isnew = 1;
+        }else{
+            $isOld = 1;
+        }
 
-        // //$allowed_units = $this->studentEnrollmentUnitsAllowed($student['student']['curriculum_id'], session('periodterm'), $student['student']['year_level'], $student['probi']);
-        // $year_level = $this->studentYearLevel($student['student']['year_level'], $student['student']['program']['years'], $student['probi'], $isnew, session('periodterm'));
+        $year_level = $this->studentYearLevel($student['student']['year_level'], $student['student']['program']['years'], $student['probi'], $isnew, session('periodterm'));
 
-        // $data = [
-        //     'period_id' => session('current_period'),
-        //     'student_id' => $student['student']['id'],
-        //     'program_id' => $student['student']['program_id'],
-        //     'curriculum_id' => $student['student']['curriculum_id'],
-        //     'year_level' => $year_level,
-        //     'new' => $isnew ?? 0,
-        //     'old' => $isOld ?? 0,
-        //     'probationary' => $student['probi'],
-        //     'user_id' => Auth::user()->id
-        // ];
+        $data = [
+            'period_id' => session('current_period'),
+            'student_id' => $student['student']['id'],
+            'program_id' => $student['student']['program_id'],
+            'curriculum_id' => $student['student']['curriculum_id'],
+            'section_id' => '',
+            'year_level' => $year_level,
+            'new' => $isnew ?? 0,
+            'old' => $isOld ?? 0,
+            'probationary' => $student['probi'],
+            'user_id' => Auth::user()->id
+        ];
 
-        // $enrollment = Enrollment::firstOrCreate(['period_id' => session('current_period'), 'student_id' => $student['student']['id']], $data);
-        // $data['id'] = $enrollment->id;
+        $enrollment = Enrollment::firstOrCreate(['period_id' => session('current_period'), 'student_id' => $student['student']['id']], $data);
+        $data['id'] = $enrollment->id;
+        $studentinfo['success'] = true;
+        $studentinfo['data']['enrollment'] = $data;
 
-        // $studentinfo['data']['enrollment'] = $data;
-
-        // return $studentinfo;
+        return $studentinfo;
         
+    }
+
+    public function checkSectionSlot($section_id)
+    {
+        $section_monitoring = SectionMonitoring::where('section_id', $section_id)->where('period_id', session('current_period'))->first();
+
+        if($section_monitoring)
+        {
+            $enrolledin_section = $this->countEnrolledinsSection($section_id, session('current_period'));
+
+            if($enrolledin_section >= $section_monitoring->minimum_enrollees)
+            {
+                return [
+                    'success' => false,
+                    'message' => 'The section selected is already full! Please check section monitoring!',
+                    'alert' => 'alert-danger'
+                ];
+            }
+
+            return $section_monitoring;
+        }
+
+        return [
+            'success' => false,
+            'message' => 'No class offerings in the selected section!',
+            'alert' => 'alert-danger'
+        ];
+
     }
 
 }
