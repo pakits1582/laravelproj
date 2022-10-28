@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::create('fee_types', function (Blueprint $table) {
             $table->id();
             $table->string('type')->index()->unique();
-            $table->tinyInteger('parent')->default(0)->nullable();
             $table->boolean('inassess')->default(0);
-            $table->integer('order');
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

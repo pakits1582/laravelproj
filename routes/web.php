@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FeeController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Redirect;
@@ -199,6 +200,18 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
             return Redirect::route('enrolments.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:fees']], function () {
+        // Route::view('/subjects/import', 'subject.import')->name('subjects.import');
+        // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
+        // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
+        // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
+        Route::view('/fees/addnewtype', 'fee.addnewtype');
+        Route::post('/fees/savetype', [FeeController::class, 'storetype'])->name('savetype');
+        Route::resource('fees', FeeController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+            return Redirect::route('fees.index');
         });
     });
 
