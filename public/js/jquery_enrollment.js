@@ -183,7 +183,7 @@ $(function(){
     }
 
     $(document).on("change","#student", function(){
-        var student_id = $(this).val();
+        var student_id = $("#student").val();
 
         if(student_id){
             $.ajax({
@@ -226,11 +226,16 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    //console.log(response);
+                    console.log(response);
+
+                    $("#educational_level").val(response.program.level.code);
+                    $("#college").val(response.program.collegeinfo.code);
+
                     var curricula = '<option value="">- select curriculum -</option>';
                     $.each(response.program.curricula, function(k, v){
                         curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
                     });
+                    
                     $("#curriculum").html(curricula);
                     $("#year_level").val('');
                     $("#section").html('<option value="">- select section -</option>');
@@ -285,8 +290,34 @@ $(function(){
     function unitsAllowed()
     {
         var curriculum_id = $("#curriculum").val();
-        
+        var year_level = $("#year_level").val();
+        var isprobi = ($('#probationary').is(":checked")) ? true : false;
+
+        $.ajax({
+            url: "/enrolments/studentenrollmentunitsallowed",
+            type: 'POST',
+            data: ({ 'curriculum_id' : curriculum_id, 'year_level' : year_level, 'isprobi' : isprobi }),
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                $("#units_allowed").val(response.data);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
+        });
+
     }
+
+    $(document).on("change","#curriculum", function(e){
+        unitsAllowed();
+        e.preventDefault();
+    });
+
 
     $(document).on("change","#year_level", function(e){
         var program_id = $("#program").val();
@@ -295,47 +326,65 @@ $(function(){
         if(program_id && year_level)
         {
             getSections(program_id, year_level, '');
-
-
-
+            unitsAllowed();
         }else{
             $("#section").html('<option value="">- select section -</option>');
+            $("#units_allowed").val(21);
         }
 
         e.preventDefault();
     });
 
-    function enrollSection(student, section)
+    function enrollSection(student_id, section_id, enrollment_id)
     {
-
+        $.ajax({
+            url: "/enrolments/enrollsection",
+            type: 'POST',
+            data: ({ 'student_id' : student_id, 'section_id' : section_id, 'enrollment_id' : enrollment_id }),
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
+        });
     }
 
     $(document).on("change", "#section", function(e){
         var section_id = $(this).val();
         
         $.ajax({
-                url: "/enrolments/checksectionslot",
-                type: 'POST',
-                data: ({ 'section_id' : section_id }),
-                dataType: 'json',
-                success: function(response){
-                    console.log(response);
-                    if(response.data.success === false){
-                        showError(response.data.message);
-                        $("#section").val('');
-                    }else{
-                        alert('got to section!');
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                    var errors = data.responseJSON;
-                    if ($.isEmptyObject(errors) === false) {
-                        showError('Something went wrong! Can not perform requested action!');
-                        $("#student").val(null).trigger('change');
-                    }
+            url: "/enrolments/checksectionslot",
+            type: 'POST',
+            data: ({ 'section_id' : section_id }),
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                if(response.data.success === false){
+                    showError(response.data.message);
+                    $("#section").val('');
+                }else{
+                    var student_id = $("#student").val();
+                    var enrollment_id = $("#enrollment_id").val();
+
+                    enrollSection(student_id, section_id, enrollment_id);
                 }
-            });
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#student").val(null).trigger('change');
+                }
+            }
+        });
         e.preventDefault();
     });
 

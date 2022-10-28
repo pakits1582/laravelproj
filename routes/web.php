@@ -187,16 +187,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:enrolments']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
         
-        // Route::post('/classes/filtercurriculumsubjects', [ClassesController::class, 'filtercurriculumsubjects']);
-        // Route::post('/classes/sectionclasssubjects', [ClassesController::class, 'sectionclasssubjects']);
-        // Route::post('/classes/checkroomschedule', [ClassesController::class, 'checkroomschedule']);
-        // Route::post('/classes/checkconflicts', [ClassesController::class, 'checkconflicts']);
-        // Route::post('/classes/updateclasssubject/{class}', [ClassesController::class, 'updateclasssubject']);
+
+        Route::post('/enrolments/studentenrollmentunitsallowed', [EnrollmentController::class, 'studentenrollmentunitsallowed']);
         Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
-        // Route::get('/classes/generatecode', [ClassesController::class, 'generatecode']);
+        Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
+
         // });
        
-        // Route::get('/classes/{section}/addclassoffering', [ClassesController::class, 'addclassoffering']);
         Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
         Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
 

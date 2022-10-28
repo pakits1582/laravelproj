@@ -127,7 +127,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group" id="button_group">
-                                            <button type="submit" id="save_enrollment" class="btn btn-success btn-icon-splitactions mb-2" disabled>
+                                            <button type="submit" id="save_enrollment" class="btn btn-success btn-icon-split actions mb-2" disabled>
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-save"></i>
                                                 </span>

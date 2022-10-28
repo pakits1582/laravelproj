@@ -69,7 +69,12 @@ class ClassesService
 
     public function classSubjects($section, $period)
     {
-        return Classes::with(['sectioninfo','curriculumsubject.subjectinfo', 'instructor', 'schedule'])->where('section_id', $section)->where('period_id', $period)->get();
+        return Classes::with([
+                'sectioninfo',
+                'instructor', 
+                'schedule', 
+                'curriculumsubject' => fn($query) => $query->with('prerequisites', 'corequisites', 'equivalents')
+            ])->where('section_id', $section)->where('period_id', $period)->get();
     }
 
     public function classSubject($class_id)

@@ -6,6 +6,7 @@ use App\Models\Term;
 use App\Libs\Helpers;
 use App\Models\Enrollment;
 use App\Models\SectionMonitoring;
+use App\Services\ClassesService;
 use App\Services\CurriculumService;
 
 use Illuminate\Support\Facades\Auth;
@@ -92,11 +93,11 @@ class EnrollmentService
         $term_info = Term::find($term_id);
 
         $allowed_units = 0;
+
         $allowed_units = ($curriculum_allowed_units === 0) ? (($term_info->type === 2) ? 9 : 21) : $curriculum_allowed_units;
         
-        $allowed_units = ($isProbi === 1) ? 18 : $allowed_units;
+        return ($isProbi == 1) ? 18 : $allowed_units;
 
-        return $allowed_units;
     }
 
     public function studentYearLevel($year_level, $program_years, $probi, $isnew, $term_id)
@@ -198,10 +199,28 @@ class EnrollmentService
 
         return [
             'success' => false,
-            'message' => 'No class offerings in the selected section!',
+            'message' => 'The selected section has no class offerings!',
             'alert' => 'alert-danger'
         ];
 
+    }
+
+    public function enrollSection($student_id, $section_id, $enrollment_id)
+    {
+        $classesService = new ClassesService();
+
+        $section_subjects = $classesService->classSubjects($section_id, session('current_period'));
+
+        if(!$section_subjects->isEmpty())
+        {           
+            return $section_subjects;
+        }
+
+        return [
+            'success' => false,
+            'message' => 'The selected section has no class offerings!',
+            'alert' => 'alert-danger'
+        ];
     }
 
 }

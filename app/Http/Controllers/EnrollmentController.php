@@ -116,4 +116,18 @@ class EnrollmentController extends Controller
         
         return response()->json(['data' => $data]);
     }
+
+    public function studentenrollmentunitsallowed(Request $request)
+    {
+        $data = $this->enrollmentService->studentEnrollmentUnitsAllowed($request->curriculum_id, session('periodterm'), $request->year_level, $request->isprobi);
+        
+        return response()->json(['data' => $data]);
+    }
+
+    public function enrollsection(Request $request)
+    {
+        $data = $this->enrollmentService->enrollSection($request->student_id, $request->section_id, $request->enrollment_id);
+        
+        return response()->json(['data' => $data]);
+    }
 }
