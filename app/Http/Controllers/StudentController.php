@@ -43,9 +43,11 @@ class StudentController extends Controller
     {
         $students = $this->studentService->returnStudents($request);
 
-        if($request->ajax()){
+        if($request->ajax())
+        {
             return view('student.return_students', compact('students'));
         }
+        
         return view('student.index', compact('students'));
     } 
 

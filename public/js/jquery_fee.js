@@ -60,6 +60,49 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on("click","#iscompound", function(){
+		if($(this).is(":checked")){
+            $.ajax({url: "/fees/compoundfee",success: function(data){
+                    $('#ui_content').html(data);
+                    $("#modalll").modal('show');
+
+                    $("#non_assess_fees").select2({
+                        dropdownParent: $("#modalll")
+                    });
+                }
+            });	
+            $("#name").prop('readonly', true)
+        }else{
+            $("#name").prop('readonly', false).val('');
+        }
+    });
+
+    $(document).on("click","#add_fee", function(){
+		let fee = $("#non_assess_fees").val();
+		let feecode = $("#non_assess_fees option:selected").text();
+		let compoundedfee = $("#compoundedfees").val();
+		let fee_array = feecode.split(' - ');
+
+		let compoundedfees = (!compoundedfee) ? fee_array[0] : '=$'+fee_array[0];
+
+		$("#compoundedfees").append(compoundedfees);
+	});
+
+    $(document).on("click","#save_compounded_fee", function(){
+		let compfees = $("#compoundedfees").val();
+		if(compfees){
+			let compfee = compfees.split('=$');
+			if(compfee.length <= 1){
+				showError('Please select at least two fees to compound!');
+			}else{
+				$("#name").val(compfees);
+				$("#modalll").modal('hide');
+			}
+		}else{
+			showError('Please select fees to be compounded!');
+		}
+		
+	});
 
     // $(document).on("click", "#download_excel", function(e)
     // {

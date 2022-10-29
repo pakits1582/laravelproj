@@ -1,12 +1,12 @@
 @extends('layout')
-@section('title') {{ 'Fees List' }} @endsection
+@section('title') {{ 'Grading Systems List' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">Fees</h1>
-        <p class="mb-4">List of all fees in the database</p>
+        <p class="mb-4">List of all grading system in the database</p>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
@@ -16,9 +16,9 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
-                    <span class="text">Add New Fee</span>
+                    <span class="text">Add New Grade</span>
                 </a>
-                <form method="POST" action="" id="filter_form" target="_blank" data-field="fees">
+                <form method="POST" action="" id="filter_form" target="_blank" data-field="gradingsystems">
                     @csrf
                     <div class="mt-3">
                         <div class="row">
@@ -30,15 +30,8 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="fee_type" class="m-0 font-weight-bold text-primary">Fee Type</label>
-                                    <select name="fee_type_id" class="form-control dropdownfilter" id="fee_type">
-                                        <option value="">- select type -</option>
-                                        @if ($fee_types)
-                                            @foreach ($fee_types as $fee_type)
-                                                <option  value="{{ $fee_type->id }}">{{ $fee_type->type }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
+                                    @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
                                 </div>
                             </div>
                         </div>
@@ -46,7 +39,7 @@
                 </form>
             </div>
             <div class="card-body">
-                @include('fee.return_fees')
+                @include('gradingsystem.return_gradingsystems')
             </div>
         </div>
 

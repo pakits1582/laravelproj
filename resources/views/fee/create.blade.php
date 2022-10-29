@@ -27,7 +27,7 @@
                                         @foreach ($fee_types as $fee_type)
                                             <option 
                                                 value="{{ $fee_type->id }}"
-                                                {{ (old('fee_type') == $fee_type->id) ? 'selected' : '' }}
+                                                {{ (old('fee_type_id') == $fee_type->id) ? 'selected' : '' }}
                                             >{{ $fee_type->type }}</option>
                                         @endforeach
                                     @endif
@@ -46,13 +46,13 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-check-solid">
-                                    <input class="form-check-input" id="iscompound" type="checkbox" value="1" name="iscompound">
+                                    <input class="form-check-input" id="iscompound" type="checkbox" value="1" name="iscompound" {{ (old('iscompound') == 1) ? 'checked' : '' }}>
                                     <label for="iscompound" class="m-0 font-weight-bold text-primary">Compound Fee</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="name" class="m-0 font-weight-bold text-primary">* Name</label>
-                                <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ old('name') }}">
+                                <input type="text" name="name" id="name" placeholder="" class="form-control text-uppercase" value="{{ old('name') }}">
                                 @error('name')
                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                 @enderror

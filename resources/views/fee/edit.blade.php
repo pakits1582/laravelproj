@@ -54,7 +54,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="name" class="m-0 font-weight-bold text-primary">* Name</label>
-                                <input type="text" name="name" placeholder="" class="form-control text-uppercase" value="{{ (old('name')) ? old('name') : $fee->name }}">
+                                <input type="text" name="name" id="name" placeholder="" class="form-control text-uppercase" value="{{ (old('name')) ? old('name') : $fee->name }}"
+                                {{ ($fee->iscompound === 1) ? 'readonly' : '' }}
+                                >
                                 @error('name')
                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                 @enderror

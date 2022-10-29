@@ -20,6 +20,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\GradingSystemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -209,9 +210,23 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
         // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
         Route::view('/fees/addnewtype', 'fee.addnewtype');
+        Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
         Route::post('/fees/savetype', [FeeController::class, 'storetype'])->name('savetype');
         Route::resource('fees', FeeController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('fees.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:gradingsystems']], function () {
+        // Route::view('/subjects/import', 'subject.import')->name('subjects.import');
+        // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
+        // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
+        // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
+        // Route::view('/fees/addnewtype', 'fee.addnewtype');
+        // Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
+        // Route::post('/fees/savetype', [FeeController::class, 'storetype'])->name('savetype');
+        Route::resource('gradingsystems', GradingSystemController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+            return Redirect::route('gradingsystems.index');
         });
     });
 

@@ -12,12 +12,12 @@ use Illuminate\Http\Request;
 
 class FeeController extends Controller
 {
-    protected $periodfeeServiceervice;
+    protected $feeService;
 
     public function __construct(FeeService $feeService)
     {
         $this->feeService = $feeService;
-        Helpers::setLoad(['jquery_fee.js']);
+        Helpers::setLoad(['jquery_fee.js', 'select2.full.min.js']);
     }
     /**
      * Display a listing of the resource.
@@ -26,23 +26,16 @@ class FeeController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Fee::with('feetype')->orderBy('code');
+        $fees = $this->feeService->returnFees($request);
 
-        if($request->has('keyword') && !empty($request->keyword)) {
-            $query->where(function($query) use($request){
-                $query->where('code', 'like', '%'.$request->keyword.'%')
-                ->orWhere('name', 'like', '%'.$request->keyword.'%');
-            });
-        }
-
-        $fees =  $query->paginate(10);
+        $fee_types = FeeType::all()->sortBy('order');
 
         if($request->ajax())
         {
             return view('fee.return_fees', compact('fees'));
         }
 
-        return view('fee.index', compact('fees'));
+        return view('fee.index', compact('fees', 'fee_types'));
     }
 
     /**
@@ -86,13 +79,9 @@ class FeeController extends Controller
      */
     public function store(StoreFeeRequest $request)
     {
-        $insert = Fee::firstOrCreate(['fee_type_id' => $request->fee_type_id, 'code' => $request->code, 'name' => $request->name], $request->validated());
+        $insert = $this->feeService->storeFee($request);
 
-        if ($insert->wasRecentlyCreated) {
-            return back()->with(['alert-class' => 'alert-success', 'message' => 'Fee sucessfully added!']);
-        }
-
-        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, fee already exists!'])->withInput();
+        return $insert;
     }
 
     /**
@@ -142,5 +131,13 @@ class FeeController extends Controller
     public function destroy(Fee $fee)
     {
         //
+    }
+
+    public function compoundfee()
+    {
+        $fees = Fee::join('fee_types', 'fees.fee_type_id', 'fee_types.id')->where('fee_types.inassess', 0)->where('fees.iscompound', '!=', 1)->get()->sortBy('fees.code');
+    
+        return view('fee.compoundfee', compact('fees'));
+
     }
 }
