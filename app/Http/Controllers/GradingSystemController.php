@@ -2,11 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\GradingSystem;
+use App\Http\Requests\StoreGradingSystemRequest;
+use App\Http\Requests\UpdateGradingSystemRequest;
+use App\Libs\Helpers;
+use App\Models\Fee;
+use App\Models\Remark;
 use Illuminate\Http\Request;
+use App\Models\GradingSystem;
+use App\Services\GradingSystemService;
 
 class GradingSystemController extends Controller
 {
+    protected $gradingsystemService;
+
+    public function __construct(GradingSystemService $gradingsystemService)
+    {
+        $this->gradingsystemService = $gradingsystemService;
+        Helpers::setLoad(['jquery_gradingsystem.js', 'select2.full.min.js']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +59,29 @@ class GradingSystemController extends Controller
      */
     public function create()
     {
-        //
+        $remarks = Remark::all();
+        
+        return view('gradingsystem.create', compact('remarks'));
+    }
+
+    public function storeremark(Request $request)
+    {
+        $validated = $request->validate([
+            'remark' => 'required|unique:remarks|max:255',
+        ]);
+
+        $insert = Remark::firstOrCreate(['remark' => $request->remark], $validated);
+
+        if ($insert->wasRecentlyCreated) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Remark successfully added!',
+                'alert' => 'alert-success',
+                'values' => $insert
+            ], 200);
+        }
+
+        return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, remark type already exists!']);
     }
 
     /**
@@ -54,9 +90,19 @@ class GradingSystemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreGradingSystemRequest $request)
     {
-        //
+        $insert = GradingSystem::firstOrCreate([
+            'educational_level_id' => $request->educational_level_id,
+            'code' => $request->code,
+            'value' => $request->value
+        ], $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return back()->with(['alert-class' => 'alert-success', 'message' => 'Grade sucessfully added!'])->withInput();
+        }
+
+        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, grade already exists!'])->withInput();
     }
 
     /**
@@ -76,9 +122,11 @@ class GradingSystemController extends Controller
      * @param  \App\Models\GradingSystem  $gradingSystem
      * @return \Illuminate\Http\Response
      */
-    public function edit(GradingSystem $gradingSystem)
+    public function edit(GradingSystem $gradingsystem)
     {
-        //
+        $remarks = Remark::all();
+
+        return view('gradingsystem.edit', compact('gradingsystem', 'remarks'));
     }
 
     /**
@@ -88,9 +136,11 @@ class GradingSystemController extends Controller
      * @param  \App\Models\GradingSystem  $gradingSystem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, GradingSystem $gradingSystem)
+    public function update(UpdateGradingSystemRequest $request, GradingSystem $gradingsystem)
     {
-        //
+        $gradingsystem->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Grade sucessfully updated!']);
     }
 
     /**

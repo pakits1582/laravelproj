@@ -222,9 +222,8 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
         // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
         // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
-        // Route::view('/fees/addnewtype', 'fee.addnewtype');
-        // Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
-        // Route::post('/fees/savetype', [FeeController::class, 'storetype'])->name('savetype');
+        Route::view('/gradingsystems/addnewremark', 'gradingsystem.addnewremark');
+        Route::post('/gradingsystems/saveremark', [GradingSystemController::class, 'storeremark'])->name('saveremark');
         Route::resource('gradingsystems', GradingSystemController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('gradingsystems.index');
         });

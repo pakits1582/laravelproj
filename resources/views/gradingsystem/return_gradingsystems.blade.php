@@ -16,9 +16,9 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $gradingsystem->code }}</td>
-                        <td>{{ $gradingsystem->name }}</td>
-                        <td>{{ $gradingsystem->gradingsystemtype->type }}</td>
-                        <td>{{ $gradingsystem->default_value }}</td>
+                        <td>{{ $gradingsystem->value }}</td>
+                        <td>{{ $gradingsystem->remark->remark }}</td>
+                        <td>{{ $gradingsystem->level->level }}</td>
                         <td class="mid">
                             <a href="{{ route('gradingsystems.edit', ['gradingsystem' => $gradingsystem->id ]) }}" class="btn btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
