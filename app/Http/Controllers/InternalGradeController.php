@@ -2,19 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InternalGrade;
+use App\Libs\Helpers;
+use App\Models\Period;
+use App\Models\Subject;
 use Illuminate\Http\Request;
+use App\Models\InternalGrade;
+use App\Services\InstructorService;
+use App\Services\Grade\InternalGradeService;
+use App\Services\SubjectService;
 
 class InternalGradeController extends Controller
 {
+    protected $internalGradeService;
+
+    public function __construct(InternalGradeService $internalGradeService)
+    {
+        $this->internalGradeService = $internalGradeService;
+        Helpers::setLoad(['jquery_internalgrade.js', 'select2.full.min.js']);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, SubjectService $subjectService, InstructorService $instructorService)
     {
-        //
+        $subjects = $subjectService->returnSubjects($request, true);
+        $instructors = $instructorService->returnInstructors($request, true);
+        
+        return view('gradeinternal.index', compact('subjects', 'instructors'));
     }
 
     /**
