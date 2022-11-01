@@ -160,7 +160,6 @@ class EnrollmentService
             'student_id' => $student['student']['id'],
             'program_id' => $student['student']['program_id'],
             'curriculum_id' => $student['student']['curriculum_id'],
-            'section_id' => '',
             'year_level' => $year_level,
             'new' => $isnew ?? 0,
             'old' => $isOld ?? 0,

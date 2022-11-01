@@ -78,9 +78,10 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/students/import', [StudentController::class, 'import'])->name('students.uploadimport');
         // Route::post('/students/export', [StudentController::class, 'export'])->name('students.downloadexcel');
         // Route::post('/students/generatepdf', [StudentController::class, 'generatepdf'])->name('students.generatepdf');
-        Route::resource('students', StudentController::class)->except(['destroy'])->missing(function (Request $request) {
-            return Redirect::route('students.index');
-        });
+        Route::resource('students', StudentController::class)->except(['destroy']);
+        // ->missing(function (Request $request) {
+        //     return Redirect::route('students.index');
+        // });
     });
 
     Route::resource('colleges', CollegeController::class)->except(['show', 'destroy'])->middleware(['inaccess:colleges'])

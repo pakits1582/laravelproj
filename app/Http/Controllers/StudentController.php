@@ -112,9 +112,11 @@ class StudentController extends Controller
      * @param  \App\Models\Instructor  $instructor
      * @return \Illuminate\Http\Response
      */
-    public function show(Student $student)
+    public function show(Request $request)
     {
-        //
+        $data = $this->studentService->returnStudentInfo($request->student);
+        
+        return response()->json(['data' => $data]);
     }
 
     /**

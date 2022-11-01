@@ -64,7 +64,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="class_start" class="m-0 font-weight-bold text-primary">Period</label>
-                                        @include('partials.periods.dropdown', ['fieldname' => 'period_id', 'fieldid' => 'period_id'])
+                                        @include('partials.periods.dropdown', ['value' => session('current_period'), 'fieldname' => 'period_id', 'fieldid' => 'period_id'])
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -95,7 +95,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="year_level" class="m-0 font-weight-bold text-primary">* Subject</label>
-                                        <select  class="form-control" id="">
+                                        <select name="subject_id"  class="form-control" id="subject">
                                             <option value="">- select subject -</option>
                                             @if ($subjects)
                                                 @foreach ($subjects as $subject)
@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="term" class="m-0 font-weight-bold text-primary">Instructor</label>
-                                    <select name="instructor_id" class="form-control select clearable" id="instructor">
+                                    <select name="instructor_id" class="form-control" id="instructor">
                                         <option value="">- select instructor -</option>
                                         @if ($instructors)
                                             @foreach ($instructors as $instructor)

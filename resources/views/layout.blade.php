@@ -149,7 +149,7 @@
     <div id="ui_content"></div>
     <div id="ui_content2"></div>
     <div id="ui_content3"></div>
-
+    <div id="ui_content4"></div>
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('sbadmin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('sbadmin/js/jquery-ui.min.js') }}"></script>

@@ -187,10 +187,9 @@ $(function(){
 
         if(student_id){
             $.ajax({
-                url: "/enrolments/getstudent",
-                type: 'POST',
+                url: "/students/"+student_id,
+                type: 'GET',
                 dataType: 'json',
-                data: ({ 'student_id' : student_id }),
                 success: function(response){
                     console.log(response);
                     if(response.data.success === false)

@@ -95,14 +95,6 @@ class EnrollmentController extends Controller
         //
     }
 
-    public function getstudent(Request $request, StudentService $studentService)
-    {
-        $data = $studentService->returnStudentInfo($request->student_id);
-        
-        return response()->json(['data' => $data]);
-       
-    }
-
     public function enrolmentinfo(Request $request)
     {
         $data = $this->enrollmentService->handleStudentEnrollmentInfo($request->student_id, $request->studentinfo);
