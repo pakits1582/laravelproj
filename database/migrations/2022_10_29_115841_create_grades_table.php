@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('school_id')->references('id')->on('schools');
             $table->unsignedBigInteger('program_id')->index();
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
-            $table->enum('origin', [0,1])->default(0);
+            $table->tinyInteger('origin')->default(0);
             $table->timestamps();
         });
     }

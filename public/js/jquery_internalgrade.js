@@ -11,7 +11,7 @@ $(function(){
     $("#student").select2({
 	    // dropdownParent: $("#ui_content3"),
         minimumInputLength: 2,
-        tags: [],
+        tags: false,
         minimumResultsForSearch: 20, // at least 20 results must be displayed
         ajax: {
             url: '/students/dropdownselectsearch',
@@ -23,6 +23,7 @@ $(function(){
                 };
             },
             processResults: function(data) {
+                console.log(data);
                 return {
                     results: $.map(data, function(item) {
                         return {
@@ -35,6 +36,7 @@ $(function(){
             cache: true
         }
 	});
+    
 
     $("#period_id").select2({
 	    dropdownParent: $("#ui_content2")
@@ -53,7 +55,7 @@ $(function(){
 
         if(student_id){
             $.ajax({
-                url: "/students/"+student_id,
+                url: "/grades/"+student_id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){

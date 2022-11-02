@@ -8,7 +8,7 @@ $(function(){
     $("#student").select2({
 	    // dropdownParent: $("#ui_content3"),
         minimumInputLength: 2,
-        tags: [],
+        tags: false,
         minimumResultsForSearch: 20, // at least 20 results must be displayed
         ajax: {
             url: '/students/dropdownselectsearch',

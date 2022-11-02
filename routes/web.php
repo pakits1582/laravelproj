@@ -6,6 +6,7 @@ use App\Http\Controllers\FeeController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SchoolController;
@@ -228,6 +229,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/gradingsystems/saveremark', [GradingSystemController::class, 'storeremark'])->name('saveremark');
         Route::resource('gradingsystems', GradingSystemController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('gradingsystems.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:grades']], function () {
+        // Route::view('/subjects/import', 'subject.import')->name('subjects.import');
+        // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
+        // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
+        // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
+        //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
+        Route::get('/grades/{student}', [GradeController::class, 'getgradebystudentandperiod']);
+        Route::resource('grades', GradeController::class)->missing(function (Request $request) {
+            return Redirect::route('grades.index');
         });
     });
 
