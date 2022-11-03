@@ -40,4 +40,32 @@ class SubjectService
         return $query->paginate(10);
         
     }
+
+    public function dropdownSelectSearch($request)
+    {
+        if($request->searchTerm)
+        {
+            $query = Subject::orderBy('code');
+
+            if($request->has('searchTerm') && !empty($request->searchTerm)) 
+            {
+                $query->where(function($query) use($request){
+                    $query->where('code', 'like', '%'.$request->searchTerm.'%')
+                        ->orWhere('name', 'like', '%'.$request->searchTerm.'%');   
+                });
+            }
+
+            $subjects = $query->limit(20)->get();
+
+            $data = [];
+            if(!$subjects->isEmpty())
+            {
+                foreach ($subjects as $key => $subject) {
+                    $data[] = ['id' => $subject->id, 'text' => '('.$subject->units.') - ['.$subject->code.'] '.$subject->name];
+                }
+            } 
+
+            return $data;
+        }
+    }
 }

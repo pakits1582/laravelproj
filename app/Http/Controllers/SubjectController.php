@@ -138,4 +138,11 @@ class SubjectController extends Controller
         $pdf = PDF::loadView('subject.generatepdf', ['subjects' => $subjects]);
         return $pdf->stream('subjects.pdf');
     }
+
+    public function dropdownselectsearch(Request $request)
+    {
+        $data = $this->subjectService->dropdownSelectSearch($request);
+
+        return response()->json($data);
+    }
 }

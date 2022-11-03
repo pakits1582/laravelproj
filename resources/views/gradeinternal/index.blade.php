@@ -21,7 +21,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="code"  class="m-0 font-weight-bold text-primary">Grade No.</label>
-                                        <input type="text" id="internalgrade_id" class="form-control text-uppercase clearable" readonly value="" placeholder="">
+                                        <input type="text" id="grade_id" class="form-control text-uppercase clearable" readonly value="" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-md-7"></div>
@@ -95,13 +95,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="year_level" class="m-0 font-weight-bold text-primary">* Subject</label>
-                                        <select name="subject_id"  class="form-control" id="subject">
-                                            <option value="">- select subject -</option>
-                                            @if ($subjects)
-                                                @foreach ($subjects as $subject)
-                                                    <option value="{{ $subject->id }}" id="option_{{ $subject->id }}" title="{{ $subject->name }}">({{ $subject->units }}) - [ {{ $subject->code }} ] {{ $subject->name }}</option>
-                                                @endforeach
-                                            @endif
+                                        <select name="subject_id" class="form-control select clearable" id="subject">
+                                            <option value="">- search subject -</option>
                                         </select>
                                     </div>
                                 </div>
@@ -137,37 +132,37 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group text-right" id="button_group">
-                                        <button type="submit" id="save_class" class="btn btn-success btn-icon-split mb-2" disabled>
+                                    <div class="form-group mid" id="button_group">
+                                        <button type="submit" id="save_class" class="btn btn-success btn-icon-split mb-2 mb-md-0">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-save"></i>
                                             </span>
                                             <span class="text">Save Changes</span>
                                         </button>
-                                        <button type="button" id="edit" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="edit" class="btn btn-primary btn-icon-split actions mb-2 mb-md-0" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-edit"></i>
                                             </span>
                                             <span class="text">Edit</span>
                                         </button>
-                                        <button type="button" id="delete" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="delete" class="btn btn-danger btn-icon-split actions mb-2 mb-md-0" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-trash"></i>
                                             </span>
                                             <span class="text">Delete</span>
                                         </button>
-                                        <button type="button" id="cancel" class="btn btn-danger btn-icon-split mb-2">
+                                        <button type="button" id="cancel" class="btn btn-danger btn-icon-split mb-2 mb-md-0">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-times"></i>
                                             </span>
                                             <span class="text">Cancel</span>
                                         </button>
-                                        <button type="button" class="btn btn-success btn-icon-split mb-2" id="add_subjects">
+                                        {{-- <button type="button" id="add_subjects" class="btn btn-success btn-icon-split mb-2 mb-md-0">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-plus-square"></i>
                                             </span>
                                             <span class="text">Add Multiple Subjects</span>
-                                        </button>
+                                        </button> --}}
                                     </div>                                    
                                 </div>
                             </div>

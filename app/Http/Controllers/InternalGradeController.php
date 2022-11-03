@@ -26,12 +26,11 @@ class InternalGradeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, SubjectService $subjectService, InstructorService $instructorService)
+    public function index(Request $request, InstructorService $instructorService)
     {
-        $subjects = $subjectService->returnSubjects($request, true);
         $instructors = $instructorService->returnInstructors($request, true);
         
-        return view('gradeinternal.index', compact('subjects', 'instructors'));
+        return view('gradeinternal.index', compact('instructors'));
     }
 
     /**

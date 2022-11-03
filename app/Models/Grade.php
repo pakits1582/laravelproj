@@ -11,6 +11,9 @@ class Grade extends Model
 
     protected $fillable = ['student_id', 'period_id', 'school_id', 'program_id', 'origin'];
 
+    const ORIGIN_INTERNAL = 0;
+    const ORIGIN_EXTERNAL = 1;
+
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');
@@ -29,6 +32,11 @@ class Grade extends Model
     public function program()
     {
         return $this->belongsTo(Program::class, 'program_id', 'id');
+    }
+
+    public function enrollment()
+    {
+        return $this->belongsTo(Enrollment::class, 'enrollment_id', 'id');
     }
 
     public function scopeOfOrigin($query, $origin)

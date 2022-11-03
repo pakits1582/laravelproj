@@ -9,12 +9,41 @@ $(function(){
     $('.datepicker').datepicker(pickerOpts);  
 
     $("#student").select2({
-	    // dropdownParent: $("#ui_content3"),
+	    dropdownParent: $("#ui_content2"),
         minimumInputLength: 2,
         tags: false,
         minimumResultsForSearch: 20, // at least 20 results must be displayed
         ajax: {
             url: '/students/dropdownselectsearch',
+            dataType: 'json',
+            delay: 250,
+            data: function (data) {
+                return {
+                    searchTerm: data.term // search term
+                };
+            },
+            processResults: function(data) {
+                console.log(data);
+                return {
+                    results: $.map(data, function(item) {
+                        return {
+                            text: item.text,
+                            id: item.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+	});
+
+    $("#subject").select2({
+	    dropdownParent: $("#ui_content2"),
+        minimumInputLength: 2,
+        tags: false,
+        minimumResultsForSearch: 20, // at least 20 results must be displayed
+        ajax: {
+            url: '/subjects/dropdownselectsearch',
             dataType: 'json',
             delay: 250,
             data: function (data) {
@@ -42,10 +71,6 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
-    $("#subject").select2({
-	    dropdownParent: $("#ui_content3")
-	});
-
     $("#instructor").select2({
 	    dropdownParent: $("#ui_content4")
 	});
@@ -60,13 +85,14 @@ $(function(){
                 dataType: 'json',
                 success: function(response){
                     console.log(response);
-                    if(response.data.success === false)
+                    if(response.data)
                     {
-                        showError(response.data.message);
-                        $("#student").val(null).trigger('change');
-                    }else{
-                        //CHECK ENROLMENT INFORMATION
-                        //enrollmetInfo(student_id, response.data.values);
+                        $("#curriculum").val(response.data.curriculum);
+                        $("#year_level").val(response.data.year_level);            
+                        $("#grade_id").val(response.data.grade_id);
+                        $("#educational_level").val(response.data.level);
+                        $("#college").val(response.data.college);
+                        $("#program").val(response.data.program);
                     }
                 },
                 error: function (data) {

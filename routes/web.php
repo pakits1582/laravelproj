@@ -128,7 +128,7 @@ Route::group(['middleware' => ['auth']], function () {
             });
     Route::post('/sections/getsections', [SectionController::class, 'getsections']);
 
-
+    Route::get('/subjects/dropdownselectsearch', [SubjectController::class, 'dropdownselectsearch']);
     Route::group(['middleware' => ['inaccess:subjects']], function () {
             Route::view('/subjects/import', 'subject.import')->name('subjects.import');
             Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
@@ -238,7 +238,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
         // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
         //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
-        Route::get('/grades/{student}', [GradeController::class, 'getgradebystudentandperiod']);
+        Route::get('/grades/{student}', [GradeController::class, 'getgradeinfobystudentandperiod']);
         Route::resource('grades', GradeController::class)->missing(function (Request $request) {
             return Redirect::route('grades.index');
         });
@@ -256,6 +256,5 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
-    Route::get('/students/dropdownselectsearch', [StudentController::class, 'dropdownselectsearch']);
     Route::get('/home', [LoginController::class, 'home'])->name('home');
 });
