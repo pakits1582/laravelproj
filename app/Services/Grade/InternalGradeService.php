@@ -33,5 +33,16 @@ class InternalGradeService
         return $query->first();
 
     }
+
+    public function checkIfPassedQuotaGrade($quotagrade, $grade, $completion_grade = null)
+    {
+        $passed = 0;
+        if($quotagrade)
+        {
+            $passed = ($grade >= $quotagrade) ? 1 : (($completion_grade && $completion_grade >= $quotagrade) ? 1 : 0);
+        }
+
+        return $passed;
+    }
 }
 

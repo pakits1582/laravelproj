@@ -231,13 +231,16 @@ class EnrollmentService
         foreach ($section_subjects as $key => $section_subject) {
             $subject_id = $section_subject['curriculumsubject']['subject_id'];
 
-           
-            $grade_passed = $internalGradeService->checkIfPassedInternalGrade($student_id, $subject_id);
+            $isgrade_passed = $internalGradeService->checkIfPassedInternalGrade($student_id, $subject_id);
             
-            if($grade_passed)
+            if($isgrade_passed)
             {
-                $quota_grade = $section_subject['curriculumsubject']['quota'] ?? false;
-                $ispassed = ($quota_grade) ? (($quota_grade >= $grade_passed->grade)) : 1;
+                $ispassed = $internalGradeService->checkIfPassedQuotaGrade(
+                    $section_subject['curriculumsubject']['quota'] ?? false, 
+                    $isgrade_passed->grade, 
+                    $isgrade_passed->completion_grade
+                );
+
             }else{
                 $ispassed = 0;
             }
