@@ -8,7 +8,7 @@ use App\Models\Enrollment;
 use App\Models\SectionMonitoring;
 use App\Services\ClassesService;
 use App\Services\CurriculumService;
-
+use App\Services\Grade\InternalGradeService;
 use Illuminate\Support\Facades\Auth;
 use function PHPUnit\Framework\returnSelf;
 
@@ -212,7 +212,7 @@ class EnrollmentService
 
         if(!$section_subjects->isEmpty())
         {           
-            return $section_subjects;
+            return $this->handleSectionSubjects($student_id, $section_subjects);
         }
 
         return [
@@ -220,6 +220,32 @@ class EnrollmentService
             'message' => 'The selected section has no class offerings!',
             'alert' => 'alert-danger'
         ];
+    }
+
+    public function handleSectionSubjects($student_id, $section_subjects)
+    {
+        $internalGradeService = new InternalGradeService();
+        $subjects = [];
+        
+        $ispassed = 0;
+        foreach ($section_subjects as $key => $section_subject) {
+            $subject_id = $section_subject['curriculumsubject']['subject_id'];
+
+           
+            $grade_passed = $internalGradeService->checkIfPassedInternalGrade($student_id, $subject_id);
+            
+            if($grade_passed)
+            {
+                $quota_grade = $section_subject['curriculumsubject']['quota'] ?? false;
+                $ispassed = ($quota_grade) ? (($quota_grade >= $grade_passed->grade)) : 1;
+            }else{
+                $ispassed = 0;
+            }
+
+            $subjects[] = $ispassed;
+        }
+
+        return $subjects;
     }
 
 }
