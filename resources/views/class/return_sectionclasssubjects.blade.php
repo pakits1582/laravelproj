@@ -29,6 +29,7 @@
             <td>{{ $faculty }}</td>
             <td>{{ $section_subject->schedule->schedule }}</td>
             <td class="mid">{{ $section_subject->slots }}</td>
+            <td>{{ $section_subject->curriculumsubject->curriculum->curriculum }}</td>
         </tr>
     @endforeach
 @else

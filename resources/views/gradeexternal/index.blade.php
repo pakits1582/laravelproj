@@ -1,12 +1,12 @@
 @extends('layout')
-@section('title') {{ 'Internal Grades' }} @endsection
+@section('title') {{ 'External Grades' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Internal Grades</h1>
-        <p class="mb-4">Student's internally recorded grades.</p>
+        <h1 class="h3 mb-2 text-gray-800">External Grades</h1>
+        <p class="mb-4">Student's externally recorded grades.</p>
         
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
@@ -64,7 +64,17 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="class_start" class="m-0 font-weight-bold text-primary">Period</label>
-                                        @include('partials.periods.dropdown', ['value' => session('current_period'), 'fieldname' => 'period_id', 'fieldid' => 'period_id'])
+                                        <select name="period_id" class="form-control" id="period">
+                                            <option value="">- select period -</option>
+                                            @if ($periods)
+                                                @foreach ($periods as $period)
+                                                    <option value="{{ $period->id }}" 
+                                                        {{ (old('period') === $period->id) ? 'selected' : '' }}
+                                                        {{ (session('current_period') === $period->id) ? 'selected' : '' }}
+                                                        >{{ $period->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -85,20 +95,20 @@
                     <div class="card-header py-3">
                         <div class="row align-items-center">
                             <div class="col-md-6">
-                                <h6 class="m-0 font-weight-bold text-primary">Student's Internal Grade File</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Student's External Grade File</h6>
                             </div>
                             <div class="col-md-6 text-right">
-                                <button type="button" id="add_internal_grade" class="btn btn-success btn-icon-split mb-2 mb-md-0">
+                                <button type="button" id="add_external_grade" class="btn btn-success btn-icon-split mb-2 mb-md-0">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-plus-square"></i>
                                     </span>
-                                    <span class="text">Add Internal Grade</span>
+                                    <span class="text">Add External Grade</span>
                                 </button>
                                 <button type="button" id="internal_grade_info" class="btn btn-primary btn-icon-split actions mb-2 mb-md-0" disabled>
                                     <span class="icon text-white-50">
                                         <i class="fas fa-edit"></i>
                                     </span>
-                                    <span class="text">Internal Grade Info</span>
+                                    <span class="text">External Grade Info</span>
                                 </button>                            
                             </div>
                         </div>
@@ -111,19 +121,19 @@
                                     <tr>
                                         <th class="w30"></th>
                                         <th class="w20"></th>
-                                        <th class="w170">Section</th>
-                                        <th class="w50">Class</th>
+                                        <th class="w170">School</th>
+                                        <th class="w150">Program</th>
                                         <th class="w150">Subject Code</th>
                                         <th class="">Description</th>
                                         <th class="w80">Grade</th>
                                         <th class="w50">C. G.</th>
+                                        <th class="w50">Equiv</th>
                                         <th class="w50">Units</th>
                                         <th class="w120">Remark</th>
-                                        <th class="w170">Instructor</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-black" id="return_internal_grades">
-                                    <tr><td class="mid" colspan="13">No records to be displayed!</td></tr>
+                                <tbody class="text-black" id="return_external_grades">
+                                    <tr><td class="mid" colspan="11">No records to be displayed!</td></tr>
                                 </tbody>
 
                             </table>

@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
-use App\Models\Period;
-use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Models\InternalGrade;
 use App\Services\InstructorService;
 use App\Services\Grade\InternalGradeService;
-use App\Services\SubjectService;
 
 class InternalGradeController extends Controller
 {

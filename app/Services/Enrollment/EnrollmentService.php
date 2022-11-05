@@ -14,7 +14,13 @@ use function PHPUnit\Framework\returnSelf;
 
 class EnrollmentService
 {
-    //
+    protected $internalGradeService;
+
+    public function __construct()
+    {
+        $this->internalGradeService = new InternalGradeService();
+    }
+
     public function handleStudentEnrollmentInfo($student_id, $studentinfo)
     {
         $data = [];
@@ -224,31 +230,48 @@ class EnrollmentService
 
     public function handleSectionSubjects($student_id, $section_subjects)
     {
-        $internalGradeService = new InternalGradeService();
         $subjects = [];
         
         $ispassed = 0;
         foreach ($section_subjects as $key => $section_subject) {
-            $subject_id = $section_subject['curriculumsubject']['subject_id'];
 
-            $isgrade_passed = $internalGradeService->checkIfPassedInternalGrade($student_id, $subject_id);
-            
-            if($isgrade_passed)
-            {
-                $ispassed = $internalGradeService->checkIfPassedQuotaGrade(
-                    $section_subject['curriculumsubject']['quota'] ?? false, 
-                    $isgrade_passed->grade, 
-                    $isgrade_passed->completion_grade
+            $ispassed = $this->internalGradeService->checkIfPassedInternalGrade(
+                $student_id, 
+                $section_subject['curriculumsubject']['subject_id'],
+                $section_subject['curriculumsubject']['quota']
                 );
-
-            }else{
-                $ispassed = 0;
+            
+            if($ispassed === 0)
+            {
+                $equivalent_subjects = $section_subject['curriculumsubject']['equivalents'];
+                if(count($equivalent_subjects) > 0)
+                {
+                    $ispassed = $this->checkEquivalentSubjects($equivalent_subjects, $student_id);
+                }
             }
 
             $subjects[] = $ispassed;
         }
 
         return $subjects;
+    }
+
+    public function checkEquivalentSubjects($equivalent_subjects, $student_id)
+    {
+        $passed = 0;
+
+        foreach ($equivalent_subjects as $key => $equivalent_subject) 
+        {
+            if($passed === 0)
+            {
+                $passed = $this->internalGradeService->checkIfPassedInternalGrade(
+                    $student_id, 
+                    $equivalent_subject['equivalent']
+                );
+            }
+        }
+    
+        return 'equiv'.$passed;
     }
 
 }

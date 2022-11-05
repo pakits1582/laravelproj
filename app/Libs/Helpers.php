@@ -81,7 +81,7 @@ class Helpers
                     ['header' => 'Master List', 'link' => 'masterlists', 'id' => 'masterlist'],
                     ['header' => 'Faculty Load', 'link' => 'facultyloads', 'id' => 'facultyload'],
                     ['header' => 'Enrolment Summary', 'link' => 'enrolmentsummary', 'id' => 'enrolmentsummary'],
-                    ['header' => 'Attendace', 'link' => 'attendances', 'id' => 'attendance'],
+                    ['header' => 'Attendance', 'link' => 'attendances', 'id' => 'attendance'],
                     ['header' => 'Student Schedule', 'link' => 'studentschedules', 'id' => 'studentschedule'],
                 ],
             ],

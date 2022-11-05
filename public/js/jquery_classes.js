@@ -16,12 +16,11 @@ $(function(){
     $(document).on("change", "#program_id", function(e){
         var program_id = $(this).val();
 
-        if(!program_id)
-        {
+       
             $("#year_level, #section").val("");
             $("#button_group").addClass('d-none');
             $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
-        }
+        
         e.preventDefault();
     });
 

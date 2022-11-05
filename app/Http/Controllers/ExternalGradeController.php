@@ -2,11 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ExternalGrade;
+use App\Libs\Helpers;
+use App\Models\Period;
+use App\Models\Remark;
+use App\Models\School;
+use App\Models\Program;
 use Illuminate\Http\Request;
+use App\Models\ExternalGrade;
+use App\Services\Grade\ExternalGradeService;
 
 class ExternalGradeController extends Controller
 {
+    protected $externalGradeService;
+
+    public function __construct(ExternalGradeService $externalGradeService)
+    {
+        $this->externalGradeService = $externalGradeService;
+        Helpers::setLoad(['jquery_externalgrade.js', 'select2.full.min.js']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +28,9 @@ class ExternalGradeController extends Controller
      */
     public function index()
     {
-        //
+        $periods = Period::all()->sortBy('year')->sortBy('priority_lvl');
+
+        return view('gradeexternal.index', compact('periods'));
     }
 
     /**
@@ -22,9 +38,13 @@ class ExternalGradeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $schools = School::all()->sortBy('code');
+        $programs = Program::all()->sortBy('code');
+        $remarks = Remark::all();
+
+        return view('gradeexternal.create', compact('schools', 'programs', 'remarks'));
     }
 
     /**

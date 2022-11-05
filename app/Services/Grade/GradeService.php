@@ -10,6 +10,8 @@ class GradeService
 {
     public function getGradeInfoByStudentAndPeriod($student_id, $period_id, $origin)
     {
+        $origin = ($origin === 'internal') ? Grade::ORIGIN_INTERNAL : Grade::ORIGIN_EXTERNAL;
+        
         $grade = Grade::with([
             'enrollment' => fn($query) => $query->with(
                 'curriculum',

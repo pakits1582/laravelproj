@@ -250,10 +250,11 @@
                                         <th class="w150 mid">Instructor</th>
                                         <th class="w300 mid">Schedule</th>
                                         <th class="w40">Slots</th>
+                                        <th class="">Curr</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-black" id="return_classsubjects">
-                                    <tr><td class="mid" colspan="13">No records to be displayed!</td></tr>
+                                    <tr><td class="mid" colspan="14">No records to be displayed!</td></tr>
                                 </tbody>
 
                             </table>

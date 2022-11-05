@@ -21,6 +21,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\ExternalGradeController;
 use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\InternalGradeController;
 
@@ -238,7 +239,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
         // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
         //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
-        Route::get('/grades/{student}', [GradeController::class, 'getgradeinfobystudentandperiod']);
+        Route::get('/grades/{student}/{origin}', [GradeController::class, 'getgradeinfobystudentandperiod']);
         Route::resource('grades', GradeController::class)->missing(function (Request $request) {
             return Redirect::route('grades.index');
         });
@@ -253,6 +254,19 @@ Route::group(['middleware' => ['auth']], function () {
         //Route::post('/gradeinternals/saveremark', [GradingSystemController::class, 'storeremark'])->name('saveremark');
         Route::resource('gradeinternals', InternalGradeController::class)->missing(function (Request $request) {
             return Redirect::route('gradeinternals.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:gradeexternals']], function () {
+        // Route::view('/subjects/import', 'subject.import')->name('subjects.import');
+        // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
+        // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
+        // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
+        //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
+        //Route::post('/gradeinternals/saveremark', [GradingSystemController::class, 'storeremark'])->name('saveremark');
+        Route::get('/gradeexternals/{student}/{period}', [ExternalGradeController::class, 'create']);
+        Route::resource('gradeexternals', ExternalGradeController::class)->missing(function (Request $request) {
+            return Redirect::route('gradeexternals.index');
         });
     });
 

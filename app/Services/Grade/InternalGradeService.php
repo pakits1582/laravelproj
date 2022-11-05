@@ -8,7 +8,7 @@ use App\Libs\Helpers;
 class InternalGradeService
 {
   
-    public function checkIfPassedInternalGrade($student_id, $subject_id, $internal_grade_id = '')
+    public function checkIfPassedInternalGrade($student_id, $subject_id, $quota_grade = null, $internal_grade_id = null)
     {
         $query = InternalGrade::query();
         $query->select(
@@ -22,15 +22,28 @@ class InternalGradeService
         $query->leftJoin('remarks', 'grading_systems.remark_id', 'remarks.id');
         $query->leftJoin('grading_systems AS cggs', 'internal_grades.completion_grade', 'cggs.id');
         $query->leftJoin('remarks AS cgr', 'cggs.remark_id', 'cgr.id');
-        $query->where('curriculum_subjects.subject_id', $subject_id);
         $query->where('internal_grades.final', 1);
-        $query->where('grades.student_id', $student_id);
-
         $query->where(function($query){
             $query->where('remarks.remark', '=', 'PASSED')->orwhere('cgr.remark', '=', 'PASSED');
         });
 
-        return $query->first();
+        $query->where('curriculum_subjects.subject_id', $subject_id);
+        $query->where('grades.student_id', $student_id);
+
+        $isgrade_passed = $query->first();
+
+        $ispassed = 0;
+
+        if($isgrade_passed)
+        {
+            $ispassed = ($quota_grade !== null) ? $this->checkIfPassedQuotaGrade(
+                $quota_grade, 
+                $isgrade_passed->grade, 
+                $isgrade_passed->completion_grade
+            ) : 'passednoquota-1';
+        }
+
+        return $ispassed;
 
     }
 
@@ -42,7 +55,7 @@ class InternalGradeService
             $passed = ($grade >= $quotagrade) ? 1 : (($completion_grade && $completion_grade >= $quotagrade) ? 1 : 0);
         }
 
-        return $passed;
+        return 'quota'.$passed;
     }
 }
 

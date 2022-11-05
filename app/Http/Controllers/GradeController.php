@@ -96,7 +96,7 @@ class GradeController extends Controller
 
     public function getgradeinfobystudentandperiod(Request $request)
     {
-        $grade = $this->gradeService->getGradeInfoByStudentAndPeriod($request->student, session('current_period'), Grade::ORIGIN_INTERNAL);
+        $grade = $this->gradeService->getGradeInfoByStudentAndPeriod($request->student, session('current_period'), $request->origin);
 
         return response()->json(['data' => $grade]);
     }
