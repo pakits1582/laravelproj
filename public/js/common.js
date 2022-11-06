@@ -41,6 +41,14 @@ function showInfo(msg){
         }).center();
 }	
 
+function showMessageInForm(form, alert, message){
+
+    $("#"+form).prepend('<p class="alert '+alert+'">'+message+'</p>');
+    $('.alert').delay( 1500 )
+    .fadeOut( 500, function(){
+        $(this).remove();
+    })
+}
 /***************************
 *** FUNCTION DATEPICKERS ***
 ***************************/

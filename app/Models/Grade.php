@@ -49,6 +49,12 @@ class Grade extends Model
         return $this->hasMany(InternalGrade::class);
     }
 
+    public function externalgrades()
+    {
+        return $this->hasMany(ExternalGrade::class);
+    }
+    
+
 
 
 

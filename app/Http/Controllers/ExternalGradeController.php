@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreExternalGradeRequest;
 use App\Libs\Helpers;
 use App\Models\Period;
 use App\Models\Remark;
@@ -29,8 +30,11 @@ class ExternalGradeController extends Controller
     public function index()
     {
         $periods = Period::all()->sortBy('year')->sortBy('priority_lvl');
+        $schools = School::all()->sortBy('code');
+        $programs = Program::all()->sortBy('code');
+        $remarks = Remark::all();
 
-        return view('gradeexternal.index', compact('periods'));
+        return view('gradeexternal.index', compact('periods', 'schools', 'programs', 'remarks'));
     }
 
     /**
@@ -40,11 +44,11 @@ class ExternalGradeController extends Controller
      */
     public function create(Request $request)
     {
-        $schools = School::all()->sortBy('code');
-        $programs = Program::all()->sortBy('code');
-        $remarks = Remark::all();
+        // $schools = School::all()->sortBy('code');
+        // $programs = Program::all()->sortBy('code');
+        // $remarks = Remark::all();
 
-        return view('gradeexternal.create', compact('schools', 'programs', 'remarks'));
+        // return view('gradeexternal.create', compact('schools', 'programs', 'remarks'));
     }
 
     /**
@@ -53,9 +57,11 @@ class ExternalGradeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreExternalGradeRequest $request)
     {
-        //
+        $return = $this->externalGradeService->storeExternalGrade($request);
+
+        return response()->json(['data' => $return]);
     }
 
     /**

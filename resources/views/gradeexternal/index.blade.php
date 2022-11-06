@@ -17,26 +17,11 @@
                 <div class="row">
                     <div class="col-lg-12 mx-auto">
                         <div id="nav-tab-card" class="tab-pane fade show active">
-                            <div class="row align-items-end">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="code"  class="m-0 font-weight-bold text-primary">Grade No.</label>
-                                        <input type="text" id="grade_id" class="form-control text-uppercase clearable" readonly value="" placeholder="">
-                                    </div>
-                                </div>
-                                <div class="col-md-7"></div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="code"  class="m-0 font-weight-bold text-primary">Curriculum</label>
-                                        <input type="text" id="curriculum" class="form-control text-uppercase clearable" readonly value="" placeholder="">
-                                    </div>
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="term" class="m-0 font-weight-bold text-primary">Student</label>
-                                        <select name="student_id" class="form-control select clearable" id="student">
+                                        <select name="student_id" class="form-control select" id="student">
                                             <option value="">- search student -</option>
                                         </select>
                                     </div>
@@ -61,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="class_start" class="m-0 font-weight-bold text-primary">Period</label>
                                         <select name="period_id" class="form-control" id="period">
@@ -77,6 +62,12 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="code"  class="m-0 font-weight-bold text-primary">Curriculum</label>
+                                        <input type="text" id="curriculum" class="form-control text-uppercase" readonly value="" placeholder="">
+                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="class_end" class="m-0 font-weight-bold text-primary">Program</label>
@@ -89,6 +80,9 @@
                 </div>
             </div>
         </div>
+        <div>
+            @include('gradeexternal.create')
+        </div>
         <div class="row">
             <div class="col-lg-12 mx-auto">
                 <div class="card shadow mb-4">
@@ -98,12 +92,6 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Student's External Grade File</h6>
                             </div>
                             <div class="col-md-6 text-right">
-                                <button type="button" id="add_external_grade" class="btn btn-success btn-icon-split mb-2 mb-md-0">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-plus-square"></i>
-                                    </span>
-                                    <span class="text">Add External Grade</span>
-                                </button>
                                 <button type="button" id="internal_grade_info" class="btn btn-primary btn-icon-split actions mb-2 mb-md-0" disabled>
                                     <span class="icon text-white-50">
                                         <i class="fas fa-edit"></i>
