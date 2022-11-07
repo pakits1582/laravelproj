@@ -57,7 +57,9 @@ class GradeController extends Controller
      */
     public function show($id)
     {
-        //
+        $gradeinfo = $this->gradeService->returnGradeInfo($id);
+
+        return $gradeinfo;
     }
 
     /**

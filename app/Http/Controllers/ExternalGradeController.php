@@ -11,6 +11,7 @@ use App\Models\Program;
 use Illuminate\Http\Request;
 use App\Models\ExternalGrade;
 use App\Services\Grade\ExternalGradeService;
+use App\Services\Grade\GradeService;
 
 class ExternalGradeController extends Controller
 {
@@ -107,5 +108,21 @@ class ExternalGradeController extends Controller
     public function destroy(ExternalGrade $externalGrade)
     {
         //
+    }
+
+    public function getallexternalgrade($student_id, $period_id)
+    {
+        $gradeService = new GradeService();
+
+        $grades = $gradeService->getAllExternalGrades($student_id, $period_id);
+
+        return response()->json(['data' => $grades]);
+    }
+
+    public function externalgradesubjects($grade_id)
+    {
+        $external_subjects = $this->externalGradeService->getExternalGradeSubjects($grade_id);
+
+        return view('gradeexternal.return_externalgrades', compact('external_subjects'));
     }
 }

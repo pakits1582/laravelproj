@@ -88,7 +88,11 @@ class GradeService
     public function getAllExternalGrades($student_id, $period_id)
     {
         return Grade::where('student_id', $student_id)->where('period_id', $period_id)->where('origin', Grade::ORIGIN_EXTERNAL)->get();
-    
+    }
+
+    public function getExternalGradeInfo($student_id, $period_id, $school_id, $program_id)
+    {
+
     }
 
 }

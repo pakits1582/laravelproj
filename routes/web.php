@@ -264,10 +264,12 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
         //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
         //Route::post('/gradeinternals/saveremark', [GradingSystemController::class, 'storeremark'])->name('saveremark');
-        Route::get('/gradeexternals/{student}/{period}', [ExternalGradeController::class, 'create']);
+        Route::get('/gradeexternals/externalgradesubjects/{grade_id}', [ExternalGradeController::class, 'externalgradesubjects']);
+        Route::get('/gradeexternals/{student}/{period}', [ExternalGradeController::class, 'getallexternalgrade']);
         Route::resource('gradeexternals', ExternalGradeController::class)->missing(function (Request $request) {
             return Redirect::route('gradeexternals.index');
         });
+       
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

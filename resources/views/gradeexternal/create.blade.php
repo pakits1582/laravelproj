@@ -14,17 +14,20 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="year_level" class="m-0 font-weight-bold text-primary">* Grade No.</label>
+                                <label for="year_level" class="m-0 font-weight-bold text-primary">Grade No.</label>
                                 <select name="grade_id" class="form-control" id="grade_id">
                                     <option value="">- select grade -</option>
                                 </select>
-                                <div id="error_school_id"></div>
                             </div>
                         </div>
                         <div class="col-md-9">
-                            <p class="font-italic text-info">
-                                Note: If student has multiple external grade record from different schools in the same term you can view grades by selecting grade number.
-                                Selecting grade number will automatically display the school and program where the grade will be save.
+                            <p class="m-0 font-italic text-info" style="font-size: 12px;">
+                                Note: 
+                                <ul class="m-0 font-italic text-info" style="font-size: 12px;">
+                                    <li>If student has multiple external grade record from different schools in the same term you can view grades by selecting grade no.</li>
+                                    <li>Selecting grade number will automatically display the school and program where the grade will be save.</li>
+                                    <li>If grade no. is selected, changing school or program will be applied to all subjects of the grade no. after saving.</li>
+                                </ul>
                             </p>                        
                         </div>
                     </div>
