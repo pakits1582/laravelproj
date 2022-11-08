@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreExternalGradeRequest;
+use App\Http\Requests\UpdateExternalGradeRequest;
 use App\Libs\Helpers;
 use App\Models\Period;
 use App\Models\Remark;
@@ -73,7 +74,7 @@ class ExternalGradeController extends Controller
      */
     public function show(ExternalGrade $externalGrade)
     {
-        //
+        dd($externalGrade);
     }
 
     /**
@@ -82,9 +83,11 @@ class ExternalGradeController extends Controller
      * @param  \App\Models\ExternalGrade  $externalGrade
      * @return \Illuminate\Http\Response
      */
-    public function edit(ExternalGrade $externalGrade)
+    public function edit(ExternalGrade $gradeexternal)
     {
-        //
+        $gradeexternal->load(['gradeinfo' => fn($query) => $query->with('school','program')]);
+
+        return response()->json(['data' => $gradeexternal]);
     }
 
     /**
@@ -94,9 +97,12 @@ class ExternalGradeController extends Controller
      * @param  \App\Models\ExternalGrade  $externalGrade
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ExternalGrade $externalGrade)
+    public function update(UpdateExternalGradeRequest $request, ExternalGrade $gradeexternal)
     {
-        //
+        $return = $this->externalGradeService->updateExternalGrade($request, $gradeexternal);
+
+        return response()->json(['data' => $return]);
+
     }
 
     /**
@@ -105,9 +111,11 @@ class ExternalGradeController extends Controller
      * @param  \App\Models\ExternalGrade  $externalGrade
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ExternalGrade $externalGrade)
+    public function destroy(ExternalGrade $gradeexternal)
     {
-        //
+        $return = $this->externalGradeService->deleteExternalGrade($gradeexternal, $gradeexternal->grade_id);
+
+        return response()->json(['data' => $return]);
     }
 
     public function getallexternalgrade($student_id, $period_id)

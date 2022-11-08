@@ -10,6 +10,8 @@ class ExternalGrade extends Model
 {
     use HasFactory;
 
+    protected $table = 'external_grades';
+
     protected $fillable = ['grade_id', 'subject_code', 'subject_description', 'grade', 'completion_grade', 'equivalent_grade', 'units', 'remark_id', 'user_id'];
 
     public function subjectCode(): Attribute

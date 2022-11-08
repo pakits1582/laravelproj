@@ -265,11 +265,11 @@ Route::group(['middleware' => ['auth']], function () {
         //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
         //Route::post('/gradeinternals/saveremark', [GradingSystemController::class, 'storeremark'])->name('saveremark');
         Route::get('/gradeexternals/externalgradesubjects/{grade_id}', [ExternalGradeController::class, 'externalgradesubjects']);
-        Route::get('/gradeexternals/{student}/{period}', [ExternalGradeController::class, 'getallexternalgrade']);
+        
         Route::resource('gradeexternals', ExternalGradeController::class)->missing(function (Request $request) {
             return Redirect::route('gradeexternals.index');
         });
-       
+        Route::get('/gradeexternals/{student}/{period}', [ExternalGradeController::class, 'getallexternalgrade']);
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

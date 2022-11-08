@@ -89,9 +89,9 @@ class ExternalGradeService
         $external_grades_count = $this->getExternalGradeSubjects($grade_id)->count();
 
         if($external_grades_count === 0){
-            
-        }
 
+        }
+        
         // return [
         //     'success' => true,
         //     'message' => 'External Grade successfully deleted!',

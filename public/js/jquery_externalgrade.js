@@ -98,6 +98,10 @@ $(function(){
                         $("#program").val(response.data.values.program.name);
 
                         getStudentExternalGrades(student_id);
+                        $("#return_external_grades").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+                        $("#school, #program_id").val('').trigger('change');
+                        $("#cancel").trigger('click');
+
                     }
                 },
                 error: function (data) {
@@ -110,7 +114,9 @@ $(function(){
                 }
             });
         }else{
-            //$('#form_enrollment')[0].reset();
+            $("#return_external_grades").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+            $("#school, #program_id").val('').trigger('change');
+            $("#cancel").trigger('click');
         }
         
         e.preventDefault();
@@ -126,6 +132,8 @@ $(function(){
 
     $(document).on("change", "#grade_id", function(e){
         var grade_id = $("#grade_id").val();
+
+        $("#cancel").trigger('click');
 
         if(grade_id){
             $.ajax({
@@ -190,8 +198,19 @@ $(function(){
                 type: 'POST',
                 data: postData,
                 dataType: 'json',
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons:false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
                 success: function(response){
-                    console.log(response);
+                    $("#confirmation").dialog('close');
                     
                     $('.alert').remove();
     
@@ -202,6 +221,7 @@ $(function(){
                     }
                 },
                 error: function (data) {
+                    $("#confirmation").dialog('close');
                     console.log(data);
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) == false) {
@@ -227,5 +247,164 @@ $(function(){
 		$('input.checks').prop('disabled', false).prop('checked', false);
 		$('.checks').closest('tr').removeClass('selected');
         $('.errors').remove();  
+
+        $('.form_externalgrade').prop("id", 'form_externalgrade');
+	});
+
+    $(document).on("click", "#edit", function(e){
+        var external_subject_id = $(".checks:checked").attr("data-id");
+
+		if($(".checks:checked").length === 0)
+        {
+			showError('Please select atleast one checkbox/subject to edit!');	
+		}else{
+            $.ajax({
+                url: "/gradeexternals/"+external_subject_id+"/edit",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response){
+                    if(!jQuery.isEmptyObject(response)){
+                        $('#edit').prop("disabled", true);
+                        $('input.checks').prop('disabled', true); 
+
+                        $("#school").val(response.data.gradeinfo.school_id).trigger('change');
+                        $("#program_id").val(response.data.gradeinfo.program_id).trigger('change');
+
+                        $('#subject_code').val(response.data.subject_code);
+                        $('#subject_description').val(response.data.subject_description);
+                        $('#grade').val(response.data.grade);
+                        $('#completion_grade').val(response.data.completion_grade);
+                        $('#units').val(response.data.units);
+                        $('#remark').val(response.data.remark_id);
+                        $('#equivalent_grade').val(response.data.equivalent_grade);
+                        $('#external_grade_id').val(response.data.id);
+
+                        $('.form_externalgrade').prop("id", 'form_update_externalgrade');
+                    }else{
+                        showError('Oppss! Something went wrong! Can not fetch grade subject data!');
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        e.preventDefault();
+    });
+
+    $(document).on("submit", "#form_update_externalgrade", function(e){
+        var postData = $(this).serializeArray();
+        var url = $(this).attr('action');
+
+        var student_id = $("#student").val();
+        var period_id = $("#period").val();
+        var external_grade_id = $("#external_grade_id").val();
+        
+        postData.push(
+            {name: 'student_id', value: student_id },
+            {name: 'period_id', value: period_id },
+        );
+
+        if(student_id && period_id && external_grade_id)
+        {
+            $.ajax({
+                url: url+"/"+external_grade_id,
+                type: 'PUT',
+                data: postData,
+                dataType: 'json',
+                    beforeSend: function() {
+                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                            show: 'fade',
+                            resizable: false,	
+                            width: 350,
+                            height: 'auto',
+                            modal: true,
+                            buttons:false
+                        });
+                        $(".ui-dialog-titlebar").hide();
+                    },
+                success: function(response){
+                    $("#confirmation").dialog('close');
+                    console.log(response);
+                    
+                    $('.alert').remove();
+    
+                    showMessageInForm('form_update_externalgrade', response.data.alert, response.data.message);
+                    if(response.data.success){
+                        $("#cancel").trigger('click');
+
+                        getExternalGradeSubjects(response.data.grade_id);
+                    }
+                },
+                error: function (data) {
+                    $("#confirmation").dialog('close');
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) == false) {
+                        $.each(errors.errors, function (key, value) {
+                            $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                        });
+                    }
+                }
+            });	
+        }else{
+            showError('Please select student and period and subject first before updating an external grade!');
+        }
+        e.preventDefault();
+    });
+
+    $(document).on("click", "#delete", function(e){
+		var external_subject_id = $(".checks:checked").attr("data-id");
+
+		if($(".checks:checked").length === 0)
+        {
+			showError('Please select atleast one checkbox/subject to delete!');	
+		}else{
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to delete selected item?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: false,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $(this).dialog('close');
+                        },
+                        'OK':function(){
+                            $(this).dialog('close');
+                            $.ajax({
+                                url: "/gradeexternals/"+external_subject_id,
+                                type: 'DELETE',
+                                dataType: 'json',
+                                success: function(response){
+                                    console.log(response);
+                                    // if(response.data.success !== false){
+                                    //     showSuccess(response.data.message);
+
+                                    //     $("#cancel").trigger('click');
+                                    //     var grade_id = $("#grade_id").val();
+                                    //     getExternalGradeSubjects(grade_id);
+                                    // }else{
+                                    //     showError(response.data.message);
+                                    // }
+                                    
+                                },
+                                error: function (data) {
+                                    //console.log(data);
+                                    var errors = data.responseJSON;
+                                    if ($.isEmptyObject(errors) === false) {
+                                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                                    }
+                                }
+                            });
+                        }//end of ok button	
+                    }//end of buttons
+                });//end of dialogbox
+                $(".ui-dialog-titlebar").hide();
+            //end of dialogbox
+        }
+		e.preventDefault();
 	});
 });

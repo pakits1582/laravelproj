@@ -9,7 +9,7 @@
                 @if(Session::has('message'))
                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                 @endif
-                <form method="POST" action="{{ route('gradeexternals.store') }}"  role="form" id="form_externalgrade">
+                <form method="POST" action="{{ route('gradeexternals.store') }}" class="form_externalgrade"  role="form" id="form_externalgrade">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -119,11 +119,12 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="code"  class="m-0 font-weight-bold text-primary">Equivalent</label>
-                                <input type="text" name="equivalent_grade" id="curriculum" class="form-control text-uppercase clearable" value="" placeholder="">
+                                <input type="text" name="equivalent_grade" id="equivalent" class="form-control text-uppercase clearable" value="" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-7">
                             <div class="form-group mid" id="button_group">
+                                <input type="hidden" name="external_grade_id" id="external_grade_id" class="clearable" value="">
                                 <button type="submit" id="save_class" class="btn btn-success btn-icon-split mb-2 mb-md-0">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-save"></i>
