@@ -90,6 +90,11 @@ class GradeService
         return Grade::where('student_id', $student_id)->where('period_id', $period_id)->where('origin', Grade::ORIGIN_EXTERNAL)->get();
     }
 
+    public function deleteGrade($grade_id)
+    {
+        Grade::where('id', $grade_id)->firstOrFail()->delete();
+    }
+
     public function getExternalGradeInfo($student_id, $period_id, $school_id, $program_id)
     {
 

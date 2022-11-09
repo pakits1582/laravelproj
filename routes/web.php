@@ -19,6 +19,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\ExternalGradeController;
@@ -265,11 +266,18 @@ Route::group(['middleware' => ['auth']], function () {
         //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
         //Route::post('/gradeinternals/saveremark', [GradingSystemController::class, 'storeremark'])->name('saveremark');
         Route::get('/gradeexternals/externalgradesubjects/{grade_id}', [ExternalGradeController::class, 'externalgradesubjects']);
-        
+
         Route::resource('gradeexternals', ExternalGradeController::class)->missing(function (Request $request) {
             return Redirect::route('gradeexternals.index');
         });
         Route::get('/gradeexternals/{student}/{period}', [ExternalGradeController::class, 'getallexternalgrade']);
+        
+    });
+
+    Route::group(['middleware' => ['inaccess:evaluations']], function () {
+        Route::resource('evaluations', EvaluationController::class)->missing(function (Request $request) {
+            return Redirect::route('evaluations.index');
+        }); 
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

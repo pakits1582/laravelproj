@@ -41,7 +41,7 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
-    function getStudentExternalGrades(student_id)
+    function getStudentExternalGrades(student_id, grade_id = null)
     {
         var period_id = $("#period").val();
         var school_id = $("#school").val();
@@ -60,6 +60,7 @@ $(function(){
                     $.each(response.data, function(k, v){
                         grade_nos += '<option value="'+v.id+'"';
                         grade_nos += (v.school_id === school_id && v.program_id === program_id) ? 'selected' : '';
+                        grade_nos += (v.id === grade_id) ? 'selected' : '';
                         grade_nos += '>'+v.id+'</option>';       
                     });
                     $("#grade_id").html(grade_nos);
@@ -211,13 +212,14 @@ $(function(){
                 },
                 success: function(response){
                     $("#confirmation").dialog('close');
-                    
+                    console.log(response);
                     $('.alert').remove();
     
                     showMessageInForm('form_externalgrade', response.data.alert, response.data.message);
                     if(response.data.success){
                         $(".clearable").val('');
                         getExternalGradeSubjects(response.data.grade_id);
+                        getStudentExternalGrades(student_id, response.data.grade_id);
                     }
                 },
                 error: function (data) {
@@ -263,6 +265,7 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
+                    console.log(response);
                     if(!jQuery.isEmptyObject(response)){
                         $('#edit').prop("disabled", true);
                         $('input.checks').prop('disabled', true); 
@@ -378,21 +381,42 @@ $(function(){
                                 url: "/gradeexternals/"+external_subject_id,
                                 type: 'DELETE',
                                 dataType: 'json',
+                                beforeSend: function() {
+                                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                                        show: 'fade',
+                                        resizable: false,	
+                                        width: 350,
+                                        height: 'auto',
+                                        modal: true,
+                                        buttons:false
+                                    });
+                                    $(".ui-dialog-titlebar").hide();
+                                },
                                 success: function(response){
                                     console.log(response);
-                                    // if(response.data.success !== false){
-                                    //     showSuccess(response.data.message);
+                                    $("#confirmation").dialog('close');
 
-                                    //     $("#cancel").trigger('click');
-                                    //     var grade_id = $("#grade_id").val();
-                                    //     getExternalGradeSubjects(grade_id);
-                                    // }else{
-                                    //     showError(response.data.message);
-                                    // }
+                                    if(response.data.success !== false){
+                                        showSuccess(response.data.message);
+
+                                        $("#school").val('').trigger('change');
+                                        $("#program_id").val('').trigger('change');
+                                        $("#cancel").trigger('click');
+
+                                        var grade_id = $("#grade_id").val();
+                                        var student_id = $("#student").val();
+
+                                        getExternalGradeSubjects(grade_id);
+                                        getStudentExternalGrades(student_id);
+
+                                    }else{
+                                        showError(response.data.message);
+                                    }
                                     
                                 },
                                 error: function (data) {
                                     //console.log(data);
+                                    $("#confirmation").dialog('close');
                                     var errors = data.responseJSON;
                                     if ($.isEmptyObject(errors) === false) {
                                         showError('Something went wrong! Can not perform requested action! '+errors.message);

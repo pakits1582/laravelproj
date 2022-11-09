@@ -89,15 +89,17 @@ class ExternalGradeService
         $external_grades_count = $this->getExternalGradeSubjects($grade_id)->count();
 
         if($external_grades_count === 0){
+            $gradeService = new GradeService();
 
+            $gradeService->deleteGrade($grade_id);
         }
         
-        // return [
-        //     'success' => true,
-        //     'message' => 'External Grade successfully deleted!',
-        //     'alert' => 'alert-success',
-        //     'status' => 200
-        // ];        
+        return [
+            'success' => true,
+            'message' => 'External Grade successfully deleted!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];        
     }
 
 }

@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Builder;
 class StudentService
 {
     //
-    public function returnStudents($request, $all = false)
+    public function returnStudents($request, $all = false, $limit = 500)
     {
-        $query = Student::with(['program', 'curriculum', 'user'])->orderBy('last_name')->orderBy('first_name');
+        $query = Student::with(['program', 'curriculum', 'user'])->orderBy('last_name')->orderBy('first_name')->limit($limit);
 
         if($request->has('keyword') && !empty($request->keyword)) {
             $query->where(function($query) use($request){

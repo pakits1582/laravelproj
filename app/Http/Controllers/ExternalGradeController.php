@@ -102,7 +102,6 @@ class ExternalGradeController extends Controller
         $return = $this->externalGradeService->updateExternalGrade($request, $gradeexternal);
 
         return response()->json(['data' => $return]);
-
     }
 
     /**

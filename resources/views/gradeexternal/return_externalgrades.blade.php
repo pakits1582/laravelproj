@@ -1,7 +1,7 @@
 @if(count($external_subjects) > 0)
     @foreach ($external_subjects as $external_subject)
         <tr class="label" id="check_{{ $external_subject->id }}">
-            <td><input type="checkbox" data-classid="{{ $external_subject->id }}" class="checks" id="check_{{ $external_subject->id }}" /></td>
+            <td><input type="checkbox" data-id="{{ $external_subject->id }}" class="checks" id="check_{{ $external_subject->id }}" /></td>
             <td>{{ $loop->iteration }}</td>
             <td>{{ $external_subject->gradeinfo->school->code }}</td>
             <td>{{ $external_subject->gradeinfo->program->code }}</td>
