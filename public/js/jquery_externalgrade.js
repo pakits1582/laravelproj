@@ -407,7 +407,7 @@ $(function(){
                                         var student_id = $("#student").val();
 
                                         getExternalGradeSubjects(grade_id);
-                                        getStudentExternalGrades(student_id);
+                                        getStudentExternalGrades(student_id, grade_id);
 
                                     }else{
                                         showError(response.data.message);

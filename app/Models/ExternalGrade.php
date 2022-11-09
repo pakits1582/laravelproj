@@ -45,6 +45,6 @@ class ExternalGrade extends Model
 
     public function remark()
     {
-        return $this->belongsTo(Remark::class, 'remark_id', 'id');
+        return $this->belongsTo(Remark::class, 'remark_id', 'id')->withDefault(['remark' => '']);
     }
 }
