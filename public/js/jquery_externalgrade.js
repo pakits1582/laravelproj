@@ -23,7 +23,7 @@ $(function(){
                 };
             },
             processResults: function(data) {
-                console.log(data);
+                //console.log(data);
                 return {
                     results: $.map(data, function(item) {
                         return {
@@ -41,7 +41,7 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
-    function getStudentExternalGrades(student_id, grade_id = null)
+    function getStudentExternalGrades(student_id, grade_id = '')
     {
         var period_id = $("#period").val();
         var school_id = $("#school").val();
@@ -54,16 +54,23 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
+                    //console.log(response);
 
                     var grade_nos = '<option value="">- select grade -</option>';
+                    var arr = [];
                     $.each(response.data, function(k, v){
+                        arr[k] = v.id;
                         grade_nos += '<option value="'+v.id+'"';
-                        grade_nos += (v.school_id === school_id && v.program_id === program_id) ? 'selected' : '';
-                        grade_nos += (v.id === grade_id) ? 'selected' : '';
+                        grade_nos += (v.school_id == school_id && v.program_id == program_id) ? ' selected' : '';
+                        grade_nos += (v.id == grade_id) ? ' selected' : '';
                         grade_nos += '>'+v.id+'</option>';       
                     });
+
                     $("#grade_id").html(grade_nos);
+                    var gradeid = (jQuery.inArray(grade_id, arr) !== -1) ? grade_id : '';
+                    
+                    $("#grade_id").val(gradeid).trigger('change');
+                    
                 },
                 error: function (data) {
                     console.log(data);
@@ -86,7 +93,7 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
+                    //console.log(response);
                     if(response.data.success === false)
                     {
                         showError(response.data.message);
@@ -142,7 +149,7 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
+                    //console.log(response);
                     $("#school").val(response.school_id).trigger('change');
                     $("#program_id").val(response.program_id).trigger('change');
 
@@ -212,7 +219,7 @@ $(function(){
                 },
                 success: function(response){
                     $("#confirmation").dialog('close');
-                    console.log(response);
+                    //console.log(response);
                     $('.alert').remove();
     
                     showMessageInForm('form_externalgrade', response.data.alert, response.data.message);
@@ -265,7 +272,7 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
+                    //console.log(response);
                     if(!jQuery.isEmptyObject(response)){
                         $('#edit').prop("disabled", true);
                         $('input.checks').prop('disabled', true); 
@@ -329,7 +336,7 @@ $(function(){
                     },
                 success: function(response){
                     $("#confirmation").dialog('close');
-                    console.log(response);
+                    //console.log(response);
                     
                     $('.alert').remove();
     
@@ -393,7 +400,7 @@ $(function(){
                                     $(".ui-dialog-titlebar").hide();
                                 },
                                 success: function(response){
-                                    console.log(response);
+                                    //console.log(response);
                                     $("#confirmation").dialog('close');
 
                                     if(response.data.success !== false){
@@ -412,7 +419,6 @@ $(function(){
                                     }else{
                                         showError(response.data.message);
                                     }
-                                    
                                 },
                                 error: function (data) {
                                     //console.log(data);

@@ -119,7 +119,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="code"  class="m-0 font-weight-bold text-primary">Equivalent</label>
-                                <input type="text" name="equivalent_grade" id="equivalent" class="form-control text-uppercase clearable" value="" placeholder="">
+                                <input type="text" name="equivalent_grade" id="equivalent_grade" class="form-control text-uppercase clearable" value="" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-7">

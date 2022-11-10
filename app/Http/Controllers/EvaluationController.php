@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Student;
+use App\Services\CurriculumService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Evaluation\EvaluationService;
+use App\Services\StudentService;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class EvaluationController extends Controller
@@ -17,7 +20,7 @@ class EvaluationController extends Controller
     public function __construct(EvaluationService $evaluationService)
     {
         $this->evaluationService = $evaluationService;
-        Helpers::setLoad(['jquery_curriculum.js', 'select2.full.min.js']);
+        Helpers::setLoad(['jquery_evaluation.js', 'select2.full.min.js']);
     }
 
     /**
@@ -27,11 +30,17 @@ class EvaluationController extends Controller
      */
     public function index(Request $request)
     {
-        $students = $this->evaluationService->handleUser(Auth::user(), $request);
+        $studentService = new StudentService();
 
-        $students = $this->paginate($students, 10);
+        $students = $studentService->returnStudents($request);
 
-        return view('evaluation.index', )
+        if($request->ajax())
+        {
+            return view('evaluation.return_students', compact('students'));
+        }
+
+        return view('evaluation.index', compact('students'));
+
     }
 
     public function paginate($items, $perPage = 5, $page = null, $options = [])
@@ -48,7 +57,8 @@ class EvaluationController extends Controller
      */
     public function create()
     {
-        //
+         //$students = $this->evaluationService->handleUser(Auth::user(), $request);
+
     }
 
     /**
@@ -68,9 +78,18 @@ class EvaluationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Student $evaluation, Request $request)
     {
-        //
+        $student = $evaluation->load(['user', 'curriculum', 'program']);
+        //dd($student);
+        $user_programs = $this->evaluationService->handleUser(Auth::user(), $request);
+
+        if($user_programs->contains('id', $student->program_id))
+        {
+            $curriculum_subjects = (new CurriculumService())->viewCurriculum( $student->program_id, $student->curriculum);
+
+            dd($curriculum_subjects);
+        }
     }
 
     /**

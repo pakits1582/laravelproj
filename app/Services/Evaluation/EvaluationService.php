@@ -26,12 +26,11 @@ class EvaluationService
                 $programs = (new ProgramService())->programDeanship($user);
             }
 
-
         }else{
-            $students = (new StudentService())->returnStudents($request,true, 100);
+            $programs = (new ProgramService())->returnPrograms($request,true,false);
         }
 
-        return $students;
+        return $programs;
     }
 
 

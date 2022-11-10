@@ -30,6 +30,30 @@ class ExternalGrade extends Model
         );
     }
 
+    public function completionGrade(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['completion_grade']),
+            set: fn ($value) => strtoupper($value)
+        );
+    }
+
+    public function equivalentGrade(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['equivalent_grade']),
+            set: fn ($value) => strtoupper($value)
+        );
+    }
+
+    public function units(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value, $attributes) => strtoupper($attributes['units']),
+            set: fn ($value) => strtoupper($value)
+        );
+    }
+
     public function grade(): Attribute
     {
         return new Attribute(

@@ -5,22 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Libs\Helpers;
 use App\Models\Student;
-use App\Models\Instructor;
-use App\Models\Useraccess;
 use Illuminate\Http\Request;
-use App\Services\UserService;
 use App\Services\StudentService;
-use App\Exports\InstructorsExport;
-use App\Imports\InstructorsImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
-use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
-use App\Http\Requests\StoreInstructorRequest;
-use App\Http\Requests\UpdateInstructorRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StudentController extends Controller
