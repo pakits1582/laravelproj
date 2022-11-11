@@ -40,11 +40,10 @@ class InternalGradeService
                 $quota_grade, 
                 $isgrade_passed->grade, 
                 $isgrade_passed->completion_grade
-            ) : 'passednoquota-1';
+            ) : 1;
         }
 
         return $ispassed;
-
     }
 
     public function checkIfPassedQuotaGrade($quotagrade, $grade, $completion_grade = null)
@@ -55,7 +54,15 @@ class InternalGradeService
             $passed = ($grade >= $quotagrade) ? 1 : (($completion_grade && $completion_grade >= $quotagrade) ? 1 : 0);
         }
 
-        return 'quota'.$passed;
+        return $passed;
+    }
+
+    public function getAllStudentInternalGrades($student_id)
+    {
+        $query = InternalGrade::with(['classinfo', 'gradeinfo', 'gradesystem', 'gradesystem.remark'])
+                    ->join('grades', 'internal_grades.grade_id', 'grades.id')->where('grades.student_id', $student_id);
+
+        return $query->get();
     }
 }
 

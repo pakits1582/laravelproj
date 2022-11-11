@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Evaluation\EvaluationService;
+use App\Services\Grade\InternalGradeService;
 use App\Services\StudentService;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -86,9 +87,12 @@ class EvaluationController extends Controller
 
         if($user_programs->contains('id', $student->program_id))
         {
-            $curriculum_subjects = (new CurriculumService())->viewCurriculum( $student->program_id, $student->curriculum);
+            $internal_grades = (new InternalGradeService())->getAllStudentInternalGrades( $student->id);
 
-            dd($curriculum_subjects);
+            $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
+            //dd($curriculum_subjects['curriculum_subjects']);
+
+            return view('evaluation.evaluate', $curriculuminfo);
         }
     }
 
