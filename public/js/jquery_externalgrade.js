@@ -43,6 +43,8 @@ $(function(){
 
     function getStudentExternalGrades(student_id, grade_id = '')
     {
+
+        
         var period_id = $("#period").val();
         var school_id = $("#school").val();
         var program_id = $("#program_id").val();
@@ -59,16 +61,17 @@ $(function(){
                     var grade_nos = '<option value="">- select grade -</option>';
                     var arr = [];
                     $.each(response.data, function(k, v){
-                        arr[k] = v.id;
+                        arr.push(v.id);
                         grade_nos += '<option value="'+v.id+'"';
                         grade_nos += (v.school_id == school_id && v.program_id == program_id) ? ' selected' : '';
                         grade_nos += (v.id == grade_id) ? ' selected' : '';
                         grade_nos += '>'+v.id+'</option>';       
                     });
+                  
 
                     $("#grade_id").html(grade_nos);
-                    var gradeid = (jQuery.inArray(grade_id, arr) !== -1) ? grade_id : '';
                     
+                    var gradeid = $("#grade_id").val();
                     $("#grade_id").val(gradeid).trigger('change');
                     
                 },
@@ -400,7 +403,7 @@ $(function(){
                                     $(".ui-dialog-titlebar").hide();
                                 },
                                 success: function(response){
-                                    //console.log(response);
+                                    console.log(response);
                                     $("#confirmation").dialog('close');
 
                                     if(response.data.success !== false){
