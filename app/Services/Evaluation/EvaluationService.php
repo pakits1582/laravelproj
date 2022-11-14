@@ -25,9 +25,15 @@ class EvaluationService
             {
                 $programs = (new ProgramService())->programDeanship($user);
             }
-
         }else{
             $programs = (new ProgramService())->returnPrograms($request,true,false);
+        }
+
+        if($user->accessibleprograms->count())
+        {
+            $programs = $user->accessibleprograms->load('program');
+
+            return $programs;
         }
 
         return $programs;

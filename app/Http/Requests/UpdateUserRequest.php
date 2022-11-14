@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserUpdateFormRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,6 +28,7 @@ class UserUpdateFormRequest extends FormRequest
             'idno' => ['required',  Rule::unique('users')->ignore($this->user->id)],
             'name' => ['required',  Rule::unique('userinfo', 'name')->ignore($this->user->id, 'user_id')],
             'access' => 'required',
+            'accessible_programs' => ''
         ];
     }
 

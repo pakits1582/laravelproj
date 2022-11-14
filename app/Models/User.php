@@ -106,7 +106,6 @@ class User extends Authenticatable
         return $user;
     }
 
-
     public function access()
     {
         return $this->hasMany(Useraccess::class, 'user_id', 'id');
@@ -114,7 +113,12 @@ class User extends Authenticatable
 
     public function permissions()
     {
-        return $this->hasMany(Permission::class);
+        return $this->hasMany(Permission::class, 'user_id', 'id');
+    }
+
+    public function accessibleprograms()
+    {
+        return $this->hasMany(AccessibleProgram::class, 'user_id', 'id');
     }
 
     public function setup()

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Libs\Helpers;
+use App\Models\AccessibleProgram;
 use App\Models\User;
 use App\Models\Userinfo;
 use App\Models\Permission;
@@ -25,7 +26,8 @@ class UserService
                 $this->createUserinfo($user, $request);
                 $this->adminAccesses($user, $request);
                 $this->userPermissions($user, $request);
-                
+                $this->userAccessiblePrograms($user, $request);
+
         DB::commit();
     }
 
@@ -41,9 +43,11 @@ class UserService
 
         Useraccess::where('user_id', $user->id)->delete();
         Permission::where('user_id', $user->id)->delete();
+        AccessibleProgram::where('user_id', $user->id)->delete();
 
         $this->adminAccesses($user, $request);
         $this->userPermissions($user, $request);
+        $this->userAccessiblePrograms($user, $request);
 
         if($user->utype === User::TYPE_INSTRUCTOR)
         {
@@ -51,7 +55,6 @@ class UserService
         }
 
         DB::commit();
-
     }
 
     public function createUser($request, $usertype)
@@ -133,6 +136,23 @@ class UserService
             }
 
             return $user->permissions()->saveMany($permissions);
+        }
+
+       return [];
+    }
+
+    public function userAccessiblePrograms($user, $request)
+    {
+        if($request->accessible_programs)
+        {
+            foreach ($request->accessible_programs as $key => $accessible_program) {
+                //ADD VALUES TO ACCESS ARRAY FOR MULTIPLE INPUT
+                $accessible_programs[] = new AccessibleProgram([
+                    'program_id' => $accessible_program
+                ]);
+            }
+
+            return $user->accessibleprograms()->saveMany($accessible_programs);
         }
 
        return [];

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
@@ -9,6 +11,8 @@ use App\Services\UserService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\UserFormRequest;
 use App\Http\Requests\UserUpdateFormRequest;
+use App\Models\Program;
+use App\Services\ProgramService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
@@ -18,7 +22,7 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        Helpers::setLoad(['jquery_user.js']);
+        Helpers::setLoad(['jquery_user.js', 'select2.full.min.js']);
     }
 
     public function index(Request $request)
@@ -31,12 +35,14 @@ class UserController extends Controller
         return view('user.index', compact('users'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('user.create');
+        $programs = (new ProgramService())->returnPrograms($request, true, true);
+
+        return view('user.create', compact('programs'));
     }
 
-    public function store(UserFormRequest $request)
+    public function store(StoreUserRequest $request)
     {
         try {
             
@@ -58,19 +64,20 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function edit(User $user)
+    public function edit(User $user, Request $request)
     {
         try {
+            $programs = (new ProgramService())->returnPrograms($request, true, true);
 
-            $user->load('info', 'access', 'permissions');
-            return view('user.edit', ['userdetails' => $user]);
+            $user->load('info', 'access', 'permissions', 'accessibleprograms');
+            return view('user.edit', ['userdetails' => $user, 'programs' => $programs]);
 
         } catch (ModelNotFoundException $e) {
             return redirect()->route('userindex');
         }
     }
 
-    public function update(UserUpdateFormRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {      
         try {
         

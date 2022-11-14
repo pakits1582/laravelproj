@@ -6,6 +6,12 @@ $(function(){
 		}
 	});
 
+   $("#accessible_programs").select2({
+      dropdownParent: $("#ui_content"),
+      placeholder: '- select accessible program -'
+  });
+
+
 /*********************************************
 *** FUNCTION ONCLICK SELECT ALL CHECKBOXES ***
 *********************************************/	

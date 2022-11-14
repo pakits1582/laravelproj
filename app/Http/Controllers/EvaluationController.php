@@ -85,14 +85,15 @@ class EvaluationController extends Controller
         //dd($student);
         $user_programs = $this->evaluationService->handleUser(Auth::user(), $request);
 
-        if($user_programs->contains('id', $student->program_id))
+        //dd($user_programs);
+        if($user_programs->contains('id', $student->program_id) || $user_programs->contains('program.id', $student->program_id))
         {
-            $internal_grades = (new InternalGradeService())->getAllStudentInternalGrades( $student->id);
+            echo 'has access';
+            // $internal_grades = (new InternalGradeService())->getAllStudentInternalGrades( $student->id);
 
-            $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
-            //dd($curriculum_subjects['curriculum_subjects']);
+            // $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
 
-            return view('evaluation.evaluate', $curriculuminfo);
+            // return view('evaluation.evaluate', $curriculuminfo + ['student' => $student]);
         }
     }
 

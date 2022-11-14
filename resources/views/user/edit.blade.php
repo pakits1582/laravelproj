@@ -35,6 +35,23 @@
                             <div id="error_name"></div>
                         </div>
                         <div class="form-group">
+                            <label for="code" class="m-0 font-weight-bold text-primary">Accessible Programs</label>
+                            <p class="font-italic text-info">Note: Leaving this field blank denotes user has access to all programs. You can select multiple programs.</p>
+                            <select class="form-control" name="accessible_programs[]" multiple="multiple" id="accessible_programs">
+                                @if ($programs)
+                                    @foreach ($programs as $program)
+                                        <option value="{{ $program->id }}"
+                                            {{ ($userdetails->accessibleprograms) ? (Helpers::is_column_in_array($program->id, 'program_id', $userdetails->accessibleprograms->toArray()) !== false) ? 'selected' : '' : '' }}       
+                                        >({{ $program->code }}){{ $program->name }}</option>
+                                    @endforeach
+                                @endif
+                              </select>
+                            <div id="error_accessible_programs"></div>
+                            @error('accessible_programs')
+                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="code" class="m-0 font-weight-bold text-primary">User Permissions</label>
                             {{-- <input type="text" name="address" placeholder="" class="form-control text-uppercase" value="{{ old('address') }}"> --}}
                             <div id="error_permissions"></div>
