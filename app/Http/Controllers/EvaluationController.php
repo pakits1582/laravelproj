@@ -88,10 +88,39 @@ class EvaluationController extends Controller
         //dd($user_programs);
         if($user_programs->contains('id', $student->program_id) || $user_programs->contains('program.id', $student->program_id))
         {
-            echo 'has access';
-            // $internal_grades = (new InternalGradeService())->getAllStudentInternalGrades( $student->id);
+            $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student->id)->toArray();
+            $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
+            echo '<pre>';
+            print_r($internal_grades);
+            //dd($curriculuminfo);
 
-            // $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
+            if($curriculuminfo['program']){
+                for($x=1; $x <= $curriculuminfo['program']->years; $x++){
+                    foreach ($curriculuminfo['curriculum_subjects'] as $yearlevel => $curriculum_subject){
+                        if ($yearlevel === $x){
+                            echo $yearlevel.'<br>';
+                            foreach ($curriculum_subject as $term => $subjects){
+                                echo $term.'<br>';
+                                
+                                foreach ($subjects->toArray() as $subject){
+                                    $finalgrade = '';
+		                            $cggrade    = '';
+		                            $gradeid    = '';
+		                            $units      = '';
+		                            $origin     = '';
+		                            $ispassed   = 0;
+		                            $manage     = true;
+
+                                    $passed = array_keys($internal_grades, Helpers::is_column_in_array($subject['subject_id'], 'subject_id', $internal_grades));
+                                    // echo $subject['subject_id'].'-'.implode(',',$passed).'<br>';
+                                    print_r($passed);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+                
 
             // return view('evaluation.evaluate', $curriculuminfo + ['student' => $student]);
         }
