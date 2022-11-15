@@ -88,10 +88,9 @@ class EvaluationController extends Controller
         //dd($user_programs);
         if($user_programs->contains('id', $student->program_id) || $user_programs->contains('program.id', $student->program_id))
         {
-            $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student->id)->toArray();
+            $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student->id);
             $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
             echo '<pre>';
-            print_r($internal_grades);
             //dd($curriculuminfo);
 
             if($curriculuminfo['program']){
@@ -111,9 +110,12 @@ class EvaluationController extends Controller
 		                            $ispassed   = 0;
 		                            $manage     = true;
 
-                                    $passed = array_keys($internal_grades, Helpers::is_column_in_array($subject['subject_id'], 'subject_id', $internal_grades));
-                                    // echo $subject['subject_id'].'-'.implode(',',$passed).'<br>';
-                                    print_r($passed);
+                                    // $passed = array_keys($internal_grades, Helpers::is_column_in_array($subject['subject_id'], 'subject_id', $internal_grades));
+                                    // // echo $subject['subject_id'].'-'.implode(',',$passed).'<br>';
+                                    // print_r($passed);
+                                    $filtered = $internal_grades->where('subject_id', $subject['subject_id']);
+
+                                    dd($filtered->toArray());
                                 }
                             }
                         }
