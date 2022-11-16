@@ -102,6 +102,7 @@ class EvaluationController extends Controller
                                 echo $term.'<br>';
                                 
                                 foreach ($subjects->toArray() as $subject){
+                                    
                                     $finalgrade = '';
 		                            $cggrade    = '';
 		                            $gradeid    = '';
@@ -110,12 +111,19 @@ class EvaluationController extends Controller
 		                            $ispassed   = 0;
 		                            $manage     = true;
 
-                                    // $passed = array_keys($internal_grades, Helpers::is_column_in_array($subject['subject_id'], 'subject_id', $internal_grades));
-                                    // // echo $subject['subject_id'].'-'.implode(',',$passed).'<br>';
-                                    // print_r($passed);
-                                    $filtered = $internal_grades->where('subject_id', $subject['subject_id']);
+                                    $grades = $internal_grades->where('subject_id', $subject['subject_id'])->toArray();
 
-                                    dd($filtered->toArray());
+                                    print_r($grades);
+                                    // $grades = array_column($filtered->toArray(), 'grade');
+                                    // if($grades){
+                                    //     print_r(max($grades));
+                                    // }
+                                    // $cggrade = array_column($filtered->toArray(), 'completion_grade');
+                                    // if($cggrade){
+                                    //     print_r(max($cggrade));
+                                    // }
+                                    
+                                    //print_r($subject);
                                 }
                             }
                         }
