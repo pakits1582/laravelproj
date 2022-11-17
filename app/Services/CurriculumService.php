@@ -74,7 +74,7 @@ class CurriculumService
             'subjectinfo', 
             'terminfo', 
             'prerequisites', 'prerequisites.curriculumsubject', 'prerequisites.curriculumsubject.subjectinfo',
-            'equivalents', 'equivalents.curriculumsubject', 'equivalents.curriculumsubject.subjectinfo',
+            'equivalents', 'equivalents.subjectinfo',
         ])->where('curriculum_id', $curriculum->id)->get();
         $grouped = $curriculum_subjects->groupBy(['year_level', 'terminfo.term']);
         

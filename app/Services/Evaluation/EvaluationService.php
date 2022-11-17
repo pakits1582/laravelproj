@@ -39,5 +39,44 @@ class EvaluationService
         return $programs;
     }
 
+    public function processGrades($grades)
+    {
+        $max_grade = -9999999; //will hold max val
+        $max_cg = -9999999;
+        $grade_arr = null; //will hold item with max val;
+        $cggrade_arr = null;
+
+        foreach($grades as $k => $v)
+        {
+            if(is_numeric($v['grade'])){
+                if($v['grade'] > $max_grade)
+                {
+                    $max_grade = $v['grade'];
+                    $grade_arr = $v;
+                }
+            }else{
+                if($v['completion_grade'] > $max_cg)
+                {
+                    $max_cg = $v['completion_grade'];
+                    $cggrade_arr = $v;
+                }
+            }
+        }
+
+        if($grade_arr && $cggrade_arr){
+            if($cggrade_arr['completion_grade'] >= $grade_arr['grade'])
+            {
+               return $cggrade_arr;
+            }
+        }
+        return $grade_arr;
+    }
+
+    public function getTaggedGradeInfo($grade_id, $origin)
+    {
+        
+    }
+
+
 
 }
