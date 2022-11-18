@@ -96,7 +96,6 @@ class EvaluationController extends Controller
             
             $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
             echo '<pre>';
-            print_r($tagged_grades->toArray());
             //dd($tagged_grades);
 
             if($curriculuminfo['program']){
@@ -126,20 +125,28 @@ class EvaluationController extends Controller
                                         //CHECK EQUIVALENTS SUBJECTS IF PASSED
                                         if($subject['equivalents'])
                                         {
+                                            //print_r($subject['equivalents']);
+                                            $equivalent_subjects_internal_grades = [];
+
                                             foreach ($subject['equivalents'] as $key => $eqivalent_subject)
                                             {
+                                                echo $eqivalent_subject['curriculum_subject_id'];
                                                 //GET ALL INTERNAL GRADES OF EQUIVALENT SUBJECTS
                                                 $equivalent_subjects_internal_grades[] = $internal_grades->where('subject_id', $eqivalent_subject['equivalent'])->toArray();
-                                                // $tagged_grades_equivalents = $tagged_grades->where('curriculum_subject_id', $eqivalent_subject['curriculum_subject_id'])->toArray();
+                                            }
+                                            if($equivalent_subjects_internal_grades)
+                                            {
+                                                $equivalent_subjects_internal_grades = call_user_func_array('array_merge', $equivalent_subjects_internal_grades);
+                                                $grade_info = $this->evaluationService->processGrades($equivalent_subjects_internal_grades);
+                                            }
+                                            
+                                            $tagged_grades_of_equivalents[] = $tagged_grades->where('curriculum_subject_id', $eqivalent_subject['curriculum_subject_id'])->toArray();
 
-                                                // print_r($tagged_grades_equivalents);
+                                            print_r($tagged_grades_of_equivalents);
+                                            if($ispassed === 0){
+
                                             }
 
-                                            $equivalent_subjects_internal_grades = call_user_func_array('array_merge', $equivalent_subjects_internal_grades);
-                                            $grade_info = $this->evaluationService->processGrades($equivalent_subjects_internal_grades);
-                                            
-
-                                            //print_r($grade_info);
                                         }
                                     }////end of grade is passed internal
                                     
@@ -148,17 +155,41 @@ class EvaluationController extends Controller
 
                                         if($curriculum_subject_tagged_grades)
                                         {
+                                            $tagged_external_grade_info = [];
+                                            $tagged_internal_grade_info = [];
+
                                             foreach ($curriculum_subject_tagged_grades as $key => $cst_grade) {
-                                                if($cst_grade['origin'] === 1){
-                                                    $external_grade_info = (new ExternalGradeService())->getExternalGradeInfo($cst_grade['grade_id']);
-
-                                                    print_r($external_grade_info->toArray());
+                                                if($cst_grade['origin'] === 1)
+                                                {
+                                                    $tagged_external_grade_info[] = (new ExternalGradeService())->getExternalGradeInfo($cst_grade['grade_id'])->toArray();
                                                 }else{
-                                                    //$grade = $internal_grades->where('subject_id', $eqivalent_subject['equivalent'])->toArray();
-
+                                                    $tagged_internal_grade_info[] = (new InternalGradeService())->getInternalGradeInfo($cst_grade['grade_id'])->toArray();
                                                 }
                                             }
-                                        }
+
+                                            $grade_info_external = $this->evaluationService->processGrades($tagged_external_grade_info);
+                                            $grade_info_internal = $this->evaluationService->processGrades($tagged_internal_grade_info);
+
+                                            // print_r($grade_info_external);
+                                            // print_r($grade_info_internal);
+
+                                            if($grade_info_external || $grade_info_internal)
+                                            {
+                                                //IF BOTH EXTERNAL AND INTERNAL NOT EMPTY CHECK WHICH GRADE IS HIGHER
+                                                if($grade_info_external && $grade_info_internal)
+                                                {
+                                                    $external_grade = ($grade_info_external) ? (($grade_info_external['grade'] === 'INC') ? $grade_info_external['completion_grade'] : $grade_info_external['grade']) : '';
+                                                    $internal_grade = ($grade_info_internal) ? (($grade_info_internal['grade'] === 'INC') ? $grade_info_internal['completion_grade'] : $grade_info_internal['grade']) : '';
+                                                    
+                                                    $grade_info = ($internal_grade >= $external_grade) ? $grade_info_internal : $grade_info_external;
+
+                                                    //print_r($grade_info);
+                                                }else{
+                                                    $grade_info = ($grade_info_internal) ? $grade_info_internal : $grade_info_external;
+                                                    //print_r($grade_info);
+                                                }
+                                            }
+                                        }//end of if has tagged subject
                                     }
                                    
                                     //print_r($subject);
