@@ -111,5 +111,12 @@ class InternalGradeService
 
         return $query->first();
     }
+
+    public function getAllBlankInternalGrades($student_id)
+    {
+        return InternalGrade::with(
+            ['gradeinfo' => fn($query) => $query->where('student_id', $student_id)
+        ])->where('grading_system_id', NULL)->get();
+    }
 }
 

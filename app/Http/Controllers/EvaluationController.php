@@ -92,22 +92,24 @@ class EvaluationController extends Controller
         {
             $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student->id);
             $tagged_grades = TaggedGrades::where('student_id', $student->id)->get();
-
-            
+            $blank_grades = (new InternalGradeService())->getAllBlankInternalGrades($student->id);
             $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
-            echo '<pre>';
+            //echo '<pre>';
             //dd($tagged_grades);
-
-            if($curriculuminfo['program']){
-                for($x=1; $x <= $curriculuminfo['program']->years; $x++){
-                    foreach ($curriculuminfo['curriculum_subjects'] as $yearlevel => $curriculum_subject){
-                        if ($yearlevel === $x){
-                            echo $yearlevel.'<br>';
-                            foreach ($curriculum_subject as $term => $subjects){
-                                echo $term.'<br>';
-                                
-                                foreach ($subjects->toArray() as $subject){
-                                    
+            $evaluation = [];
+            if($curriculuminfo['program'])
+            {
+                for($x=1; $x <= $curriculuminfo['program']->years; $x++)
+                {
+                    foreach ($curriculuminfo['curriculum_subjects'] as $yearlevel => $curriculum_subject)
+                    {
+                        if ($yearlevel === $x)
+                        {
+                            //echo $yearlevel.'<br>';
+                            foreach ($curriculum_subject as $term => $subjects)
+                            {
+                                foreach ($subjects->toArray() as $subject)
+                                {
                                     $finalgrade = '';
 		                            $cggrade    = '';
 		                            $gradeid    = '';
@@ -121,6 +123,17 @@ class EvaluationController extends Controller
                                     if($grades)
                                     {
                                         $grade_info = $this->evaluationService->processGrades($grades);
+
+                                        if($grade_info)
+                                        {
+                                            $finalgrade = $grade_info['grade'];
+                                            $cggrade    = $grade_info['completion_grade'];
+                                            $gradeid    = $grade_info['id'];
+                                            $units      = $grade_info['units'];
+                                            $origin     = 'internal';
+                                            $ispassed   = 1;
+                                            $manage     = ($subject['subjectinfo']['units'] !== $grade_info['units']) ? true : false;
+                                        }
                                     }else{
                                         //CHECK EQUIVALENTS SUBJECTS IF PASSED
                                         if($subject['equivalents'])
@@ -130,7 +143,7 @@ class EvaluationController extends Controller
 
                                             foreach ($subject['equivalents'] as $key => $eqivalent_subject)
                                             {
-                                                echo $eqivalent_subject['curriculum_subject_id'];
+                                                //echo $eqivalent_subject['curriculum_subject_id'];
                                                 //GET ALL INTERNAL GRADES OF EQUIVALENT SUBJECTS
                                                 $equivalent_subjects_internal_grades[] = $internal_grades->where('subject_id', $eqivalent_subject['equivalent'])->toArray();
                                             }
@@ -140,68 +153,67 @@ class EvaluationController extends Controller
                                                 $grade_info = $this->evaluationService->processGrades($equivalent_subjects_internal_grades);
                                             }
                                             
-                                            $tagged_grades_of_equivalents[] = $tagged_grades->where('curriculum_subject_id', $eqivalent_subject['curriculum_subject_id'])->toArray();
+                                            $tagged_grades_of_equivalents = $tagged_grades->where('curriculum_subject_id', $eqivalent_subject['curriculum_subject_id'])->toArray();
 
-                                            print_r($tagged_grades_of_equivalents);
-                                            if($ispassed === 0){
-
+                                            if($ispassed === 0)
+                                            {
+                                                if($tagged_grades_of_equivalents)
+                                                {
+                                                   $grade_info = $this->evaluationService->checkTaggedGradeInfo($tagged_grades_of_equivalents);
+                                                }
                                             }
-
+                                            if($grade_info)
+                                            {
+                                                $finalgrade = $grade_info['grade'];
+                                                $cggrade    = $grade_info['completion_grade'];
+                                                $gradeid    = $grade_info['id'];
+                                                $units      = $grade_info['units'];
+                                                $origin     = $grade_info['source'];
+                                                $ispassed   = 1;
+                                                $manage     = true;
+                                            }
                                         }
                                     }////end of grade is passed internal
                                     
-                                    if($ispassed === 0){
+                                    if($ispassed === 0)
+                                    {
                                         $curriculum_subject_tagged_grades = $tagged_grades->where('curriculum_subject_id', $subject['id'])->toArray();
 
                                         if($curriculum_subject_tagged_grades)
                                         {
-                                            $tagged_external_grade_info = [];
-                                            $tagged_internal_grade_info = [];
-
-                                            foreach ($curriculum_subject_tagged_grades as $key => $cst_grade) {
-                                                if($cst_grade['origin'] === 1)
-                                                {
-                                                    $tagged_external_grade_info[] = (new ExternalGradeService())->getExternalGradeInfo($cst_grade['grade_id'])->toArray();
-                                                }else{
-                                                    $tagged_internal_grade_info[] = (new InternalGradeService())->getInternalGradeInfo($cst_grade['grade_id'])->toArray();
-                                                }
-                                            }
-
-                                            $grade_info_external = $this->evaluationService->processGrades($tagged_external_grade_info);
-                                            $grade_info_internal = $this->evaluationService->processGrades($tagged_internal_grade_info);
-
-                                            // print_r($grade_info_external);
-                                            // print_r($grade_info_internal);
-
-                                            if($grade_info_external || $grade_info_internal)
+                                            $grade_info = $this->evaluationService->checkTaggedGradeInfo($curriculum_subject_tagged_grades);
+                                            if($grade_info)
                                             {
-                                                //IF BOTH EXTERNAL AND INTERNAL NOT EMPTY CHECK WHICH GRADE IS HIGHER
-                                                if($grade_info_external && $grade_info_internal)
-                                                {
-                                                    $external_grade = ($grade_info_external) ? (($grade_info_external['grade'] === 'INC') ? $grade_info_external['completion_grade'] : $grade_info_external['grade']) : '';
-                                                    $internal_grade = ($grade_info_internal) ? (($grade_info_internal['grade'] === 'INC') ? $grade_info_internal['completion_grade'] : $grade_info_internal['grade']) : '';
-                                                    
-                                                    $grade_info = ($internal_grade >= $external_grade) ? $grade_info_internal : $grade_info_external;
-
-                                                    //print_r($grade_info);
-                                                }else{
-                                                    $grade_info = ($grade_info_internal) ? $grade_info_internal : $grade_info_external;
-                                                    //print_r($grade_info);
-                                                }
+                                                $finalgrade = $grade_info['grade'];
+                                                $cggrade    = $grade_info['completion_grade'];
+                                                $gradeid    = $grade_info['id'];
+                                                $units      = $grade_info['units'];
+                                                $origin     = $grade_info['source'];
+                                                $ispassed   = 1;
+                                                $manage     = true;
                                             }
                                         }//end of if has tagged subject
                                     }
-                                   
-                                    //print_r($subject);
+                                    
+                                    $subject['grade_info'] = [
+                                        'finalgrade' => $finalgrade,
+                                        'completion_grade' => $cggrade,
+                                        'grade_id' => $gradeid,
+                                        'units' => $units,
+                                        'origin' => $origin,
+                                        'ispassed' => $ispassed,
+                                        'manage' => $manage
+                                    ];
+
+                                    $evaluation[] = $subject;
                                 }
                             }
                         }
                     }
                 }
             }
-                
 
-            // return view('evaluation.evaluate', $curriculuminfo + ['student' => $student]);
+            return view('evaluation.evaluate', $curriculuminfo + ['student' => $student, 'evaluation' => $evaluation]);
         }
     }
 

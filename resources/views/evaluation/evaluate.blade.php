@@ -1,3 +1,4 @@
+{{-- {{ dd($evaluation) }} --}}
 @extends('layout')
 @section('title') {{ 'Evaluate Student' }} @endsection
 @section('content')
@@ -81,10 +82,28 @@
                                                         $totalunits = 0;
                                                     @endphp
                                                     @foreach ($subjects as $subject)
+                                                        @php
+                                                            $evaluation_key = Helpers::is_column_in_array($subject->id, 'id', $evaluation);
+                                                        @endphp
                                                         <tr>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td><a href="#" id="{{ $subject->id }}" class="font-weight-bold text-primary manage_curriculum_subject">{{ $subject->subjectinfo->code }}</a></td>
+                                                            <td class="mid font-weight-bold">{{ $evaluation[$evaluation_key]['grade_info']['finalgrade'] }}</td>
+                                                            <td class="mid font-weight-bold">{{ $evaluation[$evaluation_key]['grade_info']['completion_grade'] }}</td>
+                                                            @if ($evaluation[$evaluation_key]['grade_info']['manage'] === true)
+                                                                @php
+                                                                    $class = 'danger';
+                                                                    if($evaluation[$evaluation_key]['grade_info']['finalgrade'] !== '')
+                                                                    {
+                                                                        $class = 'primary';
+                                                                    }
+
+                                                                @endphp
+                                                                <td>
+                                                                    <a href="#" id="{{ $subject->id }}" class="font-weight-bold text-{{ $class }} manage_curriculum_subject">{{ $subject->subjectinfo->code }}</a>
+                                                                </td>
+                                                            @else
+                                                                <td class="font-weight-bold text-success">{{ $subject->subjectinfo->code }}</td>
+                                                            @endif
+                                                            
                                                             <td>
                                                                 {{ $subject->subjectinfo->name }}
                                                                 @if (count($subject->prerequisites) > 0)
@@ -93,7 +112,6 @@
                                                                         @foreach ($subject->prerequisites as $prerequisite)
                                                                             {{ $loop->first ? '' : ', ' }}
                                                                             {{ $prerequisite->curriculumsubject->subjectinfo->code }}
-                                                                            {{-- {{ $prerequisite }} --}}
                                                                         @endforeach
                                                                         )
                                                                     </span>
@@ -107,7 +125,7 @@
                                                         @endphp
                                                     @endforeach
                                                     <tr>
-                                                        <td colspan="4" class="text-right  font-weight-bold text-primary">Total Units</td>
+                                                        <td colspan="5" class="text-right  font-weight-bold text-primary">Total Units</td>
                                                         <td class="mid  font-weight-bold text-primary">{{ $totalunits }}</td>
                                                     </tr>
                                                 </tbody>
