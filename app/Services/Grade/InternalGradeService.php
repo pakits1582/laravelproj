@@ -69,11 +69,13 @@ class InternalGradeService
             'remarks.remark',
             'cgr.remark AS completion_remark',
             'cggs.value AS completion_grade',
-            'curriculum_subjects.subject_id'
+            'curriculum_subjects.subject_id',
+            'subjects.*'
         );
         $query->leftJoin('grades', 'internal_grades.grade_id', 'grades.id');
         $query->leftJoin('classes', 'internal_grades.class_id', 'classes.id');
         $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'classes.curriculum_subject_id');
+        $query->leftJoin('subjects', 'subjects.id', 'curriculum_subjects.subject_id');
         $query->leftJoin('grading_systems', 'internal_grades.grading_system_id', 'grading_systems.id');
         $query->leftJoin('remarks', 'grading_systems.remark_id', 'remarks.id');
         $query->leftJoin('grading_systems AS cggs', 'internal_grades.completion_grade', 'cggs.id');
@@ -114,9 +116,28 @@ class InternalGradeService
 
     public function getAllBlankInternalGrades($student_id)
     {
-        return InternalGrade::with(
-            ['gradeinfo' => fn($query) => $query->where('student_id', $student_id)
-        ])->where('grading_system_id', NULL)->get();
+        $query = InternalGrade::query();
+        $query->select(
+            'internal_grades.*', 
+            'grading_systems.value AS grade', 
+            'remarks.remark',
+            'cgr.remark AS completion_remark',
+            'cggs.value AS completion_grade',
+            'curriculum_subjects.subject_id'
+        );
+        $query->leftJoin('grades', 'internal_grades.grade_id', 'grades.id');
+        $query->leftJoin('classes', 'internal_grades.class_id', 'classes.id');
+        $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'classes.curriculum_subject_id');
+        $query->leftJoin('grading_systems', 'internal_grades.grading_system_id', 'grading_systems.id');
+        $query->leftJoin('remarks', 'grading_systems.remark_id', 'remarks.id');
+        $query->leftJoin('grading_systems AS cggs', 'internal_grades.completion_grade', 'cggs.id');
+        $query->leftJoin('remarks AS cgr', 'cggs.remark_id', 'cgr.id');
+
+        $query->whereNull('internal_grades.grading_system_id');
+    
+        $query->where('grades.student_id', $student_id);
+
+        return $query->get();
     }
 }
 

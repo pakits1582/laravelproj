@@ -114,6 +114,61 @@ class EvaluationService
         }
     }
 
+    public function getAllGradesInternalAndExternal($student_id)
+    {
+        $internal_grades = (new InternalGradeService)->getAllStudentPassedInternalGrades($student_id);
+        $external_grades = (new ExternalGradeService)->getAllStudentPassedExternalGrades($student_id);
 
+        $allgrades = [];
+        if(!$internal_grades->isEmpty())
+        {
+            foreach ($internal_grades as $key => $i) {
+                $allgrades[] = [
+                    'id'      => $i->id,
+                    'grade_id' => $i->grade_id,
+                    'subject_code' => $i->code,
+                    'subject_name' => $i->name,
+                    'grade'   => $i->grade,
+                    'completion_grade' => $i->completion_grade,
+                    'units'   => $i->units,
+                    'origin'  => 'internal'
+                ];
+            }
+        }
+
+        if(!$external_grades->isEmpty())
+        {
+            foreach ($external_grades as $key => $e) {
+                $allgrades[] = [
+                    'id'      => $e->id,
+                    'grade_id' => $e->grade_id,
+                    'subject_code' => $e->subject_code,
+                    'subject_name' => $e->subject_description,
+                    'grade'   => $e->grade,
+                    'completion_grade' => $e->completion_grade,
+                    'units'   => $e->units,
+                    'origin'  => 'external'
+                ];
+            }
+        }
+
+        //SORT ARRAY
+		$sortArray = []; 
+		foreach($allgrades as $subject){ 
+			foreach($subject as $key=>$value){ 
+				if(!isset($sortArray[$key])){ 
+					$sortArray[$key] = []; 
+				} 
+				$sortArray[$key][] = $value; 
+			} 
+		} 
+
+		$orderby = "subject_code"; //change this to whatever key you want from the array
+		if(!empty($allgrades)){
+			array_multisort($sortArray[$orderby], SORT_ASC, $allgrades); 
+		} 
+		
+        return $allgrades;
+    }
 
 }

@@ -23,7 +23,7 @@ class EvaluationController extends Controller
     public function __construct(EvaluationService $evaluationService)
     {
         $this->evaluationService = $evaluationService;
-        Helpers::setLoad(['jquery_evaluation.js', 'select2.full.min.js']);
+        Helpers::setLoad(['jquery_evaluation.js', 'select2.full.min.js', 'bootstrap-table.min.js']);
     }
 
     /**
@@ -94,8 +94,8 @@ class EvaluationController extends Controller
             $tagged_grades = TaggedGrades::where('student_id', $student->id)->get();
             $blank_grades = (new InternalGradeService())->getAllBlankInternalGrades($student->id);
             $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
-            //echo '<pre>';
-            //dd($tagged_grades);
+            // echo '<pre>';
+            // print_r($blank_grades->toArray());
             $evaluation = [];
             if($curriculuminfo['program'])
             {
@@ -202,7 +202,8 @@ class EvaluationController extends Controller
                                         'units' => $units,
                                         'origin' => $origin,
                                         'ispassed' => $ispassed,
-                                        'manage' => $manage
+                                        'manage' => $manage,
+                                        'inprogress' => (!$blank_grades->isEmpty()) ? ((Helpers::is_column_in_array($subject['subject_id'], 'subject_id', $blank_grades->toArray()) === false) ? 0 : 1) : 0
                                     ];
 
                                     $evaluation[] = $subject;
@@ -217,37 +218,13 @@ class EvaluationController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function taggrade(Request $request)
     {
-        //
-    }
+        $student = (new StudentService)->studentInformation($request->student_id);
+        $curriculum_subject = (new CurriculumService)->returnCurriculumSubject($request->curriculum_subject_id);
+        
+        $allgrades = $this->evaluationService->getAllGradesInternalAndExternal($request->student_id);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('evaluation.tagged_grade', ['student' => $student, 'curriculum_subject' => $curriculum_subject, 'allgrades' => $allgrades]);
     }
 }

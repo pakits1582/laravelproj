@@ -207,17 +207,20 @@ class ClassesService
         if($request->schedule !== ''){
             $schedule_array = $this->processSchedule($request->schedule);
 
-            foreach ($schedule_array as $key => $sched) {
+            foreach ($schedule_array as $key => $sched) 
+            {
                 $room_info = $this->checkScheduleRoomifExist($sched['room']);
                 if(!$room_info){
                     $error .= 'Room '.$sched['room'].' does not exist!</br>';
                 }else{
-                    if($sched['timefrom'] >= $sched['timeto']){
+                    if($sched['timefrom'] >= $sched['timeto'])
+                    {
                         $error .= 'Schedule '.$sched['raw_sched'].' TIME FROM is greater than TIME TO!</br>';
                     }else{
                         if($sched['days']){
                             $conflicts = [];
-                            foreach ($sched['days'] as $key => $day) {
+                            foreach ($sched['days'] as $key => $day) 
+                            {
                                 $room_conflicts = $this->checkConflictRoom($request->class_id, $room_info->id, $sched['timefrom'], $sched['timeto'], $day);
 
                                 if(!$room_conflicts->isEmpty())

@@ -15,6 +15,7 @@
                 </div>
                 <div class="col-md-4">
                     {{ $student->user->idno }}
+                    <input type="hidden" id="student_id" value="{{ $student->id }}" />
                 </div>
                 <div class="col-md-1">
                     <label for="" class="m-0 font-weight-bold text-primary">Program</label>
@@ -51,6 +52,32 @@
             <input type="hidden" name="curriculum_id" value="{{ $curriculum->id }}" id="curriculum_id" />
         </div> 
         <div class="card-body">
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-2 text-lg-right">
+                    <h6 class="m-0 font-weight-bold text-primary">Evaluated</h6>
+                </div>
+                <div class="col-md-1">
+                    <div class="p-3 bg-success text-white"></div>
+                </div>
+                <div class="col-md-2 text-lg-right">
+                    <h6 class="m-0 font-weight-bold text-primary">Tagged</h6>
+                </div>
+                <div class="col-md-1">
+                    <div class="p-3 bg-primary text-white"></div>
+                </div>
+                <div class="col-md-2 text-lg-right">
+                    <h6 class="m-0 font-weight-bold text-primary">In Progress</h6>
+                </div>
+                <div class="col-md-1">
+                    <div class="p-3 text-white" style="background-color: black"></div>
+                </div>
+                <div class="col-md-2 text-lg-right">
+                    <h6 class="m-0 font-weight-bold text-primary">Deficiency</h6>
+                </div>
+                <div class="col-md-1">
+                    <div class="p-3 bg-danger text-white"></div>
+                </div>
+            </div>
             @if ($program)
                 @for ($x=1; $x <= $program->years; $x++)
                     <h1 class="h3 text-800 text-primary mid">{{ Helpers::yearLevel($x) }}</h1>
@@ -94,11 +121,17 @@
                                                                     if($evaluation[$evaluation_key]['grade_info']['finalgrade'] !== '')
                                                                     {
                                                                         $class = 'primary';
+                                                                    }elseif ($evaluation[$evaluation_key]['grade_info']['inprogress'] === 1) {
+                                                                        $class = 'black';
                                                                     }
-
                                                                 @endphp
                                                                 <td>
-                                                                    <a href="#" id="{{ $subject->id }}" class="font-weight-bold text-{{ $class }} manage_curriculum_subject">{{ $subject->subjectinfo->code }}</a>
+                                                                    <a href="#" 
+                                                                        id="{{ $subject->id }}" 
+                                                                        class="font-weight-bold text-{{ $class }} manage_evaluation"
+                                                                        data-origin="{{ $evaluation[$evaluation_key]['grade_info']['origin'] }}"
+                                                                        data-grade_id="{{ $evaluation[$evaluation_key]['grade_info']['grade_id'] }}"
+                                                                    >{{ $subject->subjectinfo->code }}</a>
                                                                 </td>
                                                             @else
                                                                 <td class="font-weight-bold text-success">{{ $subject->subjectinfo->code }}</td>

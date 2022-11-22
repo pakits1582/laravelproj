@@ -121,5 +121,25 @@ class ExternalGradeService
 
     }
 
+    public function getAllStudentPassedExternalGrades($student_id)
+    {
+        $query = ExternalGrade::query();
+        $query->select(
+            'external_grades.*', 
+            'remarks.remark'
+        );
+        $query->leftJoin('grades', 'external_grades.grade_id', 'grades.id');
+        
+        $query->leftJoin('remarks', 'external_grades.remark_id', 'remarks.id');
+        $query->where(function($query){
+            $query->where('remarks.remark', '=', 'PASSED');
+        });
+
+        $query->where('grades.student_id', $student_id);
+
+        return $query->get();
+
+    }
+
 }
 
