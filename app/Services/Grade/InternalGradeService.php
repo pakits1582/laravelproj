@@ -70,7 +70,9 @@ class InternalGradeService
             'cgr.remark AS completion_remark',
             'cggs.value AS completion_grade',
             'curriculum_subjects.subject_id',
-            'subjects.*'
+            'subjects.code',
+            'subjects.units',
+            'subjects.name'
         );
         $query->leftJoin('grades', 'internal_grades.grade_id', 'grades.id');
         $query->leftJoin('classes', 'internal_grades.class_id', 'classes.id');

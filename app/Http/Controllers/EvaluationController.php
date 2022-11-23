@@ -23,7 +23,7 @@ class EvaluationController extends Controller
     public function __construct(EvaluationService $evaluationService)
     {
         $this->evaluationService = $evaluationService;
-        Helpers::setLoad(['jquery_evaluation.js', 'select2.full.min.js', 'bootstrap-table.min.js']);
+        Helpers::setLoad(['jquery_evaluation.js', 'select2.full.min.js']);
     }
 
     /**
@@ -222,9 +222,9 @@ class EvaluationController extends Controller
     {
         $student = (new StudentService)->studentInformation($request->student_id);
         $curriculum_subject = (new CurriculumService)->returnCurriculumSubject($request->curriculum_subject_id);
-        
+        $all_tagged_grades = TaggedGrades::where('student_id', $request->student_id)->get();
         $allgrades = $this->evaluationService->getAllGradesInternalAndExternal($request->student_id);
 
-        return view('evaluation.tagged_grade', ['student' => $student, 'curriculum_subject' => $curriculum_subject, 'allgrades' => $allgrades]);
+        return view('evaluation.tagged_grade', ['student' => $student, 'curriculum_subject' => $curriculum_subject, 'allgrades' => $allgrades, 'all_tagged_grades' => $all_tagged_grades]);
     }
 }

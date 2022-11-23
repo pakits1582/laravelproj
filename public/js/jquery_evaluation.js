@@ -25,18 +25,23 @@ $(function(){
 			success: function(data){
 				$('#ui_content').html(data);
 				$("#modalTable").modal('show');
-
-				var $table = $('#table');
-
-				$('#modalTable').on('shown.bs.modal', function () {
-					$table.bootstrapTable('resetView')
-				})
+			
 			},
 			error: function (data) {
 				console.log(data);
 			}
 		});
 		e.preventDefault();
+	});
+
+	$(document).on("change",".cboxtag", function(){
+		if($(this).is(':checked')){
+			$(this).closest('tr').addClass('selected');
+			
+		}else{
+			$(this).prop('checked', false);
+			$(this).closest('tr').removeClass('selected');
+		}
 	});
 
 	

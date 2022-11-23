@@ -131,7 +131,7 @@ class EvaluationService
                     'grade'   => $i->grade,
                     'completion_grade' => $i->completion_grade,
                     'units'   => $i->units,
-                    'origin'  => 'internal'
+                    'origin'  => 0
                 ];
             }
         }
@@ -147,7 +147,7 @@ class EvaluationService
                     'grade'   => $e->grade,
                     'completion_grade' => $e->completion_grade,
                     'units'   => $e->units,
-                    'origin'  => 'external'
+                    'origin'  => 1
                 ];
             }
         }

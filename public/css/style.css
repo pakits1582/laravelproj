@@ -163,8 +163,15 @@
 .w60{
 	width:60px !important;	
 }
+.w65{
+	width:w65 !important;	
+}
 .w70{
 	width:70px !important;	
+}
+
+.w75{
+	width:75px !important;	
 }
 .w80{
 	width:80px !important;	
@@ -337,4 +344,24 @@ th{
     width: 100% !important; /*makes the placeholder to be 100% of the width while there are no options selected*/
 }
 
+.well {
+    background: none;
+    height: 320px;
+}
+
+.table-scroll tbody {
+    position: absolute;
+    overflow-y: scroll;
+    height: 250px;
+}
+
+.table-scroll tr {
+    width: 100%;
+    table-layout: fixed;
+    display: inline-table;
+}
+
+.table-scroll thead > tr > th {
+    border: none;
+}
 
