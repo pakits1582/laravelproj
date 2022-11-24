@@ -2,10 +2,13 @@
 
 namespace App\Services\Evaluation;
 
+use App\Libs\Helpers;
 use App\Models\User;
 use App\Models\Instructor;
+use App\Models\TaggedGrades;
 use App\Services\ProgramService;
 use App\Services\StudentService;
+use App\Services\CurriculumService;
 use App\Services\Grade\ExternalGradeService;
 use App\Services\Grade\InternalGradeService;
 
@@ -131,7 +134,7 @@ class EvaluationService
                     'grade'   => $i->grade,
                     'completion_grade' => $i->completion_grade,
                     'units'   => $i->units,
-                    'origin'  => 0
+                    'origin'  => "internal"
                 ];
             }
         }
@@ -147,7 +150,7 @@ class EvaluationService
                     'grade'   => $e->grade,
                     'completion_grade' => $e->completion_grade,
                     'units'   => $e->units,
-                    'origin'  => 1
+                    'origin'  => "external"
                 ];
             }
         }
@@ -171,4 +174,34 @@ class EvaluationService
         return $allgrades;
     }
 
+    public function storeTaggedGrades($request)
+    {
+        $student = (new StudentService)->studentInformation($request->student_id);
+        $curriculum_subject = (new CurriculumService)->returnCurriculumSubject($request->curriculum_subject_id);
+
+        $all_tagged_grades = TaggedGrades::where('student_id', $request->student_id)->get();
+        $allgrades = $this->getAllGradesInternalAndExternal($request->student_id);
+
+        if($request->filled('cboxtag'))
+        {
+            $total_unit_of_selected_grades = 0;
+			$total_units_remaining = 0;
+			$taggedto = '<table id="taggedsubs">';
+			$selected_grades = [];
+
+            foreach ($request->cboxtag as $key => $selected_grade) {
+                $a = 'origin_'.$selected_grade;
+                $origin = $request->$a;
+
+                $allgrade_key = array_filter($allgrades, fn($data) => $data['origin'] == $origin && $data['id'] == $selected_grade);
+
+                $selected_grades[] = ['origin' => $origin, 'id' => $selected_grade, 'key' => $allgrade_key, 'allgrades' => $allgrades];
+                
+            }
+
+            return $selected_grades;
+        }
+
+        
+    }
 }

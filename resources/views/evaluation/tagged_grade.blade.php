@@ -56,9 +56,8 @@
                         <div class="px-2 bg-success text-black font-italic">Green colored row denotes that grade had already been tagged.</div>
                         <div class="px-2 bg-warning text-black font-italic">Yellow colored row denotes that grade is currently tagged to the selected subject.</div>
                         <div class="px-2 bg-primary text-black font-italic">Blue colored row denotes that grade is currently selected.</div>
-                        <form action="" method="post" id="">
+                        <form action="{{ route('evaluations.store') }}" method="post" id="form_tag_grade">
                             <div class="col-xs-8 col-xs-offset-2 well">
-                            
                                     <table class="table table-scroll table-striped table-bordered" style="">
                                         <thead>
                                             <tr>
@@ -83,17 +82,24 @@
                                                         {
                                                             $istagged = 1;
                                                             foreach ($all_tagged_grades as $key => $tagged_grade) {
-                                                                if()
+                                                                $origin = ($tagged_grade->origin === 0) ? 'internal' : 'external';
+
+                                                                if($grade['id'] === $tagged_grade->grade_id && $grade['origin'] === $origin)
                                                                 {
-                                                                    
+                                                                    $checked = 'checked';
+                                                                    $isselected = true;
+                                                                }else{
+                                                                    $istaggedcolor = 'success';
                                                                 }
                                                             }
                                                         }
                                                     @endphp        
-                                                    <tr>
+                                                    <tr class="label bg-{{ ($isselected) ? 'warning' : $istaggedcolor }}" id="remove_{{ $grade['id'] }}_{{ $grade['origin'] }}" >
                                                         <td class="w50">
-                                                            {{ $grade['id'] }}
-                                                            <input type="checkbox" name="cboxtag[]" value="{{ $grade['id'] }}" class="cboxtag nomargin" id="{{ $grade['id'] }}" data-origin="{{ $grade['origin'] }}"  />
+                                                            <input type="checkbox" name="cboxtag[]" value="{{ $grade['id'] }}" class="cboxtag nomargin" id="{{ $grade['id'] }}" data-origin="{{ $grade['origin'] }}"
+                                                                {{ $checked }} data-istagged="{{ $istagged }}"
+                                                            />
+                                                            <input type="hidden" name="origin_{{ $grade['id'] }}" value="{{ $grade['origin'] }}"  />
                                                         </td>
                                                         <td class="w120 font-weight-bold">{{ $grade['subject_code'] }}</td>
                                                         <td>{{ $grade['subject_name'] }}</td>
@@ -110,6 +116,8 @@
                                     </table>
                             
                             </div>
+                            <input type="hidden" name="curriculum_subject_id" value="{{ $curriculum_subject->id }}"  />
+                            <input type="hidden" name="student_id" value="{{ $student->id }}"  />
                             <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Changes</button>
                         </form>
                     </div>

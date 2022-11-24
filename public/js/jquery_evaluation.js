@@ -35,14 +35,82 @@ $(function(){
 	});
 
 	$(document).on("change",".cboxtag", function(){
+		var check = $(this);
+
 		if($(this).is(':checked')){
 			$(this).closest('tr').addClass('selected');
 			
+			var istagged = check.attr("data-istagged");
+			if(istagged == 1){
+				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The subject you have selected had already been tagged. Continue selecting?').dialog({
+					show: 'fade',
+					resizable: false,	
+					draggable: true,
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: {
+							'Cancel':function(){
+								$(this).dialog('close');
+								check.prop("checked", true);		
+							},	
+							'OK':function(){
+								$(this).dialog('close');
+							}
+						}//end of buttons
+					});//end of dialogbox
+				$(".ui-dialog-titlebar").hide();	
+			}
 		}else{
 			$(this).prop('checked', false);
 			$(this).closest('tr').removeClass('selected');
 		}
 	});
 
+	$(document).on("submit", "#form_tag_grade", function(e){
+		var postData = $(this).serializeArray();
+		var url = $(this).attr("action");
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: postData,
+			cache:false,
+			beforeSend: function() {
+					$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+						show: 'fade',
+						resizable: false,	
+						width: 'auto',
+						height: 'auto',
+						modal: true,
+						buttons: false
+					});
+					$(".ui-dialog-titlebar").hide();
+				},
+			success: function(data){
+				$("#confirmation").dialog('close');
+				console.log(data);
+
+				// if(data == 1){
+				// 	showSuccess('Changes sucessfully saved!');
+				// 	var student   = $("#idno").val();
+				// 	var subtocurr = $("#subtocurr").val();
+				// 	returnEvaluation(student);
+				// 	$.ajax({
+				// 		type: "POST",
+				// 		url: baseUrl+"/evaluation/returntagsubjecttocurr",
+				// 		data: ({"subtocurr": subtocurr, "student":student}),
+				// 		cache: false,
+				// 		success: function(data1){
+				// 			$("#return_tagsubtocurr").html(data1);
+				// 		} 
+				// 	});
+				// }else{
+				// 	showError(data);	
+				// }
+			}
+		});
+
+		e.preventDefault();
+	});
 	
 });

@@ -72,7 +72,9 @@ class EvaluationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $taggrades = $this->evaluationService->storeTaggedGrades($request);
+    
+        return response()->json(['data' => $taggrades]);
     }
 
     /**

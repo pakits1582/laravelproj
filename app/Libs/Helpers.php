@@ -314,6 +314,30 @@ class Helpers
         return false;
     }
 
+    public static function filterby_multiple_values($value, $array)
+    {
+        foreach($array as $k => $v)
+        {
+            if( $value === array_intersect($v, $value))
+            {
+                return $k;
+                break;
+            }
+        }
+    }
+
+    public static function filter(array $params, array $arr){
+        $out = array();
+        foreach($arr as $key=>$item){
+           $diff = array_diff_assoc($item,$params);
+      
+           if (count($diff)==1) // if count diff == 1 - Ok
+              $out[$key] = $item;
+       }
+       return $out;
+
+    }
+
     public static function array_flatten($array) { 
         if (!is_array($array)) { 
           return false; 
