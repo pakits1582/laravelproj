@@ -100,6 +100,7 @@
                                                                 {{ $checked }} data-istagged="{{ $istagged }}"
                                                             />
                                                             <input type="hidden" name="origin_{{ $grade['id'] }}" value="{{ $grade['origin'] }}"  />
+                                                            <input type="hidden" name="istagged_{{ $grade['id'] }}" value="{{ $istagged }}"  />
                                                         </td>
                                                         <td class="w120 font-weight-bold">{{ $grade['subject_code'] }}</td>
                                                         <td>{{ $grade['subject_name'] }}</td>

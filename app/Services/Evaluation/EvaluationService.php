@@ -191,11 +191,14 @@ class EvaluationService
 
             foreach ($request->cboxtag as $key => $selected_grade) {
                 $a = 'origin_'.$selected_grade;
+                $b = 'istagged_'.$selected_grade;
                 $origin = $request->$a;
+                $istagged = $request->$b;
 
-                $allgrade_key = array_filter($allgrades, fn($data) => $data['origin'] == $origin && $data['id'] == $selected_grade);
+                $allgrade_key = array_keys(array_filter($allgrades, fn($data) => $data['origin'] == $origin && $data['id'] == $selected_grade));
+              
 
-                $selected_grades[] = ['origin' => $origin, 'id' => $selected_grade, 'key' => $allgrade_key, 'allgrades' => $allgrades];
+                $selected_grades[] = ['origin' => $origin, 'id' => $selected_grade, 'key' => $allgrade_key[0], 'allgrades' => $allgrades, 'istagged' => $istagged];
                 
             }
 
