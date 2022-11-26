@@ -52,6 +52,10 @@
                         <h6 class="m-0 font-weight-bold text-primary">Student's Passed Grades</h6>
                     </div>
                     <div class="card-body">
+                        @php
+                            //echo '<pre>';
+                            print_r($all_tagged_grades->toArray());
+                        @endphp
                         <p class="font-italic text-info">Note: (*) Denotes grade is from external grade.</p>
                         <div class="px-2 bg-success text-black font-italic">Green colored row denotes that grade had already been tagged.</div>
                         <div class="px-2 bg-warning text-black font-italic">Yellow colored row denotes that grade is currently tagged to the selected subject.</div>
@@ -64,13 +68,14 @@
                                                 <th class="w50">#</th>
                                                 <th class="w120">Code</th>
                                                 <th>Name</th>
-                                                <th class="w60">Units</th>
-                                                <th class="w75">Grade</th>
-                                                <th class="w60">C.G.</th>
+                                                <th class="w100">Units</th>
+                                                <th class="w100">Grade</th>
+                                                <th class="w100">C.G.</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @if (count($allgrades) > 0)
+                                            
                                                 @foreach ($allgrades as $grade)
                                                     @php
                                                         $checked = '';
@@ -78,7 +83,7 @@
                                                         $istaggedcolor = '';
                                                         $istagged = 0;
 
-                                                        if(Helpers::is_column_in_array($grade['id'], 'grade_id' ,$all_tagged_grades->toArray()))
+                                                        if(Helpers::is_column_in_array($grade['id'], 'grade_id', $all_tagged_grades->toArray()) !== false)
                                                         {
                                                             $istagged = 1;
                                                             foreach ($all_tagged_grades as $key => $tagged_grade) {
@@ -102,11 +107,14 @@
                                                             <input type="hidden" name="origin_{{ $grade['id'] }}" value="{{ $grade['origin'] }}"  />
                                                             <input type="hidden" name="istagged_{{ $grade['id'] }}" value="{{ $istagged }}"  />
                                                         </td>
-                                                        <td class="w120 font-weight-bold">{{ $grade['subject_code'] }}</td>
-                                                        <td>{{ $grade['subject_name'] }}</td>
-                                                        <td class="w60 mid">{{ $grade['units'] }}</td>
-                                                        <td class="w75 mid">{{ $grade['grade'] }}</td>
-                                                        <td class="w60 mid">{{ $grade['completion_grade'] }}</td>
+                                                        @php
+                                                            $subject_code = ($grade['origin'] === 'external') ? '*'.$grade['subject_code'] : $grade['subject_code'];
+                                                        @endphp
+                                                        <td class="w120 font-weight-bold">{{ $subject_code }}</td>
+                                                        <td>{{ $grade['subject_name'] }}{{ $grade['id'] }}</td>
+                                                        <td class="w100 mid">{{ $grade['units'] }}</td>
+                                                        <td class="w100 mid">{{ $grade['grade'] }}</td>
+                                                        <td class="w100 mid">{{ $grade['completion_grade'] }}</td>
                                                     </tr>
                                                 @endforeach
                                                 
