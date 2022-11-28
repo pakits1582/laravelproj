@@ -54,7 +54,7 @@
                     <div class="card-body">
                         @php
                             //echo '<pre>';
-                            print_r($all_tagged_grades->toArray());
+                            //print_r($all_tagged_grades->toArray());
                         @endphp
                         <p class="font-italic text-info">Note: (*) Denotes grade is from external grade.</p>
                         <div class="px-2 bg-success text-black font-italic">Green colored row denotes that grade had already been tagged.</div>
@@ -75,7 +75,6 @@
                                         </thead>
                                         <tbody>
                                             @if (count($allgrades) > 0)
-                                            
                                                 @foreach ($allgrades as $grade)
                                                     @php
                                                         $checked = '';
@@ -85,16 +84,19 @@
 
                                                         if(Helpers::is_column_in_array($grade['id'], 'grade_id', $all_tagged_grades->toArray()) !== false)
                                                         {
-                                                            $istagged = 1;
                                                             foreach ($all_tagged_grades as $key => $tagged_grade) {
                                                                 $origin = ($tagged_grade->origin === 0) ? 'internal' : 'external';
 
                                                                 if($grade['id'] === $tagged_grade->grade_id && $grade['origin'] === $origin)
                                                                 {
-                                                                    $checked = 'checked';
-                                                                    $isselected = true;
-                                                                }else{
-                                                                    $istaggedcolor = 'success';
+                                                                    if($tagged_grade->curriculum_subject_id === $curriculum_subject->id){
+                                                                        $istagged = 1;
+                                                                        $checked = 'checked';
+                                                                        $isselected = true;
+                                                                    }else{
+                                                                        $istagged = 1;
+                                                                        $istaggedcolor = 'success';
+                                                                    }
                                                                 }
                                                             }
                                                         }

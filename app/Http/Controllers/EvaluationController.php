@@ -153,6 +153,7 @@ class EvaluationController extends Controller
                                             {
                                                 $equivalent_subjects_internal_grades = call_user_func_array('array_merge', $equivalent_subjects_internal_grades);
                                                 $grade_info = $this->evaluationService->processGrades($equivalent_subjects_internal_grades);
+                                                $grade_info['source'] = 'internal';
                                             }
                                             
                                             $tagged_grades_of_equivalents = $tagged_grades->where('curriculum_subject_id', $eqivalent_subject['curriculum_subject_id'])->toArray();

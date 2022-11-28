@@ -140,7 +140,7 @@ class EnrollmentService
                 if(!Helpers::is_column_in_array('can_withbalance', 'permission', $user_permissions->toArray())){
                     return [
                         'success' => false,
-                        'message' => 'Your account does not have permission to enroll students with an account balance!',
+                        'message' => 'Your account does not have permission to enroll students with account balance!',
                         'alert' => 'alert-danger'
                     ];
                 }
@@ -148,7 +148,7 @@ class EnrollmentService
 
             return [
                 'success' => false,
-                'message' => 'Your account does not have permission to enroll students with an account balance!',
+                'message' => 'Your account does not have permission to enroll students with account balance!',
                 'alert' => 'alert-danger'
             ];
         }
