@@ -52,6 +52,7 @@ class EvaluationService
         $grade_arr = null; //will hold item with max val;
         $cggrade_arr = null;
 
+        
         foreach($grades as $k => $v)
         {
             if(is_numeric($v['grade'])){
@@ -60,21 +61,35 @@ class EvaluationService
                     $max_grade = $v['grade'];
                     $grade_arr = $v;
                 }
-            }else{
+            }else if(!is_numeric($v['grade']) && $v['completion_grade'] !== ''){
                 if($v['completion_grade'] > $max_cg)
                 {
                     $max_cg = $v['completion_grade'];
                     $cggrade_arr = $v;
                 }
+            }else{
+                if($v['grade'] > $max_grade)
+                {
+                    $max_grade = $v['grade'];
+                    $grade_arr = $v;
+                }
             }
         }
 
-        if($grade_arr && $cggrade_arr){
-            if($cggrade_arr['completion_grade'] >= $grade_arr['grade'])
+        if(!is_null($grade_arr) && !is_null($cggrade_arr))
+        {
+            if($cggrade_arr['completion_grade'] > $grade_arr['grade'])
             {
-               return $cggrade_arr;
+                return $cggrade_arr;
             }
+            return $grade_arr;
         }
+
+        if(is_null($grade_arr) && !is_null($cggrade_arr))
+        {
+            return $cggrade_arr;
+        }
+
         return $grade_arr;
     }
 
@@ -82,6 +97,7 @@ class EvaluationService
     {
         $tagged_external_grade_info = [];
         $tagged_internal_grade_info = [];
+
 
         foreach ($tagged_grades as $key => $cst_grade) {
             if($cst_grade['origin'] === 1)
@@ -91,6 +107,9 @@ class EvaluationService
                 $tagged_internal_grade_info[] = (new InternalGradeService())->getInternalGradeInfo($cst_grade['grade_id'])->toArray();
             }
         }
+
+        // print_r($tagged_external_grade_info);
+        // print_r($tagged_internal_grade_info);
 
         $grade_info_external = $this->processGrades($tagged_external_grade_info);
         $grade_info_internal = $this->processGrades($tagged_internal_grade_info);
@@ -179,8 +198,6 @@ class EvaluationService
     {
         $student = (new StudentService)->studentInformation($request->student_id);
         $curriculum_subject = (new CurriculumService)->returnCurriculumSubject($request->curriculum_subject_id);
-
-        $all_tagged_grades = TaggedGrades::where('student_id', $request->student_id)->get();
         $allgrades = $this->getAllGradesInternalAndExternal($request->student_id);
 
         $user_permissions = Auth::user()->permissions;
@@ -231,7 +248,6 @@ class EvaluationService
                     'grade_id' => $selected_grade,
                     'origin' => ($origin === 'internal') ? 0 : 1
                 ];
-                //$selected_grades[] = ['origin' => $origin, 'id' => $selected_grade, 'key' => $allgrade_key[0], 'allgrades' => $allgrades, 'istagged' => $istagged];
             }
 
             if($multi_tagged > 0)
@@ -265,15 +281,24 @@ class EvaluationService
                     'alert' => 'alert-danger'
                 ];
             }
-
-            //return $selected_grades;
-
-            //TaggedGrades::where('student_id', $student->id)->where('curriculum_subject_id', $request->curriculum_subject_id)->delete();
-
-
-            return $total_units_remaining;
+            
+            TaggedGrades::where('student_id', $student->id)->where('curriculum_subject_id', $request->curriculum_subject_id)->delete();
+            TaggedGrades::insert($selected_grades);
+            
+            return [
+                'success' => true,
+                'message' => 'Changes sucessfully saved!',
+                'alert' => 'alert-success'
+            ];
         }
 
+        TaggedGrades::where('student_id', $student->id)->where('curriculum_subject_id', $request->curriculum_subject_id)->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Changes sucessfully saved!',
+            'alert' => 'alert-success'
+        ];
         
     }
 
@@ -323,5 +348,10 @@ class EvaluationService
         }
         
         return $query->get();
+    }
+
+    public function studentsAllTaggedGrades($student_id)
+    {
+        return TaggedGrades::where('student_id', $student_id)->get();
     }
 }

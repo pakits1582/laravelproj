@@ -126,6 +126,7 @@
                                                                     }
                                                                 @endphp
                                                                 <td>
+                                                                    {{-- {{ $subject->id }} --}}
                                                                     <a href="#" 
                                                                         id="{{ $subject->id }}" 
                                                                         class="font-weight-bold text-{{ $class }} manage_evaluation"

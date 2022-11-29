@@ -185,6 +185,7 @@ class EvaluationController extends Controller
                                         if($curriculum_subject_tagged_grades)
                                         {
                                             $grade_info = $this->evaluationService->checkTaggedGradeInfo($curriculum_subject_tagged_grades);
+
                                             if($grade_info)
                                             {
                                                 $finalgrade = $grade_info['grade'];
@@ -223,10 +224,10 @@ class EvaluationController extends Controller
 
     public function taggrade(Request $request)
     {
-        $student = (new StudentService)->studentInformation($request->student_id);
+        $student            = (new StudentService)->studentInformation($request->student_id);
         $curriculum_subject = (new CurriculumService)->returnCurriculumSubject($request->curriculum_subject_id);
-        $all_tagged_grades = TaggedGrades::where('student_id', $request->student_id)->get();
-        $allgrades = $this->evaluationService->getAllGradesInternalAndExternal($request->student_id);
+        $all_tagged_grades  = $this->evaluationService->studentsAllTaggedGrades($request->student_id);
+        $allgrades          = $this->evaluationService->getAllGradesInternalAndExternal($request->student_id);
 
         return view('evaluation.tagged_grade', ['student' => $student, 'curriculum_subject' => $curriculum_subject, 'allgrades' => $allgrades, 'all_tagged_grades' => $all_tagged_grades]);
     }
