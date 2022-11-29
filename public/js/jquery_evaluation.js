@@ -52,7 +52,7 @@ $(function(){
 					buttons: {
 							'Cancel':function(){
 								$(this).dialog('close');
-								check.prop("checked", true);		
+								check.prop("checked", false);		
 							},	
 							'OK':function(){
 								$(this).dialog('close');

@@ -218,7 +218,7 @@ class EvaluationService
                 $multi_tagged += $istagged;
 
                 $allgrade_key = array_keys(array_filter($allgrades, fn($data) => $data['origin'] == $origin && $data['id'] == $selected_grade));
-                $total_unit_of_selected_grades += ($allgrades[$allgrade_key[0]]['units']) ? : 0;
+                $total_unit_of_selected_grades += (is_numeric(($allgrades[$allgrade_key[0]]['units']))) ? (($allgrades[$allgrade_key[0]]['units']) ? : 0) : $curriculum_subject->subjectinfo->units;
 
                 if($istagged == 1)
                 {
@@ -233,13 +233,15 @@ class EvaluationService
 
                     if(!$already_tagged_grades->isEmpty())
                     {
-                        $total_units_of_tagged_grades += $already_tagged_grades->sum('units');
+                        $total_units_of_tagged_grades += $already_tagged_grades->sum('curriculum_subject_units');
 
-                        $remainingunits = (float)$curriculum_subject->subjectinfo->units - (float)$total_units_of_tagged_grades;
-						$total_units_remaining += $remainingunits;
+                        //return (float)$total_unit_of_selected_grades.'-'.(float)$total_units_of_tagged_grades;
+                        $remainingunits = (float)$total_unit_of_selected_grades - (float)$total_units_of_tagged_grades;
+						
+                        $total_units_remaining += $remainingunits;
                     }
                 }else{
-                    $total_units_remaining += $curriculum_subject->subjectinfo->units;
+                    $total_units_remaining += $total_unit_of_selected_grades;
                 }
 
                 $selected_grades[] = [
@@ -307,15 +309,18 @@ class EvaluationService
         $query = TaggedGrades::query();
         $query->select(
             'internal_grades.id',
-            'subjects.code',
-            'subjects.name',
+            'internal_grades.units',
+            'classes.units AS class_units',
             'grading_systems.value AS grade', 
             'cggs.value AS completion_grade',
-            'subjects.units'
+            'subjects.units AS curriculum_subject_units',
+            'subjects.code AS curriculum_subject_code',
+            'subjects.name AS curriculum_subject_name'
         );
         $query->leftJoin('internal_grades', 'tagged_grades.grade_id', 'internal_grades.id');
         $query->leftJoin('classes', 'internal_grades.class_id', 'classes.id');
-        $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'classes.curriculum_subject_id');
+        $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'tagged_grades.curriculum_subject_id');
+        $query->leftJoin('subjects', 'curriculum_subjects.subject_id', 'subjects.id');
         $query->leftJoin('grading_systems', 'internal_grades.grading_system_id', 'grading_systems.id');
         $query->leftJoin('remarks', 'grading_systems.remark_id', 'remarks.id');
         $query->leftJoin('grading_systems AS cggs', 'internal_grades.completion_grade', 'cggs.id');
@@ -323,7 +328,7 @@ class EvaluationService
         $query->where('tagged_grades.origin',  0)->where('tagged_grades.grade_id', $grade_id)->where('student_id', $student_id);
         if($curriculum_subject_id !== NULL)
         {
-            $query->where('curriculum_subject_id', '!=', $curriculum_subject_id);
+            $query->where('tagged_grades.curriculum_subject_id', '!=', $curriculum_subject_id);
         }
         
         return $query->get();
@@ -339,8 +344,13 @@ class EvaluationService
             'external_grades.grade',
             'external_grades.completion_grade',
             'external_grades.units',
+            'subjects.units AS curriculum_subject_units',
+            'subjects.code AS curriculum_subject_code',
+            'subjects.name AS curriculum_subject_name'
         );
         $query->leftJoin('external_grades', 'tagged_grades.grade_id', 'external_grades.id');
+        $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'tagged_grades.curriculum_subject_id');
+        $query->leftJoin('subjects', 'curriculum_subjects.subject_id', 'subjects.id');
         $query->where('tagged_grades.origin',  1)->where('tagged_grades.grade_id', $grade_id)->where('student_id', $student_id);
         if($curriculum_subject_id !== NULL)
         {
