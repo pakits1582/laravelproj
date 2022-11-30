@@ -276,6 +276,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:evaluations']], function () {
         Route::post('/evaluations/taggrade', [EvaluationController::class, 'taggrade']);
+        Route::get('/evaluations/{student_id}/curriculum_subject/{curriculum_subject_id}', [EvaluationController::class, 'returntaggrade']);
         Route::resource('evaluations', EvaluationController::class)->missing(function (Request $request) {
             return Redirect::route('evaluations.index');
         }); 

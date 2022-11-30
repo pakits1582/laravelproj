@@ -73,14 +73,14 @@
                                                 <th class="w100">C.G.</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="return_tagggrade">
                                             @include('evaluation.return_tagged_grades')
                                         </tbody>
                                     </table>
                             
                             </div>
-                            <input type="hidden" name="curriculum_subject_id" value="{{ $curriculum_subject->id }}"  />
-                            <input type="hidden" name="student_id" value="{{ $student->id }}"  />
+                            <input type="hidden" name="curriculum_subject_id" id="curriculum_subject_id" value="{{ $curriculum_subject->id }}"  />
+                            <input type="hidden" name="student_id" id="student_id" value="{{ $student->id }}"  />
                             <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Changes</button>
                         </form>
                     </div>

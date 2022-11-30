@@ -86,31 +86,41 @@ $(function(){
 					});
 					$(".ui-dialog-titlebar").hide();
 				},
-			success: function(data){
+			success: function(response){
 				$("#confirmation").dialog('close');
-				console.log(data);
+				console.log(response);
 
-				// if(data == 1){
-				// 	showSuccess('Changes sucessfully saved!');
-				// 	var student   = $("#idno").val();
-				// 	var subtocurr = $("#subtocurr").val();
-				// 	returnEvaluation(student);
-				// 	$.ajax({
-				// 		type: "POST",
-				// 		url: baseUrl+"/evaluation/returntagsubjecttocurr",
-				// 		data: ({"subtocurr": subtocurr, "student":student}),
-				// 		cache: false,
-				// 		success: function(data1){
-				// 			$("#return_tagsubtocurr").html(data1);
-				// 		} 
-				// 	});
-				// }else{
-				// 	showError(data);	
-				// }
+				if(response.data.success !== false)
+				{
+					showSuccess(response.data.message);
+					var student_id = $("#student_id").val();
+					var curriculum_subject_id = $("#curriculum_subject_id").val();
+
+					$.ajax({url: "/evaluations/"+student_id+"/curriculum_subject/"+curriculum_subject_id, success: function(data){
+							$("#return_tagggrade").html(data);
+						}
+					});	
+
+					returnEvaluation(student_id);
+				}else{
+					showError(response.data.message);
+				}
+			},
+			error: function (data) {
+				console.log(data);
 			}
+			
 		});
 
 		e.preventDefault();
 	});
+
+	function returnEvaluation(student_id)
+	{
+		$.ajax({url: "/evaluations/"+student_id, success: function(data){
+				$("#return_evaluation").html(data);
+			}
+		});
+	}
 	
 });
