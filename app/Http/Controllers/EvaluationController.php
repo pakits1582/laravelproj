@@ -95,6 +95,7 @@ class EvaluationController extends Controller
         }
 
         return view('evaluation.evaluate', $student_evaluation);
+        
     }
 
     public function taggrade(Request $request)

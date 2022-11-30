@@ -178,8 +178,14 @@ class EvaluationService
                 }
             }
 
-            return $curriculuminfo + ['student' => $student, 'evaluation' => $evaluation];
+            return $curriculuminfo + ['evaluation' => $evaluation, 'student' => $student];
         }
+
+        return [
+            'student' => $student,
+            'evaluation' => false
+        ];
+
     }
 
     public function getMaxValueOfGrades($grades)
