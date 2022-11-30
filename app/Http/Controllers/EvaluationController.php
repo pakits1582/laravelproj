@@ -104,16 +104,14 @@ class EvaluationController extends Controller
         $all_tagged_grades  = $this->evaluationService->studentsAllTaggedGrades($request->student_id);
         $allgrades          = $this->evaluationService->getAllGradesInternalAndExternal($request->student_id);
 
-        return view('evaluation.tagged_grade', ['student' => $student, 'curriculum_subject' => $curriculum_subject, 'allgrades' => $allgrades, 'all_tagged_grades' => $all_tagged_grades]);
+        $return = ['student' => $student, 'curriculum_subject' => $curriculum_subject, 'allgrades' => $allgrades, 'all_tagged_grades' => $all_tagged_grades];
+        
+        if($request->from_return === 'yes')
+        {
+            return view('evaluation.return_tagged_grades', $return);
+        }
+
+        return view('evaluation.tagged_grade', $return);
     }
 
-    public function returntaggrade($student_id, $curriculum_subject_id)
-    {
-        $student            = (new StudentService)->studentInformation($student_id);
-        $curriculum_subject = (new CurriculumService)->returnCurriculumSubject($curriculum_subject_id);
-        $all_tagged_grades  = $this->evaluationService->studentsAllTaggedGrades($student_id);
-        $allgrades          = $this->evaluationService->getAllGradesInternalAndExternal($student_id);
-
-        return view('evaluation.return_tagged_grades', ['student' => $student, 'curriculum_subject' => $curriculum_subject, 'allgrades' => $allgrades, 'all_tagged_grades' => $all_tagged_grades]);
-    }
 }

@@ -84,7 +84,7 @@ class EvaluationService
                                     //print_r($grades);
                                     if($grades)
                                     {
-                                        $grade_info = $this->processGrades($grades);
+                                        $grade_info = $this->getMaxValueOfGrades($grades);
 
                                         if($grade_info)
                                         {
@@ -112,7 +112,7 @@ class EvaluationService
                                             if($equivalent_subjects_internal_grades)
                                             {
                                                 $equivalent_subjects_internal_grades = call_user_func_array('array_merge', $equivalent_subjects_internal_grades);
-                                                $grade_info = $this->processGrades($equivalent_subjects_internal_grades);
+                                                $grade_info = $this->getMaxValueOfGrades($equivalent_subjects_internal_grades);
                                                 $grade_info['source'] = 'internal';
                                             }
                                             
@@ -182,7 +182,7 @@ class EvaluationService
         }
     }
 
-    public function processGrades($grades)
+    public function getMaxValueOfGrades($grades)
     {
         $max_grade = -9999999; //will hold max val
         $max_cg = -9999999;
@@ -248,8 +248,8 @@ class EvaluationService
         // print_r($tagged_external_grade_info);
         // print_r($tagged_internal_grade_info);
 
-        $grade_info_external = $this->processGrades($tagged_external_grade_info);
-        $grade_info_internal = $this->processGrades($tagged_internal_grade_info);
+        $grade_info_external = $this->getMaxValueOfGrades($tagged_external_grade_info);
+        $grade_info_internal = $this->getMaxValueOfGrades($tagged_internal_grade_info);
 
         // print_r($grade_info_external);
         // print_r($grade_info_internal);

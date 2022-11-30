@@ -15,14 +15,13 @@ $(function(){
 	$(document).on("click", ".manage_evaluation", function(e){
 		var student_id = $("#student_id").val();
 		var curriculum_subject_id = $(this).attr("id");
-		var grade_id = $(this).attr("data-grade_id");
-		var origin = $(this).attr("data-origin");
 
 		$.ajax({
 			url: "/evaluations/taggrade",
 			type: 'POST',
-			data: ({ 'student_id':student_id, 'curriculum_subject_id':curriculum_subject_id, 'grade_id':grade_id, 'origin':origin }),
+			data: ({ 'student_id':student_id, 'curriculum_subject_id':curriculum_subject_id, 'from_return':'no' }),
 			success: function(data){
+				//console.log(data);
 				$('#ui_content').html(data);
 				$("#modalTable").modal('show');
 			
@@ -88,7 +87,7 @@ $(function(){
 				},
 			success: function(response){
 				$("#confirmation").dialog('close');
-				console.log(response);
+				//console.log(response);
 
 				if(response.data.success !== false)
 				{
@@ -96,11 +95,7 @@ $(function(){
 					var student_id = $("#student_id").val();
 					var curriculum_subject_id = $("#curriculum_subject_id").val();
 
-					$.ajax({url: "/evaluations/"+student_id+"/curriculum_subject/"+curriculum_subject_id, success: function(data){
-							$("#return_tagggrade").html(data);
-						}
-					});	
-
+					returnTaggrades(student_id, curriculum_subject_id);
 					returnEvaluation(student_id);
 				}else{
 					showError(response.data.message);
@@ -119,6 +114,22 @@ $(function(){
 	{
 		$.ajax({url: "/evaluations/"+student_id, success: function(data){
 				$("#return_evaluation").html(data);
+			}
+		});
+	}
+
+	function returnTaggrades(student_id, curriculum_subject_id)
+	{
+		$.ajax({
+			url: "/evaluations/taggrade",
+			type: 'POST',
+			data: ({ 'student_id':student_id, 'curriculum_subject_id':curriculum_subject_id, 'from_return':'yes' }),
+			success: function(data){
+				//console.log(data);
+				$('#return_taggrade').html(data);	
+			},
+			error: function (data) {
+				console.log(data);
 			}
 		});
 	}

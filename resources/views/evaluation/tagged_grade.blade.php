@@ -73,7 +73,7 @@
                                                 <th class="w100">C.G.</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="return_tagggrade">
+                                        <tbody id="return_taggrade">
                                             @include('evaluation.return_tagged_grades')
                                         </tbody>
                                     </table>
