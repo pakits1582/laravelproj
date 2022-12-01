@@ -104,12 +104,12 @@ class EvaluationService
                                                 //print_r($subject['equivalents']);
                                                 $equivalent_subjects_internal_grades = [];
 
-                                                foreach ($subject['equivalents'] as $key => $eqivalent_subject)
+                                                foreach ($subject['equivalents'] as $key => $equivalent_subject)
                                                 {
-                                                    //echo $eqivalent_subject['curriculum_subject_id'];
                                                     //GET ALL INTERNAL GRADES OF EQUIVALENT SUBJECTS
-                                                    $equivalent_subjects_internal_grades[] = $internal_grades->where('subject_id', $eqivalent_subject['equivalent'])->toArray();
+                                                    $equivalent_subjects_internal_grades[] = $internal_grades->where('subject_id', $equivalent_subject['equivalent'])->toArray();
                                                 }
+                                                
                                                 if($equivalent_subjects_internal_grades)
                                                 {
                                                     $equivalent_subjects_internal_grades = call_user_func_array('array_merge', $equivalent_subjects_internal_grades);
@@ -117,7 +117,7 @@ class EvaluationService
                                                     $grade_info['source'] = 'internal';
                                                 }
                                                 
-                                                $tagged_grades_of_equivalents = $tagged_grades->where('curriculum_subject_id', $eqivalent_subject['curriculum_subject_id'])->toArray();
+                                                $tagged_grades_of_equivalents = $tagged_grades->where('curriculum_subject_id', $equivalent_subject['curriculum_subject_id'])->toArray();
 
                                                 if($ispassed === 0)
                                                 {
@@ -138,7 +138,8 @@ class EvaluationService
                                                 }
                                             }
                                         }////end of grade is passed internal
-                                        
+
+                                        //CHECK FROM TAGGED GRADES
                                         if($ispassed === 0)
                                         {
                                             $curriculum_subject_tagged_grades = $tagged_grades->where('curriculum_subject_id', $subject['id'])->toArray();

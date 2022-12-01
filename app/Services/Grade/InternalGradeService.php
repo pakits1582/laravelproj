@@ -69,6 +69,7 @@ class InternalGradeService
             'remarks.remark',
             'cgr.remark AS completion_remark',
             'cggs.value AS completion_grade',
+            'classes.curriculum_subject_id',
             'curriculum_subjects.subject_id',
             'subjects.code',
             'subjects.units',

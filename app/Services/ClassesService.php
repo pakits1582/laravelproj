@@ -147,13 +147,13 @@ class ClassesService
 
     public function generateCode()
     {
-        $classes_withnocode = Classes::with('sectioninfo.programinfo.collegeinfo')->where('code', NULL)->orWhere('code', '=', '')->get();
+        $classes_withnocode = Classes::with('sectioninfo.programinfo.collegeinfo')->where('code', NULL)->orWhere('code', '=', '')->where('period_id', session('current_period'))->get();
 
         if(count($classes_withnocode)){
             foreach ($classes_withnocode as $key => $class_withnocode) {
                 $class_code = $class_withnocode->sectioninfo->programinfo->collegeinfo->class_code ?? 'NC';
 
-                $last_code = DB::table('classes')->select(DB::raw('MAX(CAST(SUBSTRING(code, 2, length(code) -1) AS UNSIGNED)) AS lastcode')) ->where('code','like', $class_code.'%')->get()[0];
+                $last_code = DB::table('classes')->select(DB::raw('MAX(CAST(SUBSTRING(code, 2, length(code) -1) AS UNSIGNED)) AS lastcode'))->where('code','like', $class_code.'%')->where('period_id', session('current_period'))->get()[0];
                 $oldcode = ($last_code->lastcode) ? $last_code->lastcode : 0;
 
                 $lcode = str_replace($class_code, "", $oldcode)+1;

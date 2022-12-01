@@ -5,12 +5,14 @@ namespace App\Services\Enrollment;
 use App\Models\Term;
 use App\Libs\Helpers;
 use App\Models\Enrollment;
-use App\Models\SectionMonitoring;
+use App\Models\TaggedGrades;
 use App\Services\ClassesService;
+use App\Models\SectionMonitoring;
 use App\Services\CurriculumService;
-use App\Services\Grade\InternalGradeService;
 use Illuminate\Support\Facades\Auth;
 use function PHPUnit\Framework\returnSelf;
+use App\Services\Grade\InternalGradeService;
+use App\Services\Evaluation\EvaluationService;
 
 class EnrollmentService
 {
@@ -212,12 +214,10 @@ class EnrollmentService
 
     public function enrollSection($student_id, $section_id, $enrollment_id)
     {
-        $classesService = new ClassesService();
-
-        $section_subjects = $classesService->classSubjects($section_id, session('current_period'));
+        $section_subjects = (new ClassesService())->classSubjects($section_id, session('current_period'));
 
         if(!$section_subjects->isEmpty())
-        {           
+        {        
             return $this->handleSectionSubjects($student_id, $section_subjects);
         }
 
@@ -231,22 +231,41 @@ class EnrollmentService
     public function handleSectionSubjects($student_id, $section_subjects)
     {
         $subjects = [];
-        
-        $ispassed = 0;
-        foreach ($section_subjects as $key => $section_subject) {
+        $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student_id);
+        $tagged_grades = TaggedGrades::where('student_id', $student_id)->get();
 
-            $ispassed = $this->internalGradeService->checkIfPassedInternalGrade(
-                $student_id, 
-                $section_subject['curriculumsubject']['subject_id'],
-                $section_subject['curriculumsubject']['quota']
-                );
-            
-            if($ispassed === 0)
+        foreach ($section_subjects as $key => $section_subject)
+        {
+            $ispassed = 0;
+            $grades = $internal_grades->where('subject_id', $section_subject->curriculumsubject->subject_id);
+            if($grades)
             {
-                $equivalent_subjects = $section_subject['curriculumsubject']['equivalents'];
-                if(count($equivalent_subjects) > 0)
+                $grade_info = (new EvaluationService())->getMaxValueOfGrades($grades);
+  
+                if(!is_null($section_subject->curriculumsubject->quota) && $grade_info)
                 {
-                    $ispassed = $this->checkEquivalentSubjects($equivalent_subjects, $student_id);
+                    $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
+                }
+            }else{
+                //CHECK EQUIVALENTS SUBJECTS IF PASSED
+                if($section_subject->curriculumsubject->equivalents)
+                {
+                    $equivalent_subjects_internal_grades = [];
+                    
+                    foreach ($section_subject->curriculumsubject->equivalents as $key => $equivalent_subject)
+                    {
+                        //GET ALL INTERNAL GRADES OF EQUIVALENT SUBJECTS
+                        $equivalent_subjects_internal_grades[] = $internal_grades->where('subject_id', $equivalent_subject->equivalent)->toArray();
+                    }
+
+                    if($equivalent_subjects_internal_grades)
+                    {
+                        $equivalent_subjects_internal_grades = call_user_func_array('array_merge', $equivalent_subjects_internal_grades);
+                        $grade_info = (new EvaluationService())->getMaxValueOfGrades($equivalent_subjects_internal_grades);
+                    }
+
+
+
                 }
             }
 

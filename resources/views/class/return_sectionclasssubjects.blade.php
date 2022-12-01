@@ -33,5 +33,5 @@
         </tr>
     @endforeach
 @else
-    <tr><td colspan="13" class="mid">No records to be displayed</td></tr>
+    <tr><td colspan="14" class="mid">No records to be displayed</td></tr>
 @endif
