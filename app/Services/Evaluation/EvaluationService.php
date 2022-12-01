@@ -9,6 +9,7 @@ use App\Models\TaggedGrades;
 use App\Services\ProgramService;
 use App\Services\StudentService;
 use App\Services\CurriculumService;
+use App\Services\TaggedGradeService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Grade\ExternalGradeService;
 use App\Services\Grade\InternalGradeService;
@@ -54,7 +55,7 @@ class EvaluationService
             if($user_programs->contains('id', $student->program_id) || $user_programs->contains('program.id', $student->program_id))
             {
                 $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student->id);
-                $tagged_grades = TaggedGrades::where('student_id', $student->id)->get();
+                $tagged_grades =  (new TaggedGradeService())->getAllTaggedGrades($student->id);
                 $blank_grades = (new InternalGradeService())->getAllBlankInternalGrades($student->id);
                 $curriculuminfo = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
                 // echo '<pre>';
@@ -101,29 +102,35 @@ class EvaluationService
                                             //CHECK EQUIVALENTS SUBJECTS IF PASSED
                                             if($subject['equivalents'])
                                             {
-                                                //print_r($subject['equivalents']);
+                                                //print_r($tagged_grades->toArray());
+                                                //echo '<pre>';
                                                 $equivalent_subjects_internal_grades = [];
+                                                $equivalent_subjects_external_grades = [];
 
                                                 foreach ($subject['equivalents'] as $key => $equivalent_subject)
                                                 {
+                                                    //print_r($equivalent_subject);   
                                                     //GET ALL INTERNAL GRADES OF EQUIVALENT SUBJECTS
-                                                    $equivalent_subjects_internal_grades[] = $internal_grades->where('subject_id', $equivalent_subject['equivalent'])->toArray();
+                                                    $equivalent_subjects_internal_grades += $internal_grades->where('subject_id', $equivalent_subject['equivalent'])->toArray();
+                                                    //GET ALL EXTERNAL GRADES OF EQUIVALENT SUBJECTS
+                                                    $equivalent_subjects_external_grades += $tagged_grades->where('subject_id', $equivalent_subject['equivalent'])->toArray();
                                                 }
                                                 
+                                                //print_r($equivalent_subjects_internal_grades); 
                                                 if($equivalent_subjects_internal_grades)
                                                 {
-                                                    $equivalent_subjects_internal_grades = call_user_func_array('array_merge', $equivalent_subjects_internal_grades);
+                                                    //$equivalent_subjects_internal_grades = call_user_func_array('array_merge', $equivalent_subjects_internal_grades);
                                                     $grade_info = $this->getMaxValueOfGrades($equivalent_subjects_internal_grades);
                                                     $grade_info['source'] = 'internal';
                                                 }
-                                                
-                                                $tagged_grades_of_equivalents = $tagged_grades->where('curriculum_subject_id', $equivalent_subject['curriculum_subject_id'])->toArray();
 
+                                                //print_r($grade_info);
+                                                
                                                 if($ispassed === 0)
                                                 {
-                                                    if($tagged_grades_of_equivalents)
+                                                    if($equivalent_subjects_external_grades)
                                                     {
-                                                    $grade_info = $this->checkTaggedGradeInfo($tagged_grades_of_equivalents);
+                                                        $grade_info = $this->checkTaggedGradeInfo($equivalent_subjects_external_grades);
                                                     }
                                                 }
                                                 if($grade_info)
