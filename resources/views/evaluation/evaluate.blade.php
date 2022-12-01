@@ -51,7 +51,7 @@
                 <h1 class="h3 text-800 text-danger m-0">ACCESS DENIED</h1>
             </div> 
             <div class="card-body">
-                <h1 class="h3 text-800 text-danger m-0 mid">Sorry you are not allowed to evaluate the selected student, your account does not have enough access to student's current program! You can update student's program first!</h1>
+                <h1 class="h3 text-800 m-0 mid text-danger alert alert-danger">{{ $message }}</h1>
             </div>
         </div>
     @else
