@@ -104,6 +104,11 @@ class CurriculumService
         return CurriculumSubjects::with(['subjectinfo', 'prerequisites', 'corequisites', 'equivalents'])->where("id", $curriculum_subject_id)->firstOrFail();
     }
 
+    public function returnCurriculumSubjectInfo($curriculum_subject_id)
+    {
+        return CurriculumSubjects::with(['subjectinfo', 'equivalents'])->where("id", $curriculum_subject_id)->firstOrFail();
+    }
+
     public function storeManageCurriculumSubject($request)
     {
         $curriculum_subject = $this->returnCurriculumSubject($request->curriculum_subject);

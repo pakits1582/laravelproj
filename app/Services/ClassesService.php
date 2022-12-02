@@ -73,7 +73,7 @@ class ClassesService
                 'sectioninfo',
                 'instructor', 
                 'schedule', 
-                'curriculumsubject' => fn($query) => $query->with('curriculum','prerequisites', 'corequisites', 'equivalents')
+                'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
             ])->where('section_id', $section)->where('period_id', $period)->get();
     }
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Services\StudentService;
 use Illuminate\Support\Collection;
 use App\Services\CurriculumService;
+use App\Services\TaggedGradeService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Grade\ExternalGradeService;
@@ -72,7 +73,7 @@ class EvaluationController extends Controller
      */
     public function store(Request $request)
     {
-        $taggrades = $this->evaluationService->storeTaggedGrades($request);
+        $taggrades = (new TaggedGradeService)->storeTaggedGrades($request);
     
         return response()->json(['data' => $taggrades]);
     }
@@ -102,7 +103,7 @@ class EvaluationController extends Controller
     {
         $student            = (new StudentService)->studentInformation($request->student_id);
         $curriculum_subject = (new CurriculumService)->returnCurriculumSubject($request->curriculum_subject_id);
-        $all_tagged_grades  = $this->evaluationService->studentsAllTaggedGrades($request->student_id);
+        $all_tagged_grades  = (new TaggedGradeService)->getAllTaggedGrades($request->student_id);
         $allgrades          = $this->evaluationService->getAllGradesInternalAndExternal($request->student_id);
 
         $return = ['student' => $student, 'curriculum_subject' => $curriculum_subject, 'allgrades' => $allgrades, 'all_tagged_grades' => $all_tagged_grades];
