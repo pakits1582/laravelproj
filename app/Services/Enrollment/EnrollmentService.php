@@ -303,17 +303,14 @@ class EnrollmentService
 
         foreach ($not_passed_section_subjects as $key => $not_passed_section_subject) 
         {
-            $prerequisites_failed = [];
+            $prerequisites = $this->checkIfSectionSubjectPrerequisitesPassed(
+                $student_id, 
+                $not_passed_section_subject->curriculumsubject->prerequisites,
+                $internal_grades,
+                $tagged_grades
+            );
 
-            // $this->checkIfSectionSubjectPrerequisitesPassed(
-            //     $student_id, 
-            //     $not_passed_section_subject->curriculumsubject->prerequisites,
-            //     $internal_grades,
-            //     $tagged_grades
-            // );
-
-            $not_passed_section_subject['prereqfailed'] = [];
-
+            $not_passed_section_subject['prereqfailed'] = $prerequisites;
             $final_section_subjects[] = $not_passed_section_subject;
         }
 
@@ -328,21 +325,17 @@ class EnrollmentService
         {
             foreach ($prerequisites as $key => $prerequisite) {
                 $prerequisite_info = (new CurriculumService())->returnCurriculumSubjectInfo($prerequisite->prerequisite);
-                $subject_id = $prerequisite_info->subject_info->id;
+                $subject_id = $prerequisite_info->subjectinfo->id;
                 $ispassed = 0;
 
-                $grades = $internal_grades->where('subject_id', $subject_id);
+                $grades = $internal_grades->where('subject_id', $subject_id)->toArray();
                 if($grades)
                 {
                     $grade_info = (new EvaluationService())->getMaxValueOfGrades($grades);
-      
-                    if($grade_info && !is_null($prerequisite_info->quota))
-                    {
-                        $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;
-                    }
+                    $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;   
                 }else{
                     //CHECK EQUIVALENTS SUBJECTS IF PASSED
-                    if($prerequisite_info->equivalents)
+                    if($prerequisite_info->equivalents->count())
                     {
                         $equivalent_subjects_internal_grades = [];
                         $equivalent_subjects_external_grades = [];
@@ -371,9 +364,21 @@ class EnrollmentService
                         }
                     }//end of foreach equivalents
                 }//end of if passed internal
+                //CHECK FROM TAGGED GRADES
                 if($ispassed === 0)
                 {
-                    $failed_prerequisites[] = $prerequisite;
+                    $curriculum_subject_tagged_grades = $tagged_grades->where('curriculum_subject_id', $prerequisite->prerequisite)->toArray();
+
+                    if($curriculum_subject_tagged_grades)
+                    {
+                        $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($curriculum_subject_tagged_grades);
+                        $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;
+                    }//end of if has tagged subject
+                }
+
+                if($ispassed === 0)
+                {
+                    $failed_prerequisites[] = $prerequisite_info;
                 }
             }
         }
