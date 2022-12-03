@@ -155,7 +155,11 @@ class EnrollmentService
             ];
         }
 
-        if($this->studentAllEnrollments($student['student']['id']) === false){
+        $isnew = 0;
+        $isOld = 0;
+
+        if($this->studentAllEnrollments($student['student']['id']) === false)
+        {
             $isnew = 1;
         }else{
             $isOld = 1;
@@ -233,20 +237,19 @@ class EnrollmentService
         $not_passed_section_subjects = [];
         $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student_id);
         $tagged_grades   = (new TaggedGradeService)->getAllTaggedGrades($student_id);
-
+        
+        //return $internal_grades;
         //CHECK SECTION SUBJECTS IF ALREADY PASSED
         foreach ($section_subjects as $key => $section_subject)
-        {
+        {            
             $ispassed = 0;
-            $grades = $internal_grades->where('subject_id', $section_subject->curriculumsubject->subject_id);
+            $grades = $internal_grades->where('subject_id', $section_subject->curriculumsubject->subject_id)->toArray();
+
             if($grades)
             {
                 $grade_info = (new EvaluationService())->getMaxValueOfGrades($grades);
   
-                if($grade_info && !is_null($section_subject->curriculumsubject->quota))
-                {
-                    $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
-                }
+                $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
             }else{
                 //CHECK EQUIVALENTS SUBJECTS IF PASSED
                 if($section_subject->curriculumsubject->equivalents)
