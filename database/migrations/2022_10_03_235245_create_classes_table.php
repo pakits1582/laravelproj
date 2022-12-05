@@ -36,7 +36,7 @@ return new class extends Migration
             $table->boolean('tutorial')->default(false);
             $table->boolean('dissolved')->default(false);
             $table->boolean('f2f')->default(false);
-            $table->boolean('merge')->default(false);
+            $table->unsignedBigInteger('merge')->nullable()->index();
             $table->boolean('ismother')->default(false);
             $table->boolean('isprof')->default(false);
             $table->boolean('evaluation')->default(false);
@@ -45,6 +45,10 @@ return new class extends Migration
             $table->integer('evaluation_status')->nullable()->default(0);
             $table->timestamps();
         });
+
+        Schema::table('classes',function (Blueprint $table){
+            $table->foreign('merge')->references('id')->on('classes');
+    });
     }
 
     /**

@@ -133,8 +133,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-5">
+                                        <div class="row align-items-end">
+                                            <div class="col-md-4">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Instructor</label>
                                                 <select name="instructor_id" class="form-control select clearable" id="instructor">
                                                     <option value="">- select instructor -</option>
@@ -153,6 +153,12 @@
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Slots</label>
                                                 <input type="text" name="slots" id="slots" class="form-control clearable" value="" placeholder="">
                                                 <div id="error_slots" class="errors"></div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-check form-check-solid">
+                                                    <input class="form-check-input" id="isprof" type="checkbox" value="1" name="isprof" >
+                                                    <label for="isprof" class="m-0 font-weight-bold text-primary">Is_Prof</label>                    
+                                                </div>  
                                             </div>
                                         </div>
                                     </div>

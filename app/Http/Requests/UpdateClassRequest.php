@@ -47,6 +47,7 @@ class UpdateClassRequest extends FormRequest
             'tutorial' => [],
             'dissolved' => [],
             'f2f' => [],
+            'isprof' => [],
             'instructor_id' => [],
             'schedule' => ''
         ];
