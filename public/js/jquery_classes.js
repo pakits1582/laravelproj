@@ -238,9 +238,10 @@ $(function(){
                         $('#slots').val(response.data.slots);
                         $('#schedule').val(response.data.schedule.schedule);
                         $('#instructor').val(response.data.instructor_id).trigger('change');
-                        if (response.datatutorial === 1){ $('#tutorial').prop('checked', true) }
-                        if (response.datadissolved === 1){ $('#dissolved').prop('checked', true) }
-                        if (response.dataf2f === 1){ $('#f2f').prop('checked', true) }
+                        if (response.data.tutorial === 1){ $('#tutorial').prop('checked', true) }
+                        if (response.data.dissolved === 1){ $('#dissolved').prop('checked', true) }
+                        if (response.data.f2f === 1){ $('#f2f').prop('checked', true) }
+                        if (response.data.isprof === 1){ $('#isprof').prop('checked', true) }
                     }else{
                         showError('Oppss! Something went wrong! Can not fetch class subject data!');
                     }
@@ -263,7 +264,7 @@ $(function(){
         //form fields
 		$('.clearable').val("");
 		$('input.checks').prop('disabled', false).prop('checked', false);
-		$('#dissolved, #tutorial, #f2f').prop("checked", false);
+		$('#dissolved, #tutorial, #f2f, #isprof').prop("checked", false);
 		$('.checks').closest('tr').removeClass('selected');
 
         $('#instructor').val("").trigger('change'); 
