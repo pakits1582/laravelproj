@@ -303,21 +303,20 @@ class EnrollmentService
 
         foreach ($not_passed_section_subjects as $key => $not_passed_section_subject) 
         {
-            $prerequisites = $this->checkIfSectionSubjectPrerequisitesPassed(
-                $student_id, 
+            $unfinished_prerequisites = $this->checkIfSectionSubjectPrerequisitesPassed(
                 $not_passed_section_subject->curriculumsubject->prerequisites,
                 $internal_grades,
                 $tagged_grades
             );
 
-            $not_passed_section_subject['prereqfailed'] = $prerequisites;
+            $not_passed_section_subject['unfinished_prerequisites'] = $unfinished_prerequisites;
             $final_section_subjects[] = $not_passed_section_subject;
         }
 
         return $final_section_subjects;
     }
 
-    public function checkIfSectionSubjectPrerequisitesPassed($student_id, $prerequisites, $internal_grades, $tagged_grades)
+    public function checkIfSectionSubjectPrerequisitesPassed($prerequisites, $internal_grades, $tagged_grades)
     {
         $failed_prerequisites = [];
 
