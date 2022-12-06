@@ -82,7 +82,7 @@ class EvaluationService
                                         $manage     = true;
 
                                         $grades = $internal_grades->where('subject_id', $subject['subject_id'])->toArray();
-                                        
+
                                         if($grades)
                                         {
                                             $grade_info = $this->getMaxValueOfGrades($grades);
@@ -100,8 +100,6 @@ class EvaluationService
                                             //CHECK EQUIVALENTS SUBJECTS IF PASSED
                                             if($subject['equivalents'])
                                             {
-                                                print_r($subject['equivalents']);
-
                                                 $equivalent_subjects_internal_grades = [];
                                                 $equivalent_subjects_external_grades = [];
 
@@ -139,7 +137,7 @@ class EvaluationService
                                                 }
                                             }
                                         }////end of grade is passed internal
-                                            
+
                                         //CHECK FROM TAGGED GRADES
                                         if($ispassed === 0)
                                         {
@@ -174,7 +172,7 @@ class EvaluationService
                                         ];
 
                                         $evaluation[] = $subject;
-                                    }
+                                    }//end of foreach subjects
                                 }
                             }
                         }

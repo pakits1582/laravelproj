@@ -72,7 +72,7 @@
                                                         </span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $subject->quota }}</td>
+                                                <td class="mid">{{ $subject->quota }}</td>
                                                 <td class="mid">{{ $subject->subjectinfo->units }}</td>
                                             </tr>
                                             @php

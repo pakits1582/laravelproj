@@ -48,7 +48,7 @@ return new class extends Migration
 
         Schema::table('classes',function (Blueprint $table){
             $table->foreign('merge')->references('id')->on('classes');
-    });
+        });
     }
 
     /**
