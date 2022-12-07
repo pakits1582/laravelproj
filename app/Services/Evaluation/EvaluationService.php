@@ -141,7 +141,7 @@ class EvaluationService
                                         //CHECK FROM TAGGED GRADES
                                         if($ispassed === 0)
                                         {
-                                            $curriculum_subject_tagged_grades = $tagged_grades->where('curriculum_subject_id', $subject['id'])->toArray();
+                                            $curriculum_subject_tagged_grades = $tagged_grades->where('subject_id', $subject['subject_id'])->toArray();
 
                                             if($curriculum_subject_tagged_grades)
                                             {

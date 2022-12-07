@@ -378,6 +378,7 @@ $(function(){
             dataType: 'json',
             success: function(response){
                 console.log(response);
+                $("#schedule_table").html(response);
                 if(response.data.success === false){
                     showError(response.data.message);
                     $("#section").val('');
@@ -390,6 +391,7 @@ $(function(){
             },
             error: function (data) {
                 console.log(data);
+                $("#schedule_table").html(data.responseJSON);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');

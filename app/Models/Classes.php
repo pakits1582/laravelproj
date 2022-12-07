@@ -46,4 +46,11 @@ class Classes extends Model
     public function classschedules(){
         return $this->hasMany(ClassesSchedule::class, 'class_id', 'id');
     }
+
+    public function enrolledstudents()
+    {
+        return $this->hasMany(EnrolledClass::class, 'class_id', 'id');
+    }
+
+   
 }

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('enrollment_id')->references('id')->on('enrollments')->onDelete('cascade');
             $table->unsignedBigInteger('class_id')->index();
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->index()->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
         });
     }

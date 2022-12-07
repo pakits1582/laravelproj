@@ -248,11 +248,10 @@ class EnrollmentService
             if($grades)
             {
                 $grade_info = (new EvaluationService())->getMaxValueOfGrades($grades);
-  
                 $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
             }else{
                 //CHECK EQUIVALENTS SUBJECTS IF PASSED
-                if($section_subject->curriculumsubject->equivalents)
+                if($section_subject->curriculumsubject->equivalents->count())
                 {
                     $equivalent_subjects_internal_grades = [];
                     $equivalent_subjects_external_grades = [];
@@ -284,7 +283,7 @@ class EnrollmentService
             //CHECK FROM TAGGED GRADES
             if($ispassed === 0)
             {
-                $curriculum_subject_tagged_grades = $tagged_grades->where('curriculum_subject_id', $section_subject->curriculum_subject_id)->toArray();
+                $curriculum_subject_tagged_grades = $tagged_grades->where('subject_id', $section_subject->curriculumsubject->subject_id)->toArray();
 
                 if($curriculum_subject_tagged_grades)
                 {
@@ -308,6 +307,8 @@ class EnrollmentService
                 $internal_grades,
                 $tagged_grades
             );
+
+            
 
             $not_passed_section_subject['unfinished_prerequisites'] = $unfinished_prerequisites;
             $final_section_subjects[] = $not_passed_section_subject;

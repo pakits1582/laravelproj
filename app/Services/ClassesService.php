@@ -67,14 +67,21 @@ class ClassesService
 
     }
 
-    public function classSubjects($section, $period)
+    public function classSubjects($section, $period, $with_dissolved = true)
     {
-        return Classes::with([
+        $query = Classes::with([
                 'sectioninfo',
                 'instructor', 
-                'schedule', 
+                'schedule',
+                'enrolledstudents.enrollment', 
                 'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
-            ])->where('section_id', $section)->where('period_id', $period)->get();
+            ])->where('section_id', $section)->where('period_id', $period);
+        
+        if($with_dissolved === false)
+        {
+            $query->where('dissolved', '!=', 1);
+        }
+        return $query->get();
     }
 
     public function classSubject($class_id)
