@@ -41,4 +41,27 @@ class Enrollment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function scopeAssessed($query)
+    {
+        return $query->where('assessed', 1);
+    }
+
+    public function scopeValidated($query)
+    {
+        return $query->where('validated', 1);
+    }
+
+    public function scopeCancelled($query)
+    {
+        return $query->where('cancelled', 1);
+    }
+
+    public function scopeWithdrawn($query)
+    {
+        return $query->where('withdrawn', 1);
+    }
+
+
+
+
 }

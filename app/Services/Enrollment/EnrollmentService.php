@@ -302,15 +302,14 @@ class EnrollmentService
 
         foreach ($not_passed_section_subjects as $key => $not_passed_section_subject) 
         {
-            $unfinished_prerequisites = $this->checkIfSectionSubjectPrerequisitesPassed(
-                $not_passed_section_subject->curriculumsubject->prerequisites,
-                $internal_grades,
-                $tagged_grades
-            );
+            $not_passed_section_subject['total_slots'] = ($not_passed_section_subject->merge === 1) ? $not_passed_section_subject->mergetomotherclass->slots : $not_passed_section_subject->slots;
+            $not_passed_section_subject['total_slots_taken'] = $this->getTotalSlotsTakenOfClass($not_passed_section_subject); 
+            $not_passed_section_subject['unfinished_prerequisites'] = $this->checkIfSectionSubjectPrerequisitesPassed(
+                                                                        $not_passed_section_subject->curriculumsubject->prerequisites,
+                                                                        $internal_grades,
+                                                                        $tagged_grades
+                                                                    );
 
-            
-
-            $not_passed_section_subject['unfinished_prerequisites'] = $unfinished_prerequisites;
             $final_section_subjects[] = $not_passed_section_subject;
         }
 
@@ -384,6 +383,18 @@ class EnrollmentService
         }
 
         return $failed_prerequisites;
+    }
+
+    public function getTotalSlotsTakenOfClass($class)
+    {
+        $slots_taken = 0;
+
+        if($class->ismother === 1)
+        {
+
+        }
+
+        return $slots_taken;
     }
    
 }

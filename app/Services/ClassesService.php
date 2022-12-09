@@ -63,7 +63,7 @@ class ClassesService
 
         Classes::insert($classes);
 
-       $this->insertSectionMonitoring($request->section);
+        $this->insertSectionMonitoring($request->section);
 
     }
 
@@ -73,7 +73,8 @@ class ClassesService
                 'sectioninfo',
                 'instructor', 
                 'schedule',
-                'enrolledstudents.enrollment', 
+                'enrolledstudents.enrollment',
+                'mergetomotherclass',
                 'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
             ])->where('section_id', $section)->where('period_id', $period);
         
@@ -81,6 +82,7 @@ class ClassesService
         {
             $query->where('dissolved', '!=', 1);
         }
+
         return $query->get();
     }
 
@@ -116,7 +118,7 @@ class ClassesService
     public function checkConflictSection($section_id, $start_time, $end_time, $day, $class_id)
     {
         $query = Classes::with(['sectioninfo', 'curriculumsubject.subjectinfo', 'instructor', 'schedule'])
-                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id')
+                ->leftjoin('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id')
                 ->where('classes.period_id', session('current_period'))
                 ->where('classes.section_id', $section_id);
                 $query->where(function($query) use($start_time, $end_time){
@@ -133,7 +135,7 @@ class ClassesService
     public function checkConflictFaculty($start_time, $end_time, $day, $class_id, $instructor_id)
     {
         $query = Classes::with(['sectioninfo', 'curriculumsubject.subjectinfo', 'instructor', 'schedule'])
-                ->join('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id')
+                ->leftjoin('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id')
                 ->where('classes.period_id', session('current_period'));
                 $query->where(function($query) use($start_time, $end_time){
                     $query->where('classes_schedules.from_time', '>=', $start_time)->Where('classes_schedules.from_time', '<', $end_time)
@@ -181,27 +183,30 @@ class ClassesService
         $schedule = strtoupper(preg_replace('/\s+/', ' ', trim($schedule)));
         $schedules = explode(", ", $schedule);
 
-        foreach($schedules as $sched)
+        if($schedule !== '')
         {
-            $splits = preg_split('/ ([MTWHFSU]+) /', $sched, -1, PREG_SPLIT_DELIM_CAPTURE);
+            foreach($schedules as $sched)
+            {
+                $splits = preg_split('/ ([MTWHFSU]+) /', $sched, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-            $times = $splits[0];
-            $days  = $splits[1];
-            $room  = $splits[2];
+                $times = $splits[0];
+                $days  = $splits[1];
+                $room  = $splits[2];
 
-            $times    = explode("-", $times);
-            $timefrom = Carbon::parse($times[0])->format('H:i:s');
-            $timeto   = Carbon::parse($times[1])->format('H:i:s');
+                $times    = explode("-", $times);
+                $timefrom = Carbon::parse($times[0])->format('H:i:s');
+                $timeto   = Carbon::parse($times[1])->format('H:i:s');
 
-            $splitdays = preg_split('/(.[HU]?)/' ,$days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+                $splitdays = preg_split('/(.[HU]?)/' ,$days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
 
-            $schedule_array[] = [
-                'timefrom' => $timefrom,
-                'timeto' => $timeto,
-                'room' => $room,
-                'days' => $splitdays,
-                'raw_sched' => $sched
-            ];
+                $schedule_array[] = [
+                    'timefrom' => $timefrom,
+                    'timeto' => $timeto,
+                    'room' => $room,
+                    'days' => $splitdays,
+                    'raw_sched' => $sched
+                ];
+            }
         }
 
         return $schedule_array;
@@ -211,7 +216,8 @@ class ClassesService
     {
         $error = '';
 
-        if($request->schedule !== ''){
+        if($request->filled('schedule'))
+        {
             $schedule_array = $this->processSchedule($request->schedule);
 
             foreach ($schedule_array as $key => $sched) 
@@ -251,7 +257,7 @@ class ClassesService
     {
         $allconflicts = [];
 
-        if($request->schedule !== '')
+        if($request->filled('schedule'))
         {
             $schedule_array = $this->processSchedule($request->schedule);
 
@@ -306,7 +312,7 @@ class ClassesService
     {
         $data = $request->validated();
 
-        if($request->schedule !== '')
+        if($request->filled('schedule'))
         {
             if($request->schedule !== $class->schedule->schedule)
             {
@@ -336,6 +342,7 @@ class ClassesService
                 $data = $request->validated()+['schedule_id' => $schedule_info->id];
             } 
         }
+
         $class->update($data);
 
         //IF DISSOVED IS EQUAL TO 1, REMOVE ALL STUDENTS ENROLLED IN THE SUBJECT THEN RE-ASSESS
