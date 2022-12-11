@@ -4,6 +4,7 @@ namespace App\Services\Enrollment;
 
 use App\Models\Term;
 use App\Libs\Helpers;
+use App\Models\EnrolledClass;
 use App\Models\Enrollment;
 use App\Models\TaggedGrades;
 use App\Services\ClassesService;
@@ -387,15 +388,47 @@ class EnrollmentService
 
     public function getTotalSlotsTakenOfClass($class)
     {
-        $slots_taken = 0;
-
         if($class->ismother === 1)
         {
+            return $this->getEnrolledMergedChildren($class->id)->count()+$class->enrolledstudents->count();
+        }else{
+            if($class->merge !== 0)
+            {
+                $enrolled_in_mother = $this->getEnrolledInCLass($class->merge)->count();
+                $enrolled_merged = $this->getEnrolledMergedChildren($class->merge)->count();
 
+                return $enrolled_in_mother+$enrolled_merged;
+            }
         }
 
-        return $slots_taken;
+        return $class->enrolledstudents->count();
+    }
+
+    public function getEnrolledMergedChildren($mother_class)
+    {
+        // $enrolled_children = EnrolledClass::with(['enrollment', 'class'])
+        //         ->whereHas('class', function($query) use($mother_class){
+        //             $query->where('merge', $mother_class);
+        //         })->get();
+
+        // return $enrolled_children;
+
+        $enrolled_children = EnrolledClass::join('enrollments', 'enrolled_classes.enrollment_id', '=', 'enrollments.id')
+            ->join('classes', 'enrolled_classes.class_id', '=', 'classes.id')
+            ->where('classes.merge', $mother_class)->get();
+
+            return $enrolled_children;
+        
     }
    
+    public function getEnrolledInCLass($class_id)
+    {
+        $enrolled = EnrolledClass::join('enrollments', 'enrolled_classes.enrollment_id', '=', 'enrollments.id')
+            ->join('classes', 'enrolled_classes.class_id', '=', 'classes.id')
+            ->where('classes.id', $class_id)->get();
+
+            return $enrolled;
+        
+    }
 }
 

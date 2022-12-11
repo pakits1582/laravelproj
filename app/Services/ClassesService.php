@@ -88,7 +88,14 @@ class ClassesService
 
     public function classSubject($class_id)
     {
-        return Classes::with(['sectioninfo', 'curriculumsubject', 'instructor', 'schedule'])->where('id', $class_id)->firstOrFail();
+        return Classes::with([
+            'sectioninfo',
+            'instructor', 
+            'schedule',
+            'enrolledstudents.enrollment',
+            'mergetomotherclass',
+            'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
+        ])->where('id', $class_id)->firstOrFail();
     }
 
     public function checkScheduleRoomifExist($room)
