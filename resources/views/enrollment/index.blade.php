@@ -122,7 +122,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label for="code"  class="m-0 font-weight-bold text-primary">Deficiencies</label>
-                                            <div id="deficiencies" class="border border-primary h-100"></div>
+                                            <div id="deficiencies" class="border border-primary h-100 p-2"></div>
                                         </div>
                                     </div>
                                     <div class="row">

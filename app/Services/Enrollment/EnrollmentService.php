@@ -303,7 +303,7 @@ class EnrollmentService
 
         foreach ($not_passed_section_subjects as $key => $not_passed_section_subject) 
         {
-            $not_passed_section_subject['total_slots'] = ($not_passed_section_subject->merge === 1) ? $not_passed_section_subject->mergetomotherclass->slots : $not_passed_section_subject->slots;
+            $not_passed_section_subject['total_slots'] = ($not_passed_section_subject->merge > 0) ? $not_passed_section_subject->mergetomotherclass->slots : $not_passed_section_subject->slots;
             $not_passed_section_subject['total_slots_taken'] = $this->getTotalSlotsTakenOfClass($not_passed_section_subject); 
             $not_passed_section_subject['unfinished_prerequisites'] = $this->checkIfSectionSubjectPrerequisitesPassed(
                                                                         $not_passed_section_subject->curriculumsubject->prerequisites,
@@ -392,33 +392,25 @@ class EnrollmentService
         {
             return $this->getEnrolledMergedChildren($class->id)->count()+$class->enrolledstudents->count();
         }else{
-            if($class->merge !== 0)
+            if($class->merge > 0)
             {
                 $enrolled_in_mother = $this->getEnrolledInCLass($class->merge)->count();
                 $enrolled_merged = $this->getEnrolledMergedChildren($class->merge)->count();
 
                 return $enrolled_in_mother+$enrolled_merged;
             }
-        }
 
-        return $class->enrolledstudents->count();
+            return $class->enrolledstudents->count();
+        }    
     }
 
     public function getEnrolledMergedChildren($mother_class)
     {
-        // $enrolled_children = EnrolledClass::with(['enrollment', 'class'])
-        //         ->whereHas('class', function($query) use($mother_class){
-        //             $query->where('merge', $mother_class);
-        //         })->get();
-
-        // return $enrolled_children;
-
         $enrolled_children = EnrolledClass::join('enrollments', 'enrolled_classes.enrollment_id', '=', 'enrollments.id')
             ->join('classes', 'enrolled_classes.class_id', '=', 'classes.id')
             ->where('classes.merge', $mother_class)->get();
 
-            return $enrolled_children;
-        
+        return $enrolled_children;
     }
    
     public function getEnrolledInCLass($class_id)
