@@ -649,4 +649,77 @@ $(function(){
         }
         e.preventDefault();
     });
+
+    $(document).on("click", ".merge", function(e){
+        var class_id = $(this).attr("id");
+
+        $.ajax({url: "/classes/"+class_id, success: function(response)
+            {
+                var number_of_enrolled = response.data.enrolledstudents.length
+
+                if(number_of_enrolled > 0)
+                {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Merge</div><div class="message">The selected subject has '+number_of_enrolled+'enrolled students. Continue merging?</div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        draggable: false,
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: {
+                                    'Cancel':function(){
+                                        $(this).dialog('close');
+                                    },
+                                    'OK':function(){
+                                        $(this).dialog('close');
+                                        $.ajax({
+                                            url: "/classes/merge",
+                                            type: 'post',
+                                            data: {"class":response.data},
+                                            success: function(data){
+                                                $('#ui_content').html(data);
+                                                $("#modalll").modal('show');
+                                            }
+                                        });	
+                                    }//end of ok button	
+                                }//end of buttons
+                    });//end of dialogbox
+                    $(".ui-dialog-titlebar").hide();
+                    //end of dialogbox
+                }else{
+                    $.ajax({
+                        url: "/classes/merge",
+                        type: 'post',
+                        data: {"class":response.data},
+                        success: function(data){
+                            $('#ui_content').html(data);
+                            $("#modalll").modal('show');
+                        }
+                    });	
+                }
+
+            }
+        });	
+        e.preventDefault();
+    });
+
+    $(document).on("keyup","#search_classtomerge",function(e) {
+		var searchcode = $(this).val();
+		
+		if (e.keyCode == '13')
+        {
+			if(searchcode !== "")
+            {
+                $.ajax({
+                    url: "/classes/searchcodetomerge",
+                    type: 'post',
+                    data: {'searchcode':searchcode},
+                    success: function(data)
+                    {
+						$("#return_search_classtomerge").html(data);
+                    }
+                });
+			}
+		}
+	});
 });

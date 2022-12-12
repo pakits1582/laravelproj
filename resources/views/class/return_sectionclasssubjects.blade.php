@@ -4,7 +4,16 @@
             <td><input type="checkbox" data-classid="{{ $section_subject->id }}" class="checks" id="check_{{ $section_subject->id }}" /></td>
             <td class="mid font-weight-bold">{{ $section_subject->code }}</td>
             <td>{{ $section_subject->curriculumsubject->subjectinfo->code }}</td>
-            <td>{{ $section_subject->curriculumsubject->subjectinfo->name }}</td>
+            <td>
+                @if ($section_subject->ismother > 0)
+                    <a href="#" class="viewmerge" id="{{ $section_subject->id }}"  title="View Merge Subjects"><strong>*</strong>
+                @elseif ($section_subject->merge > 0)
+                    <a href="#" class="unmerge" id="{{ $section_subject->id }}"  title="Unmerge Subjects"><strong>({{ $section_subject->mergetomotherclass->code }})</strong>
+                @else
+                    <a href="#" class="merge" id="{{ $section_subject->id }}"  title="Merge Subjects">
+                @endif
+                {{ $section_subject->curriculumsubject->subjectinfo->name }}</a>
+            </td>
             <td class="mid">{{ $section_subject->units }}</td>
             <td class="mid">{{ $section_subject->tfunits }}</td>
             <td class="mid">{{ $section_subject->loadunits }}</td>

@@ -56,5 +56,7 @@ class Classes extends Model
     {
         return $this->belongsTo(Classes::class, 'merge', 'id');
     }
+
+    
     
 }

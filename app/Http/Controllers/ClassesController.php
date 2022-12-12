@@ -82,7 +82,15 @@ class ClassesController extends Controller
      */
     public function show(Classes $class)
     {
-        return $this->classesService->processSchedule('9:00 AM-10:30 AM TTH ONLINE, 7:30 AM-9:00 AM TTH ONLINE');
+        //return $this->classesService->processSchedule('9:00 AM-10:30 AM TTH ONLINE, 7:30 AM-9:00 AM TTH ONLINE');
+        $class->load([
+            'sectioninfo',
+            'curriculumsubject.subjectinfo', 
+            'instructor', 
+            'schedule',
+            'enrolledstudents.enrollment']);
+
+        return response()->json(['data' => $class]);
     }
 
     /**
@@ -167,6 +175,27 @@ class ClassesController extends Controller
         $return = $this->classesService->storeCopyClass($request);
         
         return response()->json($return,$return['status'] ?? '');
+    }
+
+    public function merge(Request $request)
+    {
+        $class_info = $request->class; 
+
+        return view('class.merge_class', ['class' => $class_info]);
+    }
+
+    public function searchcodetomerge(Request $request)
+    {
+        if($request->filled('searchcode'))
+        {
+            $searchcodes =  explode(",",preg_replace('/\s+/', ' ', trim($request->searchcode)));
+
+            $pages = Classes::query();
+            foreach($searchcodes as $code){
+                $pages->orWhere('content', 'LIKE', '%'.$code.'%');
+            }
+            $pages = $pages->distinct()->get();
+        }
 
     }
 }

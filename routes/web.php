@@ -181,14 +181,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/classes/updateclasssubject/{class}', [ClassesController::class, 'updateclasssubject']);
         Route::post('/classes/storecopyclass', [ClassesController::class, 'storecopyclass'])->name('classes.storecopyclass');
         Route::get('/classes/generatecode', [ClassesController::class, 'generatecode']);
+        Route::post('/classes/merge', [ClassesController::class, 'merge']);
         // });
-       
+        Route::post('/classes/searchcodetomerge', [ClassesController::class, 'searchcodetomerge']);
         Route::get('/classes/{section}/addclassoffering', [ClassesController::class, 'addclassoffering']);
         Route::get('/classes/{section}/copyclass', [ClassesController::class, 'copyclass']);
 
         Route::resource('classes', ClassesController::class)->missing(function (Request $request) {
             return Redirect::route('classes.index');
         });
+
+        
     });
 
     Route::group(['middleware' => ['inaccess:enrolments']], function () {

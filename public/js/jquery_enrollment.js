@@ -355,6 +355,7 @@ $(function(){
             success: function(response){
                 $("#confirmation").dialog('close');
                 console.log(response);
+
                 var full_subjects = [];
                 var unfinished_prerequisites = [];
                 var available_subjects = [];
@@ -362,35 +363,35 @@ $(function(){
 
                 if ($.isEmptyObject(response.data) === false) {
                     $.each(response.data, function(k, v){
-                        var avalaible = true;
+                        var available = true;
 
                         if(parseInt(v.total_slots_taken) >= parseInt(v.total_slots)){
                             full_subjects.push('<strong>('+v.code+') - '+v.curriculumsubject.subjectinfo.code+'</strong>');	
                             deficiencies += '<strong>('+v.code+' - '+v.curriculumsubject.subjectinfo.code+') - FULL</strong></br>';
-                            avalaible = false;
+                            available = false;
                         }
 
                         if($.isEmptyObject(v.unfinished_prerequisites) === false){
                             unfinished_prerequisites.push('<strong>('+v.code+') - '+v.curriculumsubject.subjectinfo.code+'</strong>');	
                             deficiencies += '<strong>('+v.code+' - '+v.curriculumsubject.subjectinfo.code+') - PREREQUISITE</strong></br>';
-                            avalaible = false;
+                            available = false;
                         }
 
-                        if(avalaible === true){
+                        if(available === true){
                             available_subjects.push(v);
                         }
                     });
                 }
 
-                if(!$.isEmptyObject(full_subjects) || $.isEmptyObject(unfinished_prerequisites))
+                // console.log(full_subjects);
+                // console.log(unfinished_prerequisites);
+
+                if($.isEmptyObject(full_subjects) === false || $.isEmptyObject(unfinished_prerequisites) === false)
                 {
-                    console.log(full_subjects);
-                    console.log(unfinished_prerequisites);
-                    
                     var message = '<div class="ui_title_confirm">The following subjects will not be included</div><div class="message">';
                     message += (!$.isEmptyObject(full_subjects)) ? '<div>Closed Subjects </div>'+ full_subjects.join(", ") : "" ;
 				    message += (!$.isEmptyObject(unfinished_prerequisites)) ? '<div>Pre-Requisites not finished</div>'+ unfinished_prerequisites.join(", ") : "" ;
-                    $("#confirmation").html('<div class="confirmation"></div>'+message+'<div>Continue student enrollment?</div></div>').dialog({
+                    $("#ui_content").html('<div class="confirmation"></div>'+message+'<div>Continue student enrollment?</div></div>').dialog({
                         show: 'fade',
                         resizable: false,	
                         draggable: true,
