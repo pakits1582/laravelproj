@@ -705,6 +705,7 @@ $(function(){
 
     $(document).on("keyup","#search_classtomerge",function(e) {
 		var searchcode = $(this).val();
+        var class_id = $("#class_id").val();
 		
 		if (e.keyCode == '13')
         {
@@ -713,9 +714,11 @@ $(function(){
                 $.ajax({
                     url: "/classes/searchcodetomerge",
                     type: 'post',
-                    data: {'searchcode':searchcode},
+                    data: {'searchcode':searchcode, 'class_id':class_id},
+                    //dataType: 'json',
                     success: function(data)
                     {
+                        //console.log(data);
 						$("#return_search_classtomerge").html(data);
                     }
                 });

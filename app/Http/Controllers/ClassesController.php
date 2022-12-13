@@ -186,16 +186,10 @@ class ClassesController extends Controller
 
     public function searchcodetomerge(Request $request)
     {
-        if($request->filled('searchcode'))
-        {
-            $searchcodes =  explode(",",preg_replace('/\s+/', ' ', trim($request->searchcode)));
+        $search_classes = $this->classesService->searchClassSubjects($request->searchcode);
 
-            $pages = Classes::query();
-            foreach($searchcodes as $code){
-                $pages->orWhere('content', 'LIKE', '%'.$code.'%');
-            }
-            $pages = $pages->distinct()->get();
-        }
+        //return $search_classes;
 
+        return view('class.return_search_code_results', ['classes' => $search_classes]);
     }
 }

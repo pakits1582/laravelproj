@@ -57,6 +57,8 @@ class Classes extends Model
         return $this->belongsTo(Classes::class, 'merge', 'id');
     }
 
-    
+    public function merged(){
+        return $this->hasMany(ClassesSchedule::class, 'merge', 'id');
+    }
     
 }

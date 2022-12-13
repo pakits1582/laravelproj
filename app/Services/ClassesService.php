@@ -445,4 +445,34 @@ class ClassesService
 		//check if last class in the section, if true delete in section_monitorings
     }
 
+    public function searchClassSubjects($search_codes)
+    {
+        ///$searchcodes =  explode(",",preg_replace('/\s+/', ' ', trim($search_codes)));
+        $searchcodes = ['cfe 1', 'pe 01'];
+
+        $query = Classes::with([
+            'sectioninfo',
+            'instructor', 
+            'schedule',
+            'enrolledstudents.enrollment',
+            'mergetomotherclass',
+            'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
+        ])->where('period_id', session('current_period'));
+
+        $query->where(function($query) use($searchcodes){
+            foreach($searchcodes as $key => $code){
+                $query->orwhere(function($query) use($code){
+                    $query->orWhere('code', 'LIKE', '%'.$code.'%');
+                    $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
+                        $query->where('subjects.code', 'LIKE', '%'.$code.'%');
+                    });
+                });
+            }
+        });
+
+
+        //return $query->toSql();
+        return $query->get()->sortBy('curriculumsubject.subjectinfo.code');
+    }
+
 }
