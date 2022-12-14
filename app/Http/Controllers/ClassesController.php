@@ -186,10 +186,67 @@ class ClassesController extends Controller
 
     public function searchcodetomerge(Request $request)
     {
-        $search_classes = $this->classesService->searchClassSubjects($request->searchcode);
+        $search_classes = $this->classesService->searchClassSubjectsToMerge($request->searchcode);
 
-        //return $search_classes;
+        $classes = $search_classes->where('merge', 0)->where('ismother', 0)->where('id', '!=', $request->class_id);
 
-        return view('class.return_search_code_results', ['classes' => $search_classes]);
+        return view('class.return_search_code_results', ['classes' => $classes]);
+    }
+
+    public function savemerge(Request $request)
+    {
+        if($request->filled('class_ids'))
+        {
+            Classes::whereIn("id", $request->class_ids)->update(['merge' => $request->class_id]);
+            Classes::where("id", $request->class_id)->update(["ismother" => 1]);
+
+            return [
+                'success' => true,
+                'message' => 'Class subjects sucessfully merged!',
+                'alert' => 'alert-success',
+                'status' => 200
+            ];
+        }
+       
+        return [
+            'success' => false,
+            'message' => 'Please select at least one checkbox or class subject to merge!',
+            'alert' => 'alert-danger',
+            'status' => 401
+        ];
+    }
+
+    public function unmergesubject(Request $request)
+    {
+        $class_info = Classes::with('merged')->findOrFail($request->class_id);
+
+        if(count($class_info->merge) == 1)
+        {
+            Classes::where("id", $class_info->merge)->update(["ismother" => 0]);
+        }
+
+        $class_info->update(["merge" => NULL]);
+
+        return [
+            'success' => true,
+            'message' => 'Class subject sucessfully unmerged!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
+    }
+
+    public function viewmerged(Request $request)
+    {
+        $class_info = Classes::with([
+                'merged' => [
+                    'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
+                    'sectioninfo',
+                    'instructor', 
+                    'schedule',
+                    'enrolledstudents.enrollment',
+                ]
+            ])->findOrFail($request->class_id);
+
+        return view('class.view_merge_class', ['class' => $class_info]);
     }
 }

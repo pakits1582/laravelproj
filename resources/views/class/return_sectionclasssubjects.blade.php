@@ -8,7 +8,7 @@
                 @if ($section_subject->ismother > 0)
                     <a href="#" class="viewmerge" id="{{ $section_subject->id }}"  title="View Merge Subjects"><strong>*</strong>
                 @elseif ($section_subject->merge > 0)
-                    <a href="#" class="unmerge" id="{{ $section_subject->id }}"  title="Unmerge Subjects"><strong>({{ $section_subject->mergetomotherclass->code }})</strong>
+                    <a href="#" class="unmerge" id="{{ $section_subject->id }}"  title="Unmerge Subjects" data-mergeto="({{ $section_subject->mergetomotherclass->code }}) {{ $section_subject->mergetomotherclass->curriculumsubject->subjectinfo->code }} - {{ $section_subject->mergetomotherclass->curriculumsubject->subjectinfo->name }}"><strong>({{ $section_subject->mergetomotherclass->code }})</strong>
                 @else
                     <a href="#" class="merge" id="{{ $section_subject->id }}"  title="Merge Subjects">
                 @endif

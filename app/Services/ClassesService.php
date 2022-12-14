@@ -445,10 +445,10 @@ class ClassesService
 		//check if last class in the section, if true delete in section_monitorings
     }
 
-    public function searchClassSubjects($search_codes)
+    public function searchClassSubjectsToMerge($searchcodes)
     {
-        ///$searchcodes =  explode(",",preg_replace('/\s+/', ' ', trim($search_codes)));
-        $searchcodes = ['cfe 1', 'pe 01'];
+        $searchcodes=  explode(",",preg_replace('/\s+/', ' ', trim($searchcodes)));
+        $searchcodes= array_map('trim', $searchcodes);
 
         $query = Classes::with([
             'sectioninfo',

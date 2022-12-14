@@ -1,7 +1,7 @@
 @if (count($classes) > 0)
     @foreach ($classes as $class)
         <tr class="">
-            <td class="w50 mid"><input type="checkbox" name="class_ids" class="" id="" value="{{ $class->id }}" /></td>
+            <td class="w50 mid"><input type="checkbox" name="class_ids[]" class="checkbox_merge" value="{{ $class->id }}" /></td>
             <td class="w80">{{ $class->code }}</td>
             <td class="w150">{{ $class->sectioninfo->code }}</td>
             <td class="w150">{{ $class->curriculumsubject->subjectinfo->code }}</td>
