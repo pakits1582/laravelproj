@@ -10,7 +10,7 @@
             </button>
          </div>
          <div class="modal-body">
-            <div class=" py-0 px-3"> 
+            <div class=" py-0 px-1"> 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">{{ $class['sectioninfo']['code'] }} - ({{ $class['code'] }}) {{ $class['curriculumsubject']['subjectinfo']['code'] }} - {{ $class['curriculumsubject']['subjectinfo']['name'] }}</h6>
@@ -59,6 +59,34 @@
                             <input type="hidden" name="class_id" id="class_id" value="{{ $class['id'] }}"  />
                             <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Merge Classes</button>
                         </form>
+                    </div>
+                </div>
+            </div>
+            <div class=" py-0 px-1"> 
+                <div class="card shadow mb-0">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Merged Class Subjects</h6>
+                    </div>
+                    <div class="card-body">
+                        {{-- <div class="col-xs-8 col-xs-offset-2 well"> --}}
+                            <table class="table table-striped table-bordered" style="">
+                                <thead>
+                                    <tr>
+                                        <th class="w20">#</th>
+                                        <th class="w80">Code</th>
+                                        <th class="w150">Section</th>
+                                        <th class="w150">Subject</th>
+                                        <th class="">Schedule</th>
+                                        <th class="w150">Instructor</th>
+                                        <th class="w100">Enrolled</th>
+                                        <th class="w100">Slots</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="return_merged_classes">
+                                    @include('class.merged_classes')
+                                </tbody>
+                            </table>
+                        {{-- </div> --}}
                     </div>
                 </div>
             </div>

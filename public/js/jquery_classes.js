@@ -655,6 +655,8 @@ $(function(){
 
         $.ajax({url: "/classes/"+class_id, success: function(response)
             {
+                console.log(response);
+
                 var number_of_enrolled = response.data.enrolledstudents.length
 
                 if(number_of_enrolled > 0)
@@ -777,11 +779,12 @@ $(function(){
                                     {
                                         showSuccess(data.message);
                                         returnClassSubjects($("#section").val());
-
+                                        
                                         var searchcode = $("#search_classtomerge").val();
                                         var class_id   = $("#class_id").val();
 
                                         searchCodeToMerge(searchcode, class_id);
+                                        returnMergedClassSubjects($("#class_id").val());
 
                                     }else{
                                         showError(data.message);
@@ -799,6 +802,51 @@ $(function(){
         
         e.preventDefault()
     });
+
+    function unmergeClassSubject(class_id)
+    {
+        $.ajax({
+            url: "/classes/unmergesubject",
+            type: 'POST',
+            data: {"class_id":class_id},
+            success: function(data){
+                console.log(data);
+                if(data.success === true)
+                {
+                    showSuccess(data.message);
+                }else{
+                    showError(data.message);
+                }  
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action! '+errors.message);
+                }
+            }
+        });	
+    }
+
+    function returnMergedClassSubjects(class_id)
+    {
+        $.ajax({
+            url: "/classes/"+class_id+"/viewmergedclasses",
+            // type: 'POST',
+            // data: {"class_id":class_id},
+            success: function(data){
+                console.log(data);
+                $("#return_merged_classes").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action! '+errors.message);
+                }
+            }
+        });
+    }
 
     $(document).on("click",".unmerge", function(e){
 		var class_id = $(this).attr("id");
@@ -819,54 +867,45 @@ $(function(){
                     },
                     'OK':function(){
                         $(this).dialog('close');
-                        $.ajax({
-                            url: "/classes/unmergesubject",
-                            type: 'POST',
-                            data: {"class_id":class_id},
-                            success: function(data){
-                                console.log(data);
-                                if(data.success === true)
-                                {
-                                    showSuccess(data.message);
-                                    returnClassSubjects($("#section").val());
+                        unmergeClassSubject(class_id);
 
-                                }else{
-                                    showError(data.message);
-                                }  
-                            },
-                            error: function (data) {
-                                console.log(data);
-                                var errors = data.responseJSON;
-                                if ($.isEmptyObject(errors) == false) {
-                                    showError('Something went wrong! Can not perform requested action! '+errors.message);
-                                }
-                            }
-                        });	
+                        returnClassSubjects($("#section").val());
                     }//end of ok button	
                 }//end of buttons
          });//end of dialogbox
-            $(".ui-dialog-titlebar").hide();
+        $(".ui-dialog-titlebar").hide();
 			
-		
 		e.preventDefault();
 	});
 
-    $(document).on("click", ".viewmerge", function(e){
-        var class_id = $(this).attr("id");
+    $(document).on("click",".unmerge_class_subject", function(e){
+		var class_id = $(this).attr("id");
 
-        $.ajax({
-            url: "/classes/viewmerged",
-            type: 'POST',
-            data: {"class_id":class_id},
-            success: function(data)
-            {
-                console.log(data);
-                $('#ui_content').html(data);
-                $("#modalll").modal('show');
-            }
-        });	
-                                   
-        e.preventDefault();
-    });
+        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Unmerge</div><div class="message">Are you sure you want to unmerge selected class subject? Do you want to continue?</div>').dialog({
+            show: 'fade',
+            resizable: false,	
+            draggable: false,
+            width: 350,
+            height: 'auto',
+            modal: true,
+            buttons: {
+                    'Cancel':function(){
+                        $(this).dialog('close');
+                    },
+                    'OK':function(){
+                        $(this).dialog('close');
+
+                        unmergeClassSubject(class_id);
+                        returnMergedClassSubjects($("#class_id").val());
+                        returnClassSubjects($("#section").val());
+                    }//end of ok button	
+                }//end of buttons
+        });//end of dialogbox
+
+        $(".ui-dialog-titlebar").hide();
+			
+		e.preventDefault();
+	});
+
 
 });

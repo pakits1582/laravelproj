@@ -186,7 +186,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/classes/searchcodetomerge', [ClassesController::class, 'searchcodetomerge']);
         Route::post('/classes/savemerge', [ClassesController::class, 'savemerge'])->name('classes.savemerge');
         Route::post('/classes/unmergesubject', [ClassesController::class, 'unmergesubject']);
-        Route::post('/classes/viewmerged', [ClassesController::class, 'viewmerged']);
+        Route::get('/classes/{class}/viewmergedclasses', [ClassesController::class, 'viewmergedclasses']);
         Route::get('/classes/{section}/addclassoffering', [ClassesController::class, 'addclassoffering']);
         Route::get('/classes/{section}/copyclass', [ClassesController::class, 'copyclass']);
 

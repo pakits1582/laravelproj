@@ -88,7 +88,16 @@ class ClassesController extends Controller
             'curriculumsubject.subjectinfo', 
             'instructor', 
             'schedule',
-            'enrolledstudents.enrollment']);
+            'enrolledstudents.enrollment',
+            'merged' => [
+                'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
+                'sectioninfo',
+                'instructor', 
+                'schedule',
+                'enrolledstudents.enrollment',
+                'mergetomotherclass',
+            ]
+        ]);
 
         return response()->json(['data' => $class]);
     }
@@ -218,9 +227,9 @@ class ClassesController extends Controller
 
     public function unmergesubject(Request $request)
     {
-        $class_info = Classes::with('merged')->findOrFail($request->class_id);
+        $class_info = Classes::with(['merged', 'mergetomotherclass' => ['merged']])->findOrFail($request->class_id);
 
-        if(count($class_info->merge) == 1)
+        if($class_info->mergetomotherclass->merged->count() === 1)
         {
             Classes::where("id", $class_info->merge)->update(["ismother" => 0]);
         }
@@ -235,18 +244,24 @@ class ClassesController extends Controller
         ];
     }
 
-    public function viewmerged(Request $request)
+    public function viewmergedclasses(Classes $class)
     {
-        $class_info = Classes::with([
-                'merged' => [
-                    'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
-                    'sectioninfo',
-                    'instructor', 
-                    'schedule',
-                    'enrolledstudents.enrollment',
-                ]
-            ])->findOrFail($request->class_id);
+        $class->load([
+            'sectioninfo',
+            'curriculumsubject.subjectinfo', 
+            'instructor', 
+            'schedule',
+            'enrolledstudents.enrollment',
+            'merged' => [
+                'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
+                'sectioninfo',
+                'instructor', 
+                'schedule',
+                'enrolledstudents.enrollment',
+                'mergetomotherclass',
+            ]
+        ]);
 
-        return view('class.view_merge_class', ['class' => $class_info]);
+        return view('class.merged_classes', ['class' => $class]);
     }
 }
