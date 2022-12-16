@@ -456,8 +456,7 @@ class ClassesService
             'instructor', 
             'schedule',
             'enrolledstudents.enrollment',
-            'mergetomotherclass',
-            'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
+            'curriculumsubject' => fn($query) => $query->with('subjectinfo')
         ])->where('period_id', session('current_period'));
 
         $query->where(function($query) use($searchcodes){
