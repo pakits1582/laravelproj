@@ -13,7 +13,7 @@ class Enrollment extends Model
 
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 
     public function program()
@@ -28,7 +28,7 @@ class Enrollment extends Model
 
     public function section()
     {
-        return $this->belongsTo(Section::class);
+        return $this->belongsTo(Section::class)->withDefault(['code' => '', 'name' => '']);
     }
 
     public function period()

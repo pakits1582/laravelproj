@@ -676,7 +676,7 @@ $(function(){
                                         $(this).dialog('close');
                                         $.ajax({
                                             url: "/classes/merge",
-                                            type: 'post',
+                                            type: 'POST',
                                             data: {"class":response.data},
                                             success: function(data){
                                                 $('#ui_content').html(data);
@@ -691,7 +691,7 @@ $(function(){
                 }else{
                     $.ajax({
                         url: "/classes/merge",
-                        type: 'post',
+                        type: 'POST',
                         data: {"class":response.data},
                         success: function(data){
                             $('#ui_content').html(data);
@@ -907,5 +907,33 @@ $(function(){
 		e.preventDefault();
 	});
 
+    $(document).on("click", "#display_enrolled", function(e){
+        var class_id = $(".checks:checked").attr("data-classid");
+
+		if($(".checks:checked").length === 0)
+        {
+			showError('Please select atleast one checkbox/subject to display!');	
+		}else{
+            $.ajax({
+                url: "/classes/"+class_id+"/displayenrolled",
+                type: 'GET',
+                success: function(data){
+                    console.log(data);
+                    
+                    $('#ui_content').html(data);
+                    $("#modalll").modal('show');
+                },
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) == false) {
+                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                    }
+                }
+            });
+        }
+
+        e.preventDefault();
+    });
 
 });

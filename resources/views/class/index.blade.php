@@ -199,7 +199,7 @@
                                             </span>
                                             <span class="text">Copy Class</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-icon-split mb-2">
+                                        <button type="button" id="display_enrolled" class="btn btn-primary btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-eye"></i>
                                             </span>

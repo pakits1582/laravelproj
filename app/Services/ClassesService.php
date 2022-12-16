@@ -8,9 +8,10 @@ use App\Models\Classes;
 use App\Models\Section;
 use App\Models\Schedule;
 use App\Models\ClassesSchedule;
-use App\Models\CurriculumSubjects;
 use App\Models\SectionMonitoring;
+use App\Models\CurriculumSubjects;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 class ClassesService
 {
@@ -473,6 +474,94 @@ class ClassesService
 
         //return $query->toSql();
         return $query->get()->sortBy('curriculumsubject.subjectinfo.code');
+    }
+
+    public function displayEnrolledToClassSubject($class)
+    {
+        $class->load([
+            'sectioninfo',
+            'curriculumsubject.subjectinfo', 
+            'instructor', 
+            'schedule',
+            'enrolledstudents'=> [
+                'class',
+                'enrollment' => [
+                    'section',
+                    'student' => [
+                        'user',
+                        'program'
+                    ]
+                ]
+            ]
+        ]);
+
+        //return $class;
+
+        $enrolled_students = new Collection();
+
+        if($class->ismother === 1)
+        {
+            $class->load([
+                    'merged' => [
+                        'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
+                        'enrolledstudents'=> [
+                            'class',
+                            'enrollment' => [
+                                'section',
+                                'student' => [
+                                    'user',
+                                    'program'
+                                ]
+                            ]
+                        ]
+                    ]
+            ]);
+            $enrolled_students = $enrolled_students->merge($class->enrolledstudents);
+        
+            foreach ($class->merged as $key => $merged) {
+                $enrolled_students = $enrolled_students->merge($merged->enrolledstudents);
+            }
+
+        }else if($class->merge !== NULL){
+            $class->load([
+                'mergetomotherclass' => [
+                    'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
+                    'enrolledstudents'=> [
+                        'class',
+                        'enrollment' => [
+                            'section',
+                            'student' => [
+                                'user',
+                                'program'
+                            ]
+                        ]
+                    ],
+                    'merged' => [
+                        'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
+                        'enrolledstudents'=> [
+                            'class',
+                            'enrollment' => [
+                                'section',
+                                'student' => [
+                                    'user',
+                                    'program'
+                                ]
+                            ]
+                        ]
+                    ],
+                ]
+            ]);
+
+            $enrolled_students = $enrolled_students->merge($class->mergetomotherclass->enrolledstudents);
+
+            foreach ($class->mergetomotherclass->merged as $key => $mother_merged) {
+                $enrolled_students = $enrolled_students->merge($mother_merged->enrolledstudents);
+            }
+        }else{
+            $enrolled_students = $enrolled_students->merge($class->enrolledstudents);
+        }
+       
+        return ['class' => $class, 'enrolled_students' => $enrolled_students];
     }
 
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateClassRequest;
 use Carbon\Carbon;
 use App\Models\Term;
 use App\Libs\Helpers;
@@ -12,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Services\ClassesService;
 use App\Services\CurriculumService;
 use App\Services\InstructorService;
+use App\Http\Requests\UpdateClassRequest;
+use Illuminate\Database\Eloquent\Collection;
 
 
 class ClassesController extends Controller
@@ -251,17 +252,25 @@ class ClassesController extends Controller
             'curriculumsubject.subjectinfo', 
             'instructor', 
             'schedule',
-            'enrolledstudents.enrollment',
+            'enrolledstudents.enrollment.student',
             'merged' => [
                 'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
                 'sectioninfo',
                 'instructor', 
                 'schedule',
-                'enrolledstudents.enrollment',
+                'enrolledstudents.enrollment.student',
                 'mergetomotherclass',
             ]
         ]);
 
         return view('class.merged_classes', ['class' => $class]);
+    }
+
+    public function displayenrolled(Classes $class)
+    {
+        $enrolled_students = $this->classesService->displayEnrolledToClassSubject($class);
+
+        //return $enrolled_students;
+        return view('class.display_enrolled_students', $enrolled_students);
     }
 }
