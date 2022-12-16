@@ -15,8 +15,8 @@
                         <h6 class="m-0 font-weight-bold text-primary">{{ $class->sectioninfo->code }} - ({{ $class->code }}) {{ $class->curriculumsubject->subjectinfo->code }} - {{ $class->curriculumsubject->subjectinfo->name }}</h6>
                     </div>
                     <div class="card-body">
-                        <div class="col-xs-8 col-xs-offset-2 well">
-                            <table class="table table-scroll table-striped table-bordered" style="">
+                        <div class="col-xs-8 col-xs-offset-2 well" style="height: 420px">
+                            <table class="table table-sm table-scroll table-striped table-bordered" style="">
                                 <thead>
                                     <tr>
                                         <th class="w50">#</th>
@@ -28,7 +28,7 @@
                                         <th class="w100">Class</th>
                                     </tr>
                                 </thead>
-                                <tbody id="return_search_classtomerge">
+                                <tbody id="return_search_classtomerge" style="height: 400px;">
                                     @if (count($enrolled_students))
                                         @foreach ($enrolled_students as $enrolled_student)
                                             <tr>

@@ -254,7 +254,7 @@
                                         <th class="w35 mid">Lab</th>
                                         <th class="w35 mid">Hrs</th>
                                         <th class="w150 mid">Instructor</th>
-                                        <th class="w300 mid">Schedule</th>
+                                        <th class="w250 mid">Schedule</th>
                                         <th class="w40">Slots</th>
                                         <th class="">Curr</th>
                                     </tr>

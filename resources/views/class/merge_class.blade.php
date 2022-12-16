@@ -27,10 +27,10 @@
                         <p class="font-italic text-info">Note: You can search multiple subject code by separating it by comma (,) code 1, code 2..</p>
                         <form action="{{ route('classes.savemerge') }}" method="post" id="form_merge_class">
                             <div class="col-xs-8 col-xs-offset-2 well">
-                                <table class="table table-scroll table-striped table-bordered" style="">
+                                <table class="table table-sm table-scroll table-striped table-bordered" style="">
                                     <thead>
                                         <tr>
-                                            <th class="w20">#</th>
+                                            <th class="w50">#</th>
                                             <th class="w80">Code</th>
                                             <th class="w150">Section</th>
                                             <th class="w150">Subject</th>
@@ -43,7 +43,7 @@
                                     <tbody id="return_search_classtomerge">
                                         @for ($x=1;$x<=7;$x++)
                                             <tr class="">
-                                                <td class="w20">&nbsp;</td>
+                                                <td class="w50">&nbsp;</td>
                                                 <td class="w80">&nbsp;</td>
                                                 <td class="w150">&nbsp;</td>
                                                 <td class="w150">&nbsp;</td>
@@ -69,7 +69,7 @@
                     </div>
                     <div class="card-body">
                         {{-- <div class="col-xs-8 col-xs-offset-2 well"> --}}
-                            <table class="table table-striped table-bordered" style="">
+                            <table class="table table-sm table-striped table-bordered" style="">
                                 <thead>
                                     <tr>
                                         <th class="w20">#</th>
