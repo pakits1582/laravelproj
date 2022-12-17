@@ -123,9 +123,11 @@ class ClassesController extends Controller
      * @param  \App\Models\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Classes $classes)
+    public function update(Classes $class, UpdateClassRequest $request)
     {
-        //
+        $return = $this->classesService->UpdateClassSubject($class, $request);
+
+        return response()->json(['data' => $return]);
     }
 
     /**
@@ -136,9 +138,9 @@ class ClassesController extends Controller
      */
     public function destroy(Classes $class)
     {
-        $return = $this->classesService->deleteClassSubject($class);
+        $data = $this->classesService->deleteClassSubject($class);
         
-        return response()->json($return, $return['status'] ?? '');
+        return response()->json(['data' => $data]);
     }
 
     public function checkroomschedule(Request $request)
@@ -155,13 +157,6 @@ class ClassesController extends Controller
 
         return response()->json(['error' => $return]);
 
-    }
-
-    public function updateclasssubject(Classes $class, UpdateClassRequest $request)
-    {
-        $return = $this->classesService->UpdateClassSubject($class, $request);
-
-        return response()->json(['data' => $return]);
     }
 
     public function generatecode()

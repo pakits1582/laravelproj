@@ -57,6 +57,7 @@ class ClassesService
                 'lecunits' => $curriculum_subject->subjectinfo->lecunits,
                 'labunits' => $curriculum_subject->subjectinfo->labunits,
                 'hours' => $curriculum_subject->subjectinfo->hours,
+                'isprof' => $curriculum_subject->subjectinfo->professional,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];
@@ -429,15 +430,32 @@ class ClassesService
 
     public function deleteClassSubject($class)
     {
-        if($class->withCount('enrolledStudents')->get() > 0)
-        {
-            return [
-                'success' => false,
-                'message' => 'There are students that are currently enrolled in the class subject. You can not delete selected class subject!',
-                'alert' => 'alert-danger',
-                'status' => 401
-            ];
-        }
+        $class->load([
+            'sectioninfo',
+            'curriculumsubject.subjectinfo', 
+            'instructor', 
+            'schedule',
+            'enrolledstudents.enrollment.student',
+            'merged' => [
+                'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
+                'sectioninfo',
+                'instructor', 
+                'schedule',
+                'enrolledstudents.enrollment.student',
+                'mergetomotherclass',
+            ]
+        ]);
+        
+        return $class;
+        // if($class->has('enrolledstudents')->get())
+        // {
+        //     return [
+        //         'success' => false,
+        //         'message' => 'There are students currently enrolled in the class subject. You can not delete selected class subject!',
+        //         'alert' => 'alert-danger',
+        //         'status' => 401
+        //     ];
+        // }
 
 		//delete from classes
 		//delete from classes_schedules

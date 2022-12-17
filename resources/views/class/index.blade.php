@@ -23,7 +23,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action="{{ route('enrolments.store') }}"  role="form" id="form_classoffering">
+                                <form method="POST" action=""  role="form" id="form_classoffering">
                                     @csrf
                                     <div class="form-group">
                                         <div class="row">
@@ -173,7 +173,7 @@
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-edit"></i>
                                             </span>
-                                            <span class="text">Edit</span>
+                                            <span class="text">(F2) Edit</span>
                                         </button>
                                         <button type="button" id="delete" class="btn btn-danger btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
@@ -203,7 +203,7 @@
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-eye"></i>
                                             </span>
-                                            <span class="text">Display Enroled</span>
+                                            <span class="text">Display Enrolled</span>
                                         </button>
                                         <button type="button" class="btn btn-danger btn-icon-split mb-2">
                                             <span class="icon text-white-50">

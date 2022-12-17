@@ -1,6 +1,17 @@
 @if(count($section_subjects) > 0)
     @foreach ($section_subjects as $section_subject)
-        <tr class="label" id="check_{{ $section_subject->id }}">
+        @php
+            $row_color = '';
+            if($section_subject->dissolved === 1)
+            {
+                $row_color = 'dissolved';
+            }elseif ($section_subject->tutorial === 1) {
+                $row_color = 'tutorial';
+            }elseif ($section_subject->f2f === 1) {
+                $row_color = 'f2f';
+            }
+        @endphp
+        <tr class="label {{ $row_color }}" id="check_{{ $section_subject->id }}">
             <td><input type="checkbox" data-classid="{{ $section_subject->id }}" class="checks" id="check_{{ $section_subject->id }}" /></td>
             <td class="mid font-weight-bold">{{ $section_subject->code }}</td>
             <td>{{ $section_subject->curriculumsubject->subjectinfo->code }}</td>
@@ -13,9 +24,10 @@
                 @else
                     <a href="#" class="merge" id="{{ $section_subject->id }}"  title="Merge Subjects">
                         @if ($section_subject->ismother > 0)
-                            <strong>*</strong>
+                            <b>*</b>
                         @endif
                 @endif
+                <b>{{ ($section_subject->dissolved === 1) ? '[ DISSOLVED ]' : '' }}</b>
                 {{ $section_subject->curriculumsubject->subjectinfo->name }}</a>
             </td>
             <td class="mid">{{ $section_subject->units }}</td>

@@ -209,8 +209,9 @@ $(function(){
         e.preventDefault()
     });
 
-    $(document).on("click","#edit", function(){
-		var class_id = $(".checks:checked").attr("data-classid");
+    function editCLassSubject()
+    {
+        var class_id = $(".checks:checked").attr("data-classid");
 
 		if($(".checks:checked").length === 0)
         {
@@ -251,6 +252,16 @@ $(function(){
                 }
             });
         }
+    }
+
+    $(document).keyup(function (event) {
+	    if (event.keyCode == 113) {
+            editCLassSubject();
+	    };
+	});
+
+    $(document).on("click","#edit", function(){
+		editCLassSubject();
     });
 
 /******************************************************
@@ -425,8 +436,8 @@ $(function(){
     function saveUpdatedClassSubject(postData, class_id)
     {
         $.ajax({
-            url: "/classes/updateclasssubject/"+class_id,
-            type: 'post',
+            url: "/classes/"+class_id,
+            type: 'PUT',
             data: postData,
             dataType: 'json',
             beforeSend: function() {
@@ -630,16 +641,28 @@ $(function(){
                                 url: '/classes/'+class_id,
                                 type: 'DELETE',
                                 dataType: 'json',
-                                success: function(data){
-                                    console.log(data);
+                                success: function(response)
+                                {
+                                    if(response.data.success === false)
+                                    {
+                                        showError(response.data.message);
+                                        $('#cancel').trigger('click');
+                                    }else{
+                                        showSuccess('Class Subject Successfully Deleted!');
+                                        $('#cancel').trigger('click');
+                                        var section = $("#section").val();
+
+                                        returnClassSubjects(section)
+                                        console.log(response);
+                                    }
                                     
                                 },
                                 error: function (data) {
                                     console.log(data);
-                                    // var errors = data.responseJSON;
-                                    // if ($.isEmptyObject(errors) == false) {
-                                    //     showError('Something went wrong! Can not perform requested action! '+errors.message);
-                                    // }
+                                    var errors = data.responseJSON;
+                                    if ($.isEmptyObject(errors) == false) {
+                                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                                    }
                                 }
                             });
                         }//end of ok button	
