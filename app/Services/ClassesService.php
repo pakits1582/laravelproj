@@ -435,33 +435,37 @@ class ClassesService
             'curriculumsubject.subjectinfo', 
             'instructor', 
             'schedule',
-            'enrolledstudents.enrollment.student',
-            'merged' => [
-                'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
-                'sectioninfo',
-                'instructor', 
-                'schedule',
-                'enrolledstudents.enrollment.student',
-                'mergetomotherclass',
-            ]
+            'enrolledstudents'
         ]);
         
-        return $class;
-        // if($class->has('enrolledstudents')->get())
-        // {
-        //     return [
-        //         'success' => false,
-        //         'message' => 'There are students currently enrolled in the class subject. You can not delete selected class subject!',
-        //         'alert' => 'alert-danger',
-        //         'status' => 401
-        //     ];
-        // }
+        //return $class;
+
+        if($class->has('enrolledstudents')->get())
+        {
+            return [
+                'success' => false,
+                'message' => 'There are students currently enrolled in the class subject. You can not delete selected class subject!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
+        }
+
+        // $class->delete();
+
+        // return [
+        //     'success' => false,
+        //     'message' => 'There are students currently enrolled in the class subject. You can not delete selected class subject!',
+        //     'alert' => 'alert-danger',
+        //     'status' => 401
+        // ];
 
 		//delete from classes
 		//delete from classes_schedules
 		//delete from enrolled_classes
 		//delete from enrolled_classes_schedules
 		//check if last class in the section, if true delete in section_monitorings
+
+
     }
 
     public function searchClassSubjectsToMerge($searchcodes)
