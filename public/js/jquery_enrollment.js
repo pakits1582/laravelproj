@@ -334,6 +334,33 @@ $(function(){
         e.preventDefault();
     });
 
+    function returnEnrolledClassSubjects(enrollment_id)
+    {
+
+    }
+
+    function enrollClassSubjects(class_subjects)
+    {
+        $.ajax({
+            url: "/enrolments/enrollclasssubjects",
+            type: 'POST',
+            dataType: 'json',
+            data: ({ 'class_subjects' : class_subjects }),
+            success: function(response){
+                console.log(response);
+                
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#student").val(null).trigger('change');
+                }
+            }
+        });
+    }
+
     function enrollSection(student_id, section_id, enrollment_id)
     {
         $.ajax({
@@ -360,6 +387,7 @@ $(function(){
                 var unfinished_prerequisites = [];
                 var available_subjects = [];
                 var deficiencies = '';
+                var return_subjects_table = '';
 
                 if ($.isEmptyObject(response.data) === false) {
                     $.each(response.data, function(k, v){
@@ -385,6 +413,7 @@ $(function(){
 
                 // console.log(full_subjects);
                 // console.log(unfinished_prerequisites);
+                console.log(available_subjects);
 
                 if($.isEmptyObject(full_subjects) === false || $.isEmptyObject(unfinished_prerequisites) === false)
                 {
@@ -406,13 +435,16 @@ $(function(){
                                 'OK':function(){
                                     $(this).dialog('close');
                                     $('#deficiencies').html(deficiencies);
+                                    enrollClassSubjects(available_subjects);
+                                    returnEnrolledClassSubjects(enrollment_id);
                                 }	
                             }//end of buttons
                         });//end of dialogbox
                     $(".ui-dialog-titlebar").hide();
                 }else{
                     $('#deficiencies').html('');
-
+                    enrollClassSubjects(available_subjects);
+                    returnEnrolledClassSubjects(enrollment_id);
                 }
             },
             error: function (data) {

@@ -431,16 +431,16 @@ class ClassesService
     public function deleteClassSubject($class)
     {
         $class->load([
-            'sectioninfo',
-            'curriculumsubject.subjectinfo', 
-            'instructor', 
-            'schedule',
+            // 'sectioninfo',
+            // 'curriculumsubject.subjectinfo', 
+            // 'instructor', 
+            // 'schedule',
             'enrolledstudents'
         ]);
         
         //return $class;
 
-        if($class->has('enrolledstudents')->get())
+        if($class->enrolledstudents->count())
         {
             return [
                 'success' => false,
@@ -450,14 +450,14 @@ class ClassesService
             ];
         }
 
-        // $class->delete();
+        $class->delete();
 
-        // return [
-        //     'success' => false,
-        //     'message' => 'There are students currently enrolled in the class subject. You can not delete selected class subject!',
-        //     'alert' => 'alert-danger',
-        //     'status' => 401
-        // ];
+        return [
+            'success' => true,
+            'message' => 'Selected class subject successfully deleted!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
 
 		//delete from classes
 		//delete from classes_schedules

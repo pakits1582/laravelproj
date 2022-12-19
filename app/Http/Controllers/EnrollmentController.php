@@ -122,4 +122,9 @@ class EnrollmentController extends Controller
         
         return response()->json(['data' => $data]);
     }
+
+    public function enrollclasssubjects(Request $request)
+    {
+        return $request;
+    }
 }
