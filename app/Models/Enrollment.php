@@ -61,7 +61,15 @@ class Enrollment extends Model
         return $query->where('withdrawn', 1);
     }
 
+    public function enrolled_classes()
+    {
+        return $this->hasMany(EnrolledClass::class, 'enrollment_id', 'id');
+    }
 
+    public function enrolled_class_schedules()
+    {
+        return $this->hasMany(EnrolledClassSchedule::class, 'enrollment_id', 'id');
+    }
 
 
 }

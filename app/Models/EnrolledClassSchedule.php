@@ -10,7 +10,7 @@ class EnrolledClassSchedule extends Model
     use HasFactory;
 
     protected $table = 'enrolled_class_schedules';
-    protected $fillable = ['enrollment_id', 'class_id', 'day', 'room'];
+    protected $fillable = ['enrollment_id', 'class_id', 'from_time', 'to_time', 'day', 'room'];
 
     public function enrollment()
     {

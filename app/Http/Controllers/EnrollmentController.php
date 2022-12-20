@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Student;
-use App\Services\Enrollment\EnrollmentService;
-use App\Services\StudentService;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
+use App\Models\EnrolledClass;
+use App\Services\ClassesService;
+use App\Services\StudentService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\EnrolledClassSchedule;
+use App\Services\Enrollment\EnrollmentService;
 
 class EnrollmentController extends Controller
 {
@@ -125,6 +131,48 @@ class EnrollmentController extends Controller
 
     public function enrollclasssubjects(Request $request)
     {
-        return $request;
+        DB::beginTransaction();
+
+        $enrollment = Enrollment::findOrFail($request->enrollment_id);
+
+        $enrollment->enrolled_classes()->delete();
+        $enrollment->enrolled_class_schedules()->delete();
+
+        $enroll_classes = [];
+        $enroll_class_schedules = [];
+
+        foreach ($request->class_subjects as $key => $class_subject) {
+            //ADD VALUES TO ACCESS ARRAY FOR MULTIPLE INPUT
+            $enroll_classes[] = new EnrolledClass([
+                'class_id' => $class_subject['id'],
+                'user_id' => Auth::id(),
+            ]);
+
+            
+            if(!is_null($class_subject['schedule']['schedule']))
+            {
+                $class_schedules = (new ClassesService())->processSchedule($class_subject['schedule']['schedule']);
+
+                foreach ($class_schedules as $key => $class_schedule) 
+                {
+                    foreach ($class_schedule['days'] as $key => $day) {
+                        $enroll_class_schedules[] = new EnrolledClassSchedule([
+                            'class_id' => $class_subject['id'],
+                            'from_time' => $class_schedule['timefrom'],
+                            'to_time' => $class_schedule['timeto'],
+                            'day' => $day,
+                            'room' => $class_schedule['room'],
+                        ]);
+                    }
+                }
+            }
+        }
+
+        $enrollment->enrolled_classes()->saveMany($enroll_classes);
+        $enrollment->enrolled_class_schedules()->saveMany($enroll_class_schedules);
+
+        DB::commit();
+
+        return true;
     }
 }

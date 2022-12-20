@@ -237,7 +237,7 @@ class EnrollmentService
     {
         $not_passed_section_subjects = [];
         $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student_id);
-        $tagged_grades   = (new TaggedGradeService)->getAllTaggedGrades($student_id);
+        $tagged_grades   = (new TaggedGradeService())->getAllTaggedGrades($student_id);
         
         //return $internal_grades;
         //CHECK SECTION SUBJECTS IF ALREADY PASSED

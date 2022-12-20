@@ -339,13 +339,13 @@ $(function(){
 
     }
 
-    function enrollClassSubjects(class_subjects)
+    function enrollClassSubjects(enrollment_id, class_subjects)
     {
         $.ajax({
             url: "/enrolments/enrollclasssubjects",
             type: 'POST',
             dataType: 'json',
-            data: ({ 'class_subjects' : class_subjects }),
+            data: ({ 'enrollment_id':enrollment_id, 'class_subjects':class_subjects }),
             success: function(response){
                 console.log(response);
                 
@@ -435,7 +435,7 @@ $(function(){
                                 'OK':function(){
                                     $(this).dialog('close');
                                     $('#deficiencies').html(deficiencies);
-                                    enrollClassSubjects(available_subjects);
+                                    enrollClassSubjects(enrollment_id, available_subjects);
                                     returnEnrolledClassSubjects(enrollment_id);
                                 }	
                             }//end of buttons
