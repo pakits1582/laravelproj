@@ -1,4 +1,7 @@
 @if(count($section_subjects) > 0)
+    @php
+        $totalunits = 0;
+    @endphp
     @foreach ($section_subjects as $section_subject)
         @php
             $row_color = '';
@@ -56,7 +59,14 @@
             <td class="mid">{{ $section_subject->slots }}</td>
             <td>{{ $section_subject->curriculumsubject->curriculum->curriculum }}</td>
         </tr>
+        @php
+            $totalunits += $section_subject->units;
+        @endphp
     @endforeach
+    <tr class="nohover">
+        <td colspan="4"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ count($section_subjects) }})</h6></td>
+        <td colspan="10"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolledunits">{{ $totalunits }}</span>) Total Units </h6>
+    </td>
 @else
     <tr><td colspan="14" class="mid">No records to be displayed</td></tr>
 @endif

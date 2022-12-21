@@ -175,4 +175,21 @@ class EnrollmentController extends Controller
 
         return true;
     }
+
+    public function enrolledclasssubjects(Request $request)
+    {
+        $enrolled_classes = EnrolledClass::with([
+            'class' => [
+                'sectioninfo',
+                'instructor', 
+                'schedule',
+                'curriculumsubject' => ['subjectinfo']
+            ],
+            'addedby'
+        ])->where('enrollment_id', $request->enrollment_id)->get();
+
+        //return $enrolled_classes;
+
+        return view('enrollment.enrolled_class_subjects', compact('enrolled_classes'));
+    }
 }

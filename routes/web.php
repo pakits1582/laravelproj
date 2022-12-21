@@ -205,6 +205,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
         Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
         Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
+        Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
 
         // });
        

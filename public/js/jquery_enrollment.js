@@ -336,7 +336,24 @@ $(function(){
 
     function returnEnrolledClassSubjects(enrollment_id)
     {
-
+        $.ajax({
+            url: "/enrolments/enrolledclasssubjects",
+            type: 'POST',
+            //dataType: 'json',
+            data: ({ 'enrollment_id':enrollment_id }),
+            success: function(data){
+                console.log(data);
+                $("#return_enrolled_subjects").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#student").val(null).trigger('change');
+                }
+            }
+        });
     }
 
     function enrollClassSubjects(enrollment_id, class_subjects)
@@ -348,7 +365,7 @@ $(function(){
             data: ({ 'enrollment_id':enrollment_id, 'class_subjects':class_subjects }),
             success: function(response){
                 console.log(response);
-                
+                returnEnrolledClassSubjects(enrollment_id);
             },
             error: function (data) {
                 console.log(data);

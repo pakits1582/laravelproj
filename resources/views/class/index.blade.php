@@ -101,6 +101,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-check form-check-solid">
+                                                    <input type="hidden" value="0" name="dissolved" >
                                                     <input class="form-check-input" id="dissolved" type="checkbox" value="1" name="dissolved" >
                                                     <label for="dissolved" class="m-0 font-weight-bold text-primary">Dissolved</label>            
                                                 </div>        
@@ -110,6 +111,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-check form-check-solid">
+                                                    <input type="hidden" value="0" name="tutorial" >
                                                     <input class="form-check-input" id="tutorial" type="checkbox" value="1" name="tutorial" >
                                                     <label for="tutorial" class="m-0 font-weight-bold text-primary">Tutorial</label>         
                                                 </div>
@@ -119,6 +121,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-check form-check-solid">
+                                                    <input type="hidden" value="0" name="f2f" >
                                                     <input class="form-check-input" id="f2f" type="checkbox" value="1" name="f2f" >
                                                     <label for="f2f" class="m-0 font-weight-bold text-primary">F2F</label>                    
                                                 </div>  
@@ -156,6 +159,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-check form-check-solid">
+                                                    <input type="hidden" value="0" name="isprof" >
                                                     <input class="form-check-input" id="isprof" type="checkbox" value="1" name="isprof" >
                                                     <label for="isprof" class="m-0 font-weight-bold text-primary">Is_Prof</label>                    
                                                 </div>  

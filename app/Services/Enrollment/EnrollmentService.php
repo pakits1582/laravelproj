@@ -219,7 +219,7 @@ class EnrollmentService
 
     public function enrollSection($student_id, $section_id, $enrollment_id)
     {
-        $section_subjects = (new ClassesService())->classSubjects($section_id, session('current_period'));
+        $section_subjects = (new ClassesService())->classSubjects($section_id, session('current_period'), false);
 
         if(!$section_subjects->isEmpty())
         {        
