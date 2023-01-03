@@ -33,6 +33,14 @@ $(function(){
         }
 	});
 
+    $(document).on("change",".select_enrolled_class", function(){
+		if($(this).is(':checked')){
+			$(this).closest('tr').addClass('selected');
+		}else{	
+			$(this).closest('tr').removeClass('selected');
+		}
+	});
+
     $("#program").select2({
 	    dropdownParent: $("#ui_content2")
 	});
@@ -72,16 +80,14 @@ $(function(){
             $(".actions").prop("disabled", true);
             $('#form_enrollment')[0].reset();
         }
-    }
 
-    function studentEnrolledSubjects(enrollment_id)
-    {
-
+        returnEnrolledClassSubjects(response.data.enrollment.id);
+        enrollmentScheduleTable(response.data.enrollment.id);
     }
 
     function enrollmentScheduleTable(enrollment_id)
     {
-        
+        $("#schedule_table").html('display schedule table!');
     }
 
     function enrollmetInfo(student_id, studentinfo)
@@ -356,13 +362,13 @@ $(function(){
         });
     }
 
-    function enrollClassSubjects(enrollment_id, class_subjects)
+    function enrollClassSubjects(enrollment_id, section_id, class_subjects)
     {
         $.ajax({
             url: "/enrolments/enrollclasssubjects",
             type: 'POST',
             dataType: 'json',
-            data: ({ 'enrollment_id':enrollment_id, 'class_subjects':class_subjects }),
+            data: ({ 'enrollment_id':enrollment_id, 'section_id':section_id, 'class_subjects':class_subjects }),
             success: function(response){
                 console.log(response);
                 returnEnrolledClassSubjects(enrollment_id);
@@ -452,7 +458,7 @@ $(function(){
                                 'OK':function(){
                                     $(this).dialog('close');
                                     $('#deficiencies').html(deficiencies);
-                                    enrollClassSubjects(enrollment_id, available_subjects);
+                                    enrollClassSubjects(enrollment_id, section_id, available_subjects);
                                     returnEnrolledClassSubjects(enrollment_id);
                                 }	
                             }//end of buttons
@@ -460,7 +466,7 @@ $(function(){
                     $(".ui-dialog-titlebar").hide();
                 }else{
                     $('#deficiencies').html('');
-                    enrollClassSubjects(available_subjects);
+                    enrollClassSubjects(enrollment_id, section_id, available_subjects);
                     returnEnrolledClassSubjects(enrollment_id);
                 }
             },
@@ -507,6 +513,71 @@ $(function(){
             }
         });
         e.preventDefault();
+    });
+
+    $(document).on("click", "#delete_selected", function(){
+        if($('.select_enrolled_class:checked').length > 0)
+        {
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">All items related to this class subject will also be deleted. Do you want to continue?<br>You can not undo this process?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: false,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $("#confirmation").dialog('close');
+                        },
+                        'OK':function(){
+                            $("#confirmation").dialog('close');
+                            var class_ids = [];
+                            var enrollment_id = $("#enrollment_id").val();
+
+                            $(".select_enrolled_class:checked").each(function() {
+                                class_id = $(this).attr('value');
+                                class_ids.push(class_id);
+                            });
+
+                            $.ajax({
+                                url: '/enrolments/deleteenrolledsubjects',
+                                type: 'DELETE',
+                                data: ({ 'class_ids' : class_ids, 'enrollment_id' : enrollment_id }),
+                                dataType: 'json',
+                                success: function(response)
+                                {
+                                    console.log(response);
+
+                                    returnEnrolledClassSubjects(enrollment_id);
+                                    // if(response.data.success === false)
+                                    // {
+                                    //     showError(response.data.message);
+                                    //     $('#cancel').trigger('click');
+                                    // }else{
+                                    //     showSuccess('Class Subject Successfully Deleted!');
+                                    //     $('#cancel').trigger('click');
+                                    //     var section = $("#section").val();
+
+                                    //     returnClassSubjects(section)
+                                    //     console.log(response);
+                                    // }
+                                    
+                                },
+                                error: function (data) {
+                                    console.log(data);
+                                    var errors = data.responseJSON;
+                                    if ($.isEmptyObject(errors) == false) {
+                                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                                    }
+                                }
+                            });
+                        }//end of ok button	
+                     }//end of buttons
+            });//end of dialogbox
+            $(".ui-dialog-titlebar").hide();
+        }else{
+            showError('Please select at least one subject to be deleted!');
+        }
     });
 
 });

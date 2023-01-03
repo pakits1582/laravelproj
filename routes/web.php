@@ -211,6 +211,8 @@ Route::group(['middleware' => ['auth']], function () {
        
         Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
         Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
+        Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
+
 
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
             return Redirect::route('enrolments.index');

@@ -135,6 +135,7 @@ class EnrollmentController extends Controller
 
         $enrollment = Enrollment::findOrFail($request->enrollment_id);
 
+        $enrollment->update(['section_id' => $request->section_id]);
         $enrollment->enrolled_classes()->delete();
         $enrollment->enrolled_class_schedules()->delete();
 
@@ -147,7 +148,6 @@ class EnrollmentController extends Controller
                 'class_id' => $class_subject['id'],
                 'user_id' => Auth::id(),
             ]);
-
             
             if(!is_null($class_subject['schedule']['schedule']))
             {
@@ -191,5 +191,13 @@ class EnrollmentController extends Controller
         //return $enrolled_classes;
 
         return view('enrollment.enrolled_class_subjects', compact('enrolled_classes'));
+    }
+
+    public function deleteenrolledsubjects(Request $request)
+    {
+        $selectedclasses = EnrolledClass::where('enrollment_id', $request->enrollment_id)->whereIn('class_id', $request->class_ids)->delete();
+        $selectedclassesscheds = EnrolledClassSchedule::where('enrollment_id', $request->enrollment_id)->whereIn('class_id', $request->class_ids)->delete();
+
+        return $selectedclassesscheds;
     }
 }
