@@ -13,18 +13,25 @@
             <div class=" py-0 px-3"> 
                 <div class="card shadow">
                     <div class="card-header py-3">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label for="" class="m-0 font-weight-bold text-primary">Search Here</label>
+                        <div class="row align-items-center">
+                            <div class="col-md-1">
+                                <label for="" class="m-0 font-weight-bold text-primary">Search</label>
                             </div>
-                            <div class="col-md-5">
-                                
+                            <div class="col-md-7">
+                                <input type="text" class="form-control text-uppercase" id="" value="">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <label for="" class="m-0 font-weight-bold text-primary">Section</label>
                             </div>
                             <div class="col-md-3">
-                                
+                                <select name="section_copyfrom" class="form-control">
+                                    <option value="">- select section -</option>
+                                    {{-- @if ($sections)
+                                        @foreach ($sections as $key => $section)
+                                            <option value="{{ $section->id }}" >{{ $section->code }}</option>
+                                        @endforeach
+                                    @endif --}}
+                                </select>
                             </div>
                         </div>
                     </div>
