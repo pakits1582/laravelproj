@@ -580,4 +580,31 @@ $(function(){
         }
     });
 
+    $(document).on("click", "#add_subjects", function(event){
+        var section = $("#section").val();
+
+        if(section){
+            $.ajax({url: "/enrolments/searchandaddclasses",success: function(data){
+                    console.log(data);
+                    $('#ui_content').html(data);
+                    $("#modalll").modal('show');
+                }
+            });	
+        }else{
+            showError('Please select section first!');
+        }
+        e.preventDefault();
+    });
+
+    $(document).keyup(function (event) {
+	    if (event.keyCode === 113) {
+	        var section = $("#section").val();
+			if(!section){
+				showError('Please select section first!');
+			}else{
+				alert('xxxx');
+			}
+	    };
+	});
+
 });

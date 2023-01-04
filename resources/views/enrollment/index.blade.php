@@ -145,11 +145,11 @@
                                                 </span>
                                                 <span class="text">Delete Selected</span>
                                             </button>
-                                            <button type="button" id="delete_all" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                            <button type="button" id="delete_enrollment" class="btn btn-danger btn-icon-split actions mb-2" disabled>
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-trash"></i>
                                                 </span>
-                                                <span class="text">Delete All Subjects</span>
+                                                <span class="text">Delete Enrollment</span>
                                             </button>
                                         </div>
                                     </div>
@@ -187,7 +187,6 @@
                                 <tbody class="text-black" id="return_enrolled_subjects">
                                     <tr><td class="mid" colspan="13">No records to be displayed!</td></tr>
                                 </tbody>
-
                             </table>
                         </div>
                     </div>

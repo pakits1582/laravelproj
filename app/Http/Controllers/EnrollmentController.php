@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\EnrolledClass;
 use App\Services\ClassesService;
 use App\Services\StudentService;
+use App\Models\SectionMonitoring;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EnrolledClassSchedule;
@@ -199,5 +200,12 @@ class EnrollmentController extends Controller
         $selectedclassesscheds = EnrolledClassSchedule::where('enrollment_id', $request->enrollment_id)->whereIn('class_id', $request->class_ids)->delete();
 
         return $selectedclassesscheds;
+    }
+
+    public function searchandaddclasses()
+    {
+        $sections_offered = SectionMonitoring::where('period_id', session('current_period'))->get();
+
+        return view('enrollment.searchandaddclasses', compact('sections_offered'));
     }
 }
