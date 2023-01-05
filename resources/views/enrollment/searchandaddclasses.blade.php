@@ -1,6 +1,6 @@
  <!-- Logout Modal-->
  <div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
- aria-hidden="true">
+ aria-hidden="true" data-keyboard="false" data-backdrop="static">
  <div class="modal-dialog modal-xl" role="document" style="max-width: 80% !important">
      <div class="modal-content">
          <div class="modal-header">

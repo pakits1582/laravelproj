@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Classes;
 use App\Models\Student;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
@@ -211,6 +212,36 @@ class EnrollmentController extends Controller
 
     public function searchclasssubject(Request $request)
     {
-        return $request;
+        $enrollment_id = $request->enrollment_id;
+        $student_id =  $request->enrollment_id;
+        $searchcodes = stripslashes($request->searchcodes);
+
+        $searchcodes = array_unique(preg_split('/(\s*,*\s*)*,+(\s*,*\s*)*/', $searchcodes));
+        $searchcodes= array_map('trim', $searchcodes);
+
+        $query = Classes::with([
+            'sectioninfo',
+            'instructor', 
+            'schedule',
+            'enrolledstudents.enrollment',
+            'curriculumsubject' => fn($query) => $query->with('subjectinfo')
+        ])->where('period_id', session('current_period'))->where('dissolved', '!=', 1);
+
+        $query->where(function($query) use($searchcodes){
+            foreach($searchcodes as $key => $code){
+                $query->orwhere(function($query) use($code){
+                    $query->orWhere('code', 'LIKE', '%'.$code.'%');
+                    $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
+                        $query->where('subjects.code', 'LIKE', '%'.$code.'%');
+                    });
+                });
+            }
+        });
+
+        $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
+
+        $subjects = $this->enrollmentService->handleClassSubjects($student_id, $section_subjects);
+
+        return $subjects;
     }
 }

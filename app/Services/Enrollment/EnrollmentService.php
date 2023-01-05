@@ -223,7 +223,7 @@ class EnrollmentService
 
         if(!$section_subjects->isEmpty())
         {        
-            return $this->handleSectionSubjects($student_id, $section_subjects);
+            return $this->handleClassSubjects($student_id, $section_subjects);
         }
 
         return [
@@ -233,7 +233,7 @@ class EnrollmentService
         ];
     }
 
-    public function handleSectionSubjects($student_id, $section_subjects)
+    public function handleClassSubjects($student_id, $section_subjects)
     {
         $not_passed_section_subjects = [];
         $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student_id);
