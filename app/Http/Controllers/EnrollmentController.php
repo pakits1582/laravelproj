@@ -204,8 +204,13 @@ class EnrollmentController extends Controller
 
     public function searchandaddclasses()
     {
-        $sections_offered = SectionMonitoring::where('period_id', session('current_period'))->get();
+        $sections_offered = SectionMonitoring::with(['section'])->where('period_id', session('current_period'))->get();
 
         return view('enrollment.searchandaddclasses', compact('sections_offered'));
+    }
+
+    public function searchclasssubject(Request $request)
+    {
+        return $request;
     }
 }

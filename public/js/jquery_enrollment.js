@@ -599,12 +599,52 @@ $(function(){
     $(document).keyup(function (event) {
 	    if (event.keyCode === 113) {
 	        var section = $("#section").val();
-			if(!section){
-				showError('Please select section first!');
+			if(section){
+				$.ajax({url: "/enrolments/searchandaddclasses",success: function(data){
+                    console.log(data);
+                    $('#ui_content').html(data);
+                    $("#modalll").modal('show');
+                }
+            });	
 			}else{
-				alert('xxxx');
+				showError('Please select section first!');
 			}
 	    };
 	});
+
+    $(document).on('keyup', '#search_classes', function(e){
+        var searchcodes   = $(this).val();
+		var enrollment_id = $("#enrollment_id").val();
+		var student_id    = $("#student").val();
+
+        if(e.keyCode == '13')
+        {
+			if(searchcodes !== "")
+            {
+				$.ajax({
+					url: "/enrolments/searchclasssubject",
+					type: 'POST',
+					data: {'searchcodes':searchcodes, 'enrollment_id':enrollment_id, 'student_id':student_id},
+					cache:false,
+					beforeSend: function() {
+						$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+							show: 'fade',
+							resizable: false,	
+							width: 'auto',
+							height: 'auto',
+							modal: true,
+							buttons: false
+						});
+						$(".ui-dialog-titlebar").hide();
+					},
+					success: function(data){
+						$('#confirmation').dialog('close');
+						console.log(data);
+						//$("#return_classcodes").html(data);
+					}
+				});	
+			}
+		}
+    });
 
 });

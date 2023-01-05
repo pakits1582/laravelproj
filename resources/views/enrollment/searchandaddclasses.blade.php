@@ -18,19 +18,19 @@
                                 <label for="" class="m-0 font-weight-bold text-primary">Search</label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" class="form-control text-uppercase" id="" value="">
+                                <input type="text" class="form-control text-uppercase" id="search_classes" class="text-uppercase" placeholder="Type class code or subject code to search....">
                             </div>
                             <div class="col-md-1">
                                 <label for="" class="m-0 font-weight-bold text-primary">Section</label>
                             </div>
                             <div class="col-md-3">
-                                <select name="section_copyfrom" class="form-control">
+                                <select id="section_copyfrom" class="form-control">
                                     <option value="">- select section -</option>
-                                    {{-- @if ($sections)
-                                        @foreach ($sections as $key => $section)
-                                            <option value="{{ $section->id }}" >{{ $section->code }}</option>
+                                    @if ($sections_offered)
+                                        @foreach ($sections_offered as $key => $section)
+                                            <option value="{{ $section->section->id }}" >{{ $section->section->code }}</option>
                                         @endforeach
-                                    @endif --}}
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -52,8 +52,19 @@
                                             <th class="w50">Max</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="return_taggrade">
+                                    <tbody id="return_searchedclasses">
                                         <tr><td colspan="9" class="mid">No records to be displayed!</td></tr>
+                                        <tr>
+                                            <td class="w30 mid">#</td>
+                                            <td class="w50">Code</td>
+                                            <td class="w120">Section</td>
+                                            <td class="w120">Subject</td>
+                                            <td>Description</td>
+                                            <td class="w50 mid">Units</td>
+                                            <td>Schedule</td>
+                                            <td class="w50 mid">Size</td>
+                                            <td class="w50 mid">Max</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

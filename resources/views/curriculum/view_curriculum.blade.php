@@ -58,7 +58,7 @@
                                                                 @endif
                                                             </td>
                                                             <td class="mid">{{ $subject->quota }}</td>
-                                                            <td class="mid">{{ $subject->subjectinfo->units }}</td>
+                                                            <td class="mid">{{ ($subject->subjectinfo->professional === 1) ? '('.$subject->subjectinfo->units.')' : $subject->subjectinfo->units }}</td>
                                                         </tr>
                                                         @php
                                                             $totalunits += $subject->subjectinfo->units

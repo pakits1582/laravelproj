@@ -213,6 +213,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
         Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
         Route::get('/enrolments/searchandaddclasses', [EnrollmentController::class, 'searchandaddclasses']);
+        Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
 
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
             return Redirect::route('enrolments.index');
