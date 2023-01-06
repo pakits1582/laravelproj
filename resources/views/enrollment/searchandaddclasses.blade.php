@@ -4,7 +4,7 @@
  <div class="modal-dialog modal-xl" role="document" style="max-width: 80% !important">
      <div class="modal-content">
          <div class="modal-header">
-            <h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Search and Add Class Subjects</h1>
+            <h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Search and Add Classes</h1>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
             </button>
@@ -54,17 +54,6 @@
                                     </thead>
                                     <tbody id="return_searchedclasses">
                                         <tr><td colspan="9" class="mid">No records to be displayed!</td></tr>
-                                        <tr>
-                                            <td class="w30 mid">#</td>
-                                            <td class="w50">Code</td>
-                                            <td class="w120">Section</td>
-                                            <td class="w120">Subject</td>
-                                            <td>Description</td>
-                                            <td class="w50 mid">Units</td>
-                                            <td>Schedule</td>
-                                            <td class="w50 mid">Size</td>
-                                            <td class="w50 mid">Max</td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

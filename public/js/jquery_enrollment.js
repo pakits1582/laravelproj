@@ -33,7 +33,7 @@ $(function(){
         }
 	});
 
-    $(document).on("change",".select_enrolled_class", function(){
+    $(document).on("change",".select_enrolled_class, .check_searched_class", function(){
 		if($(this).is(':checked')){
 			$(this).closest('tr').addClass('selected');
 		}else{	
@@ -547,21 +547,7 @@ $(function(){
                                 success: function(response)
                                 {
                                     console.log(response);
-
                                     returnEnrolledClassSubjects(enrollment_id);
-                                    // if(response.data.success === false)
-                                    // {
-                                    //     showError(response.data.message);
-                                    //     $('#cancel').trigger('click');
-                                    // }else{
-                                    //     showSuccess('Class Subject Successfully Deleted!');
-                                    //     $('#cancel').trigger('click');
-                                    //     var section = $("#section").val();
-
-                                    //     returnClassSubjects(section)
-                                    //     console.log(response);
-                                    // }
-                                    
                                 },
                                 error: function (data) {
                                     console.log(data);
@@ -640,11 +626,95 @@ $(function(){
 					success: function(data){
 						$('#confirmation').dialog('close');
 						console.log(data);
-						//$("#return_classcodes").html(data);
+						$("#return_searchedclasses").html(data);
 					}
 				});	
 			}
 		}
+    });
+
+    $(document).on("click", ".check_searched_class", function(){
+        var taken_units   = parseInt($("#enrolledunits").text());
+		var allowed_units = parseInt($("#units_allowed").val());
+
+        if($(this).is(':checked'))
+        {
+            var checkbox = $(this);
+			var errors   = $(this).attr("data-errors");
+
+			$('.check_searched_class:checked').each(function(){
+				taken_units += isNaN(parseInt($(this).parent().siblings(".units").text())) ? 0 : parseInt($(this).parent().siblings(".units").text());
+			});
+            
+            if(errors){
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The subject you are selecting has deficiency!<br>Continue selecting subject?</div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					draggable: false,
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: {
+                        'Cancel':function(){
+                            $(this).dialog('close');
+                            $(checkbox).closest('tr').removeClass('selected');
+                            $(checkbox).prop("checked", false);
+                        },
+                        'OK':function(){
+                            $(this).dialog('close');
+                            if(taken_units > allowed_units)
+                            {
+                                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The maximum units allowed for the student already exceeded.<br>Continue selecting subject?</div>').dialog({
+                                    show: 'fade',
+                                    resizable: false,	
+                                    draggable: false,
+                                    width: 350,
+                                    height: 'auto',
+                                    modal: true,
+                                    buttons: {
+                                        'Cancel':function(){
+                                            $(this).dialog('close');
+                                            $(checkbox).closest('tr').removeClass('selected')
+                                            $(checkbox).prop("checked", false);
+                                        },
+                                        'OK':function(){
+                                            $(this).dialog('close');
+                                            $(checkbox).closest('tr').addClass('selected');
+                                        }//end of ok button	
+                                    }//end of buttons
+                                });//end of dialogbox
+                                $(".ui-dialog-titlebar").hide();
+                            }
+                        }//end of ok button	
+                    }//end of buttons
+				});//end of dialogbox
+				$(".ui-dialog-titlebar").hide();
+            }else{
+                if(taken_units > allowed_units)
+                {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The maximum units allowed for the student already exceeded.<br>Continue selecting subject?</div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        draggable: false,
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: {
+                            'Cancel':function(){
+                                $(this).dialog('close');
+                                $(checkbox).closest('tr').removeClass('selected')
+                                $(checkbox).prop("checked", false);
+                            },
+                            'OK':function(){
+                                $(this).dialog('close');
+                                $(checkbox).closest('tr').addClass('selected');
+                            }//end of ok button	
+                        }//end of buttons
+                    });//end of dialogbox
+                    $(".ui-dialog-titlebar").hide();
+                }
+            }
+        }
     });
 
 });

@@ -239,9 +239,11 @@ class EnrollmentController extends Controller
         });
 
         $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
-
         $subjects = $this->enrollmentService->handleClassSubjects($student_id, $section_subjects);
+        $checked_subjects = $this->enrollmentService->checkClassesIfConflictStudentSchedule($enrollment_id, $subjects);
 
-        return $subjects;
+        //return $checked_subjects;
+
+        return view('enrollment.return_searchedclasses', compact('checked_subjects'));
     }
 }

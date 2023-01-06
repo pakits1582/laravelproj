@@ -2,16 +2,18 @@
 
 namespace App\Services\Enrollment;
 
+use Carbon\Carbon;
 use App\Models\Term;
 use App\Libs\Helpers;
-use App\Models\EnrolledClass;
 use App\Models\Enrollment;
 use App\Models\TaggedGrades;
+use App\Models\EnrolledClass;
 use App\Services\ClassesService;
 use App\Models\SectionMonitoring;
 use App\Services\CurriculumService;
 use App\Services\TaggedGradeService;
 use Illuminate\Support\Facades\Auth;
+use App\Models\EnrolledClassSchedule;
 use App\Services\Grade\InternalGradeService;
 use App\Services\Evaluation\EvaluationService;
 
@@ -419,8 +421,70 @@ class EnrollmentService
             ->join('classes', 'enrolled_classes.class_id', '=', 'classes.id')
             ->where('classes.id', $class_id)->get();
 
-            return $enrolled;
+        return $enrolled;
         
+    }
+
+    public function checkClassesIfConflictStudentSchedule($enrollment_id, $subjects)
+    {
+        $enrollment_schedules = EnrolledClassSchedule::with(['class'])->where('enrollment_id', $enrollment_id)->get();
+
+        $checked_subjects = [];
+
+        if($subjects)
+        {
+            foreach ($subjects as $key => $subject)
+            {
+                $conflict = 0;
+                $schedule = $subject->schedule->schedule;
+                
+                if($schedule !== '')
+                {
+                    $schedule = strtoupper(preg_replace('/\s+/', ' ', trim($schedule)));
+                    $schedules = explode(", ", $schedule);
+
+                    foreach($schedules as $sched)
+                    {
+                        $splits = preg_split('/ ([MTWHFSU]+) /', $sched, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+                        $times = $splits[0];
+                        $days  = $splits[1];
+                        $room  = $splits[2];
+
+                        $times    = explode("-", $times);
+                        $timefrom = Carbon::parse($times[0])->format('H:i:s');
+                        $timeto   = Carbon::parse($times[1])->format('H:i:s');
+
+                        $splitdays = preg_split('/(.[HU]?)/' ,$days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+
+                        $confli = 0;
+                        foreach($splitdays as $splitday)
+                        {
+                            $hasconflict = 0;
+                            foreach ($enrollment_schedules as $k => $v)
+                            {
+                                if($v->to_time > $timefrom && $timeto > $v->from_time && $splitday == $v->day){
+                                    $hasconflict = 1;
+                                    break;
+                                }
+                            }
+                            if($hasconflict == 1){
+                                $confli = 1;
+                                break;
+                            }
+                        }
+
+                        if($confli == 1){
+                            $conflict = 1;
+                        }
+                    }
+                }
+                $checked_subjects[$key] = $subject;
+                $checked_subjects[$key]['conflict'] = $conflict;
+            }
+        }
+
+        return $checked_subjects;
     }
 }
 
