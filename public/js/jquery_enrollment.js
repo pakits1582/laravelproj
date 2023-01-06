@@ -625,7 +625,7 @@ $(function(){
 					},
 					success: function(data){
 						$('#confirmation').dialog('close');
-						console.log(data);
+						//console.log(data);
 						$("#return_searchedclasses").html(data);
 					}
 				});	
@@ -714,6 +714,66 @@ $(function(){
                     $(".ui-dialog-titlebar").hide();
                 }
             }
+        }
+    });
+
+    $(document).on("click", "#add_selected_classes", function(){
+        $(this).attr("disable", true);
+
+        var selected_classes = $(".check_searched_class:checked");
+		var enrollment_id    = $("#enrollment_id").val();
+
+        if(selected_classes.length === 0)
+        {
+			showError('Please select atleast one checkbox/class subject to add!');
+			$("#add_selected_classes").attr("disabled", false);	
+		}else{
+            var class_ids = selected_classes.map(function(){ return $(this).attr("value"); }).get();
+
+            $.ajax({
+				url: "/enrolments/addselectedclasses/",
+				type: 'POST',
+				data: {"class_ids":class_ids, "enrollment_id":enrollment_id},
+                dataType: 'json',
+				beforeSend: function() {
+						$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+							show: 'fade',
+							resizable: false,	
+							width: 'auto',
+							height: 'auto',
+							modal: true,
+							buttons: false
+						});
+						$(".ui-dialog-titlebar").hide();
+					},
+				success: function(response){
+					$("#confirmation").dialog('close');
+                    console.log(response);
+                    if(response.data.success === true)
+                    {
+                        showSuccess(response.data.message);
+                        $.each(class_ids, function(i, val){
+                            $("#searched_class_"+val).remove();
+                        });
+                        returnEnrolledClassSubjects(enrollment_id);
+                        //scheduletable(enrollno);
+                        var rowCount = $('#add_classsubjects_table > tbody tr').length;
+
+                        if(rowCount == 0){
+                            $('#add_classsubjects_table > tbody').append('<tr><td colspan="9" class="mid">No records to be displayed</td></tr>');
+                        }
+                    }
+				},
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) {
+                        showError('Something went wrong! Can not perform requested action!');
+                    }
+                }
+			});	
+
+            $("#add_selected_classes").attr("disabled",false);
         }
     });
 

@@ -6,7 +6,7 @@
             $errors .= ($checked_subject->total_slots_taken >= $checked_subject->total_slots) ? '[FULL]' : '';
             $errors .= ($checked_subject->unfinished_prerequisites) ? '[PREREQUISITE]' : '';
         @endphp
-        <tr class="label {{ ($errors !== '') ? 'dissolved' : '' }}">
+        <tr class="label {{ ($errors !== '') ? 'dissolved' : '' }}" id="searched_class_{{ $checked_subject->id }}">
             <td class="w30 mid">
                 <input type="checkbox" name="" data-errors="{{ $errors }}" class="check_searched_class" value="{{ $checked_subject->id }}" />
             </td>

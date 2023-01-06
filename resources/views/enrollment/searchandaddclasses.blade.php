@@ -38,7 +38,7 @@
                     <div class="card-body">
                         <form action="" method="post" id="form_tag_grade">
                             <div class="col-xs-8 col-xs-offset-2 well">
-                                <table class="table table-sm table-scroll table-striped table-bordered" style="font-size:14px;">
+                                <table class="table table-sm table-scroll table-striped table-bordered" id="add_classsubjects_table" style="font-size:14px;">
                                     <thead>
                                         <tr>
                                             <th class="w30">#</th>
@@ -57,7 +57,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Changes</button>
+                            <button type="button" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm" id="add_selected_classes">Add Selected Classes</button>
                         </form>
                     </div>
                 </div>

@@ -246,4 +246,54 @@ class EnrollmentController extends Controller
 
         return view('enrollment.return_searchedclasses', compact('checked_subjects'));
     }
+
+    public function addselectedclasses(Request $request)
+    {
+        $class_subjects = Classes::with(['schedule'])->whereIn("id", $request->class_ids)->get();
+
+        DB::beginTransaction();
+
+        $enrollment = Enrollment::findOrFail($request->enrollment_id);
+
+        $enroll_classes = [];
+        $enroll_class_schedules = [];
+
+        foreach ($class_subjects as $key => $class_subject)
+        {
+            $enroll_classes[] = new EnrolledClass([
+                'class_id' => $class_subject['id'],
+                'user_id' => Auth::id(),
+            ]);
+            
+            if(!is_null($class_subject['schedule']['schedule']))
+            {
+                $class_schedules = (new ClassesService())->processSchedule($class_subject['schedule']['schedule']);
+
+                foreach ($class_schedules as $key => $class_schedule) 
+                {
+                    foreach ($class_schedule['days'] as $key => $day) {
+                        $enroll_class_schedules[] = new EnrolledClassSchedule([
+                            'class_id' => $class_subject['id'],
+                            'from_time' => $class_schedule['timefrom'],
+                            'to_time' => $class_schedule['timeto'],
+                            'day' => $day,
+                            'room' => $class_schedule['room'],
+                        ]);
+                    }
+                }
+            }
+        }
+
+        $enrollment->enrolled_classes()->saveMany($enroll_classes);
+        $enrollment->enrolled_class_schedules()->saveMany($enroll_class_schedules);
+
+        DB::commit();
+
+        return response()->json(['data' => [
+            'success' => true,
+            'message' => 'Selected class subject/s successfully added!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ]]);
+    }
 }
