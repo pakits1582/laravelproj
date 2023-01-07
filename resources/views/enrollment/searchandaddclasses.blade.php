@@ -18,7 +18,7 @@
                                 <label for="" class="m-0 font-weight-bold text-primary">Search</label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" class="form-control text-uppercase" id="search_classes" class="text-uppercase" placeholder="Type class code or subject code to search....">
+                                <input type="text" class="form-control text-uppercase" autofocus id="search_classes" class="text-uppercase" placeholder="Type class code or subject code to search....">
                             </div>
                             <div class="col-md-1">
                                 <label for="" class="m-0 font-weight-bold text-primary">Section</label>

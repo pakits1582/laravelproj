@@ -29,37 +29,38 @@ class EnrollmentService
 
     public function handleStudentEnrollmentInfo($student_id, $studentinfo)
     {
-       
         $user_programs = (new UserService())->handleUserPrograms(Auth::user());
-        
-        if(!$user_programs->contains('id', $studentinfo['program_id']) || !$user_programs->contains('program.id', $studentinfo['program_id']))
+
+        if($user_programs->contains('id', $studentinfo['program_id']) || $user_programs->contains('program.id', $studentinfo['program_id']))
         {
-            return [
-                'success' => false,
-                'message' => 'Your account does not have permission to enroll student\'s current program!',
-                'alert' => 'alert-danger'
-            ];
-        }
+            $data = [];
 
-        $data = [];
+            $data['student'] = $studentinfo;
+            $data['probi']   = 0;
+            $data['balance']  = 0;
+            $data['enrollment'] = $this->studentEnrollment($student_id, session('current_period'));
 
-        $data['student'] = $studentinfo;
-        $data['probi']   = 0;
-        $data['balance']  = 0;
-        $data['enrollment'] = $this->studentEnrollment($student_id, session('current_period'));
-
-        $last_enrollment = $this->studentLastEnrollment($student_id);
-        
-        if($last_enrollment !== false)
-        {
-            $data['probi'] = $this->checkIfStudentIsOnProbation($student_id, '$last_enrollment->period_id');
-            $data['balance'] = $this->checkIfstudentHasAccountBalance($student_id, '$last_enrollment->period_id');
+            $last_enrollment = $this->studentLastEnrollment($student_id);
             
-        }
-        
-        $data['allowed_units'] = $this->studentEnrollmentUnitsAllowed($studentinfo['curriculum_id'], session('periodterm'), $studentinfo['year_level'], $data['probi']);
+            if($last_enrollment !== false)
+            {
+                $data['probi'] = $this->checkIfStudentIsOnProbation($student_id, '$last_enrollment->period_id');
+                $data['balance'] = $this->checkIfstudentHasAccountBalance($student_id, '$last_enrollment->period_id');
+                
+            }
+            
+            $data['allowed_units'] = $this->studentEnrollmentUnitsAllowed($studentinfo['curriculum_id'], session('periodterm'), $studentinfo['year_level'], $data['probi']);
 
-        return $data;
+            return $data;
+        }
+
+        return [
+            'success' => false,
+            'message' => 'Your account does not have permission to enroll student\'s current program!',
+            'alert' => 'alert-danger'
+        ];
+
+        
     }
 
     public function studentEnrollment($student_id, $period_id, $acctok = 0)
@@ -155,7 +156,7 @@ class EnrollmentService
             
             if($user_permissions)
             {
-                if(!Helpers::is_column_in_array('can_withbalance', 'permission', $user_permissions->toArray())){
+                if(Helpers::is_column_in_array('can_withbalance', 'permission', $user_permissions->toArray()) === false){
                     return [
                         'success' => false,
                         'message' => 'Your account does not have permission to enroll students with account balance!',

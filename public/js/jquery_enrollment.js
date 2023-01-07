@@ -572,7 +572,7 @@ $(function(){
         }
     });
 
-    $(document).on("click", "#add_subjects", function(event){
+    $(document).on("click", "#add_subjects", function(e){
         var section = $("#section").val();
 
         if(section){
@@ -642,6 +642,7 @@ $(function(){
     $(document).on("click", ".check_searched_class", function(){
         var taken_units   = parseInt($("#enrolledunits").text());
 		var allowed_units = parseInt($("#units_allowed").val());
+        var can_overloadunits = $("#can_overloadunits").val();
 
         if($(this).is(':checked'))
         {
@@ -668,29 +669,44 @@ $(function(){
                         },
                         'OK':function(){
                             $(this).dialog('close');
-                            if(taken_units > allowed_units)
-                            {
-                                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The maximum units allowed for the student already exceeded.<br>Continue selecting subject?</div>').dialog({
-                                    show: 'fade',
-                                    resizable: false,	
-                                    draggable: false,
-                                    width: 350,
-                                    height: 'auto',
-                                    modal: true,
-                                    buttons: {
-                                        'Cancel':function(){
-                                            $(this).dialog('close');
-                                            $(checkbox).closest('tr').removeClass('selected')
-                                            $(checkbox).prop("checked", false);
-                                        },
-                                        'OK':function(){
-                                            $(this).dialog('close');
-                                            $(checkbox).closest('tr').addClass('selected');
-                                        }//end of ok button	
-                                    }//end of buttons
-                                });//end of dialogbox
-                                $(".ui-dialog-titlebar").hide();
+                            var haspermission = checkbox.attr("data-haspermission");
+
+                            if(haspermission == 0){
+                                showError('<p class="mid">ACCESS DENIED!</p>Your account does not have enough permission to override deficiency!')
+                                $(checkbox).closest('tr').removeClass('selected')
+                                $(checkbox).prop("checked", false);
+                            }else{
+                                if(taken_units > allowed_units)
+                                {
+                                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The maximum units allowed for the student already exceeded.<br>Continue selecting subject?</div>').dialog({
+                                        show: 'fade',
+                                        resizable: false,	
+                                        draggable: false,
+                                        width: 350,
+                                        height: 'auto',
+                                        modal: true,
+                                        buttons: {
+                                            'Cancel':function(){
+                                                $(this).dialog('close');
+                                                $(checkbox).closest('tr').removeClass('selected')
+                                                $(checkbox).prop("checked", false);
+                                            },
+                                            'OK':function(){
+                                                $(this).dialog('close');
+                                                if(can_overloadunits == 0){
+                                                    showError('<p class="mid">ACCESS DENIED!</p>Your account does not have enough permission to override deficiency!')
+                                                    $(checkbox).closest('tr').removeClass('selected')
+                                                    $(checkbox).prop("checked", false);
+                                                }else{
+                                                    $(checkbox).closest('tr').addClass('selected');
+                                                }
+                                            }//end of ok button	
+                                        }//end of buttons
+                                    });//end of dialogbox
+                                    $(".ui-dialog-titlebar").hide();
+                                }
                             }
+                            
                         }//end of ok button	
                     }//end of buttons
 				});//end of dialogbox
@@ -713,7 +729,13 @@ $(function(){
                             },
                             'OK':function(){
                                 $(this).dialog('close');
-                                $(checkbox).closest('tr').addClass('selected');
+                                if(can_overloadunits == 0){
+                                    showError('<p class="mid">ACCESS DENIED!</p>Your account does not have enough permission to override deficiency!')
+                                    $(checkbox).closest('tr').removeClass('selected')
+                                    $(checkbox).prop("checked", false);
+                                }else{
+                                    $(checkbox).closest('tr').addClass('selected');
+                                }
                             }//end of ok button	
                         }//end of buttons
                     });//end of dialogbox
