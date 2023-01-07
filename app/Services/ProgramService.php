@@ -80,4 +80,23 @@ class ProgramService
 
         return $query->get();
     }
+
+    public function returnAllPrograms($limit = 0, $all = false, $isactiveonly = false)
+    {
+        $query = Program::with(['level', 'collegeinfo', 'headinfo'])->orderBy('code');
+
+        if($isactiveonly)
+        {
+            $query->where('active', 1);
+        }
+
+        if($all){
+            return $query->get();
+        }
+        
+        if($limit !== 0){
+            return $query->take($limit)->get();
+
+        }
+    }
 }

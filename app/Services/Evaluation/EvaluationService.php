@@ -13,41 +13,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\Grade\ExternalGradeService;
 use App\Services\Grade\InternalGradeService;
 use App\Services\TaggedGradeService;
+use App\Services\UserService;
 
 class EvaluationService
 {
-    public function handleUser($user, $request)
-    {
-        if($user->utype === User::TYPE_INSTRUCTOR)
-        {
-            $user->load('instructorinfo');
-
-            if($user->instructorinfo->designation === Instructor::TYPE_PROGRAM_HEAD)
-            {
-                $programs = (new ProgramService())->programHeadship($user);
-            }
-
-            if($user->instructorinfo->designation === Instructor::TYPE_DEAN)
-            {
-                $programs = (new ProgramService())->programDeanship($user);
-            }
-        }else{
-            $programs = (new ProgramService())->returnPrograms($request,true,false);
-        }
-
-        if($user->accessibleprograms->count())
-        {
-            $programs = $user->accessibleprograms->load('program');
-
-            return $programs;
-        }
-
-        return $programs;
-    }
-
     public function evaluateStudent($student, $request)
     {
-        $user_programs = $this->handleUser(Auth::user(), $request);
+        $user_programs = (new UserService())->handleUserPrograms(Auth::user());
 
         if(!is_null($student->program_id) && !is_null($student->curriculum_id))
         {

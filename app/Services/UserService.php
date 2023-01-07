@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
-use App\Libs\Helpers;
-use App\Models\AccessibleProgram;
 use App\Models\User;
+use App\Libs\Helpers;
 use App\Models\Userinfo;
+use App\Models\Instructor;
 use App\Models\Permission;
 use App\Models\Useraccess;
+use App\Models\AccessibleProgram;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
@@ -242,5 +243,34 @@ class UserService
         }
 
         return $user->update($arr);
+    }
+
+    public function handleUserPrograms($user)
+    {
+        if($user->utype === User::TYPE_INSTRUCTOR)
+        {
+            $user->load('instructorinfo');
+
+            if($user->instructorinfo->designation === Instructor::TYPE_PROGRAM_HEAD)
+            {
+                $programs = (new ProgramService())->programHeadship($user);
+            }
+
+            if($user->instructorinfo->designation === Instructor::TYPE_DEAN)
+            {
+                $programs = (new ProgramService())->programDeanship($user);
+            }
+        }else{
+            $programs = (new ProgramService())->returnAllPrograms(0, true, false);
+        }
+
+        if($user->accessibleprograms->count())
+        {
+            $programs = $user->accessibleprograms->load('program');
+
+            return $programs;
+        }
+
+        return $programs;
     }
 }

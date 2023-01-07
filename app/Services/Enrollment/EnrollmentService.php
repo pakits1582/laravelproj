@@ -8,6 +8,7 @@ use App\Libs\Helpers;
 use App\Models\Enrollment;
 use App\Models\TaggedGrades;
 use App\Models\EnrolledClass;
+use App\Services\UserService;
 use App\Services\ClassesService;
 use App\Models\SectionMonitoring;
 use App\Services\CurriculumService;
@@ -28,6 +29,18 @@ class EnrollmentService
 
     public function handleStudentEnrollmentInfo($student_id, $studentinfo)
     {
+       
+        $user_programs = (new UserService())->handleUserPrograms(Auth::user());
+        
+        if(!$user_programs->contains('id', $studentinfo['program_id']) || !$user_programs->contains('program.id', $studentinfo['program_id']))
+        {
+            return [
+                'success' => false,
+                'message' => 'Your account does not have permission to enroll student\'s current program!',
+                'alert' => 'alert-danger'
+            ];
+        }
+
         $data = [];
 
         $data['student'] = $studentinfo;
@@ -135,7 +148,7 @@ class EnrollmentService
     public function insertStudentEnrollment($studentinfo)
     {
         $student = $studentinfo['data'];
-
+        
         if($student['balance'])
         {
             $user_permissions = Auth::user()->permissions;
