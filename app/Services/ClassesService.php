@@ -177,8 +177,8 @@ class ClassesService
                 $lcode = str_replace($class_code, "", $oldcode)+1;
 				$newcode = $class_code.$lcode++;
 
-                $class_withnocode->code = $newcode;
-                $class_withnocode->save();
+                //$class_withnocode->code = $newcode;
+                $class_withnocode->update(['code' => $newcode]);
             }
         }
 

@@ -7,7 +7,9 @@ use App\Models\Student;
 use App\Models\TaggedGrades;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
+use App\Models\CurriculumSubjects;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use App\Services\CurriculumService;
 use App\Services\TaggedGradeService;
 use Illuminate\Pagination\Paginator;
@@ -61,7 +63,21 @@ class EvaluationController extends Controller
      */
     public function create()
     {
-         //$students = $this->evaluationService->handleUser(Auth::user(), $request);
+        DB::enableQueryLog();
+
+        $curriculum_subjects = CurriculumSubjects::with([
+            'subjectinfo', 
+            'terminfo', 
+            'prerequisites', 'prerequisites.curriculumsubject', 'prerequisites.curriculumsubject.subjectinfo',
+            'equivalents', 'equivalents.subjectinfo',
+        ])->where('curriculum_id', 1)->get();
+
+        //return $curriculum_subjects;
+        $grouped = $curriculum_subjects->groupBy(['year_level', 'terminfo.term']);
+    
+        dd(DB::getQueryLog());
+    
+        //$students = $this->evaluationService->handleUser(Auth::user(), $request);
 
     }
 
