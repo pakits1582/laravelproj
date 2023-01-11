@@ -24,7 +24,7 @@
                                 <label for="" class="m-0 font-weight-bold text-primary">Section</label>
                             </div>
                             <div class="col-md-3">
-                                <select id="section_copyfrom" class="form-control">
+                                <select id="section_searchclasses" class="form-control">
                                     <option value="">- select section -</option>
                                     @if ($sections_offered)
                                         @foreach ($sections_offered as $key => $section)

@@ -805,4 +805,36 @@ $(function(){
         }
     });
 
+    $(document).on("change","#section_searchclasses", function(){
+        var section_id = $(this).val();
+        var enrollment_id = $("#enrollment_id").val();
+		var student_id    = $("#student").val();
+
+        if(section_id)
+        {
+            $.ajax({
+                url: "/enrolments/searchclasssubjectbysection",
+                type: 'POST',
+                data: {'enrollment_id':enrollment_id, 'student_id':student_id, 'section_id':section_id},
+                cache:false,
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 'auto',
+                        height: 'auto',
+                        modal: true,
+                        buttons: false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
+                success: function(data){
+                    $('#confirmation').dialog('close');
+                    console.log(data);
+                    $("#return_searchedclasses").html(data);
+                }
+            });
+        }
+    });
+
 });

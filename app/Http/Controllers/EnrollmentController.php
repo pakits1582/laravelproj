@@ -213,7 +213,7 @@ class EnrollmentController extends Controller
     public function searchclasssubject(Request $request)
     {
         $enrollment_id = $request->enrollment_id;
-        $student_id =  $request->enrollment_id;
+        $student_id =  $request->student_id;
         $searchcodes = stripslashes($request->searchcodes);
 
         $searchcodes = array_unique(preg_split('/(\s*,*\s*)*,+(\s*,*\s*)*/', $searchcodes));
@@ -245,6 +245,29 @@ class EnrollmentController extends Controller
         $user_permissions = Auth::user()->permissions;
 
 
+
+       return view('enrollment.return_searchedclasses', compact('checked_subjects', 'user_permissions'));
+    }
+
+    public function searchclasssubjectbysection(Request $request)
+    {
+        $enrollment_id = $request->enrollment_id;
+        $student_id =  $request->student_id;
+        $section_id = $request->section_id;
+
+        $query = Classes::with([
+            'sectioninfo',
+            'instructor', 
+            'schedule',
+            'enrolledstudents.enrollment',
+            'curriculumsubject' => fn($query) => $query->with('subjectinfo')
+        ])->where('period_id', session('current_period'))->where('dissolved', '!=', 1)->where('section_id', $section_id);
+
+        $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
+        $subjects = $this->enrollmentService->handleClassSubjects($student_id, $section_subjects);
+        $checked_subjects = $this->enrollmentService->checkClassesIfConflictStudentSchedule($enrollment_id, $subjects);
+
+        $user_permissions = Auth::user()->permissions;
 
        return view('enrollment.return_searchedclasses', compact('checked_subjects', 'user_permissions'));
     }
