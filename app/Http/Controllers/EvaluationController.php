@@ -106,6 +106,7 @@ class EvaluationController extends Controller
 
         $student_evaluation = $this->evaluationService->evaluateStudent($student, $request);
         
+        //return $student_evaluation;
         if($request->ajax())
         {
             return view('evaluation.return_evaluation', $student_evaluation);

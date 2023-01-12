@@ -129,7 +129,6 @@ class ExternalGradeService
             'remarks.remark'
         );
         $query->leftJoin('grades', 'external_grades.grade_id', 'grades.id');
-        
         $query->leftJoin('remarks', 'external_grades.remark_id', 'remarks.id');
         $query->where(function($query){
             $query->where('remarks.remark', '=', 'PASSED');

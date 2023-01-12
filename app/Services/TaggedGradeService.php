@@ -188,23 +188,29 @@ class TaggedGradeService
         ];
     }
 
-    public function checkTaggedGradeInfo($tagged_grades)
-    {
+    public function checkTaggedGradeInfo($tagged_grades, $internal_grades, $external_grades)
+    {        
+
         $tagged_external_grade_info = [];
         $tagged_internal_grade_info = [];
 
         foreach ($tagged_grades as $key => $cst_grade) {
             if($cst_grade['origin'] === 1)
             {
-                $tagged_external_grade_info[] = (new ExternalGradeService())->getExternalGradeInfo($cst_grade['grade_id'])->toArray();
+                //$tagged_external_grade_info[] = (new ExternalGradeService())->getExternalGradeInfo($cst_grade['grade_id'])->toArray();
+                $tagged_external_grade_info[] = $external_grades->where('id', $cst_grade['grade_id'])->values()->toArray();
             }else{
-                $tagged_internal_grade_info[] = (new InternalGradeService())->getInternalGradeInfo($cst_grade['grade_id'])->toArray();
+                $tagged_internal_grade_info[] = $internal_grades->where('id', $cst_grade['grade_id'])->values()->toArray();
+                //$tagged_internal_grade_info[] = (new InternalGradeService())->getInternalGradeInfo($cst_grade['grade_id'])->toArray();
             }
         }
+        //return $tagged_external_grade_info;
 
         $grade_info_external = (new EvaluationService())->getMaxValueOfGrades($tagged_external_grade_info);
         $grade_info_internal = (new EvaluationService())->getMaxValueOfGrades($tagged_internal_grade_info);
 
+        //return $grade_info_external;
+        
         if($grade_info_external || $grade_info_internal)
         {
             //IF BOTH EXTERNAL AND INTERNAL NOT EMPTY CHECK WHICH GRADE IS HIGHER

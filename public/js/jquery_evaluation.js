@@ -113,6 +113,7 @@ $(function(){
 	function returnEvaluation(student_id)
 	{
 		$.ajax({url: "/evaluations/"+student_id, success: function(data){
+				console.log(data);
 				$("#return_evaluation").html(data);
 			}
 		});
