@@ -31,8 +31,7 @@ class EvaluationService
                 $tagged_grades   = (new TaggedGradeService())->getAllTaggedGrades($student->id);
                 $blank_grades    = (new InternalGradeService())->getAllBlankInternalGrades($student->id);
                 $curriculuminfo  = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
-                // echo '<pre>';
-                // print_r($blank_grades->toArray());
+        
                 $evaluation = [];
                 if($curriculuminfo['program'])
                 {
@@ -42,9 +41,9 @@ class EvaluationService
                         {
                             if ($yearlevel === $x)
                             {
-                                //echo $yearlevel.'<br>';
                                 foreach ($curriculum_subject as $term => $subjects)
                                 {
+                                    //return $subjects;
                                     foreach ($subjects->toArray() as $subject)
                                     {
                                         $finalgrade = '';
@@ -59,6 +58,7 @@ class EvaluationService
 
                                         if($grades)
                                         {
+                                            //return $grades;
                                             $grade_info = $this->getMaxValueOfGrades($grades);
                                             if($grade_info)
                                             {
@@ -85,6 +85,7 @@ class EvaluationService
                                                     $equivalent_subjects_external_grades += $tagged_grades->where('subject_id', $equivalent_subject['equivalent'])->toArray();
                                                 }
 
+                                                
                                                 if($equivalent_subjects_internal_grades)
                                                 {
                                                     $grade_info = $this->getMaxValueOfGrades($equivalent_subjects_internal_grades);
@@ -93,7 +94,6 @@ class EvaluationService
                                                 
                                                 if($ispassed === 0)
                                                 {
-                                                   //// return $equivalent_subjects_internal_grades;
                                                     if($equivalent_subjects_external_grades)
                                                     {
                                                         //return $equivalent_subjects_external_grades;
@@ -184,31 +184,27 @@ class EvaluationService
         $cggrade_arr = null;
 
         
-        foreach($grades as $k => $c)
+        foreach($grades as $k => $v)
         {   
-            foreach ($c as $key => $v)
-            {
-                if(is_numeric($v['grade'])){
-                    if($v['grade'] > $max_grade)
-                    {
-                        $max_grade = $v['grade'];
-                        $grade_arr = $v;
-                    }
-                }else if(!is_numeric($v['grade']) && $v['completion_grade'] !== ''){
-                    if($v['completion_grade'] > $max_cg)
-                    {
-                        $max_cg = $v['completion_grade'];
-                        $cggrade_arr = $v;
-                    }
-                }else{
-                    if($v['grade'] > $max_grade)
-                    {
-                        $max_grade = $v['grade'];
-                        $grade_arr = $v;
-                    }
+            if(is_numeric($v['grade'])){
+                if($v['grade'] > $max_grade)
+                {
+                    $max_grade = $v['grade'];
+                    $grade_arr = $v;
+                }
+            }else if(!is_numeric($v['grade']) && $v['completion_grade'] !== ''){
+                if($v['completion_grade'] > $max_cg)
+                {
+                    $max_cg = $v['completion_grade'];
+                    $cggrade_arr = $v;
+                }
+            }else{
+                if($v['grade'] > $max_grade)
+                {
+                    $max_grade = $v['grade'];
+                    $grade_arr = $v;
                 }
             }
-            
         }
 
         if(!is_null($grade_arr) && !is_null($cggrade_arr))

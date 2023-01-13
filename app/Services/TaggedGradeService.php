@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Libs\Helpers;
+use Illuminate\Support\Arr;
 use App\Models\TaggedGrades;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -204,10 +205,10 @@ class TaggedGradeService
                 //$tagged_internal_grade_info[] = (new InternalGradeService())->getInternalGradeInfo($cst_grade['grade_id'])->toArray();
             }
         }
-        //return $tagged_external_grade_info;
+        //return Arr::collapse($tagged_external_grade_info);
 
-        $grade_info_external = (new EvaluationService())->getMaxValueOfGrades($tagged_external_grade_info);
-        $grade_info_internal = (new EvaluationService())->getMaxValueOfGrades($tagged_internal_grade_info);
+        $grade_info_external = (new EvaluationService())->getMaxValueOfGrades(Arr::collapse($tagged_external_grade_info));
+        $grade_info_internal = (new EvaluationService())->getMaxValueOfGrades(Arr::collapse($tagged_internal_grade_info));
 
         //return $grade_info_external;
         
