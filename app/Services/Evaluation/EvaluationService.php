@@ -112,7 +112,6 @@ class EvaluationService
                                                         }
                                                     }
                                                 }
-                                                
                                             }
                                         }////end of grade is passed internal
 
