@@ -15,6 +15,7 @@ use App\Services\CurriculumService;
 use App\Services\TaggedGradeService;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EnrolledClassSchedule;
+use App\Services\Grade\ExternalGradeService;
 use App\Services\Grade\InternalGradeService;
 use App\Services\Evaluation\EvaluationService;
 
@@ -253,9 +254,10 @@ class EnrollmentService
     {
         $not_passed_section_subjects = [];
         $internal_grades = (new InternalGradeService())->getAllStudentPassedInternalGrades($student_id);
+        $external_grades = (new ExternalGradeService())->getAllStudentPassedExternalGrades($student_id);
         $tagged_grades   = (new TaggedGradeService())->getAllTaggedGrades($student_id);
-        
-        //return $internal_grades;
+
+        return $section_subjects;
         //CHECK SECTION SUBJECTS IF ALREADY PASSED
         foreach ($section_subjects as $key => $section_subject)
         {            
@@ -291,7 +293,7 @@ class EnrollmentService
                     {
                         if($equivalent_subjects_external_grades)
                         {
-                            $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($equivalent_subjects_external_grades);
+                            $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($equivalent_subjects_external_grades, $internal_grades, $external_grades);
                             $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
                         }
                     }
@@ -304,7 +306,7 @@ class EnrollmentService
 
                 if($curriculum_subject_tagged_grades)
                 {
-                    $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($curriculum_subject_tagged_grades);
+                    $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($curriculum_subject_tagged_grades, $internal_grades, $external_grades);
                     $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
                 }//end of if has tagged subject
             }
@@ -321,11 +323,12 @@ class EnrollmentService
         {
             $not_passed_section_subject['total_slots'] = ($not_passed_section_subject->merge > 0) ? $not_passed_section_subject->mergetomotherclass->slots : $not_passed_section_subject->slots;
             $not_passed_section_subject['total_slots_taken'] = $this->getTotalSlotsTakenOfClass($not_passed_section_subject); 
-            $not_passed_section_subject['unfinished_prerequisites'] = $this->checkIfSectionSubjectPrerequisitesPassed(
-                                                                        $not_passed_section_subject->curriculumsubject->prerequisites,
-                                                                        $internal_grades,
-                                                                        $tagged_grades
-                                                                    );
+            // //$not_passed_section_subject['unfinished_prerequisites'] = $this->checkIfSectionSubjectPrerequisitesPassed(
+            //                                                             $not_passed_section_subject->curriculumsubject->prerequisites,
+            //                                                             $internal_grades,
+            //                                                             $external_grades,
+            //                                                             $tagged_grades
+            //                                                         );
 
             $final_section_subjects[] = $not_passed_section_subject;
         }
@@ -333,7 +336,7 @@ class EnrollmentService
         return $final_section_subjects;
     }
 
-    public function checkIfSectionSubjectPrerequisitesPassed($prerequisites, $internal_grades, $tagged_grades)
+    public function checkIfSectionSubjectPrerequisitesPassed($prerequisites, $internal_grades, $external_grades, $tagged_grades)
     {
         $failed_prerequisites = [];
 
@@ -374,7 +377,7 @@ class EnrollmentService
                         {
                             if($equivalent_subjects_external_grades)
                             {
-                                $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($equivalent_subjects_external_grades);
+                                $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($equivalent_subjects_external_grades, $internal_grades, $external_grades);
                                 $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;
                             }
                         }
@@ -387,7 +390,7 @@ class EnrollmentService
 
                     if($curriculum_subject_tagged_grades)
                     {
-                        $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($curriculum_subject_tagged_grades);
+                        $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($curriculum_subject_tagged_grades, $internal_grades, $external_grades);
                         $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;
                     }//end of if has tagged subject
                 }

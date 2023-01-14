@@ -26,7 +26,8 @@ class TaggedGradeService
         return $query->get();
     }  
     
-    public function getAllTaggedGradesInternal($student_id, $grade_id, $curriculum_subject_id = NULL)
+    //public function getAllTaggedGradesInternal($student_id, $grade_id, $curriculum_subject_id = NULL)
+    public function getAllTaggedGradesInternal($student_id)
     {
         $query = TaggedGrades::query();
         $query->select(
@@ -37,7 +38,8 @@ class TaggedGradeService
             'cggs.value AS completion_grade',
             'subjects.units AS curriculum_subject_units',
             'subjects.code AS curriculum_subject_code',
-            'subjects.name AS curriculum_subject_name'
+            'subjects.name AS curriculum_subject_name',
+            'tagged_grades.curriculum_subject_id'
         );
         $query->leftJoin('internal_grades', 'tagged_grades.grade_id', 'internal_grades.id');
         $query->leftJoin('classes', 'internal_grades.class_id', 'classes.id');
@@ -47,16 +49,19 @@ class TaggedGradeService
         $query->leftJoin('remarks', 'grading_systems.remark_id', 'remarks.id');
         $query->leftJoin('grading_systems AS cggs', 'internal_grades.completion_grade', 'cggs.id');
         $query->leftJoin('remarks AS cgr', 'cggs.remark_id', 'cgr.id');
-        $query->where('tagged_grades.origin',  0)->where('tagged_grades.grade_id', $grade_id)->where('student_id', $student_id);
-        if($curriculum_subject_id !== NULL)
-        {
-            $query->where('tagged_grades.curriculum_subject_id', '!=', $curriculum_subject_id);
-        }
+        $query->where('tagged_grades.origin',  0)->where('student_id', $student_id);
+
+        // ->where('tagged_grades.grade_id', $grade_id)->;
+        // if($curriculum_subject_id !== NULL)
+        // {
+        //     $query->where('tagged_grades.curriculum_subject_id', '!=', $curriculum_subject_id);
+        // }
         
         return $query->get();
     }
 
-    public function getAllTaggedGradesExternal($student_id, $grade_id, $curriculum_subject_id = NULL)
+    //public function getAllTaggedGradesExternal($student_id, $grade_id, $curriculum_subject_id = NULL)
+    public function getAllTaggedGradesExternal($student_id)
     {
         $query = TaggedGrades::query();
         $query->select(
@@ -68,16 +73,19 @@ class TaggedGradeService
             'external_grades.units',
             'subjects.units AS curriculum_subject_units',
             'subjects.code AS curriculum_subject_code',
-            'subjects.name AS curriculum_subject_name'
+            'subjects.name AS curriculum_subject_name',
+            'tagged_grades.curriculum_subject_id'
         );
         $query->leftJoin('external_grades', 'tagged_grades.grade_id', 'external_grades.id');
         $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'tagged_grades.curriculum_subject_id');
         $query->leftJoin('subjects', 'curriculum_subjects.subject_id', 'subjects.id');
-        $query->where('tagged_grades.origin',  1)->where('tagged_grades.grade_id', $grade_id)->where('student_id', $student_id);
-        if($curriculum_subject_id !== NULL)
-        {
-            $query->where('curriculum_subject_id', '!=', $curriculum_subject_id);
-        }
+        $query->where('tagged_grades.origin',  1)->where('student_id', $student_id);
+
+        // ->where('tagged_grades.grade_id', $grade_id)
+        // if($curriculum_subject_id !== NULL)
+        // {
+        //     $query->where('curriculum_subject_id', '!=', $curriculum_subject_id);
+        // }
         
         return $query->get();
     }
@@ -87,18 +95,21 @@ class TaggedGradeService
         $student = (new StudentService)->studentInformation($request->student_id);
         $curriculum_subject = (new CurriculumService)->returnCurriculumSubject($request->curriculum_subject_id);
         $allgrades = (new EvaluationService)->getAllGradesInternalAndExternal($request->student_id);
+        $allTaggedGradesExternal = $this->getAllTaggedGradesExternal($request->student_id);
+        $allTaggedGradesInternal = $this->getAllTaggedGradesInternal($request->student_id);
 
         $user_permissions = Auth::user()->permissions;
 
         if($request->filled('cboxtag'))
         {
             $total_unit_of_selected_grades = 0;
+            $total_units_of_tagged_grades = 0;
 			$total_units_remaining = 0;
 			$selected_grades = [];
             $multi_tagged = 0;
 
-
-            foreach ($request->cboxtag as $key => $selected_grade) {
+            foreach ($request->cboxtag as $key => $selected_grade)
+            {
                 $a = 'origin_'.$selected_grade;
                 $b = 'istagged_'.$selected_grade;
                 $origin = $request->$a;
@@ -110,24 +121,25 @@ class TaggedGradeService
 
                 if($istagged == 1)
                 {
-                    $total_units_of_tagged_grades = 0;
-
                     if($origin === 'internal')
                     {
-                        $already_tagged_grades = $this->getAllTaggedGradesInternal($request->student_id, $selected_grade, $request->curriculum_subject_id);
+                        $already_tagged_grades = $allTaggedGradesInternal->where('id', $selected_grade)->where('curriculum_subject_id', '!=', $request->curriculum_subject_id);
                     }else{
-                        $already_tagged_grades = $this->getAllTaggedGradesExternal($request->student_id, $selected_grade, $request->curriculum_subject_id);
+                        $already_tagged_grades = $allTaggedGradesExternal->where('id', $selected_grade)->where('curriculum_subject_id', '!=', $request->curriculum_subject_id);
                     }
 
                     if(!$already_tagged_grades->isEmpty())
                     {
-                        $total_units_of_tagged_grades += $already_tagged_grades->sum('curriculum_subject_units');
+                        $total_units_of_tagged_grades += $already_tagged_grades->sum('curriculum_subject_units');                        
                         $remainingunits = (float)$total_unit_of_selected_grades - (float)$total_units_of_tagged_grades;
-						
-                        $total_units_remaining += $remainingunits;
+                        
+                        $total_units_remaining = $remainingunits;
+
+                    }else{
+                        $total_units_remaining = $total_unit_of_selected_grades;
                     }
                 }else{
-                    $total_units_remaining += $total_unit_of_selected_grades;
+                    $total_units_remaining = $total_unit_of_selected_grades;
                 }
 
                 $selected_grades[] = [
@@ -165,7 +177,7 @@ class TaggedGradeService
             {
                 return [
                     'success' => false,
-                    'message' => 'The remaining total units of selected subjects/grade not equal to the units of grade/subject to be tagged!',
+                    'message' => 'The remaining total units of selected subjects/grade is not equal to the units of grade/subject to be tagged!',
                     'alert' => 'alert-danger'
                 ];
             }
@@ -191,7 +203,6 @@ class TaggedGradeService
 
     public function checkTaggedGradeInfo($tagged_grades, $internal_grades, $external_grades)
     {        
-
         $tagged_external_grade_info = [];
         $tagged_internal_grade_info = [];
 

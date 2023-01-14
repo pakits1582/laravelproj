@@ -76,7 +76,13 @@ class ClassesService
                 'instructor', 
                 'schedule',
                 'enrolledstudents.enrollment',
-                'mergetomotherclass',
+                'merged' => ['enrolledstudents'],
+                'mergetomotherclass' => [
+                    'enrolledstudents',
+                    'merged' => [
+                        'enrolledstudents'
+                    ],
+                ],
                 'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
             ])->where('section_id', $section)->where('period_id', $period);
         

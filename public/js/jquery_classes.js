@@ -68,7 +68,7 @@ $(function(){
 			type: 'POST',
 			data: ({ 'section' : section}),
 			success: function(data){
-				//console.log(data);
+				console.log(data);
 				$("#return_classsubjects").html(data);
 			},
 			error: function (data) {
