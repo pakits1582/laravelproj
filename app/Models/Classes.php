@@ -60,5 +60,10 @@ class Classes extends Model
     public function merged(){
         return $this->hasMany(Classes::class, 'merge', 'id');
     }
+
+    public function mergedenrolledstudentscount()
+    {
+        return $this->hasManyThrough(EnrolledClass::class, Classes::class, 'merge', 'id');
+    }
     
 }

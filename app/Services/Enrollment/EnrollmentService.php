@@ -260,7 +260,8 @@ class EnrollmentService
         return $section_subjects;
         //CHECK SECTION SUBJECTS IF ALREADY PASSED
         foreach ($section_subjects as $key => $section_subject)
-        {            
+        {        
+            return $section_subject->merged->sum('enrolledstudents_count');    
             $ispassed = 0;
             $grades = $internal_grades->where('subject_id', $section_subject->curriculumsubject->subject_id)->toArray();
 

@@ -75,21 +75,30 @@ class ClassesService
                 'sectioninfo',
                 'instructor', 
                 'schedule',
-                'enrolledstudents.enrollment',
-                'merged' => ['enrolledstudents'],
+                'enrolledstudents' => function($query)
+                {
+                    $query->with('enrollment')->withCount('enrollment');
+                },
+                'merged' => function($query)
+                {
+                    $query->withCount('enrolledstudents');
+                },
                 'mergetomotherclass' => [
-                    'enrolledstudents',
-                    'merged' => [
-                        'enrolledstudents'
-                    ],
+                    'enrolledstudents' => function($query)
+                    {
+                        $query->withCount('enrollment');
+                    },
+                    'merged' => function($query)
+                    {
+                        $query->withCount('enrolledstudents');
+                    },
                 ],
                 'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
             ])->where('section_id', $section)->where('period_id', $period);
         
-        if($with_dissolved === false)
-        {
-            $query->where('dissolved', '!=', 1);
-        }
+        $query->when($with_dissolved === false, function ($q) {
+            return $q->where('dissolved', '!=', 1);
+        });
 
         return $query->get();
     }
