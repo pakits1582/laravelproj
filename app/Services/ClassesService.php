@@ -93,7 +93,13 @@ class ClassesService
                         $query->withCount('enrolledstudents');
                     },
                 ],
-                'curriculumsubject' => fn($query) => $query->with('subjectinfo', 'curriculum','prerequisites', 'corequisites', 'equivalents')
+                'curriculumsubject' => [
+                    'subjectinfo', 
+                    'curriculum',
+                    'prerequisites' => ['curriculumsubject.subjectinfo'], 
+                    'corequisites', 
+                    'equivalents'
+                ]
             ])->where('section_id', $section)->where('period_id', $period);
         
         $query->when($with_dissolved === false, function ($q) {
