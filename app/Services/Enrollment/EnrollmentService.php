@@ -5,6 +5,7 @@ namespace App\Services\Enrollment;
 use Carbon\Carbon;
 use App\Models\Term;
 use App\Libs\Helpers;
+use App\Models\Classes;
 use App\Models\Enrollment;
 use App\Models\TaggedGrades;
 use App\Models\EnrolledClass;
@@ -236,7 +237,38 @@ class EnrollmentService
 
     public function enrollSection($student_id, $section_id, $enrollment_id)
     {
-        $section_subjects = (new ClassesService())->classSubjects($section_id, session('current_period'), false);
+        $query = Classes::with([
+            'sectioninfo',
+            'instructor', 
+            'schedule',
+            'enrolledstudents' => function($query)
+            {
+                $query->with('enrollment')->withCount('enrollment');
+            },
+            'merged' => function($query)
+            {
+                $query->withCount('enrolledstudents');
+            },
+            'mergetomotherclass' => [
+                'enrolledstudents' => function($query)
+                {
+                    $query->withCount('enrollment');
+                },
+                'merged' => function($query)
+                {
+                    $query->withCount('enrolledstudents');
+                },
+            ],
+            'curriculumsubject' => [
+                'subjectinfo', 
+                'curriculum',
+                'prerequisites' => ['curriculumsubject.subjectinfo','curriculumsubject.equivalents',], 
+                'corequisites', 
+                'equivalents'
+            ]
+        ])->where('section_id', $section_id)->where('period_id', session('current_period'))->where('dissolved', '!=', 1);
+
+        $section_subjects = $query->get();
 
         if(!$section_subjects->isEmpty())
         {        
@@ -257,11 +289,11 @@ class EnrollmentService
         $external_grades = (new ExternalGradeService())->getAllStudentPassedExternalGrades($student_id);
         $tagged_grades   = (new TaggedGradeService())->getAllTaggedGrades($student_id);
 
-        return $section_subjects;
+        //return $section_subjects;
         //CHECK SECTION SUBJECTS IF ALREADY PASSED
         foreach ($section_subjects as $key => $section_subject)
         {        
-            return $section_subject->merged->sum('enrolledstudents_count');    
+            //return $section_subject->merged->sum('enrolledstudents_count');    
             $ispassed = 0;
             $grades = $internal_grades->where('subject_id', $section_subject->curriculumsubject->subject_id)->toArray();
 
@@ -324,12 +356,12 @@ class EnrollmentService
         {
             $not_passed_section_subject['total_slots'] = ($not_passed_section_subject->merge > 0) ? $not_passed_section_subject->mergetomotherclass->slots : $not_passed_section_subject->slots;
             $not_passed_section_subject['total_slots_taken'] = $this->getTotalSlotsTakenOfClass($not_passed_section_subject); 
-            // //$not_passed_section_subject['unfinished_prerequisites'] = $this->checkIfSectionSubjectPrerequisitesPassed(
-            //                                                             $not_passed_section_subject->curriculumsubject->prerequisites,
-            //                                                             $internal_grades,
-            //                                                             $external_grades,
-            //                                                             $tagged_grades
-            //                                                         );
+            $not_passed_section_subject['unfinished_prerequisites'] = $this->checkIfSectionSubjectPrerequisitesPassed(
+                                                                        $not_passed_section_subject->curriculumsubject->prerequisites,
+                                                                        $internal_grades,
+                                                                        $external_grades,
+                                                                        $tagged_grades
+                                                                    );
 
             $final_section_subjects[] = $not_passed_section_subject;
         }
@@ -343,24 +375,24 @@ class EnrollmentService
 
         if($prerequisites->count())
         {
-            foreach ($prerequisites as $key => $prerequisite) {
-                $prerequisite_info = (new CurriculumService())->returnCurriculumSubjectInfo($prerequisite->prerequisite);
-                $subject_id = $prerequisite_info->subjectinfo->id;
+            foreach ($prerequisites as $key => $prerequisite)
+            {
+                $subject_id = $prerequisite->curriculumsubject->subject_id;
                 $ispassed = 0;
 
                 $grades = $internal_grades->where('subject_id', $subject_id)->toArray();
                 if($grades)
                 {
                     $grade_info = (new EvaluationService())->getMaxValueOfGrades($grades);
-                    $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;   
+                    $ispassed = ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota) ? 1 : 0;   
                 }else{
                     //CHECK EQUIVALENTS SUBJECTS IF PASSED
-                    if($prerequisite_info->equivalents->count())
+                    if($prerequisite->curriculumsubject->equivalents->count())
                     {
                         $equivalent_subjects_internal_grades = [];
                         $equivalent_subjects_external_grades = [];
                         
-                        foreach ($prerequisite_info->equivalents as $key => $equivalent_subject)
+                        foreach ($prerequisite->curriculumsubject->equivalents as $key => $equivalent_subject)
                         {
                             //GET ALL INTERNAL GRADES OF EQUIVALENT SUBJECTS
                             $equivalent_subjects_internal_grades += $internal_grades->where('subject_id', $equivalent_subject['equivalent'])->toArray();
@@ -371,7 +403,7 @@ class EnrollmentService
                         if($equivalent_subjects_internal_grades)
                         {
                             $grade_info = (new EvaluationService())->getMaxValueOfGrades($equivalent_subjects_internal_grades);
-                            $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;
+                            $ispassed = ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota) ? 1 : 0;
                         }
     
                         if($ispassed === 0)
@@ -379,7 +411,7 @@ class EnrollmentService
                             if($equivalent_subjects_external_grades)
                             {
                                 $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($equivalent_subjects_external_grades, $internal_grades, $external_grades);
-                                $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;
+                                $ispassed = ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota) ? 1 : 0;
                             }
                         }
                     }//end of foreach equivalents
@@ -392,13 +424,13 @@ class EnrollmentService
                     if($curriculum_subject_tagged_grades)
                     {
                         $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($curriculum_subject_tagged_grades, $internal_grades, $external_grades);
-                        $ispassed = ($grade_info['grade'] >= $prerequisite_info->quota || !is_null($grade_info['completion_grade']) >= $prerequisite_info->quota) ? 1 : 0;
+                        $ispassed = ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota) ? 1 : 0;
                     }//end of if has tagged subject
                 }
 
                 if($ispassed === 0)
                 {
-                    $failed_prerequisites[] = $prerequisite_info;
+                    $failed_prerequisites[] = $prerequisite;
                 }
             }
         }
@@ -408,39 +440,21 @@ class EnrollmentService
 
     public function getTotalSlotsTakenOfClass($class)
     {
+        $total_enrolled_in_class = 0;
         if($class->ismother === 1)
-        {
-            return $this->getEnrolledMergedChildren($class->id)->count()+$class->enrolledstudents->count();
+        {  
+            $total_enrolled_in_class = $class->enrolledstudents->sum('enrollment_count') + $class->merged->sum('enrolledstudents_count');
         }else{
-            if($class->merge > 0)
+            if(!is_null($class->merge))
             {
-                $enrolled_in_mother = $this->getEnrolledInCLass($class->merge)->count();
-                $enrolled_merged = $this->getEnrolledMergedChildren($class->merge)->count();
-
-                return $enrolled_in_mother+$enrolled_merged;
+                $total_enrolled_in_class = $class->mergetomotherclass->enrolledstudents->sum('enrollment_count') + $class->mergetomotherclass->merged->sum('enrolledstudents_count');
+            }else{
+                $total_enrolled_in_class = $class->enrolledstudents->count();
             }
 
-            return $class->enrolledstudents->count();
-        }    
-    }
-
-    public function getEnrolledMergedChildren($mother_class)
-    {
-        $enrolled_children = EnrolledClass::join('enrollments', 'enrolled_classes.enrollment_id', '=', 'enrollments.id')
-            ->join('classes', 'enrolled_classes.class_id', '=', 'classes.id')
-            ->where('classes.merge', $mother_class)->get();
-
-        return $enrolled_children;
-    }
-   
-    public function getEnrolledInCLass($class_id)
-    {
-        $enrolled = EnrolledClass::join('enrollments', 'enrolled_classes.enrollment_id', '=', 'enrollments.id')
-            ->join('classes', 'enrolled_classes.class_id', '=', 'classes.id')
-            ->where('classes.id', $class_id)->get();
-
-        return $enrolled;
+        }   
         
+        return $total_enrolled_in_class;
     }
 
     public function checkClassesIfConflictStudentSchedule($enrollment_id, $subjects)

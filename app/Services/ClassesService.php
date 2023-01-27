@@ -75,24 +75,7 @@ class ClassesService
                 'sectioninfo',
                 'instructor', 
                 'schedule',
-                'enrolledstudents' => function($query)
-                {
-                    $query->with('enrollment')->withCount('enrollment');
-                },
-                'merged' => function($query)
-                {
-                    $query->withCount('enrolledstudents');
-                },
-                'mergetomotherclass' => [
-                    'enrolledstudents' => function($query)
-                    {
-                        $query->withCount('enrollment');
-                    },
-                    'merged' => function($query)
-                    {
-                        $query->withCount('enrolledstudents');
-                    },
-                ],
+                'enrolledstudents',
                 'curriculumsubject' => [
                     'subjectinfo', 
                     'curriculum',
