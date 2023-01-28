@@ -133,74 +133,23 @@ class EnrollmentController extends Controller
 
     public function enrollclasssubjects(Request $request)
     {
-        DB::beginTransaction();
-
-        $enrollment = Enrollment::findOrFail($request->enrollment_id);
-
-        $enrollment->update(['section_id' => $request->section_id]);
-        $enrollment->enrolled_classes()->delete();
-        $enrollment->enrolled_class_schedules()->delete();
-
-        $enroll_classes = [];
-        $enroll_class_schedules = [];
-
-        foreach ($request->class_subjects as $key => $class_subject) {
-            //ADD VALUES TO ACCESS ARRAY FOR MULTIPLE INPUT
-            $enroll_classes[] = new EnrolledClass([
-                'class_id' => $class_subject['id'],
-                'user_id' => Auth::id(),
-            ]);
-            
-            if(!is_null($class_subject['schedule']['schedule']))
-            {
-                $class_schedules = (new ClassesService())->processSchedule($class_subject['schedule']['schedule']);
-
-                foreach ($class_schedules as $key => $class_schedule) 
-                {
-                    foreach ($class_schedule['days'] as $key => $day) {
-                        $enroll_class_schedules[] = new EnrolledClassSchedule([
-                            'class_id' => $class_subject['id'],
-                            'from_time' => $class_schedule['timefrom'],
-                            'to_time' => $class_schedule['timeto'],
-                            'day' => $day,
-                            'room' => $class_schedule['room'],
-                        ]);
-                    }
-                }
-            }
-        }
-
-        $enrollment->enrolled_classes()->saveMany($enroll_classes);
-        $enrollment->enrolled_class_schedules()->saveMany($enroll_class_schedules);
-
-        DB::commit();
+        $this->enrollmentService->enrollClassSubjects($request);
 
         return true;
     }
 
     public function enrolledclasssubjects(Request $request)
     {
-        $enrolled_classes = EnrolledClass::with([
-            'class' => [
-                'sectioninfo',
-                'instructor', 
-                'schedule',
-                'curriculumsubject' => ['subjectinfo']
-            ],
-            'addedby'
-        ])->where('enrollment_id', $request->enrollment_id)->get();
-
-        //return $enrolled_classes;
+        $enrolled_classes = $this->enrollmentService->enrolledClassSubjects($request);
 
         return view('enrollment.enrolled_class_subjects', compact('enrolled_classes'));
     }
 
     public function deleteenrolledsubjects(Request $request)
     {
-        $selectedclasses = EnrolledClass::where('enrollment_id', $request->enrollment_id)->whereIn('class_id', $request->class_ids)->delete();
-        $selectedclassesscheds = EnrolledClassSchedule::where('enrollment_id', $request->enrollment_id)->whereIn('class_id', $request->class_ids)->delete();
+       $data = $this->enrollmentService->deleteSelectedSubjects($request);
 
-        return $selectedclassesscheds;
+        return response()->json(['data' => $data]);
     }
 
     public function searchandaddclasses()
@@ -212,113 +161,24 @@ class EnrollmentController extends Controller
 
     public function searchclasssubject(Request $request)
     {
-        $enrollment_id = $request->enrollment_id;
-        $student_id =  $request->student_id;
-        $searchcodes = stripslashes($request->searchcodes);
-
-        $searchcodes = array_unique(preg_split('/(\s*,*\s*)*,+(\s*,*\s*)*/', $searchcodes));
-        $searchcodes= array_map('trim', $searchcodes);
-
-        $query = Classes::with([
-            'sectioninfo',
-            'instructor', 
-            'schedule',
-            'enrolledstudents.enrollment',
-            'curriculumsubject' => fn($query) => $query->with('subjectinfo')
-        ])->where('period_id', session('current_period'))->where('dissolved', '!=', 1);
-
-        $query->where(function($query) use($searchcodes){
-            foreach($searchcodes as $key => $code){
-                $query->orwhere(function($query) use($code){
-                    $query->orWhere('code', 'LIKE', '%'.$code.'%');
-                    $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
-                        $query->where('subjects.code', 'LIKE', '%'.$code.'%');
-                    });
-                });
-            }
-        });
-
-        $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
-        $subjects = $this->enrollmentService->handleClassSubjects($student_id, $section_subjects);
-        $checked_subjects = $this->enrollmentService->checkClassesIfConflictStudentSchedule($enrollment_id, $subjects);
-
+        $checked_subjects = $this->enrollmentService->searchClassSubject($request);
         $user_permissions = Auth::user()->permissions;
 
-
-
-       return view('enrollment.return_searchedclasses', compact('checked_subjects', 'user_permissions'));
+        return view('enrollment.return_searchedclasses', compact('checked_subjects', 'user_permissions'));
     }
 
     public function searchclasssubjectbysection(Request $request)
     {
-        $enrollment_id = $request->enrollment_id;
-        $student_id =  $request->student_id;
-        $section_id = $request->section_id;
-
-        $query = Classes::with([
-            'sectioninfo',
-            'instructor', 
-            'schedule',
-            'enrolledstudents.enrollment',
-            'curriculumsubject' => fn($query) => $query->with('subjectinfo')
-        ])->where('period_id', session('current_period'))->where('dissolved', '!=', 1)->where('section_id', $section_id);
-
-        $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
-        $subjects = $this->enrollmentService->handleClassSubjects($student_id, $section_subjects);
-        $checked_subjects = $this->enrollmentService->checkClassesIfConflictStudentSchedule($enrollment_id, $subjects);
-
+        $checked_subjects = $this->enrollmentService->searchClassSubjectBySection($request);
         $user_permissions = Auth::user()->permissions;
 
-       return view('enrollment.return_searchedclasses', compact('checked_subjects', 'user_permissions'));
+        return view('enrollment.return_searchedclasses', compact('checked_subjects', 'user_permissions'));
     }
 
     public function addselectedclasses(Request $request)
     {
-        $class_subjects = Classes::with(['schedule'])->whereIn("id", $request->class_ids)->get();
+        $data = $this->enrollmentService->addSelectedClasses($request);
 
-        DB::beginTransaction();
-
-        $enrollment = Enrollment::findOrFail($request->enrollment_id);
-
-        $enroll_classes = [];
-        $enroll_class_schedules = [];
-
-        foreach ($class_subjects as $key => $class_subject)
-        {
-            $enroll_classes[] = new EnrolledClass([
-                'class_id' => $class_subject['id'],
-                'user_id' => Auth::id(),
-            ]);
-            
-            if(!is_null($class_subject['schedule']['schedule']))
-            {
-                $class_schedules = (new ClassesService())->processSchedule($class_subject['schedule']['schedule']);
-
-                foreach ($class_schedules as $key => $class_schedule) 
-                {
-                    foreach ($class_schedule['days'] as $key => $day) {
-                        $enroll_class_schedules[] = new EnrolledClassSchedule([
-                            'class_id' => $class_subject['id'],
-                            'from_time' => $class_schedule['timefrom'],
-                            'to_time' => $class_schedule['timeto'],
-                            'day' => $day,
-                            'room' => $class_schedule['room'],
-                        ]);
-                    }
-                }
-            }
-        }
-
-        $enrollment->enrolled_classes()->saveMany($enroll_classes);
-        $enrollment->enrolled_class_schedules()->saveMany($enroll_class_schedules);
-
-        DB::commit();
-
-        return response()->json(['data' => [
-            'success' => true,
-            'message' => 'Selected class subject/s successfully added!',
-            'alert' => 'alert-success',
-            'status' => 200
-        ]]);
+        return response()->json(['data' => $data]);
     }
 }
