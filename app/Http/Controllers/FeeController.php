@@ -6,12 +6,15 @@ use App\Models\Fee;
 use App\Libs\Helpers;
 use App\Models\FeeType;
 use App\Models\Program;
+use App\Models\FeeSetup;
 use App\Services\FeeService;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use App\Services\ProgramService;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreFeeRequest;
 use App\Http\Requests\UpdateFeeRequest;
+use App\Http\Requests\StoreSetupFeeRequest;
 
 class FeeController extends Controller
 {
@@ -150,7 +153,25 @@ class FeeController extends Controller
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
 
-
         return view('fee.setup.index', compact('fees', 'programs', 'periods'));
+    }
+
+    public function storesetupfee(StoreSetupFeeRequest $request)
+    {
+        $insert = FeeSetup::firstOrCreate($request->validated(), $request->validated()+['user_id' => Auth::id()]);
+
+        if ($insert->wasRecentlyCreated) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Setup fee successfully added!',
+                'alert' => 'alert-success'
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Duplicate entry, fee already exists!',
+            'alert' => 'alert-danger'
+        ], 200);
     }
 }

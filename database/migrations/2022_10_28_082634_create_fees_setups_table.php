@@ -33,10 +33,11 @@ return new class extends Migration
             $table->boolean('foreigner')->default(false);
             $table->boolean('returnee')->default(false);
             $table->boolean('professional')->default(false);
+            $table->tinyInteger('sex')->nullable();
             $table->unsignedBigInteger('fee_id')->index()->nullable();
             $table->foreign('fee_id')->references('id')->on('fees')->onDelete('cascade');
             $table->decimal('rate', 9, 2)->default('0.00');
-            $table->enum('payscheme', [1,2,3]);
+            $table->enum('payment_scheme', [1,2,3]);
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

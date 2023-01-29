@@ -243,6 +243,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
         // Route::view('/fees/addnewtype', 'fee.addnewtype');
         // Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
+        Route::post('/fees/savesetupfee', [FeeController::class, 'storesetupfee'])->name('storesetupfee');
         Route::get('/fees/setup', [FeeController::class, 'setupfees']);
         
     });

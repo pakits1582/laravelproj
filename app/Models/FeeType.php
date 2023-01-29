@@ -9,5 +9,7 @@ class FeeType extends Model
 {
     use HasFactory;
 
+    protected $table = 'fee_types';
+
     protected $fillable = ['type', 'inassess', 'order'];
 }

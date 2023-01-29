@@ -8,6 +8,42 @@ $(function(){
     
     $('.datepicker').datepicker(pickerOpts);  
 
+    $("#subject").select2({
+	    // dropdownParent: $("#ui_content3"),
+        minimumInputLength: 2,
+        tags: false,
+        minimumResultsForSearch: 20, // at least 20 results must be displayed
+        ajax: {
+            url: '/subjects/dropdownselectsearch',
+            dataType: 'json',
+            delay: 250,
+            data: function (data) {
+                return {
+                    searchTerm: data.term // search term
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: $.map(data, function(item) {
+                        return {
+                            text: item.text,
+                            id: item.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+	});
+
+    $("#program").select2({
+	    dropdownParent: $("#ui_content2")
+	});
+
+    $("#fee").select2({
+	    dropdownParent: $("#ui_content2")
+	});
+
 /***********************************************
 *** FUNCTION CHANGE SCHOOL START DATE PICKER ***
 ***********************************************/
@@ -120,5 +156,29 @@ $(function(){
     //     e.preventDefault();
     // });
 
+    $(document).on("submit", "#form_setup_fees", function(e){
+        var postData = $(this).serializeArray();
 
+        $.ajax({
+            url: "/fees/savesetupfee",
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            success: function(data){
+               console.log(data);
+			
+            },
+            error: function (data) {
+               console.log(data);
+               var errors = data.responseJSON;
+               if ($.isEmptyObject(errors) == false) {
+                   $.each(errors.errors, function (key, value) {
+                       $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                   });
+               }
+           }
+        });
+
+        e.preventDefault();
+    });
 });
