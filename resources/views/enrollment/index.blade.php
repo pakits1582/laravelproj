@@ -23,7 +23,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action="{{ route('classes.store') }}"  role="form" id="form_enrollment">
+                                <form method="POST" action=""  role="form" id="form_enrollment">
                                     @csrf
                                     <div class="row align-items-end">
                                         <div class="col-md-2">

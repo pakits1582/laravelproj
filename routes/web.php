@@ -236,6 +236,17 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
+    Route::group(['middleware' => ['inaccess:fees/setup']], function () {
+        // Route::view('/subjects/import', 'subject.import')->name('subjects.import');
+        // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
+        // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
+        // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
+        // Route::view('/fees/addnewtype', 'fee.addnewtype');
+        // Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
+        Route::get('/fees/setup', [FeeController::class, 'setupfees']);
+        
+    });
+
     Route::group(['middleware' => ['inaccess:gradingsystems']], function () {
         // Route::view('/subjects/import', 'subject.import')->name('subjects.import');
         // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');

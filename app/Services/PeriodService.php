@@ -62,4 +62,23 @@ class PeriodService
         session()->put('periodname', $period->name);
         session()->put('periodterm', $period->term_id);
     }
+
+    public function returnAllPeriods($limit = 0, $all = false, $source = 0)
+    {
+        $query = Period::with('terminfo')->orderBy('year')->orderBy('priority_lvl');
+
+        if($source !== 0)
+        {
+            $query->where('source', $source);
+        }
+
+        if($all){
+            return $query->get();
+        }
+        
+        if($limit !== 0){
+            return $query->take($limit)->get();
+
+        }
+    }
 }

@@ -840,4 +840,11 @@ $(function(){
         }
     });
 
+    $(document).on("submit", "#form_enrollment", function(e){
+
+        alert('xxxx');
+        
+        e.preventDefault();
+    });
+
 });

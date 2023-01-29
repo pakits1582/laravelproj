@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreFeeRequest;
-use App\Http\Requests\UpdateFeeRequest;
 use App\Models\Fee;
 use App\Libs\Helpers;
 use App\Models\FeeType;
+use App\Models\Program;
 use App\Services\FeeService;
 use Illuminate\Http\Request;
+use App\Services\PeriodService;
+use App\Services\ProgramService;
+use App\Http\Requests\StoreFeeRequest;
+use App\Http\Requests\UpdateFeeRequest;
 
 class FeeController extends Controller
 {
@@ -139,5 +142,15 @@ class FeeController extends Controller
     
         return view('fee.compoundfee', compact('fees'));
 
+    }
+
+    public function setupfees(Request $request)
+    {
+        $fees = $this->feeService->returnFees($request,true);
+        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+
+
+        return view('fee.setup.index', compact('fees', 'programs', 'periods'));
     }
 }
