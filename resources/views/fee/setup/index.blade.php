@@ -215,30 +215,58 @@
                         <h6 class="m-0 font-weight-bold text-primary">Assessment Fees</h6>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive-sm">
-                            <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
+                        {{-- <div class="table-responsive-sm">
+                            <table class="table table-sm table-striped table-bordered" style="font-size: 14px;"> --}}
+                        <div class="table-responsive-sm col-xs-8 col-xs-offset-2 well">
+                            <table class="table table-sm table-scroll table-striped table-bordered" style="font-size: 14px;">
                                 <thead class="">
                                     <tr>
                                         <th class="w20"></th>
                                         <th class="w100">Level</th>
                                         <th class="w100">College</th>
-                                        <th class="w100">Course</th>
-                                        <th class="w40">Year</th>
-                                        <th class="w40">New</th>
+                                        <th class="w100">Program</th>
+                                        <th class="w40">Yr.</th>
+                                        <th class="w40">Nw</th>
                                         <th class="w40">Old</th>
                                         <th class="w40">Sex</th>
-                                        <th class="w40">Cross</th>
-                                        <th class="w40">Trans</th>
+                                        <th class="w40">Crs</th>
+                                        <th class="w40">Trns</th>
                                         <th class="w40">PS</th>
                                         <th class="w150">Subject</th>
                                         <th class="">Fee</th>
                                         <th class="">Fee Type</th>
-                                        <th class="w100">Rate</th>
-                                        <th class="w40">Schm</th>
+                                        <th class="w70">Rate</th>
+                                        <th class="w70">Schm</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-black" id="return_setup_fees">
-                                    <tr><td class="mid" colspan="16">No records to be displayed!</td></tr>
+                                    @if (count($feessetups) > 0)
+                                        @foreach ($feessetups as $feessetup)
+                                            <tr>
+                                                <td class="w20"></td>
+                                                <td class="w100">{{ $feessetup->educlevel->code }}</td>
+                                                <td class="w100">{{ $feessetup->college->code }}</td>
+                                                <td class="w100">{{ $feessetup->program->code }}</td>
+                                                <td class="mid w40">{{ $feessetup->year_level }}</td>
+                                                <td class="mid w40">{{ ($feessetup->new === 0) ? '' : 'Y' }}</td>
+                                                <td class="mid w40">{{ ($feessetup->old === 0) ? '' : 'Y' }}</td>
+                                                <td class="mid w40">{{ ($feessetup->sex) ? (($feessetup->sex === 1) ? 'M' : 'F') : '' }}</td>
+                                                <td class="mid w40">{{ ($feessetup->transferee === 0) ? '' : 'Y' }}</td>
+                                                <td class="mid w40">{{ ($feessetup->cross_enrollee === 0) ? '' : 'Y' }}</td>
+                                                <td class="mid w40">{{ ($feessetup->professional === 0) ? '' : 'Y' }}</td>
+                                                <td class="w150">{{ $feessetup->subject->code }}</td>
+                                                <td>{{ $feessetup->fee->code }}</td>
+                                                <td>{{ $feessetup->fee->feetype->type }}</td>
+                                                <td class="w70">{{ $feessetup->rate }}</td>
+                                                <td class="w70">
+                                                    {{ ($feessetup->payment_scheme == 1) ? 'Fixed' : (($feessetup->payment_scheme == 2) ? 'Units' : 'Subject') }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr><td class="mid" colspan="16">No records to be displayed!</td></tr>
+                                    @endif
+
                                 </tbody>
                             </table>
                         </div>

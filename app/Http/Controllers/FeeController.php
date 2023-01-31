@@ -153,7 +153,9 @@ class FeeController extends Controller
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
 
-        return view('fee.setup.index', compact('fees', 'programs', 'periods'));
+        $feessetups = $this->feeService->returnSetupFees($request);
+
+        return view('fee.setup.index', compact('fees', 'programs', 'periods', 'feessetups'));
     }
 
     public function storesetupfee(StoreSetupFeeRequest $request)

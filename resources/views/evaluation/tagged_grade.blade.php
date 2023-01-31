@@ -62,22 +62,21 @@
                         <div class="px-2 bg-primary text-black font-italic">Blue colored row denotes that grade is currently selected.</div>
                         <form action="{{ route('evaluations.store') }}" method="post" id="form_tag_grade">
                             <div class="col-xs-8 col-xs-offset-2 well">
-                                    <table class="table table-scroll table-striped table-bordered" style="">
-                                        <thead>
-                                            <tr>
-                                                <th class="w50">#</th>
-                                                <th class="w120">Code</th>
-                                                <th>Name</th>
-                                                <th class="w100">Units</th>
-                                                <th class="w100">Grade</th>
-                                                <th class="w100">C.G.</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="return_taggrade">
-                                            @include('evaluation.return_tagged_grades')
-                                        </tbody>
-                                    </table>
-                            
+                                <table class="table table-scroll table-striped table-bordered" style="">
+                                    <thead>
+                                        <tr>
+                                            <th class="w50">#</th>
+                                            <th class="w120">Code</th>
+                                            <th>Name</th>
+                                            <th class="w100">Units</th>
+                                            <th class="w100">Grade</th>
+                                            <th class="w100">C.G.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="return_taggrade">
+                                        @include('evaluation.return_tagged_grades')
+                                    </tbody>
+                                </table>
                             </div>
                             <input type="hidden" name="curriculum_subject_id" id="curriculum_subject_id" value="{{ $curriculum_subject->id }}"  />
                             <input type="hidden" name="student_id" id="student_id" value="{{ $student->id }}"  />

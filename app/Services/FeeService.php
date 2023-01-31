@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Libs\Helpers;
 use App\Models\Fee;
+use App\Models\FeeSetup;
 use App\Models\FeeType;
 use App\Models\SetupPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +59,17 @@ class FeeService
         }
 
         return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, fee already exists!'])->withInput();
+    }
+
+    public function returnSetupFees($request)
+    {
+        $query = FeeSetup::with(['educlevel', 'college', 'program', 'subject', 'fee' => ['feetype']]);
+
+        $query->when(filled($request->period), function ($q) use($request) {
+            return $q->where('period', $request->period);
+        });
+
+        return $query->get();
     }
 
 }
