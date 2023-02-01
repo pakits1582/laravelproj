@@ -273,52 +273,69 @@ class ClassesService
         if($request->filled('schedule'))
         {
             $schedule_array = $this->processSchedule($request->schedule);
+            $rooms = Room::all();
+            $classes_with_schedules = Classes::with(['classschedules' => ['roominfo']])->where('period_id', session('current_period'))->get();
+           
+            $errors = [];
 
             foreach ($schedule_array as $key => $sched) 
             {
-                $conflicts = [];
-                foreach ($sched['days'] as $key => $day) {
-                    //CHECK CONFLICT SECTION
-					$section_conflicts = $this->checkConflictSection($request->section, $sched['timefrom'], $sched['timeto'], $day, $request->class_id);
-					
-                    if(!$section_conflicts->isEmpty())
-                    {
-                        foreach ($section_conflicts as $key => $section_conflict) {
-                            $conflicts[] = [
-                                'class_code'   => ($section_conflict->code) ?? '',
-                                'section_code' => $section_conflict->sectioninfo->code,
-                                'subject_code' => $section_conflict->curriculumsubject->subjectinfo->code,
-                                'schedule' => $section_conflict->schedule->schedule,
-                                'conflict_from' => 'Section'
-                            ];
-                        }
-                    }
+                $room = $sched['room'];
 
-                    if($request->instructor_id)
+                if (!$rooms->contains(function ($value, $key) use($room) {
+                    return $value['code'] == $room;
+                })) {
+                    $errors[] = 'Room <strong>'.$room.'</strong> does not exists!';
+                }else{
+                    if (Carbon::parse($sched['timefrom'])->greaterThanOrEqualTo(Carbon::parse($sched['timeto']))) 
                     {
-                        //CHECK CONFLICT INSTRUCTOR
-                        $faculty_conflicts = $this->checkConflictFaculty($sched['timefrom'], $sched['timeto'], $day, $request->class_id, $request->instructor_id);
-                        if(!$faculty_conflicts->isEmpty())
-                        {
-                            foreach ($faculty_conflicts as $key => $faculty_conflict) {
-                                $conflicts[] = [
-                                    'class_code'   => ($faculty_conflict->code) ?? '',
-                                    'section_code' => $faculty_conflict->sectioninfo->code,
-                                    'subject_code' => $faculty_conflict->curriculumsubject->subjectinfo->code,
-                                    'schedule' => $faculty_conflict->schedule->schedule,
-                                    'conflict_from' => 'Faculty'
-                                ];
-                            }
-                        }
+                        $errors[] = 'Schedule <strong>'.$sched['timefrom'].'-'.$sched['timeto'].'</strong> is invalid time format!';
+                    }else{
+                        
                     }
-                }//end of days
+                }
+                // foreach ($sched['days'] as $key => $day) {
+                //     //CHECK CONFLICT SECTION
+				// 	$section_conflicts = $this->checkConflictSection($request->section, $sched['timefrom'], $sched['timeto'], $day, $request->class_id);
+					
+                //     if(!$section_conflicts->isEmpty())
+                //     {
+                //         foreach ($section_conflicts as $key => $section_conflict) {
+                //             $conflicts[] = [
+                //                 'class_code'   => ($section_conflict->code) ?? '',
+                //                 'section_code' => $section_conflict->sectioninfo->code,
+                //                 'subject_code' => $section_conflict->curriculumsubject->subjectinfo->code,
+                //                 'schedule' => $section_conflict->schedule->schedule,
+                //                 'conflict_from' => 'Section'
+                //             ];
+                //         }
+                //     }
+
+                //     if($request->instructor_id)
+                //     {
+                //         //CHECK CONFLICT INSTRUCTOR
+                //         $faculty_conflicts = $this->checkConflictFaculty($sched['timefrom'], $sched['timeto'], $day, $request->class_id, $request->instructor_id);
+                //         if(!$faculty_conflicts->isEmpty())
+                //         {
+                //             foreach ($faculty_conflicts as $key => $faculty_conflict) {
+                //                 $conflicts[] = [
+                //                     'class_code'   => ($faculty_conflict->code) ?? '',
+                //                     'section_code' => $faculty_conflict->sectioninfo->code,
+                //                     'subject_code' => $faculty_conflict->curriculumsubject->subjectinfo->code,
+                //                     'schedule' => $faculty_conflict->schedule->schedule,
+                //                     'conflict_from' => 'Faculty'
+                //                 ];
+                //             }
+                //         }
+                //     }
+                // }//end of days
             }
            
-            $temp = array_unique(array_column($conflicts, 'conflict_from'));
-            $allconflicts = array_intersect_key($conflicts, $temp);
+            // $temp = array_unique(array_column($conflicts, 'conflict_from'));
+            // $allconflicts = array_intersect_key($conflicts, $temp);
         }
         
-        return $allconflicts;
+        return $errors;
     }
 
     public function updateClassSubject($class, $request)

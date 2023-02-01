@@ -379,18 +379,18 @@ $(function(){
                     showError(checkScheduleFormat(schedule));
                 }else{
                     $.ajax({
-                        url: "/classes/checkroomschedule",
+                        url: "/classes/checkconflicts",
                         type: 'POST',
                         data: ({ 'schedule' : schedule, 'class_id' : class_id}),
                         dataType: 'json',
                         success: function(response){
                             console.log(response);
-                            if ($.isEmptyObject(response.error) === false) {
-                                showError(response.error);
-                            }else{
-                                //CHECK CONFLICT SECTION, INSTRUCTOR
-                                checkConflicts(postData);
-                            }
+                            // if ($.isEmptyObject(response.error) === false) {
+                            //     showError(response.error);
+                            // }else{
+                            //     //CHECK CONFLICT SECTION, INSTRUCTOR
+                            //     checkConflicts(postData);
+                            // }
                         },
                         error: function (data) {
                             console.log(data);
