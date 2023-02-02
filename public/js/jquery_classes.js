@@ -364,33 +364,35 @@ $(function(){
 *********************************************************/
     $(document).on("submit", "#form_classoffering", function(e){
         var checkedbox = $(".checks:checked");
-
-        if(checkedbox.length == 0){
+        var postData = $("#form_classoffering").serializeArray();
+        var class_id   = checkedbox.attr("data-classid");
+        postData.push({ name: "class_id", value: class_id });
+        
+        if(checkedbox.length == 0)
+        {
 			showError('Please select checkbox to be updated!');
 		}else{
-            var postData = $(this).serializeArray();
-            var url = $(this).attr('action');
-            var class_id   = $(".checks:checked").attr("data-classid");
             var schedule = $("#schedule").val();
-            postData.push({name: "class_id", value: class_id });
 
-            if(schedule){
-                if(checkScheduleFormat(schedule)){
+            if(schedule)
+            {
+                if(checkScheduleFormat(schedule))
+                {
                     showError(checkScheduleFormat(schedule));
                 }else{
                     $.ajax({
-                        url: "/classes/checkconflicts",
+                        url: "/classes/checkroomschedule",
                         type: 'POST',
-                        data: ({ 'schedule' : schedule, 'class_id' : class_id}),
+                        data: postData,
                         dataType: 'json',
                         success: function(response){
                             console.log(response);
-                            // if ($.isEmptyObject(response.error) === false) {
-                            //     showError(response.error);
-                            // }else{
-                            //     //CHECK CONFLICT SECTION, INSTRUCTOR
-                            //     checkConflicts(postData);
-                            // }
+                            if ($.isEmptyObject(response.error) === false) {
+                                showError(response.error);
+                            }else{
+                                //CHECK CONFLICT SECTION, INSTRUCTOR
+                                checkConflicts(postData);
+                            }
                         },
                         error: function (data) {
                             console.log(data);

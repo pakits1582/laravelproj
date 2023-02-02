@@ -79,9 +79,9 @@ class ClassesService
                 'curriculumsubject' => [
                     'subjectinfo', 
                     'curriculum',
-                    'prerequisites' => ['curriculumsubject.subjectinfo'], 
-                    'corequisites', 
-                    'equivalents'
+                    // 'prerequisites' => ['curriculumsubject.subjectinfo'], 
+                    // 'corequisites', 
+                    // 'equivalents'
                 ]
             ])->where('section_id', $section)->where('period_id', $period);
         
@@ -225,114 +225,148 @@ class ClassesService
         return $schedule_array;
     }
 
-    public function checkRoomSchedule($request)
+    public function classesWithSchedules()
     {
-        $error = '';
+        $classes_with_schedules = Classes::with([
+            'sectioninfo',
+            'curriculumsubject.subjectinfo', 
+            'instructor', 
+            'schedule',
+            'classschedules' => ['roominfo']])->where('period_id', session('current_period'))->whereNotNull('schedule_id')->get();
 
-        if($request->filled('schedule'))
-        {
-            $schedule_array = $this->processSchedule($request->schedule);
-
-            foreach ($schedule_array as $key => $sched) 
-            {
-                $room_info = $this->checkScheduleRoomifExist($sched['room']);
-                if(!$room_info){
-                    $error .= 'Room '.$sched['room'].' does not exist!</br>';
-                }else{
-                    if($sched['timefrom'] >= $sched['timeto'])
-                    {
-                        $error .= 'Schedule '.$sched['raw_sched'].' TIME FROM is greater than TIME TO!</br>';
-                    }else{
-                        if($sched['days']){
-                            $conflicts = [];
-                            foreach ($sched['days'] as $key => $day) 
-                            {
-                                $room_conflicts = $this->checkConflictRoom($request->class_id, $room_info->id, $sched['timefrom'], $sched['timeto'], $day);
-
-                                if(!$room_conflicts->isEmpty())
-                                {
-                                    foreach ($room_conflicts as $key => $room_conflict) {
-                                        $conflicts[] = 'Room Conflict: ('.$room_conflict->sectioninfo->code.') ['.$room_conflict->curriculumsubject->subjectinfo->code.']  - '.$room_conflict->schedule->schedule.'</br>';
-                                    }
-                                    break;
-                                }
-                            }
-                            $error = array_unique($conflicts);
-                        }
-                    }
-                }
-            }
-        }
-        return $error;
+        return $classes_with_schedules;
     }
 
-    public function checkConflicts($request)
+    public function checkRoomSchedule($request)
     {
-        $allconflicts = [];
+        $errors = [];
 
         if($request->filled('schedule'))
         {
             $schedule_array = $this->processSchedule($request->schedule);
             $rooms = Room::all();
-            $classes_with_schedules = Classes::with(['classschedules' => ['roominfo']])->where('period_id', session('current_period'))->get();
+            $classes_with_schedules = $this->classesWithSchedules();
            
-            $errors = [];
-
             foreach ($schedule_array as $key => $sched) 
             {
                 $room = $sched['room'];
+                $room_info = $rooms->firstWhere('code', $room);
 
-                if (!$rooms->contains(function ($value, $key) use($room) {
-                    return $value['code'] == $room;
-                })) {
+                if (!$room_info) 
+                {
                     $errors[] = 'Room <strong>'.$room.'</strong> does not exists!';
                 }else{
                     if (Carbon::parse($sched['timefrom'])->greaterThanOrEqualTo(Carbon::parse($sched['timeto']))) 
                     {
-                        $errors[] = 'Schedule <strong>'.$sched['timefrom'].'-'.$sched['timeto'].'</strong> is invalid time format!';
+                        $errors[] = 'Schedule '.$sched['raw_sched'].' TIME FROM is greater than TIME TO!</br>';
                     }else{
-                        
+                        if($room_info->excludechecking === 0)
+                        {
+                            if($sched['days'])
+                            {
+                                $conflicts = [];
+                                $timefrom = $sched['timefrom'];
+                                $timeto =  $sched['timeto'];
+
+                                foreach ($sched['days'] as $key => $day) 
+                                {
+                                    foreach ($classes_with_schedules as $key => $classes_with_schedule) 
+                                    {
+                                        foreach ($classes_with_schedule->classschedules as $key => $schedule) {
+                                            if ($schedule->day == $day &&
+                                                ($schedule->from_time >= $timefrom && $schedule->from_time < $timeto ||
+                                                 $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $schedule->roominfo->code == $room) {
+                                                $conflicts[] = $classes_with_schedule;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                $conflicts = array_unique($conflicts);
+
+                                if($conflicts)
+                                {
+                                    foreach ($conflicts as $key => $conflict) 
+                                    {
+                                        $errors[] = 'Room Conflict: ('.$conflict->sectioninfo->code.') ['.$conflict->curriculumsubject->subjectinfo->code.']  - '.$conflict->schedule->schedule.'<br>';
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-                // foreach ($sched['days'] as $key => $day) {
-                //     //CHECK CONFLICT SECTION
-				// 	$section_conflicts = $this->checkConflictSection($request->section, $sched['timefrom'], $sched['timeto'], $day, $request->class_id);
-					
-                //     if(!$section_conflicts->isEmpty())
-                //     {
-                //         foreach ($section_conflicts as $key => $section_conflict) {
-                //             $conflicts[] = [
-                //                 'class_code'   => ($section_conflict->code) ?? '',
-                //                 'section_code' => $section_conflict->sectioninfo->code,
-                //                 'subject_code' => $section_conflict->curriculumsubject->subjectinfo->code,
-                //                 'schedule' => $section_conflict->schedule->schedule,
-                //                 'conflict_from' => 'Section'
-                //             ];
-                //         }
-                //     }
-
-                //     if($request->instructor_id)
-                //     {
-                //         //CHECK CONFLICT INSTRUCTOR
-                //         $faculty_conflicts = $this->checkConflictFaculty($sched['timefrom'], $sched['timeto'], $day, $request->class_id, $request->instructor_id);
-                //         if(!$faculty_conflicts->isEmpty())
-                //         {
-                //             foreach ($faculty_conflicts as $key => $faculty_conflict) {
-                //                 $conflicts[] = [
-                //                     'class_code'   => ($faculty_conflict->code) ?? '',
-                //                     'section_code' => $faculty_conflict->sectioninfo->code,
-                //                     'subject_code' => $faculty_conflict->curriculumsubject->subjectinfo->code,
-                //                     'schedule' => $faculty_conflict->schedule->schedule,
-                //                     'conflict_from' => 'Faculty'
-                //                 ];
-                //             }
-                //         }
-                //     }
-                // }//end of days
             }
-           
-            // $temp = array_unique(array_column($conflicts, 'conflict_from'));
-            // $allconflicts = array_intersect_key($conflicts, $temp);
+        }
+        
+        return $errors;
+    }
+
+    public function checkConflicts($request)
+    {
+        $errors = [];
+
+        if($request->filled('schedule'))
+        {
+            $schedule_array = $this->processSchedule($request->schedule);
+            $classes_with_schedules = $this->classesWithSchedules();
+
+            foreach ($schedule_array as $key => $sched) 
+            {
+                $conflicts_sections = [];
+                $conflicts_faculty = [];
+                $timefrom = $sched['timefrom'];
+                $timeto =  $sched['timeto'];
+                
+                foreach ($sched['days'] as $key => $day) {
+
+                    foreach ($classes_with_schedules as $key => $classes_with_schedule) 
+                    {
+                        foreach ($classes_with_schedule->classschedules as $key => $schedule) {
+                            if ($schedule->day == $day && ($schedule->from_time >= $timefrom && $schedule->from_time < $timeto ||
+                                    $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $classes_with_schedule->section_id == $request->section) {
+                                $conflicts_sections[] = $classes_with_schedule;
+                            }
+
+                            if ($schedule->day == $day && ($schedule->from_time >= $timefrom && $schedule->from_time < $timeto ||
+                                    $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $classes_with_schedule->instructor_id == $request->instructor_id) {
+                                $conflicts_faculty[] = $classes_with_schedule;
+                            }
+
+                        }
+                    }
+                }//end of days
+                $conflicts_sections = array_unique($conflicts_sections);
+
+                if($conflicts_sections)
+                {
+                    foreach ($conflicts_sections as $key => $conflict) 
+                    {
+                        $errors[] = [
+                            'class_code' => $conflict->code,
+                            'section_code' => $conflict->sectioninfo->code,
+                            'subject_code' => $conflict->curriculumsubject->subjectinfo->code,
+                            'schedule' => $conflict->schedule->schedule,
+                            'conflict_from' => 'Section'
+                        ];
+                    }
+                }
+
+                $conflicts_faculty = array_unique($conflicts_faculty);
+
+                if($conflicts_faculty)
+                {
+                    foreach ($conflicts_faculty as $key => $conflict) 
+                    {
+                        $errors[] = [
+                            'class_code' => $conflict->code,
+                            'section_code' => $conflict->sectioninfo->code,
+                            'subject_code' => $conflict->curriculumsubject->subjectinfo->code,
+                            'schedule' => $conflict->schedule->schedule,
+                            'conflict_from' => 'Faculty'
+                        ];
+                    }
+                }
+            }
         }
         
         return $errors;
