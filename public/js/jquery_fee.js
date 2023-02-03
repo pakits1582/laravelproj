@@ -41,7 +41,11 @@ $(function(){
 	});
 
     $("#fee").select2({
-	    dropdownParent: $("#ui_content2")
+	    dropdownParent: $("#ui_content3")
+	});
+
+    $("#period").select2({
+	    dropdownParent: $("#ui_content4")
 	});
 
 /***********************************************
@@ -178,6 +182,66 @@ $(function(){
                }
            }
         });
+
+        e.preventDefault();
+    });
+
+    $(document).on("click","#cancel", function(){
+        //buttons
+        //$('#save_setup_fee').prop("disabled", true);
+		$('#delete_selected').prop("disabled", true);
+		$('#edit').prop("disabled", true);
+        //form fields
+		$('.clearable').val("").trigger('change');
+		$('input.checks').prop('disabled', false).prop('checked', false);
+		$('.checks').closest('tr').removeClass('selected');
+
+        $('.errors').remove();  
+	});
+
+    $(document).on("click", "#edit", function(e){
+        var setupfee_id = $(".checks:checked").attr("data-setupfeeid");
+
+		if($(".checks:checked").length === 0)
+        {
+			showError('Please select atleast one checkbox/fee to edit!');	
+		}else{
+            $.ajax({
+                url: "/fees/"+setupfee_id+"/editsetupfee",
+                dataType: 'json',
+                success: function(response){
+                    console.log(response);
+                    // if(!jQuery.isEmptyObject(response)){
+
+                    //     $('#delete').prop("disabled", true);
+                    //     $('#edit').prop("disabled", true);
+                    //     $('input.checks').prop('disabled', true); 
+                    //     $('#save_class').prop("disabled", false);
+
+                    //     $('#subject_code').val(response.data.curriculumsubject.subjectinfo.code);
+                    //     $('#subject_name').val(response.data.curriculumsubject.subjectinfo.name);
+                    //     $('#units').val(response.data.units);
+                    //     $('#loadunits').val(response.data.loadunits);
+                    //     $('#tfunits').val(response.data.tfunits);
+                    //     $('#lecunits').val(response.data.lecunits);
+                    //     $('#labunits').val(response.data.labunits);
+                    //     $('#hours').val(response.data.hours);
+                    //     $('#slots').val(response.data.slots);
+                    //     $('#schedule').val(response.data.schedule.schedule);
+                    //     $('#instructor').val(response.data.instructor_id).trigger('change');
+                    //     if (response.data.tutorial === 1){ $('#tutorial').prop('checked', true) }
+                    //     if (response.data.dissolved === 1){ $('#dissolved').prop('checked', true) }
+                    //     if (response.data.f2f === 1){ $('#f2f').prop('checked', true) }
+                    //     if (response.data.isprof === 1){ $('#isprof').prop('checked', true) }
+                    // }else{
+                    //     showError('Oppss! Something went wrong! Can not fetch fee data!');
+                    // }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
 
         e.preventDefault();
     });

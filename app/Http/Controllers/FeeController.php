@@ -150,7 +150,7 @@ class FeeController extends Controller
     public function setupfees(Request $request)
     {
         $fees = $this->feeService->returnFees($request,true);
-        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
+        $programs = Program::where('active', 1)->orderBy('code');
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
 
         $feessetups = $this->feeService->returnSetupFees($request);
@@ -175,5 +175,12 @@ class FeeController extends Controller
             'message' => 'Duplicate entry, fee already exists!',
             'alert' => 'alert-danger'
         ], 200);
+    }
+
+    public function editsetupfee($setupfee_id)
+    {
+        $setupFee = FeeSetup::findOrFail($setupfee_id);
+
+        return response()->json($setupFee);
     }
 }

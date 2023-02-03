@@ -29,7 +29,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="period"  class="m-0 font-weight-bold text-primary">* Period</label>
-                                                <select name="period_id" class="form-control select clearable" id="period" required>
+                                                <select name="period_id" class="form-control" id="period" required>
                                                     <option value="">- select period -</option>
                                                     @if ($periods)
                                                         @foreach ($periods as $period)
@@ -37,7 +37,7 @@
                                                         @endforeach
                                                     @endif
                                                 </select>
-                                                <div id="error_period_id"></div>
+                                                <div id="error_period_id" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-8">
@@ -57,7 +57,7 @@
                                             <div class="form-group">
                                                 <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Level</label>
                                                 @include('partials.educlevels.dropdown',['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id'])
-                                                <div id="error_educational_level_id"></div>
+                                                <div id="error_educational_level_id"  class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -92,7 +92,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="year_level" class="m-0 font-weight-bold text-primary">Year Level</label>
-                                                <select name="year_level" class="form-control">
+                                                <select name="year_level" class="form-control clearable">
                                                     <option value="">- select year -</option>
                                                     <option value="1" {{ (old('year_level') == 1) ? 'selected' : '' }}>First Year</option>
                                                     <option value="2" {{ (old('year_level') == 2) ? 'selected' : '' }}>Second Year</option>
@@ -106,7 +106,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="sex" class="m-0 font-weight-bold text-primary">Sex</label>
-                                                <select name="sex" class="form-control">
+                                                <select name="sex" class="form-control clearable">
                                                     <option value="">- select sex -</option>
                                                     <option value="1">Male</option>
                                                     <option value="2">Female</option>
@@ -126,14 +126,14 @@
                                                         @endforeach
                                                     @endif
                                                 </select>
-                                                <div id="error_fee_id"></div>
+                                                <div id="error_fee_id" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="rate" class="m-0 font-weight-bold text-primary">* Fee Rate</label>
-                                                <input type="text" name="rate" id="rate" placeholder="0.00" required class="form-control text-uppercase" value="">
-                                                <div id="error_rate"></div>
+                                                <input type="text" name="rate" id="rate" placeholder="0.00" required class="form-control text-uppercase clearable" value="">
+                                                <div id="error_rate" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -144,20 +144,20 @@
                                                     <option value="2">Per Units</option>
                                                     <option value="3">Per Subject</option>
                                                 </select>
-                                                <div id="error_payment_scheme"></div>
+                                                <div id="error_payment_scheme" class="errors"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group" id="button_group">
-                                                <button type="submit" id="save_setup_fee" class="btn btn-success btn-icon-split actions mb-2">
+                                                <button type="submit" id="save_setup_fee" class="btn btn-success btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-save"></i>
                                                     </span>
                                                     <span class="text">Save</span>
                                                 </button>
-                                                <button type="button" id="edit_setup_fee" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                                <button type="button" id="edit" class="btn btn-primary btn-icon-split actions mb-2" disabled>
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>
                                                     </span>
@@ -169,7 +169,7 @@
                                                     </span>
                                                     <span class="text">Delete</span>
                                                 </button>
-                                                <button type="button" id="cancel" class="btn btn-danger btn-icon-split actions mb-2">
+                                                <button type="button" id="cancel" class="btn btn-danger btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-trash"></i>
                                                     </span>
@@ -179,19 +179,19 @@
                                         </div>
                                         <div class="col-md-7 right">
                                             <div class="form-group" id="button_group">
-                                                <button type="submit" id="save_enrollment" class="btn btn-primary btn-icon-split actions mb-2">
+                                                <button type="button" id="print_setup_summary" class="btn btn-primary btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-print"></i>
                                                     </span>
                                                     <span class="text">Print Setup Summary</span>
                                                 </button>
-                                                <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2">
+                                                <button type="button" id="print_subject_fees" class="btn btn-primary btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-print"></i>
                                                     </span>
                                                     <span class="text">Print Subject Fees</span>
                                                 </button>
-                                                <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2">
+                                                <button type="button" id="copy_setup" class="btn btn-primary btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-copy"></i>
                                                     </span>
@@ -242,8 +242,8 @@
                                 <tbody class="text-black" id="return_setup_fees">
                                     @if (count($feessetups) > 0)
                                         @foreach ($feessetups as $feessetup)
-                                            <tr>
-                                                <td class="w20"></td>
+                                            <tr class="label" id="check">
+                                                <td class="w20"><input type="checkbox" data-setupfeeid="{{ $feessetup->id }}" class="checks" id="check_{{ $feessetup->id }}" /></td>
                                                 <td class="w100">{{ $feessetup->educlevel->code }}</td>
                                                 <td class="w100">{{ $feessetup->college->code }}</td>
                                                 <td class="w100">{{ $feessetup->program->code }}</td>

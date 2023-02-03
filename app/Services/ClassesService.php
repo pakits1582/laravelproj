@@ -275,7 +275,7 @@ class ClassesService
                                         foreach ($classes_with_schedule->classschedules as $key => $schedule) {
                                             if ($schedule->day == $day &&
                                                 ($schedule->from_time >= $timefrom && $schedule->from_time < $timeto ||
-                                                 $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $schedule->roominfo->code == $room) {
+                                                 $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $schedule->roominfo->code == $room && $classes_with_schedule->id != $request->class_id) {
                                                 $conflicts[] = $classes_with_schedule;
                                             }
                                         }
@@ -323,12 +323,12 @@ class ClassesService
                     {
                         foreach ($classes_with_schedule->classschedules as $key => $schedule) {
                             if ($schedule->day == $day && ($schedule->from_time >= $timefrom && $schedule->from_time < $timeto ||
-                                    $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $classes_with_schedule->section_id == $request->section) {
+                                    $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $classes_with_schedule->section_id == $request->section && $classes_with_schedule->id != $request->class_id) {
                                 $conflicts_sections[] = $classes_with_schedule;
                             }
 
                             if ($schedule->day == $day && ($schedule->from_time >= $timefrom && $schedule->from_time < $timeto ||
-                                    $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $classes_with_schedule->instructor_id == $request->instructor_id) {
+                                    $schedule->to_time > $timefrom && $schedule->to_time <= $timeto) && $classes_with_schedule->instructor_id == $request->instructor_id && $classes_with_schedule->id != $request->class_id) {
                                 $conflicts_faculty[] = $classes_with_schedule;
                             }
 
