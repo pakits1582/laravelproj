@@ -10,6 +10,8 @@ $(function(){
 
     $("#subject").select2({
 	    // dropdownParent: $("#ui_content3"),
+        allowClear: true,
+        placeholder: "- search subject -",
         minimumInputLength: 2,
         tags: false,
         minimumResultsForSearch: 20, // at least 20 results must be displayed
@@ -160,17 +162,48 @@ $(function(){
     //     e.preventDefault();
     // });
 
-    $(document).on("submit", "#form_setup_fees", function(e){
+    function returnSetupFees(period)
+    {
+        $.ajax({
+            url: "/fees/"+period+"/returnfeessetup",
+            success: function(data){
+                $("#return_setup_fees").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action! '+errors.message);
+                }
+            }
+        });
+    }
+
+    $(document).on("submit", "#form_setup_fee", function(e){
         var postData = $(this).serializeArray();
+        var period = $("#period").val();
 
         $.ajax({
             url: "/fees/savesetupfee",
             type: 'POST',
             data: postData,
             dataType: 'json',
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons:false
+                });
+                $(".ui-dialog-titlebar").hide();
+            },
             success: function(data){
-               console.log(data);
-			
+                $("#confirmation").dialog('close');
+                showSuccess('Fee successfully added!');
+                $("#cancel").trigger("click");
+                returnSetupFees(period);
             },
             error: function (data) {
                console.log(data);
@@ -190,12 +223,14 @@ $(function(){
         //buttons
         //$('#save_setup_fee').prop("disabled", true);
 		$('#delete_selected').prop("disabled", true);
+        $('.checkbox').prop("checked", false);
 		$('#edit').prop("disabled", true);
         //form fields
 		$('.clearable').val("").trigger('change');
 		$('input.checks').prop('disabled', false).prop('checked', false);
 		$('.checks').closest('tr').removeClass('selected');
 
+        $('.save_setupfee_form').attr("id", "form_setup_fee");
         $('.errors').remove();  
 	});
 
@@ -209,40 +244,170 @@ $(function(){
             $.ajax({
                 url: "/fees/"+setupfee_id+"/editsetupfee",
                 dataType: 'json',
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons:false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
                 success: function(response){
                     console.log(response);
-                    // if(!jQuery.isEmptyObject(response)){
+                    $("#confirmation").dialog('close');
+                    if(!jQuery.isEmptyObject(response)){
 
-                    //     $('#delete').prop("disabled", true);
-                    //     $('#edit').prop("disabled", true);
-                    //     $('input.checks').prop('disabled', true); 
-                    //     $('#save_class').prop("disabled", false);
+                        $('#delete_selected').prop("disabled", true);
+                        $('#edit').prop("disabled", true);
+                        $('input.checks').prop('disabled', true); 
 
-                    //     $('#subject_code').val(response.data.curriculumsubject.subjectinfo.code);
-                    //     $('#subject_name').val(response.data.curriculumsubject.subjectinfo.name);
-                    //     $('#units').val(response.data.units);
-                    //     $('#loadunits').val(response.data.loadunits);
-                    //     $('#tfunits').val(response.data.tfunits);
-                    //     $('#lecunits').val(response.data.lecunits);
-                    //     $('#labunits').val(response.data.labunits);
-                    //     $('#hours').val(response.data.hours);
-                    //     $('#slots').val(response.data.slots);
-                    //     $('#schedule').val(response.data.schedule.schedule);
-                    //     $('#instructor').val(response.data.instructor_id).trigger('change');
-                    //     if (response.data.tutorial === 1){ $('#tutorial').prop('checked', true) }
-                    //     if (response.data.dissolved === 1){ $('#dissolved').prop('checked', true) }
-                    //     if (response.data.f2f === 1){ $('#f2f').prop('checked', true) }
-                    //     if (response.data.isprof === 1){ $('#isprof').prop('checked', true) }
-                    // }else{
-                    //     showError('Oppss! Something went wrong! Can not fetch fee data!');
-                    // }
+                        $('#period').val(response.data.period_id).trigger('change');
+                        $('#educational_level_id').val(response.data.educational_level_id);
+                        $('#college_id').val(response.data.college_id);
+
+                        if(response.data.subject_id !== null)
+                        {
+                            var $newOption = $("<option selected='selected'></option>").val(response.data.subject.id).text('('+response.data.subject.units+') - ['+response.data.subject.code+'] '+response.data.subject.name);
+					        $("#subject").append($newOption).trigger('change');
+                        }
+                        $('#program').val(response.data.program_id).trigger('change');
+                        $('#year_level').val(response.data.year_level);
+                        $('#sex').val(response.data.sex);
+                        $('#fee').val(response.data.fee_id).trigger('change');
+                        $('#rate').val(response.data.rate);
+                        $('#payment_scheme').val(response.data.payment_scheme);
+                        //$('#instructor').val(response.data.instructor_id).trigger('change');
+                        if (response.data.new === 1){ $('#new').prop('checked', true) }
+                        if (response.data.old === 1){ $('#old').prop('checked', true) }
+                        if (response.data.returnee === 1){ $('#returnee').prop('checked', true) }
+                        if (response.data.transferee === 1){ $('#transferee').prop('checked', true) }
+                        if (response.data.cross === 1){ $('#cross').prop('checked', true) }
+                        if (response.data.foreigner === 1){ $('#foreigner').prop('checked', true) }
+                        if (response.data.professional === 1){ $('#professional').prop('checked', true) }
+
+                        $('.save_setupfee_form').attr("id", "form_update_setup_fee");
+
+
+                    }else{
+                        showError('Oppss! Something went wrong! Can not fetch fee data!');
+                    }
                 },
                 error: function (data) {
                     console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) == false) {
+                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                    }
                 }
             });
         }
 
+        e.preventDefault();
+    });
+
+    $(document).on("submit", "#form_update_setup_fee", function(e){
+        var postData = $(this).serializeArray();
+        var period = $("#period").val();
+        var setupfee_id = $(".checks:checked").attr("data-setupfeeid");
+
+        //postData.push({ name: "setupfee_id", value: setupfee_id });
+
+        $.ajax({
+            url: "/fees/"+setupfee_id+"/updatesetupfee",
+            type: 'PUT',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons:false
+                });
+                $(".ui-dialog-titlebar").hide();
+            },
+            success: function(response){
+                $("#confirmation").dialog('close');
+                if(response.data.success === false)
+                {
+                    showError(response.data.message);
+                }else{
+                    showSuccess(response.data.message);
+                }
+                $('#cancel').trigger('click');
+                returnSetupFees(period);
+            },
+            error: function (data) {
+               console.log(data);
+               var errors = data.responseJSON;
+               if ($.isEmptyObject(errors) == false) {
+                   $.each(errors.errors, function (key, value) {
+                       $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                   });
+               }
+           }
+        });
+        e.preventDefault();
+    });
+
+    $(document).on("click", "#delete_selected", function(e){
+        var setupfee_id = $(".checks:checked").attr("data-setupfeeid");
+        var period = $("#period").val();
+
+		if($(".checks:checked").length === 0)
+        {
+			showError('Please select atleast one checkbox/fee to edit!');	
+		}else{
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">All items related to this class subject will also be deleted. Do you want to continue?<br>You can not undo this process?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: false,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $("#confirmation").dialog('close');
+                            $('#cancel').trigger('click');
+                        },
+                        'OK':function(){
+                            $("#confirmation").dialog('close');
+                            $.ajax({
+                                url: "/fees/"+setupfee_id+"/delete",
+                                type: 'DELETE',
+                                dataType: 'json',
+                                success: function(response)
+                                {
+                                    console.log(response);
+                                    if(response.data.success === false)
+                                    {
+                                        showError(response.data.message);
+                                        $('#cancel').trigger('click');
+                                    }else{
+                                        showSuccess('Setup Fee Successfully Deleted!');
+                                        $('#cancel').trigger('click');
+
+                                        returnSetupFees(period);
+                                    }
+                                },
+                                error: function (data) {
+                                    console.log(data);
+                                    var errors = data.responseJSON;
+                                    if ($.isEmptyObject(errors) == false) {
+                                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                                    }
+                                }
+                            });
+                        }//end of ok button	
+                     }//end of buttons
+            });//end of dialogbox
+            $(".ui-dialog-titlebar").hide();
+        }
         e.preventDefault();
     });
 });

@@ -150,9 +150,9 @@ class FeeController extends Controller
     public function setupfees(Request $request)
     {
         $fees = $this->feeService->returnFees($request,true);
-        $programs = Program::where('active', 1)->orderBy('code');
+        $programs = Program::where('active', 1)->orderBy('code')->get();
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
-
+        
         $feessetups = $this->feeService->returnSetupFees($request);
 
         return view('fee.setup.index', compact('fees', 'programs', 'periods', 'feessetups'));
@@ -179,8 +179,40 @@ class FeeController extends Controller
 
     public function editsetupfee($setupfee_id)
     {
-        $setupFee = FeeSetup::findOrFail($setupfee_id);
+        $setupFee = FeeSetup::with(['subject'])->findOrFail($setupfee_id);
 
-        return response()->json($setupFee);
+        return response()->json(['data' => $setupFee]);
+    }
+
+    public function returnfeessetup(Request $request)
+    {
+        $feessetups = $this->feeService->returnSetupFees($request);
+
+        return view('fee.setup.return_setupfees', compact('feessetups'));
+    }
+
+    public function deletefeessetup(FeeSetup $setupfee)
+    {
+        $setupfee->delete();
+
+        return response()->json(['data' => [
+            'success' => true,
+            'message' => 'Selected setup fee successfully deleted!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ]]);
+    }
+
+    public function updatesetupfee(StoreSetupFeeRequest $request, FeeSetup $setupfee)
+    {
+
+        $setupfee->update($request->validated());
+
+        return response()->json(['data' => [
+            'success' => true,
+            'message' => 'Selected setup fee successfully updated!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ]]);
     }
 }

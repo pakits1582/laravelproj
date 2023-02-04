@@ -23,7 +23,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action=""  role="form" id="form_setup_fees">
+                                <form method="POST" action=""  role="form" id="form_setup_fee" class="save_setupfee_form">
                                     @csrf
                                     <div class="row align-items-end">
                                         <div class="col-md-4">
@@ -42,13 +42,27 @@
                                         </div>
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="new" value="1" id="new"> New</label>
-                                                <label for="old"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="old" value="1" id="old"> Old</label>
-                                                <label for="returnee"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="returnee" value="1" id="returnee"> Returnee</label>
-                                                <label for="transferee"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="transferee" value="1" id="transferee"> Transferee</label>
-                                                <label for="cross"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="cross_enrollee" value="1" id="cross"> Cross Enrollee</label>
-                                                <label for="foreigner"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="foreigner" value="1" id="foreigner"> Foreigner</label>
-                                                <label for="professional"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="professional" value="1" id="professional"> Professional</label>
+                                                <label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="new" >
+                                                    <input type="checkbox" class="checkbox" name="new" value="1" id="new"> New</label>
+                                                <label for="old"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="old" >
+                                                    <input type="checkbox" class="checkbox" name="old" value="1" id="old"> Old</label>
+                                                <label for="returnee"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="returnee" >
+                                                    <input type="checkbox" class="checkbox" name="returnee" value="1" id="returnee"> Returnee</label>
+                                                <label for="transferee"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="transferee" >
+                                                    <input type="checkbox" class="checkbox" name="transferee" value="1" id="transferee"> Transferee</label>
+                                                <label for="cross"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="cross_enrollee" >
+                                                    <input type="checkbox" class="checkbox" name="cross_enrollee" value="1" id="cross"> Cross Enrollee</label>
+                                                <label for="foreigner"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="foreigner" >
+                                                    <input type="checkbox" class="checkbox" name="foreigner" value="1" id="foreigner"> Foreigner</label>
+                                                <label for="professional"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="professional" >
+                                                    <input type="checkbox" class="checkbox" name="professional" value="1" id="professional"> Professional</label>
                                             </div>
                                         </div>
                                     </div>
@@ -63,7 +77,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="college" class="m-0 font-weight-bold text-primary">College</label>
-                                                @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college_id'])
+                                                @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college_id', 'fieldclass' => 'clearable'])
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -92,7 +106,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="year_level" class="m-0 font-weight-bold text-primary">Year Level</label>
-                                                <select name="year_level" class="form-control clearable">
+                                                <select name="year_level" class="form-control clearable" id="year_level">
                                                     <option value="">- select year -</option>
                                                     <option value="1" {{ (old('year_level') == 1) ? 'selected' : '' }}>First Year</option>
                                                     <option value="2" {{ (old('year_level') == 2) ? 'selected' : '' }}>Second Year</option>
@@ -106,7 +120,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="sex" class="m-0 font-weight-bold text-primary">Sex</label>
-                                                <select name="sex" class="form-control clearable">
+                                                <select name="sex" class="form-control clearable" id="sex">
                                                     <option value="">- select sex -</option>
                                                     <option value="1">Male</option>
                                                     <option value="2">Female</option>
@@ -139,7 +153,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="payment_scheme" class="m-0 font-weight-bold text-primary">* Payment Scheme</label>
-                                                <select name="payment_scheme" class="form-control" required>
+                                                <select name="payment_scheme" class="form-control" required id="payment_scheme">
                                                     <option value="1">Fixed</option>
                                                     <option value="2">Per Units</option>
                                                     <option value="3">Per Subject</option>
@@ -240,33 +254,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-black" id="return_setup_fees">
-                                    @if (count($feessetups) > 0)
-                                        @foreach ($feessetups as $feessetup)
-                                            <tr class="label" id="check">
-                                                <td class="w20"><input type="checkbox" data-setupfeeid="{{ $feessetup->id }}" class="checks" id="check_{{ $feessetup->id }}" /></td>
-                                                <td class="w100">{{ $feessetup->educlevel->code }}</td>
-                                                <td class="w100">{{ $feessetup->college->code }}</td>
-                                                <td class="w100">{{ $feessetup->program->code }}</td>
-                                                <td class="mid w40">{{ $feessetup->year_level }}</td>
-                                                <td class="mid w40">{{ ($feessetup->new === 0) ? '' : 'Y' }}</td>
-                                                <td class="mid w40">{{ ($feessetup->old === 0) ? '' : 'Y' }}</td>
-                                                <td class="mid w40">{{ ($feessetup->sex) ? (($feessetup->sex === 1) ? 'M' : 'F') : '' }}</td>
-                                                <td class="mid w40">{{ ($feessetup->transferee === 0) ? '' : 'Y' }}</td>
-                                                <td class="mid w40">{{ ($feessetup->cross_enrollee === 0) ? '' : 'Y' }}</td>
-                                                <td class="mid w40">{{ ($feessetup->professional === 0) ? '' : 'Y' }}</td>
-                                                <td class="w150">{{ $feessetup->subject->code }}</td>
-                                                <td>{{ $feessetup->fee->code }}</td>
-                                                <td>{{ $feessetup->fee->feetype->type }}</td>
-                                                <td class="w70">{{ $feessetup->rate }}</td>
-                                                <td class="w70">
-                                                    {{ ($feessetup->payment_scheme == 1) ? 'Fixed' : (($feessetup->payment_scheme == 2) ? 'Units' : 'Subject') }}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <tr><td class="mid" colspan="16">No records to be displayed!</td></tr>
-                                    @endif
-
+                                    @include('fee.setup.return_setupfees')
                                 </tbody>
                             </table>
                         </div>

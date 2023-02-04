@@ -243,7 +243,10 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
         // Route::view('/fees/addnewtype', 'fee.addnewtype');
         // Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
-        Route::get('/fees/{setupfeeid}/editsetupfee', [FeeController::class, 'editsetupfee']);
+        Route::get('/fees/{period}/editsetupfee', [FeeController::class, 'editsetupfee']);
+        Route::delete('/fees/{setupfee}/delete', [FeeController::class, 'deletefeessetup']);
+        Route::get('/fees/{setupfeeid}/returnfeessetup', [FeeController::class, 'returnfeessetup']);
+        Route::put('/fees/{setupfee}/updatesetupfee', [FeeController::class, 'updatesetupfee']);
         Route::post('/fees/savesetupfee', [FeeController::class, 'storesetupfee'])->name('storesetupfee');
         Route::get('/fees/setup', [FeeController::class, 'setupfees']);
         
