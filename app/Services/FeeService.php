@@ -65,8 +65,8 @@ class FeeService
     {
         $query = FeeSetup::with(['educlevel', 'college', 'program', 'subject', 'fee' => ['feetype']]);
 
-        $query->when(filled($request->period), function ($q) use($request) {
-            return $q->where('period', $request->period);
+        $query->when(filled($request->period_id), function ($q) use($request) {
+            return $q->where('period_id', $request->period_id);
         });
 
         return $query->get();

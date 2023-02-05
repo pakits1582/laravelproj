@@ -1,7 +1,9 @@
 @if (count($feessetups) > 0)
     @foreach ($feessetups as $feessetup)
-        <tr class="label" id="check">
-            <td class="w20"><input type="checkbox" data-setupfeeid="{{ $feessetup->id }}" class="checks" id="check_{{ $feessetup->id }}" /></td>
+        <tr class="label" id="">
+            <td class="w30 mid">
+                <input type="checkbox" data-setupfeeid="{{ $feessetup->id }}" class="{{ ($selectall === 0) ? 'checks' : 'copyfees_checkbox' }}" id="check_{{ $feessetup->id }}" />
+            </td>
             <td class="w100">{{ $feessetup->educlevel->code }}</td>
             <td class="w100">{{ $feessetup->college->code }}</td>
             <td class="w100">{{ $feessetup->program->code }}</td>

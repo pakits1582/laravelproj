@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreFeeRequest;
 use App\Http\Requests\UpdateFeeRequest;
 use App\Http\Requests\StoreSetupFeeRequest;
+use App\Models\Period;
 
 class FeeController extends Controller
 {
@@ -155,7 +156,7 @@ class FeeController extends Controller
         
         $feessetups = $this->feeService->returnSetupFees($request);
 
-        return view('fee.setup.index', compact('fees', 'programs', 'periods', 'feessetups'));
+        return view('fee.setup.index', compact('fees', 'programs', 'periods', 'feessetups'))->with('selectall', 0);
     }
 
     public function storesetupfee(StoreSetupFeeRequest $request)
@@ -188,7 +189,7 @@ class FeeController extends Controller
     {
         $feessetups = $this->feeService->returnSetupFees($request);
 
-        return view('fee.setup.return_setupfees', compact('feessetups'));
+        return view('fee.setup.return_setupfees', compact('feessetups'))->with('selectall', $request->selectall);
     }
 
     public function deletefeessetup(FeeSetup $setupfee)
@@ -214,5 +215,12 @@ class FeeController extends Controller
             'alert' => 'alert-success',
             'status' => 200
         ]]);
+    }
+
+    public function copysetup(Period $period)
+    {
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+
+        return view('fee.setup.copy_setup', compact('period', 'periods'));
     }
 }

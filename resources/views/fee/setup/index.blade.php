@@ -235,7 +235,7 @@
                             <table class="table table-sm table-scroll table-striped table-bordered" style="font-size: 14px;">
                                 <thead class="">
                                     <tr>
-                                        <th class="w20"></th>
+                                        <th class="w30"></th>
                                         <th class="w100">Level</th>
                                         <th class="w100">College</th>
                                         <th class="w100">Program</th>

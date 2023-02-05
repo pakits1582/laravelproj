@@ -245,9 +245,10 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
         Route::get('/fees/{period}/editsetupfee', [FeeController::class, 'editsetupfee']);
         Route::delete('/fees/{setupfee}/delete', [FeeController::class, 'deletefeessetup']);
-        Route::get('/fees/{setupfeeid}/returnfeessetup', [FeeController::class, 'returnfeessetup']);
+        Route::get('/fees/{period_id}/returnfeessetup', [FeeController::class, 'returnfeessetup']);
         Route::put('/fees/{setupfee}/updatesetupfee', [FeeController::class, 'updatesetupfee']);
         Route::post('/fees/savesetupfee', [FeeController::class, 'storesetupfee'])->name('storesetupfee');
+        Route::get('/fees/{period}/copysetup', [FeeController::class, 'copysetup']);
         Route::get('/fees/setup', [FeeController::class, 'setupfees']);
         
     });

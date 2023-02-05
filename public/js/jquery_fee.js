@@ -50,6 +50,8 @@ $(function(){
 	    dropdownParent: $("#ui_content4")
 	});
 
+
+
 /***********************************************
 *** FUNCTION CHANGE SCHOOL START DATE PICKER ***
 ***********************************************/
@@ -162,10 +164,20 @@ $(function(){
     //     e.preventDefault();
     // });
 
+    $(document).on("change",".copyfees_checkbox", function(){
+		if($(this).is(':checked')){
+			 $(this).closest('tr').addClass('selected');
+		}else{
+			$(this).prop('checked', false);
+			$(this).closest('tr').removeClass('selected');
+		}
+	});
+
     function returnSetupFees(period)
     {
         $.ajax({
             url: "/fees/"+period+"/returnfeessetup",
+            data: ({ 'selectall' : 0}),
             success: function(data){
                 $("#return_setup_fees").html(data);
             },
@@ -410,4 +422,68 @@ $(function(){
         }
         e.preventDefault();
     });
+
+    $(document).on("click", "#copy_setup", function(e){
+        var period = $("#period").val();
+
+        if(period){
+            $.ajax({url: "/fees/"+period+"/copysetup",success: function(data){
+                    //console.log(data);
+                    $('#ui_content').html(data);
+                    $("#modalll").modal('show');
+
+                    $("#period_copyfrom").select2({
+                        dropdownParent: $("#modalll")
+                    });
+                }
+            });	
+        }else{
+            showError('Please select period first!');
+        }
+        e.preventDefault();
+    });
+
+    $(document).on("change", "#period_copyfrom", function(e){
+        var period_copyfrom = $(this).val();
+
+        if(period_copyfrom)
+        {
+            $.ajax({
+                url: "/fees/"+period_copyfrom+"/returnfeessetup",
+                data: ({ 'selectall' : 1}),
+                success: function(data){
+                    $("#return_copy_setup_fees").html(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) == false) {
+                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                    }
+                }
+            });
+        }
+
+        e.preventDefault();
+    });
+
+    $(document).on("click", "#check_all", function(){
+		var checks = $(".copyfees_checkbox").length;
+		if(checks != 0){
+			if($(this).is(':checked')){
+				$('.copyfees_checkbox').each(function(i, obj) {
+					$(this).prop('checked',true);
+					$(this).closest('tr').addClass('selected');
+				});
+			}else{
+				$('.copyfees_checkbox').each(function(i, obj) {
+					$(this).prop('checked',false);
+					$(this).closest('tr').removeClass('selected');
+				});
+			}	
+		}else{
+			showError('No fees to be selected please select period first!');
+			$(this).prop("checked",false);
+		}
+	});
 });
