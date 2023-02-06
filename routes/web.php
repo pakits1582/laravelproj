@@ -248,6 +248,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/fees/{period_id}/returnfeessetup', [FeeController::class, 'returnfeessetup']);
         Route::put('/fees/{setupfee}/updatesetupfee', [FeeController::class, 'updatesetupfee']);
         Route::post('/fees/savesetupfee', [FeeController::class, 'storesetupfee'])->name('storesetupfee');
+        Route::post('/fees/savecopyfees', [FeeController::class, 'savecopyfees'])->name('savecopyfees');
         Route::get('/fees/{period}/copysetup', [FeeController::class, 'copysetup']);
         Route::get('/fees/setup', [FeeController::class, 'setupfees']);
         

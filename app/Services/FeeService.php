@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
-use App\Libs\Helpers;
+use Carbon\Carbon;
 use App\Models\Fee;
-use App\Models\FeeSetup;
+use App\Libs\Helpers;
 use App\Models\FeeType;
+use App\Models\FeeSetup;
 use App\Models\SetupPeriod;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -70,6 +71,56 @@ class FeeService
         });
 
         return $query->get();
+    }
+
+    public function copysetupfees($request)
+    {
+        $setup_fees = FeeSetup::whereIn('id', $request->setup_fee_id)->get();
+       
+        if(!$setup_fees->isEmpty())
+        {
+            $setup_fees_arr = [];
+            foreach ($setup_fees as $key => $setup_fee) {
+                $setup_fees_arr[] = [
+                    'period_id' => $request->period_copyto,
+                    'educational_level_id' => $setup_fee->educational_level_id,
+                    'college_id' => $setup_fee->college_id,
+                    'program_id' => $setup_fee->program_id,
+                    'year_level' => $setup_fee->year_level,
+                    'subject_id' => $setup_fee->subject_id,
+                    'new' => $setup_fee->new,
+                    'old' => $setup_fee->old,
+                    'transferee' => $setup_fee->transferee,
+                    'cross_enrollee' => $setup_fee->cross_enrollee,
+                    'foreigner' => $setup_fee->foreigner,
+                    'returnee' => $setup_fee->returnee,
+                    'professional' => $setup_fee->professional,
+                    'sex' => $setup_fee->sex,
+                    'fee_id' => $setup_fee->fee_id,
+                    'rate' => $setup_fee->rate,
+                    'payment_scheme' => $setup_fee->payment_scheme,
+                    'user_id' => Auth::user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ];
+            }
+
+            FeeSetup::insert($setup_fees_arr);
+
+            return [
+                'success' => true,
+                'message' => 'Assessment Fees Successfully Copied!',
+                'alert' => 'alert-success',
+                'status' => 200
+            ];
+        }
+
+        return [
+                'success' => false,
+                'message' => 'Period has no fees, nothing to copy!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
     }
 
 }

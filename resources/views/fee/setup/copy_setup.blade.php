@@ -30,8 +30,7 @@
                                                 <div class="row align-items-center">
                                                     <div class="col-md-1 mid">
                                                         <label for="code"  class="m-0 font-weight-bold text-primary">Period</label>
-                                                        {{-- <input type="hidden" name="section_copyto" value="{{ $section->id }}" id="section_copyto" />
-                                                        <input type="hidden" name="period_copyto" value="{{ session('current_period') }}" id="period_copyto" /> --}}
+                                                        <input type="hidden" name="period_copyto" value="{{ $period->id }}" id="period_copyto" />
                                                     </div>
                                                     <div class="col-md-4">
                                                         <select name="period_copyfrom" class="form-control" id="period_copyfrom" required>

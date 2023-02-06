@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Fee;
 use App\Libs\Helpers;
+use App\Models\Period;
 use App\Models\FeeType;
 use App\Models\Program;
 use App\Models\FeeSetup;
@@ -15,7 +17,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreFeeRequest;
 use App\Http\Requests\UpdateFeeRequest;
 use App\Http\Requests\StoreSetupFeeRequest;
-use App\Models\Period;
 
 class FeeController extends Controller
 {
@@ -222,5 +223,12 @@ class FeeController extends Controller
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
 
         return view('fee.setup.copy_setup', compact('period', 'periods'));
+    }
+
+    public function savecopyfees(Request $request)
+    {        
+        $copy_setup = $this->feeService->copysetupfees($request);
+
+        return response()->json(['data' => $copy_setup]);
     }
 }

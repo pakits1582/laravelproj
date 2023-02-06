@@ -2,7 +2,7 @@
     @foreach ($feessetups as $feessetup)
         <tr class="label" id="">
             <td class="w30 mid">
-                <input type="checkbox" data-setupfeeid="{{ $feessetup->id }}" class="{{ ($selectall === 0) ? 'checks' : 'copyfees_checkbox' }}" id="check_{{ $feessetup->id }}" />
+                <input type="checkbox" name="setup_fee_id[]" value="{{ $feessetup->id }}" data-setupfeeid="{{ $feessetup->id }}" class="{{ ($selectall == 0) ? 'checks' : 'copyfees_checkbox' }}" id="check_{{ $feessetup->id }}" />
             </td>
             <td class="w100">{{ $feessetup->educlevel->code }}</td>
             <td class="w100">{{ $feessetup->college->code }}</td>

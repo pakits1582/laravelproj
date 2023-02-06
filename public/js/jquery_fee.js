@@ -173,11 +173,11 @@ $(function(){
 		}
 	});
 
-    function returnSetupFees(period)
+    function returnSetupFees(period, selectall)
     {
         $.ajax({
             url: "/fees/"+period+"/returnfeessetup",
-            data: ({ 'selectall' : 0}),
+            data: ({ 'selectall' : selectall}),
             success: function(data){
                 $("#return_setup_fees").html(data);
             },
@@ -215,7 +215,7 @@ $(function(){
                 $("#confirmation").dialog('close');
                 showSuccess('Fee successfully added!');
                 $("#cancel").trigger("click");
-                returnSetupFees(period);
+                returnSetupFees(period, 0);
             },
             error: function (data) {
                console.log(data);
@@ -352,7 +352,7 @@ $(function(){
                     showSuccess(response.data.message);
                 }
                 $('#cancel').trigger('click');
-                returnSetupFees(period);
+                returnSetupFees(period, 0);
             },
             error: function (data) {
                console.log(data);
@@ -373,7 +373,7 @@ $(function(){
 
 		if($(".checks:checked").length === 0)
         {
-			showError('Please select atleast one checkbox/fee to edit!');	
+			showError('Please select atleast one checkbox/fee to delete!');	
 		}else{
             $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">All items related to this class subject will also be deleted. Do you want to continue?<br>You can not undo this process?</div>').dialog({
                 show: 'fade',
@@ -399,13 +399,12 @@ $(function(){
                                     if(response.data.success === false)
                                     {
                                         showError(response.data.message);
-                                        $('#cancel').trigger('click');
                                     }else{
                                         showSuccess('Setup Fee Successfully Deleted!');
-                                        $('#cancel').trigger('click');
-
-                                        returnSetupFees(period);
                                     }
+
+                                    $('#cancel').trigger('click');
+                                    returnSetupFees(period, 0);
                                 },
                                 error: function (data) {
                                     console.log(data);
@@ -486,4 +485,79 @@ $(function(){
 			$(this).prop("checked",false);
 		}
 	});
+
+    $(document).on("submit", "#form_copyclass", function(e){
+        var period = $("#period").val();
+		var postData = $(this).serializeArray();
+        var checks = $(".copyfees_checkbox:checked").length;
+
+		if(checks != 0)
+        {
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Action</div><div class="message">Are you sure you want to copy selected fee?</div>').dialog({
+				show: 'fade',
+				resizable: false,	
+				draggable: false,
+				width: 350,
+				height: 'auto',
+				modal: true,
+				buttons: {
+                    'Cancel':function(){
+                        $(this).dialog('close');
+                        $('.copyfees_checkbox').closest('tr').removeClass('selected');
+                        $('input.copyfees_checkbox').prop('checked', false);						
+                    },
+                    'OK':function(){
+                        $(this).dialog('close');
+                        $.ajax({
+                            url: "/fees/savecopyfees",
+                            type: 'POST',
+                            data: postData,
+                            dataType: 'json',
+                            beforeSend: function() {
+                                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                                    show: 'fade',
+                                    resizable: false,	
+                                    width: 350,
+                                    height: 'auto',
+                                    modal: true,
+                                    buttons:false
+                                });
+                                $(".ui-dialog-titlebar").hide();
+                            },
+                            success: function(response){
+                                console.log(response);
+                                $("#confirmation").dialog('close');
+                                if(response.data.success === false)
+                                {
+                                    showError(response.data.message);
+                                    $('.copyfees_checkbox').closest('tr').removeClass('selected');
+                                    $('input.copyfees_checkbox').prop('checked', false);						
+            
+                                }else{
+                                    showSuccess(response.data.message);
+                                    $('.copyfees_checkbox:checked').closest('tr').remove();
+                                }
+                                $("#check_all").prop("checked", false);
+                                $('#cancel').trigger('click');
+                                returnSetupFees(period, 0);
+                            },
+                            error: function (data) {
+                            console.log(data);
+                            var errors = data.responseJSON;
+                            if ($.isEmptyObject(errors) == false) {
+                                $.each(errors.errors, function (key, value) {
+                                    $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                                });
+                            }
+                        }
+                        });
+                    }	
+                }//end of buttons
+            });//end of dialogbox
+            $(".ui-dialog-titlebar").hide();
+        }else{
+            showError('Please select atleast one fee to copy!');	
+        }
+        e.preventDefault();
+    });
 });
