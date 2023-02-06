@@ -15,7 +15,7 @@
             <td class="mid w40">{{ ($feessetup->cross_enrollee === 0) ? '' : 'Y' }}</td>
             <td class="mid w40">{{ ($feessetup->professional === 0) ? '' : 'Y' }}</td>
             <td class="w150">{{ $feessetup->subject->code }}</td>
-            <td>{{ $feessetup->fee->code }}</td>
+            <td>{{ $feessetup->fee->name }}</td>
             <td>{{ $feessetup->fee->feetype->type }}</td>
             <td class="w70">{{ $feessetup->rate }}</td>
             <td class="w70">
