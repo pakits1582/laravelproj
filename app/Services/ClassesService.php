@@ -45,19 +45,21 @@ class ClassesService
         ]);
 
         $classes = [];
-        foreach ($request->subjects as $key => $subject) {
-            $curriculum_subject = $curriculumService->returnCurriculumSubject($subject);
+
+        $subjects = CurriculumSubjects::with(['subjectinfo'])->whereIn("id", $request->subjects)->get();
+        foreach ($subjects as $key => $subject) 
+        {
             $classes[] = [
                 'period_id' => session('current_period'),
                 'section_id' => $request->section,
-                'curriculum_subject_id' => $subject,
-                'units' => $curriculum_subject->subjectinfo->units,
-                'tfunits' => $curriculum_subject->subjectinfo->tfunits,
-                'loadunits' => $curriculum_subject->subjectinfo->loadunits,
-                'lecunits' => $curriculum_subject->subjectinfo->lecunits,
-                'labunits' => $curriculum_subject->subjectinfo->labunits,
-                'hours' => $curriculum_subject->subjectinfo->hours,
-                'isprof' => $curriculum_subject->subjectinfo->professional,
+                'curriculum_subject_id' => $subject->id,
+                'units' => $subject->subjectinfo->units,
+                'tfunits' => $subject->subjectinfo->tfunits,
+                'loadunits' => $subject->subjectinfo->loadunits,
+                'lecunits' => $subject->subjectinfo->lecunits,
+                'labunits' => $subject->subjectinfo->labunits,
+                'hours' => $subject->subjectinfo->hours,
+                'isprof' => $subject->subjectinfo->professional,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];

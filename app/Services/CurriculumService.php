@@ -39,7 +39,7 @@ class CurriculumService
         return $programs;
     }
 
-    public function storeCurriculumSubejects($request)
+    public function storeCurriculumSubjects($request)
     {
         $curriculum = Curriculum::with('subjects')->find($request->curriculum_id);
 
