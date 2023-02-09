@@ -840,6 +840,27 @@ $(function(){
         }
     });
 
+    $(document).on("click", "#save_enrollment", function(e){
+        // var conflicts = $("#mayconflict").val();
+
+		// if(conflicts > 0){
+		// 	showError('There are conflict subjects, please check before saving!');
+		// }else{
+			//alert('saveenrollment');
+			var checkboxes = $(".select_enrolled_class");
+
+			if(checkboxes.length == 0)
+            {
+				showError('Please add at least one subject before saving enrolment!');
+			}else{
+				$("#save_enrollment").attr("disabled",true);
+				$("#form_enrollment").submit();
+			}
+			
+		//}		
+        e.preventDefault();
+    });
+
     $(document).on("submit", "#form_enrollment", function(e){
 
         alert('xxxx');

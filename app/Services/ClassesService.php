@@ -387,18 +387,19 @@ class ClassesService
                 $this->deleteClassSchedules($class->id);
 
                 $schedule_array = $this->processSchedule($request->schedule);
-               
+                $rooms = Room::all();
+
                 foreach ($schedule_array as $key => $sched) 
                 {
-                    $room_info = $this->checkScheduleRoomifExist($sched['room']);
-
+                    $room_info = $rooms->firstWhere('code', $sched['room']);
+                   
                     $classesSchedules = [];
                     foreach ($sched['days'] as $key => $day) {
                         $classesSchedules[] =  new ClassesSchedule([
                                         'from_time' => $sched['timefrom'],
                                         'to_time' => $sched['timeto'],
                                         'day' => $day,
-                                        'room_id' => $room_info->id,
+                                        'room_id' => ($room_info) ? $room_info->id : '',
                                         'schedule_id' => $schedule_info->id
                                     ]);
                     }//end of days
