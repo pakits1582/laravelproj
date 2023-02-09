@@ -542,14 +542,14 @@ $(function(){
                                 returnSetupFees(period, 0);
                             },
                             error: function (data) {
-                            console.log(data);
-                            var errors = data.responseJSON;
-                            if ($.isEmptyObject(errors) == false) {
-                                $.each(errors.errors, function (key, value) {
-                                    $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
-                                });
+                                console.log(data);
+                                var errors = data.responseJSON;
+                                if ($.isEmptyObject(errors) == false) {
+                                    $.each(errors.errors, function (key, value) {
+                                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                                    });
+                                }
                             }
-                        }
                         });
                     }	
                 }//end of buttons

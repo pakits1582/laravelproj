@@ -29,19 +29,32 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="code"  class="m-0 font-weight-bold text-primary">* Enrollment No.</label>
-                                                <input type="text" id="enrollment_id" class="form-control text-uppercase clearable" readonly value="" placeholder="">
+                                                <input type="text" name="enrollment_id" id="enrollment_id" class="form-control text-uppercase clearable" readonly value="" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="new" value="1" id="new"> New</label>
-                                                <label for="old"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="old" value="1" id="old"> Old</label>
-                                                <label for="returnee"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="returnee" value="1" id="returnee"> Returnee</label>
-                                                <label for="transferee"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="transferee" value="1" id="transferee"> Transferee</label>
-                                                <label for="cross"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="cross_enrollee" value="1" id="cross"> Cross Enrollee</label>
-                                                <label for="foreigner"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="foreigner" value="1" id="foreigner"> Foreigner</label>
-                                                <label for="probationary"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3"><input type="checkbox" class="" name="probationary" value="1" id="probationary"> Probationary</label>
-                                            </div>
+                                                <label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="new" >
+                                                    <input type="checkbox" class="checkbox" name="new" value="1" id="new"> New</label>
+                                                <label for="old"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="old" >
+                                                    <input type="checkbox" class="checkbox" name="old" value="1" id="old"> Old</label>
+                                                <label for="returnee"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="returnee" >
+                                                    <input type="checkbox" class="checkbox" name="returnee" value="1" id="returnee"> Returnee</label>
+                                                <label for="transferee"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="transferee" >
+                                                    <input type="checkbox" class="checkbox" name="transferee" value="1" id="transferee"> Transferee</label>
+                                                <label for="cross"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="cross_enrollee" >
+                                                    <input type="checkbox" class="checkbox" name="cross_enrollee" value="1" id="cross"> Cross Enrollee</label>
+                                                <label for="foreigner"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="foreigner" >
+                                                    <input type="checkbox" class="checkbox" name="foreigner" value="1" id="foreigner"> Foreigner</label>
+                                                <label for="probationary"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
+                                                    <input type="hidden" value="0" name="probationary" >
+                                                    <input type="checkbox" class="checkbox" name="probationary" value="1" id="probationary"> Probationary</label>                                            </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">

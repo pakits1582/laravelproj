@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateEnrollmentRequest;
 use App\Libs\Helpers;
 use App\Models\Classes;
 use App\Models\Student;
@@ -180,5 +181,21 @@ class EnrollmentController extends Controller
         $data = $this->enrollmentService->addSelectedClasses($request);
 
         return response()->json(['data' => $data]);
+    }
+
+    public function saveenrollment(UpdateEnrollmentRequest $request, Enrollment $enrollment)
+    {
+        DB::beginTransaction();
+
+        $enrollment->student()->update([
+            'program_id' => $request->program_id,
+            'year_level' => $request->year_level,
+            'curriculum_id' => $request->curriculum_id,
+        ]);
+
+        $enrollment->update($request->validated()+['acctok' => 1, 'user_id' => Auth::user()->id]);
+
+        DB::commit();
+
     }
 }

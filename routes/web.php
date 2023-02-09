@@ -216,6 +216,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
         Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
         Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);
+        Route::post('/enrolments/{enrollment}/saveenrollment', [EnrollmentController::class, 'saveenrollment']);
 
 
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
