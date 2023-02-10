@@ -66,7 +66,7 @@ class EnrollmentService
 
     public function studentEnrollment($student_id, $period_id, $acctok = 0)
     {
-        $query = Enrollment::with(['period', 'student', 'program', 'curriculum', 'section'])
+        $query = Enrollment::with(['period', 'student', 'program' => ['level', 'collegeinfo'], 'curriculum', 'section', 'assessment'])
                     ->where('student_id', $student_id)
                     ->where('period_id', $period_id);
             if($acctok === 1)
@@ -563,7 +563,7 @@ class EnrollmentService
         DB::commit();
     }
 
-    public function enrolledClassSubjects($request)
+    public function enrolledClassSubjects($enrollment_id)
     {
         $enrolled_classes = EnrolledClass::with([
             'class' => [
@@ -573,7 +573,7 @@ class EnrollmentService
                 'curriculumsubject' => ['subjectinfo']
             ],
             'addedby'
-        ])->where('enrollment_id', $request->enrollment_id)->get();
+        ])->where('enrollment_id', $enrollment_id)->get();
 
         return $enrolled_classes;
     }

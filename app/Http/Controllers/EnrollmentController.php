@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateEnrollmentRequest;
 use App\Libs\Helpers;
+use App\Models\Assessment;
 use App\Models\Classes;
 use App\Models\Student;
 use App\Models\Enrollment;
@@ -65,9 +66,11 @@ class EnrollmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($student_id)
     {
-        //
+        $enrollment = $this->enrollmentService->studentEnrollment($student_id, session('current_period'),1);
+
+        return response()->json(['data' => $enrollment]);
     }
 
     /**
@@ -141,7 +144,7 @@ class EnrollmentController extends Controller
 
     public function enrolledclasssubjects(Request $request)
     {
-        $enrolled_classes = $this->enrollmentService->enrolledClassSubjects($request);
+        $enrolled_classes = $this->enrollmentService->enrolledClassSubjects($request->enrollment_id);
 
         return view('enrollment.enrolled_class_subjects', compact('enrolled_classes'));
     }
@@ -195,7 +198,17 @@ class EnrollmentController extends Controller
 
         $enrollment->update($request->validated()+['acctok' => 1, 'user_id' => Auth::user()->id]);
 
+        Assessment::firstOrCreate([
+            'enrollment_id' => $enrollment->id,
+            'period_id' => session('current_period'),
+        ], [
+            'enrollment_id' => $enrollment->id,
+            'period_id' => session('current_period'),
+            'user_id' => Auth::id()
+        ]);
+
         DB::commit();
 
+        return true;
     }
 }

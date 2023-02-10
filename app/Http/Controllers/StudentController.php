@@ -72,7 +72,7 @@ class StudentController extends Controller
                 'password' => Hash::make('password'),
                 'utype' => User::TYPE_STUDENT,
             ]);
-            //INSERT TO INSTRUCTOR TABLE
+            //INSERT TO STUDENT TABLE
             Student::firstOrCreate([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,

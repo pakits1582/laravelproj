@@ -138,33 +138,31 @@
                                             <div id="deficiencies" class="border border-primary h-100 p-2"></div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="form-group" id="button_group">
-                                            <button type="submit" id="save_enrollment" class="btn btn-success btn-icon-split actions mb-2" disabled>
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-save"></i>
-                                                </span>
-                                                <span class="text">Save Enrollment</span>
-                                            </button>
-                                            <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2" disabled>
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-plus-square"></i>
-                                                </span>
-                                                <span class="text">(F2) Add Subjects</span>
-                                            </button>
-                                            <button type="button" id="delete_selected" class="btn btn-danger btn-icon-split actions mb-2" disabled>
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-trash"></i>
-                                                </span>
-                                                <span class="text">Delete Selected</span>
-                                            </button>
-                                            <button type="button" id="delete_enrollment" class="btn btn-danger btn-icon-split actions mb-2" disabled>
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-trash"></i>
-                                                </span>
-                                                <span class="text">Delete Enrollment</span>
-                                            </button>
-                                        </div>
+                                    <div class="form-group" id="button_group">
+                                        <button type="submit" id="save_enrollment" class="btn btn-success btn-icon-split actions mb-2" disabled>
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-save"></i>
+                                            </span>
+                                            <span class="text">Save Enrollment</span>
+                                        </button>
+                                        <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-plus-square"></i>
+                                            </span>
+                                            <span class="text">(F2) Add Subjects</span>
+                                        </button>
+                                        <button type="button" id="delete_selected" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-trash"></i>
+                                            </span>
+                                            <span class="text">Delete Selected</span>
+                                        </button>
+                                        <button type="button" id="delete_enrollment" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-trash"></i>
+                                            </span>
+                                            <span class="text">Delete Enrollment</span>
+                                        </button>
                                     </div>
                                 </form>
                             </div>

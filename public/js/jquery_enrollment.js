@@ -903,6 +903,7 @@ $(function(){
             },
             error: function (data) {
                 console.log(data);
+                $("#confirmation").dialog('close');
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) == false) {
                     $.each(errors.errors, function (key, value) {
@@ -917,7 +918,7 @@ $(function(){
 
     function displayAssessmentPreview(enrollment_id)
     {
-
+        alert('xxx');
     }
 
 });

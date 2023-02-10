@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('enrollment_id')->references('id')->on('enrollments')->onDelete('cascade');
             $table->unsignedBigInteger('period_id')->index();
             $table->foreign('period_id')->references('id')->on('periods')->onDelete('cascade');
-            $table->decimal('amount', 9, 2);
+            $table->decimal('amount', 9, 2)->default('0.00')->nullable();
             $table->boolean('assesed')->default(false);
             $table->unsignedBigInteger('user_id')->index()->nullable();
             $table->foreign('user_id')->references('id')->on('users');

@@ -71,5 +71,11 @@ class Enrollment extends Model
         return $this->hasMany(EnrolledClassSchedule::class, 'enrollment_id', 'id');
     }
 
+    public function assessment()
+    {
+        return $this->hasOne(Assessment::class, 'enrollment_id', 'id');
+
+    }
+
 
 }

@@ -16,6 +16,7 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
@@ -221,6 +222,33 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
             return Redirect::route('enrolments.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:assessments']], function () {
+        // Route::group(['middleware' => ['writeability:curriculum']], function () {
+        
+
+        Route::post('/assessments/assessmentpreview', [AssessmentController::class, 'assessmentpreview']);
+        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
+        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
+        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
+        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
+
+        // // });
+       
+        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
+        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
+        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
+        // Route::get('/enrolments/searchandaddclasses', [EnrollmentController::class, 'searchandaddclasses']);
+        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
+        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
+        // Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);
+        // Route::post('/enrolments/{enrollment}/saveenrollment', [EnrollmentController::class, 'saveenrollment']);
+
+
+        Route::resource('assessments', AssessmentController::class)->missing(function (Request $request) {
+            return Redirect::route('assessments.index');
         });
     });
 
