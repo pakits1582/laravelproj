@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\PaymentSchedule;
 use App\Services\PeriodService;
 use App\Http\Requests\StorePaymentScheduleRequest;
+use App\Http\Requests\UpdatePaymentScheduleRequest;
 
 class PaymentScheduleController extends Controller
 {
@@ -49,13 +50,28 @@ class PaymentScheduleController extends Controller
      */
     public function store(StorePaymentScheduleRequest $request)
     {
-        $paymentschedules = PaymentSchedule::with(['educlevel', 'paymentmode'])->where('period_id', $request->period_id)->get();
+        $paymentschedules = PaymentSchedule::with(['educlevel', 'paymentmode'])
+            ->where('period_id', $request->period_id)
+            ->where('educational_level_id', $request->educational_level_id)
+            ->where('year_level', $request->year_level)
+            ->where('payment_mode_id', $request->payment_mode_id)
+            ->where('payment_type', $request->payment_type)
+        ->get();
 
         if(!$request->filled('tuition') && !$request->filled('miscellaneous') && !$request->filled('others'))
         {
             return response()->json([
                 'success' => false,
                 'message' => 'Please fill at least one of the following field (Tuition, Miscellaneous, Others)',
+                'alert' => 'alert-danger'
+            ], 200);
+        }
+
+        if($paymentschedules->count() >= 10)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'You\'ve already reached the maximum number of 10 payment schedules!',
                 'alert' => 'alert-danger'
             ], 200);
         }
@@ -134,9 +150,9 @@ class PaymentScheduleController extends Controller
      * @param  \App\Models\PaymentSchedule  $paymentSchedule
      * @return \Illuminate\Http\Response
      */
-    public function edit(PaymentSchedule $paymentSchedule)
+    public function edit(PaymentSchedule $paymentschedule)
     {
-        //
+        return response()->json($paymentschedule);
     }
 
     /**
@@ -146,9 +162,83 @@ class PaymentScheduleController extends Controller
      * @param  \App\Models\PaymentSchedule  $paymentSchedule
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PaymentSchedule $paymentSchedule)
+    public function update(UpdatePaymentScheduleRequest $request, PaymentSchedule $paymentschedule)
     {
-        //
+        $paymentschedules = PaymentSchedule::with(['educlevel', 'paymentmode'])
+            ->where('period_id', $request->period_id)
+            ->where('educational_level_id', $request->educational_level_id)
+            ->where('year_level', $request->year_level)
+            ->where('payment_mode_id', $request->payment_mode_id)
+            ->where('payment_type', $request->payment_type)
+            ->where('id', '!=', $paymentschedule->id)
+        ->get();
+
+        if(!$request->filled('tuition') && !$request->filled('miscellaneous') && !$request->filled('others'))
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please fill at least one of the following field (Tuition, Miscellaneous, Others)',
+                'alert' => 'alert-danger'
+            ], 200);
+        }
+
+        if($paymentschedules->count() >= 10)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'You\'ve already reached the maximum number of 10 payment schedules!',
+                'alert' => 'alert-danger'
+            ], 200);
+        }
+
+        $current_tuition_percentage = 0;
+        $current_miscellaneous_percentage = 0;
+        $current_others_percentage = 0;
+        $error = '';
+
+        if($request->payment_type == 1)
+        {
+            foreach ($paymentschedules as $key => $v) {
+                $current_tuition_percentage += $v->tuition;
+                $current_miscellaneous_percentage += $v->miscellaneous;
+                $current_others_percentage += $v->others;
+            }
+
+            if($current_tuition_percentage == 100 && $request->tuition != 0){
+                $error = 'The total tuition fee percentage is already 100%!';	
+            }else if($current_miscellaneous_percentage == 100 && $request->miscellaneous != 0){
+                $error = 'The total miscellaneous fee percentage is already 100%!';	
+            }else if($current_others_percentage == 100 && $request->others != 0){
+                $error = 'The total other miscellaneous fee percentage is already 100%!';	
+            }else{
+                //check remaining percentage
+                if($request->tuition > (100 - $current_tuition_percentage)){
+                    $error = 'The tuition fee percentage entered is greater than the remaining '.(100 - $current_tuition_percentage).'% percentage!';
+                }else if($request->miscellaneous > (100 - $current_miscellaneous_percentage)){
+                    $error = 'The miscelleneous fee percentage entered is greater than the remaining '.(100 - $current_miscellaneous_percentage).'% percentage!';
+                }else if($request->others > (100 - $current_others_percentage)){
+                    $error = 'The other miscelleneous fee percentage entered is greater than the remaining '.(100 - $current_others_percentage).'% percentage!';
+                }
+            }
+        }
+
+        if($error != '')
+        {
+            return response()->json([
+                'success' => false,
+                'message' => $error,
+                'alert' => 'alert-danger'
+            ], 200);
+        }
+
+        $paymentschedule->update($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment schedule successfully added!',
+            'alert' => 'alert-success'
+        ], 200);
+
     }
 
     /**
@@ -157,9 +247,15 @@ class PaymentScheduleController extends Controller
      * @param  \App\Models\PaymentSchedule  $paymentSchedule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PaymentSchedule $paymentSchedule)
+    public function destroy(PaymentSchedule $paymentschedule)
     {
-        //
+        $paymentschedule->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment schedule successfully deleted!',
+            'alert' => 'alert-success'
+        ], 200);
     }
 
     public function storepaymentmode(Request $request)

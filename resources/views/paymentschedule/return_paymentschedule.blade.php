@@ -2,7 +2,7 @@
     @foreach ($paymentschedules as $paymentschedule)
         <tr class="label" id="">
             <td class="w30 mid">
-                <input type="checkbox" name="setup_fee_id[]" value="{{ $paymentschedule->id }}" class="checks" id="check_{{ $paymentschedule->id }}" />
+                <input type="checkbox" name="payment_schedule_id[]" value="{{ $paymentschedule->id }}" class="checks" id="{{ $paymentschedule->id }}" />
             </td>
             <td class="w150">{{ $paymentschedule->educlevel->code }}</td>
             <td class="mid w100">{{ $paymentschedule->year_level }}</td>

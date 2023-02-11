@@ -375,7 +375,7 @@ $(function(){
         {
 			showError('Please select atleast one checkbox/fee to delete!');	
 		}else{
-            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">All items related to this class subject will also be deleted. Do you want to continue?<br>You can not undo this process?</div>').dialog({
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to delete selected setup fee?<br>You can not undo this process?</div>').dialog({
                 show: 'fade',
                 resizable: false,	
                 draggable: false,

@@ -100,16 +100,17 @@
                                                     <option value="5" {{ (old('year_level') == 5) ? 'selected' : '' }}>Fifth Year</option>
                                                     <option value="6" {{ (old('year_level') == 6) ? 'selected' : '' }}>Sixth Year</option>
                                                 </select>
+                                                <div id="error_year_level" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="payment_type"  class="m-0 font-weight-bold text-primary">* Payment Type</label>
-                                                <select name="payment_type" class="form-control clearable" id="payment_type">
+                                                <select name="payment_type" class="form-control" id="payment_type">
                                                     <option value="1" {{ (old('payment_type') == 1) ? 'selected' : '' }}>Percentage</option>
                                                     <option value="2" {{ (old('payment_type') == 2) ? 'selected' : '' }}>Fixed</option>
                                                 </select>
-                                                <div id="error_period_id" class="errors"></div>
+                                                <div id="error_payment_type" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
