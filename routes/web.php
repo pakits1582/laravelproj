@@ -26,6 +26,7 @@ use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\ExternalGradeController;
 use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\InternalGradeController;
+use App\Http\Controllers\PaymentScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -249,6 +250,19 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('assessments', AssessmentController::class)->missing(function (Request $request) {
             return Redirect::route('assessments.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:paymentschedules']], function () {
+        // Route::group(['middleware' => ['writeability:curriculum']], function () {
+        
+        Route::view('/paymentschedules/addpaymentmode', 'paymentschedule.addpaymentmode');
+        Route::post('/paymentschedules/savepaymentmode', [PaymentScheduleController::class, 'storepaymentmode'])->name('savepaymentmode');
+        Route::get('/paymentschedules/{period_id}/returnpaymentschedules', [PaymentScheduleController::class, 'returnpaymentschedules']);
+
+
+        Route::resource('paymentschedules', PaymentScheduleController::class)->missing(function (Request $request) {
+            return Redirect::route('paymentschedules.index');
         });
     });
 

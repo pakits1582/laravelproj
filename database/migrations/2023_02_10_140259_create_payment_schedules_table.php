@@ -23,9 +23,9 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_mode_id')->index();
             $table->foreign('payment_mode_id')->references('id')->on('payment_modes')->onDelete('cascade');
             $table->string('description');
-            $table->integer('tuition')->default(0)->nullable();
-            $table->integer('miscellaneous')->default(0)->nullable();
-            $table->integer('others')->default(0)->nullable();
+            $table->decimal('tuition', 9, 2)->default('0')->nullable();
+            $table->decimal('miscellaneous', 9, 2)->default('0')->nullable();
+            $table->decimal('others', 9, 2)->default('0')->nullable();
             $table->tinyInteger('payment_type')->default(1);
             $table->timestamps();
         });
