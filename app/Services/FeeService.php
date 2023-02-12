@@ -62,13 +62,18 @@ class FeeService
         return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, fee already exists!'])->withInput();
     }
 
-    public function returnSetupFees($request)
+    public function returnSetupFees($period_id, $educational_level_id = '')
     {
         $query = FeeSetup::with(['educlevel', 'college', 'program', 'subject', 'fee' => ['feetype']]);
 
-        $query->when(filled($request->period_id), function ($q) use($request) {
-            return $q->where('period_id', $request->period_id);
+        $query->when(filled($period_id), function ($q) use($period_id) {
+            return $q->where('period_id', $period_id);
         });
+
+        $query->when(filled($educational_level_id), function ($q) use($educational_level_id) {
+            return $q->where('educational_level_id', $educational_level_id);
+        });
+
 
         return $query->get();
     }

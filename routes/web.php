@@ -230,7 +230,6 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
         
 
-        Route::post('/assessments/assessmentpreview', [AssessmentController::class, 'assessmentpreview']);
         // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
         // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
         // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);

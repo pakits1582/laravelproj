@@ -40,9 +40,8 @@ $(function(){
     function returnAssessmentPreview(enrollment_id, assessment_id)
     {
         $.ajax({
-            url: "/assessments/assessmentpreview",
-            type: 'POST',
-            data: ({ 'enrollment_id':enrollment_id, 'assessment_id':assessment_id }),
+            url: "/assessments/"+assessment_id,
+            type: 'GET',
             beforeSend: function() {
 				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
 					show: 'fade',
@@ -57,9 +56,10 @@ $(function(){
             success: function(response){
                 $("#confirmation").dialog('close');
                 console.log(response);
-                
+                $("#assessment_preview").html(response);
             },
             error: function (data) {
+                $("#confirmation").dialog('close');
                 console.log(data);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {

@@ -147,7 +147,7 @@
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Assessment Preview</h6>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" id="assessment_preview">
                         
                     </div>
                 </div>

@@ -155,7 +155,7 @@ class FeeController extends Controller
         $programs = Program::where('active', 1)->orderBy('code')->get();
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         
-        $feessetups = $this->feeService->returnSetupFees($request);
+        $feessetups = $this->feeService->returnSetupFees(session('current_period'));
 
         return view('fee.setup.index', compact('fees', 'programs', 'periods', 'feessetups'))->with('selectall', 0);
     }
@@ -188,7 +188,7 @@ class FeeController extends Controller
 
     public function returnfeessetup(Request $request)
     {
-        $feessetups = $this->feeService->returnSetupFees($request);
+        $feessetups = $this->feeService->returnSetupFees($request->period_id);
 
         return view('fee.setup.return_setupfees', compact('feessetups'))->with('selectall', $request->selectall);
     }

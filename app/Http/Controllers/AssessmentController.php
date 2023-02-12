@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Assessment;
+use App\Services\FeeService;
 use Illuminate\Http\Request;
+use App\Models\Configuration;
+use App\Models\PaymentSchedule;
 use App\Services\PeriodService;
 use App\Services\Assessment\AssessmentService;
 use App\Services\Enrollment\EnrollmentService;
@@ -55,9 +59,18 @@ class AssessmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Assessment $assessment)
     {
-        //
+        $assessment->load(['enrollment' =>['period', 'student' => ['user'], 'program', 'curriculum', 'section']]);
+        $configuration = Configuration::take(1)->first();
+
+        $enrolled_classes  = (new EnrollmentService())->enrolledClassSubjects($assessment->enrollment_id);
+        $setup_fees        = (new FeeService())->returnSetupFees($assessment->period_id, $assessment->enrollment->program->educational_level_id);
+        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', session('current_period'))->where('educational_level_id', $assessment->enrollment->program->educational_level_id)->get();
+        //POSTCHARGES
+        //PREVIOUS BALANCE
+        
+        return view('assessment.assessment_preview', compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules'));
     }
 
     /**
@@ -94,10 +107,5 @@ class AssessmentController extends Controller
         //
     }
 
-    public function assessmentpreview(Request $request)
-    {
-        $enrolled_classes = (new EnrollmentService())->enrolledClassSubjects($request->enrollment_id);
-
-        
-    }
+  
 }
