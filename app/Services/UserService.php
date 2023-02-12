@@ -174,10 +174,10 @@ class UserService
                 if($request->has('keyword') && !empty($request->keyword))
                 {
                     $query->where(function($query) use($request){
-                        $query->where('instructors.last_name', 'like', '%'.$request->keyword.'%');
-                        $query->orwhere('instructors.middle_name', 'like', '%'.$request->keyword.'%');
-                        $query->orwhere('instructors.first_name', 'like', '%'.$request->keyword.'%');
-                        $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                        $query->where('instructors.last_name', 'like', $request->keyword.'%');
+                        $query->orwhere('instructors.middle_name', 'like', $request->keyword.'%');
+                        $query->orwhere('instructors.first_name', 'like', $request->keyword.'%');
+                        $query->orwhere('users.idno', 'like', $request->keyword.'%');
                     });
                 }
                 break;
@@ -192,10 +192,10 @@ class UserService
                 if($request->has('keyword') && !empty($request->keyword))
                 {
                     $query->where(function($query) use($request){
-                        $query->where('students.last_name', 'like', '%'.$request->keyword.'%');
-                        $query->orwhere('students.middle_name', 'like', '%'.$request->keyword.'%');
-                        $query->orwhere('students.first_name', 'like', '%'.$request->keyword.'%');
-                        $query->orwhere('users.idno', 'like', '%'.$request->keyword.'%');
+                        $query->where('students.last_name', 'like', $request->keyword.'%');
+                        $query->orwhere('students.middle_name', 'like', $request->keyword.'%');
+                        $query->orwhere('students.first_name', 'like', $request->keyword.'%');
+                        $query->orwhere('users.idno', 'like', $request->keyword.'%');
                     });
                 }
                 break;
