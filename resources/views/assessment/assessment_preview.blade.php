@@ -382,9 +382,9 @@
                                     }
                                     if($fee['subject_id'] != 0 && strcasecmp($feetype['type'], 'Laboratory Fees') == 0)
                                     {
-                                        if(in_array($fee['subject_id'], $laboratory_subjects) == true)
+                                        if(in_array($fee['subject_id'], $laboratory_subjects) === true)
                                         {
-                                            $feesdesc .= '('.$fee['fee']['code'].')';
+                                            $feesdesc .= '('.$fee['subject']['code'].')';
                                             $labfeetotal += $rate;
                                         }
                                     }
