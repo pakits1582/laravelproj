@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
                         $info = 'studentinfo';
                         break;
                     default:
-                         $info = 'info';
+                        $info = 'info';
                         break;
                 }
 

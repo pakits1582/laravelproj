@@ -378,3 +378,15 @@ th{
 	text-align: left !important;
 }
 
+.tablefees{
+	margin:0px 2%;
+	font-size: 13px;
+	color: black;
+	width: 96%;
+	border-collapse: collapse;
+}
+.tablefees td{
+	border-collapse: collapse;
+}
+
+

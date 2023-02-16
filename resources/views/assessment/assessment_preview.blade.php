@@ -404,17 +404,143 @@
                         @endif
                     @endforeach
                         <tr>
-                            <td class=""><strong>Total ssss</strong></td>
+                            <td colspan="3"><hr class="m-0"></td>
+                        </tr>
+                        <tr>
+                            <td class=""><strong>Total {{ $feetype['type'] }}</strong></td>
                             <td class="w100"></td>
-                            <td class="right w100"><strong>ss</strong></td>
+                            <td class="right w100"><strong>{{ number_format($total,2) }}</strong></td>
                         </tr>
                         <tr><td colspan="2">&nbsp;</td></tr>
                     </table>
+                    @php
+                        $totalfees += $total;
+                    @endphp
+                    <input type="hidden" name="assessbreakdown[]" value="{{ $total }}" />
                 @endforeach
             @endif
         </div>
         <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-8">
+                    <h6 class="mx-3 font-weight-bold text-black">TOTAL TUITION AND FEES:</h6> 
+                </div>
+                <div class="col-md-4 font-weight-bold text-black">
+                    {{ 'Php '.number_format($totalfees, 2) }}
+                </div>
+            </div>
+            <div class="row">
+                <h6 class="mx-3 font-weight-bold text-black">Payment Schedules</h6> 
+            </div>
+            {{-- {{ print_r($payment_schedules->toArray()) }} --}}
+            @php
+                $paymentsched = [];
+                $paypassed = 0;
+                if($payment_schedules->toArray())
+                {
+                    foreach ($payment_schedules->toArray() as $key => $payment_schedule) 
+                    {
+                        if($payment_schedule['educational_level_id'] == NULL && $payment_schedule['year_level'] == NULL){
+                            $paypassed = 1;
+                        }else{
+                            if($payment_schedule['educational_level_id'] != NULL){
+                                $paypassed = ($educational_level_id == $payment_schedule['educational_level_id']) ? 1 : 0;
+                            }
+                            if($payment_schedule['year_level'] != 0){
+                                $paypassed = ($year_level == $payment_schedule['year_level']) ? 1 : 0;
+                            }
+                        }
+                        if($paypassed == 1)
+                        {
+                            $paymentsched[] = $payment_schedule;
+                        }
+                    }
+                }
 
+                @endphp
+                    <table class="tablefees">
+                @php
+                //FINAL COMPUTATION (AMOUNT DUE)
+                $amountdue = 0;
+                $fixedtuition = 0;
+                $fixedmisc = 0;
+                $fixedother = 0;
+                foreach ($paymentsched as $key => $ps) 
+                {
+                    $topay = 0;
+
+                    $fixedtuition = ($ps['payment_type'] == 2) ? $ps['tuition'] : 0;
+                    $fixedmisc    = ($ps['payment_type'] == 2) ? $ps['miscellaneous'] : 0;
+                    $fixedother   = ($ps['payment_type'] == 2) ? $ps['others'] : 0;
+
+                    $totaltuition  = $totaltuition-$fixedtuition;
+                    $miscfeetotal  = $miscfeetotal-$fixedmisc;
+                    $otherfeetotal = $otherfeetotal-$fixedother;
+
+                    $tuitioncomp = ($ps['payment_type'] == 1) ? ($ps['tuition']/100) * $totaltuition : $ps['tuition'];
+                    $misccomp    = ($ps['payment_type'] == 1) ? ($ps['miscellaneous']/100) * $miscfeetotal : $ps['miscellaneous'];
+                    $otherscomp  = ($ps['payment_type'] == 1) ? ($ps['others']/100) * $otherfeetotal : $ps['others'];
+
+                    if(strcasecmp($ps['description'], 'downpayment') == 0){
+                        $topay = $tuitioncomp+$misccomp+$otherscomp+$labfeetotal+$additionalfeetotal;
+                        $amountdue = $topay;
+                        @endphp
+                            <input type="hidden" name="downpayment" value="{{ $topay }}" />
+                        @php
+                    }else{
+                        $topay = $tuitioncomp+$misccomp+$otherscomp;
+                        @endphp
+                            <input type="hidden" name="exams[]" value="{{ $topay }}" />
+                        @php
+                        $exams[] = array('exams' => $topay);
+                    }
+                    @endphp
+                        <tr>
+                            <td>{{ $ps['description'] }}</td>
+                            <td class="right w100">{{ number_format($topay,2) }}</td>
+                        </tr>
+                    @php
+                }
+            @endphp
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr><td><strong>AMOUNT DUE</strong></td><td class="w100 right"><strong>{{ 'Php '.number_format($amountdue,2) }}</strong></td></tr>
+                    <tr><td colspan="2">&nbsp;</td></tr> 
+                </table>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <h6 class="mx-3 font-weight-bold text-black">GRAND TOTAL</h6> 
+                </div>
+                <div class="col-md-4 font-weight-bold text-black">
+                    {{ 'Php '.number_format($totalfees, 2) }}
+                </div>
+            </div>
+            <div class="m-3">
+                <em><span>Note: </span>SCHOOL FEES ARE SUBJECT FOR ADJUSTMENT</em>
+            </div>
+            <table class="tablefees">
+                <tr><td class="w200"><label>Approved/Verified by:</label></td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td id="blank">&nbsp;</td><td></td></tr>
+                <tr><td class="mid"><strong>Adviser</strong></td><td></td></tr>
+                <tr><td colspan="2"><strong>Date Printed : </strong>{{ date("F d, Y") }}</td></tr>
+                <tr><td colspan="2"><strong>Printed By : </strong>{{ Auth::user()->name }}</td></tr>
+            </table>
+            <div id="due" class="m-3">
+                <em>
+                @php
+                    if($configuration)
+                    {
+                        $noofdays = $configuration->due;
+                        $note = $configuration->note;  
+                        $due = date('F d, Y', strtotime($enrollment_date . ' +'.$noofdays.' Weekday'));
+                 @endphp
+                        {{ str_replace('DUE',$due,$note) }}
+                @php
+                    }
+                @endphp
+                </em>
+            </div>
         </div>
     </div>
 </div>
