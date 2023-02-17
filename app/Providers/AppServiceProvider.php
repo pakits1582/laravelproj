@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('layout', function ($view) {
+        View::composer('*', function ($view) {
             try {
                 $user = Auth::user();
                 switch ($user->utype) {

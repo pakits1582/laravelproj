@@ -37,7 +37,7 @@ $(function(){
         dropdownParent: $("#ui_content4")
     });
 
-    function returnAssessmentPreview(enrollment_id, assessment_id)
+    function returnAssessmentPreview(assessment_id)
     {
         $.ajax({
             url: "/assessments/"+assessment_id,
@@ -57,6 +57,7 @@ $(function(){
                 $("#confirmation").dialog('close');
                 console.log(response);
                 $("#assessment_preview").html(response);
+                // $("#save_assessment").focus();
             },
             error: function (data) {
                 $("#confirmation").dialog('close');
@@ -110,7 +111,7 @@ $(function(){
                             $("#foreigner").prop("checked", (response.data.foreigner === 1) ? true : false);      
                             $("#probationary").prop("checked", (response.data.probationary === 1) ? true : false); 
 
-                            returnAssessmentPreview(response.data.id, response.data.assessment.id);
+                            returnAssessmentPreview(response.data.assessment.id);
                         }
                     }
                 },

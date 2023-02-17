@@ -207,7 +207,6 @@ class FeeController extends Controller
 
     public function updatesetupfee(StoreSetupFeeRequest $request, FeeSetup $setupfee)
     {
-
         $setupfee->update($request->validated());
 
         return response()->json(['data' => [

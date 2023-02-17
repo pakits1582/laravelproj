@@ -1,3 +1,4 @@
+<form method="POST" action="" id="assessment_form">
 <div>
     <!-- Page Heading -->
     @php
@@ -522,9 +523,9 @@
                 <tr><td class="w200"><label>Approved/Verified by:</label></td><td>&nbsp;</td></tr>
                 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                 <tr><td id="blank">&nbsp;</td><td></td></tr>
-                <tr><td class="mid"><strong>Adviser</strong></td><td></td></tr>
+                <tr><td class="mid border-top border-dark"><strong>Adviser</strong></td><td></td></tr>
                 <tr><td colspan="2"><strong>Date Printed : </strong>{{ date("F d, Y") }}</td></tr>
-                <tr><td colspan="2"><strong>Printed By : </strong>{{ Auth::user()->name }}</td></tr>
+                <tr><td colspan="2"><strong>Printed By : </strong>{{ Auth::user()->{ $info['info'] }->name }}</td></tr>
             </table>
             <div id="due" class="m-3">
                 <em>
@@ -532,8 +533,9 @@
                     if($configuration)
                     {
                         $noofdays = $configuration->due;
-                        $note = $configuration->note;  
-                        $due = date('F d, Y', strtotime($enrollment_date . ' +'.$noofdays.' Weekday'));
+                        $note = $configuration->note; 
+                        $due = date('F d, Y', strtotime($enrollment_date . ' +'.$noofdays.' days'));
+
                  @endphp
                         {{ str_replace('DUE',$due,$note) }}
                 @php
@@ -541,8 +543,19 @@
                 @endphp
                 </em>
             </div>
-        </div>
+            @if ($withbutton == 1)
+            <div class="mid m-3">
+                <button type="submit" id="save_assessment" class="btn btn-success btn-icon-split actions mb-2">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-save"></i>
+                    </span>
+                    <span class="text">Save Assessment</span>
+                </button>
+            </div>
+            @endif
+        </div>{{-- end of 2nd column --}}
     </div>
 </div>
+</form>
 
 

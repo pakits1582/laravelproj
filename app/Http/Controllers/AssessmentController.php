@@ -71,7 +71,7 @@ class AssessmentController extends Controller
         
         //PREVIOUS BALANCE
         
-        return view('assessment.assessment_preview', compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules'));
+        return view('assessment.assessment_preview', compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules'))->with('withbutton', 1);
     }
 
     /**
