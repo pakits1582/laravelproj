@@ -267,7 +267,7 @@
                                             <tr>
                                                 <td class="w350">{{ $description }}</td>
                                                 <td class="right w100">{{ number_format($acadsubjtotal,2) }}</td>
-                                                <input type="hidden" name="fees[]" value="" />
+                                                <input type="hidden" name="fees[]" value="{{ $fee['fee_id'] }}-{{ $acadsubjtotal }}" />
                                             </tr>
                                             @php
                                                 $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $acadsubjtotal);
@@ -305,7 +305,7 @@
                                             <tr>
                                                 <td class="w350">{{ $description }}</td>
                                                 <td class="right w100">{{ number_format($profsubjtotal,2) }}</td>
-                                                <input type="hidden" name="fees[]" value="" />
+                                                <input type="hidden" name="fees[]" value="{{ $fee['fee_id'] }}-{{ $profsubjtotal }}" />
                                             </tr>
                                             @php
                                                 $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $profsubjtotal);
@@ -342,8 +342,8 @@
                                         @endphp   
                                             <tr>
                                                 <td class="w350">{{ $description }}</td>
-                                                <td class="right w100">{{ number_format($profsubjtotal,2) }}</td>
-                                                <input type="hidden" name="fees[]" value="" />
+                                                <td class="right w100">{{ number_format($tuitiontotal,2) }}</td>
+                                                <input type="hidden" name="fees[]" value="{{ $fee['fee_id'] }}-{{ $tuitiontotal }}" />
                                             </tr>
                                             @php
                                                 $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $tuitiontotal);
@@ -393,7 +393,7 @@
                                         <tr>
                                             <td class="w350">{{ $feesdesc }}</td>
                                             <td class="right w100">{{ number_format($rate,2) }}</td>
-                                            <input type="hidden" name="fees[]" value="" />
+                                            <input type="hidden" name="fees[]" value="{{ $fee['fee_id'] }}-{{ $rate }}" />
                                         </tr>
                                         @php
                                             $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $rate);
@@ -417,7 +417,7 @@
                     @php
                         $totalfees += $total;
                     @endphp
-                    <input type="hidden" name="assessbreakdown[]" value="{{ $total }}" />
+                    <input type="hidden" name="assessbreakdown[]" value="{{ $feetype['id'] }}-{{ $total }}" />
                 @endforeach
             @endif
         </div>
@@ -428,6 +428,7 @@
                 </div>
                 <div class="col-md-4 font-weight-bold text-black">
                     {{ 'Php '.number_format($totalfees, 2) }}
+                    <input type="hidden" name="totalfees" value="{{ $totalfees }}" >
                 </div>
             </div>
             <div class="row">
@@ -545,6 +546,11 @@
             </div>
             @if ($withbutton == 1)
             <div class="mid m-3">
+                <input type="hidden" name="idno" required="" value="{{ $idno }}">
+                <input type="hidden" name="enrollment_id" required="" required="" value="{{ $enrollment_id }}">
+                <input type="hidden" name="assessment_id" value="{{ $assessment_id }}">
+                <input type="hidden" name="validated" required="" value="{{ $validated }}">
+
                 <button type="submit" id="save_assessment" class="btn btn-success btn-icon-split actions mb-2">
                     <span class="icon text-white-50">
                         <i class="fas fa-save"></i>

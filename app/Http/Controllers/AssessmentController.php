@@ -92,9 +92,12 @@ class AssessmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Assessment $assessment)
     {
-        //
+        // $validated = $request->validate([
+        //     'type' => 'required|unique:fee_types|max:255',
+        //     'inassess' => '',
+        // ]);    
     }
 
     /**

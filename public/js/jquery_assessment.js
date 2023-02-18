@@ -126,4 +126,47 @@ $(function(){
             });
         }
     });
+
+    $(document).on("submit","#assessment_form", function(e){
+        var enrolled_units = $("#enrolledunits").text();
+        var assessment_id = $("#assessment_id").val();
+		var postData = $(this).serializeArray(); 
+		postData.push({name: 'enrolled_units', value: enrolled_units });
+        $("#save_assessment").prop("disabled", true);
+        
+        $.ajax({
+            url: "/assessments/"+assessment_id,
+            type: 'PUT',
+            data: postData,
+            beforeSend: function() {
+				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+			},
+            success: function(response){
+                $("#confirmation").dialog('close');
+                $("#save_assessment").prop("disabled", false);
+
+                console.log(response);
+                
+            },
+            error: function (data) {
+                $("#confirmation").dialog('close');
+                $("#save_assessment").prop("disabled", false);
+
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
+        });
+        e.preventDefault();
+    });
 });
