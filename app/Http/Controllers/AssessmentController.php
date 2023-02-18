@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Assessment;
+use App\Models\AssessmentBreakdown;
+use App\Models\AssessmentDetail;
 use App\Services\FeeService;
 use Illuminate\Http\Request;
 use App\Models\Configuration;
 use App\Models\PaymentSchedule;
 use App\Services\PeriodService;
+use Illuminate\Support\Facades\DB;
 use App\Services\Assessment\AssessmentService;
 use App\Services\Enrollment\EnrollmentService;
+use Illuminate\Support\Facades\Auth;
 
 class AssessmentController extends Controller
 {
@@ -94,10 +98,9 @@ class AssessmentController extends Controller
      */
     public function update(Request $request, Assessment $assessment)
     {
-        // $validated = $request->validate([
-        //     'type' => 'required|unique:fee_types|max:255',
-        //     'inassess' => '',
-        // ]);    
+        $data = $this->assessmentService->updateAssessment($request, $assessment);
+
+        return response()->json(['data' => $data]);
     }
 
     /**
