@@ -240,7 +240,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
         // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
         // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
-        // Route::get('/enrolments/searchandaddclasses', [EnrollmentController::class, 'searchandaddclasses']);
+        Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
         // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
         // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
         // Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);

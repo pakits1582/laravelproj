@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use App\Models\Assessment;
-use App\Models\AssessmentBreakdown;
-use App\Models\AssessmentDetail;
 use App\Services\FeeService;
 use Illuminate\Http\Request;
 use App\Models\Configuration;
 use App\Models\PaymentSchedule;
 use App\Services\PeriodService;
+use App\Models\AssessmentDetail;
 use Illuminate\Support\Facades\DB;
+use App\Models\AssessmentBreakdown;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Assessment\AssessmentService;
 use App\Services\Enrollment\EnrollmentService;
-use Illuminate\Support\Facades\Auth;
 
 class AssessmentController extends Controller
 {
@@ -112,6 +113,22 @@ class AssessmentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function printassessment(Assessment $assessment)
+    {
+        $assessment->load(['enrollment' =>['period', 'student' => ['user'], 'program', 'curriculum', 'section']]);
+        $configuration = Configuration::take(1)->first();
+
+        $enrolled_classes  = (new EnrollmentService())->enrolledClassSubjects($assessment->enrollment_id);
+        $setup_fees        = (new FeeService())->returnSetupFees($assessment->period_id, $assessment->enrollment->program->educational_level_id);
+        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', session('current_period'))->where('educational_level_id', $assessment->enrollment->program->educational_level_id)->get();
+        
+        
+        $pdf = PDF::loadView('assessment.print_assessment', compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules'))
+        ->setPaper('a4', 'landscape');
+       
+        return $pdf->stream('assessment.pdf');
     }
 
   

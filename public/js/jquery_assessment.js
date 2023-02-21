@@ -138,6 +138,7 @@ $(function(){
             url: "/assessments/"+assessment_id,
             type: 'PUT',
             data: postData,
+            dataType: 'json',
             beforeSend: function() {
 				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
 					show: 'fade',
@@ -153,7 +154,28 @@ $(function(){
                 $("#confirmation").dialog('close');
                 $("#save_assessment").prop("disabled", false);
 
-                console.log(response);
+                if(response.data === true)
+                {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Assessment Saved</div><div class="message">Student was successfully assessed.<br>Print student assessment?</div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        draggable: false,
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: {
+                                'Cancel':function(){
+                                    $("#confirmation").dialog('close');
+                                },
+                                'OK':function(){
+                                    $("#confirmation").dialog('close');
+                                    window.open("/assessments/printassessment/"+assessment_id, '_blank'); 
+                                }//end of ok button	
+                            }//end of buttons
+                    });//end of dialogbox
+                    $(".ui-dialog-titlebar").hide();
+                    //end of dialogbox
+                }
                 
             },
             error: function (data) {
