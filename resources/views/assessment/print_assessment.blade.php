@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +15,51 @@
           right: 0px;
           height: 60px;
           margin-top: -60px;
+        }
+
+        @font-face {
+            font-family: 'centurygothic';
+            src: url({{ storage_path("fonts/century_gothic.ttf") }}) format("truetype");
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'centurygothicb';
+            src: url({{ storage_path("fonts/gothicb.ttf") }}) format("truetype");
+            font-style: bold;
+        }
+
+        body{
+            font-family:centurygothic !important;
+            word-wrap:break-word !important;
+            font-size:14px;
+        }
+
+        *{
+            font-family:centurygothic !important;
+            word-wrap:break-word !important;
+        }
+
+        /******* TABLE ASSESS *********/
+        table.assess_table{
+            border-collapse:collapse;
+            clear:both;
+            width:100%;
+        }
+        table.assess_table th{
+            border-bottom:none;	
+            border-top:none;
+            padding:5px 0px;	
+            border:1px solid #ccc;
+        }
+        table.assess_table tr:nth-child(odd) {
+            background-color:#f2f2f2;
+        }
+        table.assess_table td {
+            border:1px solid #ccc !important;
+            padding:3px !important;
+            font-size: 10px !important;
+
         }
       </style>
 </head>
@@ -86,7 +129,7 @@
             </div>
         </div>
         <div class="table-responsive-sm">
-            <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
+            <table class="assess_table">
                 <thead class="">
                     <tr>
                         <th class="w50">Code</th>

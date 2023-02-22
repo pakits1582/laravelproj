@@ -114,11 +114,11 @@
                                         </div>
                                     </div>
                                     <div class="form-group right" id="button_group">
-                                        <button type="submit" id="save_enrollment" class="btn btn-success btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="print_assessment" class="btn btn-success btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
-                                                <i class="fas fa-save"></i>
+                                                <i class="fas fa-print"></i>
                                             </span>
-                                            <span class="text">Save Enrollment</span>
+                                            <span class="text">Print Assessment</span>
                                         </button>
                                         <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">

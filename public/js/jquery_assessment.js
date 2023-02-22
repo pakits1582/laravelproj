@@ -89,6 +89,7 @@ $(function(){
                         if(response.data.acctok === 0)
                         {
                             showError('Student enrollment is not yet saved! Please save enrollment first!');
+                            $(".actions").prop("disabled", true);
                         }else{
                             // //DISPLAY ENROLLMENT
                             $("#enrollment_id").val(response.data.id);
@@ -110,7 +111,7 @@ $(function(){
                             $("#cross").prop("checked", (response.data.cross_enrollee === 1) ? true : false);
                             $("#foreigner").prop("checked", (response.data.foreigner === 1) ? true : false);      
                             $("#probationary").prop("checked", (response.data.probationary === 1) ? true : false); 
-
+                            $(".actions").prop("disabled", false);
                             returnAssessmentPreview(response.data.assessment.id);
                         }
                     }
@@ -189,6 +190,18 @@ $(function(){
                 }
             }
         });
+        e.preventDefault();
+    });
+
+    $(document).on("click", "#print_assessment", function(e){
+        var assessment_id = $("#assessment_id").val();
+
+        if(assessment_id)
+        {
+            window.open("/assessments/printassessment/"+assessment_id, '_blank'); 
+        }else{
+            showError('Please select student assessment to print!');
+        }
         e.preventDefault();
     });
 });

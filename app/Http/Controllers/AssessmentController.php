@@ -124,9 +124,8 @@ class AssessmentController extends Controller
         $setup_fees        = (new FeeService())->returnSetupFees($assessment->period_id, $assessment->enrollment->program->educational_level_id);
         $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', session('current_period'))->where('educational_level_id', $assessment->enrollment->program->educational_level_id)->get();
         
-        
         $pdf = PDF::loadView('assessment.print_assessment', compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules'))
-        ->setPaper('a4', 'landscape');
+        ->setPaper('a4', 'portrait');
        
         return $pdf->stream('assessment.pdf');
     }
