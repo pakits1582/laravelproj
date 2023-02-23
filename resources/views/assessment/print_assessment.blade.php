@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Assessment</title>
     <style>
         @page{
           margin-top: 100px;
@@ -29,15 +29,134 @@
             font-style: bold;
         }
 
-        body{
+        *{
             font-family:centurygothic !important;
             word-wrap:break-word !important;
             font-size:14px;
         }
 
-        *{
-            font-family:centurygothic !important;
-            word-wrap:break-word !important;
+        h1, h2, h3, h4, h5, h6, .bold, label {
+            font-family:centurygothicb !important;
+        }
+
+        .w10{
+            width:10px !important;	
+        }
+        .w15{
+            width:15px !important;	
+        }
+        .w20{
+            width:25px !important;	
+        }
+        .w30{
+            width:30px !important;	
+        }
+        .w35{
+            width:35px !important;	
+        }
+        .w40{
+            width:40px !important;	
+        }
+        .w49{
+            width:48px !important;	
+        }
+        .w50{
+            width:50px !important;	
+        }
+        .w60{
+            width:60px !important;	
+        }
+        .w70{
+            width:70px !important;	
+        }
+        .w80{
+            width:80px !important;	
+        }
+        .w85{
+            width:85px !important;	
+        }
+        .w100{
+            width:100px !important;	
+        }
+        .w90{
+            width:90px !important;	
+        }
+        .w120{
+            width:120px !important;	
+        }
+        .w150{
+            width:150px !important;	
+        }
+        .w170{
+            width:170px !important;	
+        }
+        .w180{
+            width:180px !important;	
+        }
+        .wt190{
+            width:190px !important;	
+        }
+        .w190{
+            width:193px !important;	
+        }
+        .w200{
+            width:200px !important;	
+        }
+        .w220{
+            width:220px !important;	
+        }
+        .w250{
+            width:250px !important;	
+        }
+        .w275{
+            width:275px !important;	
+        }
+        .w300{
+            width:300px !important;	
+        }
+        .w350{
+            width:350px !important;	
+        }
+        .w380{
+            width:380px !important;	
+        }
+        .w400{
+            width:450px !important;	
+        }
+        .w450{
+            width:450px !important;	
+        }
+
+        .w500{
+            width:500px !important;	
+        }
+        .w550{
+            width:550px !important;	
+        }
+        .w600{
+            width:600px !important;	
+        }
+        .w650{
+            width:650px !important;	
+        }
+        .w700{
+            width:712px !important;	
+        }
+        .w850{
+            width:850px !important;	
+        }
+
+
+        .bold, label{
+            font-weight: 700;
+        }
+
+        .mid{
+            text-align: center;
+        }
+
+        .nomargin{
+            margin: 0px !important;
         }
 
         /******* TABLE ASSESS *********/
@@ -46,11 +165,10 @@
             clear:both;
             width:100%;
         }
-        table.assess_table th{
-            border-bottom:none;	
-            border-top:none;
-            padding:5px 0px;	
-            border:1px solid #ccc;
+        table.assess_table  th{
+           font-size: 12px !important;
+           font-family: centurygothicb !important;
+           border:1px solid #ccc !important;
         }
         table.assess_table tr:nth-child(odd) {
             background-color:#f2f2f2;
@@ -59,7 +177,30 @@
             border:1px solid #ccc !important;
             padding:3px !important;
             font-size: 10px !important;
+        }
 
+        table.heading{
+            border-collapse:collapse;
+            clear:both;
+            width:100%;
+            margin-bottom: 5px;
+        }
+        table.heading  th{
+           font-size: 12px !important;
+           font-family: centurygothicb !important;
+        }
+        table.heading tr:nth-child(odd) {
+            background-color:#f2f2f2;
+        }
+        table.heading td label{
+            border-collapse:collapse;
+            border:1px solid #ccc !important;
+            padding:3px !important;
+            font-size: 12px !important;
+        }
+
+        .text-black{
+            font-size: 10px;
         }
       </style>
 </head>
@@ -76,122 +217,94 @@
             $all_subjects  = [];
     
         @endphp
-    
-        <div class="row mb-2">
-            <div>
-                
-            </div>
-            <div class="col-md-12">
-                <h6 class="mid m-0 font-weight-bold text-black">{{ $configuration->name }}</h6>
-                <h6 class="mid m-0 font-weight-bold text-black">{{ $configuration->address }}</h6>
-                <h6 class="mid m-0 font-weight-bold text-black">Assessment ({{ $assessment->enrollment->period->name }})</h6>
-            </div>
+   
+        <div class="">
+            <div class="bold mid">{{ $configuration->name }}</div>
+            <div class="bold mid">{{ $configuration->address }}</div>
+            <div class="bold mid">Assessment ({{ $assessment->enrollment->period->name }})</div>
         </div>
-        <div class="row">
-            <div class="col-md-1">
-                <label for="term" class="m-0 font-weight-bold text-primary">ID No.</label>
-            </div>
-            <div class="col-md-4">
-                <div class="text-black">{{ $assessment->enrollment->student->user->idno }}</div>
-            </div>
-            <div class="col-md-2">
-                <label for="term" class="m-0 font-weight-bold text-primary">Program & Year</label>
-            </div>
-            <div class="col-md-2">
-                <div class="text-black">{{ $assessment->enrollment->program->code }}-{{ $assessment->enrollment->year_level }}</div>
-    
-            </div>
-            <div class="col-md-2">
-                <label for="term" class="m-0 font-weight-bold text-primary">Assessment No.</label>
-            </div>
-            <div class="col-md-1">
-                <div class="text-black">{{ $assessment->id }}</div>
-            </div>
-        </div>
-        <div class="row mb-1">
-            <div class="col-md-1">
-                <label for="term" class="m-0 font-weight-bold text-primary">Name</label>
-            </div>
-            <div class="col-md-4">
-                <div class="text-black">{{ $assessment->enrollment->student->last_name }}, {{ $assessment->enrollment->student->first_name }} {{ $assessment->enrollment->student->name_suffix }} {{ $assessment->enrollment->student->middle_name }}</div>
-            </div>
-            <div class="col-md-2">
-                <label for="term" class="m-0 font-weight-bold text-primary">Section</label>
-            </div>
-            <div class="col-md-2">
-                <div class="text-black">{{ $assessment->enrollment->section->code }}</div>
-            </div>
-            <div class="col-md-2">
-                <label for="term" class="m-0 font-weight-bold text-primary">Enrollment No.</label>
-            </div>
-            <div class="col-md-1">
-                <div class="text-black">{{ $assessment->enrollment->id }}</div>
-            </div>
-        </div>
-        <div class="table-responsive-sm">
-            <table class="assess_table">
-                <thead class="">
-                    <tr>
-                        <th class="w50">Code</th>
-                        <th class="w120 mid">Subject</th>
-                        <th>Description</th>
-                        <th class="w40 mid">Units</th>
-                        <th class="w35 mid">Lec</th>
-                        <th class="w35 mid">Lab</th>
-                        <th class="w300 mid">Schedule</th>
-                        <th class="">Section</th>
-                    </tr>
-                </thead>
-                <tbody class="text-black" id="return_enrolled_subjects">
-                    @if (count($enrolled_classes) > 0)
+        <table class="heading" style="width: 100%;">
+            <tr>
+                <td><label for="term" class="">Assessment No.</label></td>
+                <td><div class="text-black">{{ $assessment->enrollment->student->user->idno }}</div></td>
+                <td><label for="term" class="m-0 font-weight-bold text-primary">Enroll No. & Date</label></td>
+                <td><div class="text-black">{{ $assessment->enrollment->program->code }}-{{ $assessment->enrollment->year_level }}</div></td>
+            </tr>
+            <tr>
+                <td><label for="term" class="m-0 font-weight-bold text-primary">ID Number</label></td>
+                <td><div class="text-black">{{ $assessment->enrollment->student->last_name }}, {{ $assessment->enrollment->student->first_name }} {{ $assessment->enrollment->student->name_suffix }} {{ $assessment->enrollment->student->middle_name }}</div></td>
+                <td><label for="term" class="m-0 font-weight-bold text-primary">Program & Year</label></td>
+                <td><div class="text-black">{{ $assessment->enrollment->section->code }}</div></td>
+            </tr>
+            <tr>
+                <td><label for="term" class="m-0 font-weight-bold text-primary">Student Name</label></td>
+                <td><div class="text-black">{{ $assessment->enrollment->student->last_name }}, {{ $assessment->enrollment->student->first_name }} {{ $assessment->enrollment->student->name_suffix }} {{ $assessment->enrollment->student->middle_name }}</div></td>
+                <td><label for="term" class="m-0 font-weight-bold text-primary">Section</label></td>
+                <td><div class="text-black">{{ $assessment->enrollment->section->code }}</div></td>
+            </tr>
+        </table>
+        <table class="assess_table">
+            <thead class="">
+                <tr>
+                    <th>Code</th>
+                    <th>Subject</th>
+                    <th class="">Description</th>
+                    <th class="">Units</th>
+                    <th class="">Lec</th>
+                    <th class="">Lab</th>
+                    <th class="">Schedule</th>
+                    <th class="">Section</th>
+                </tr>
+            </thead>
+            <tbody class="" id="">
+                @if (count($enrolled_classes) > 0)
+                    @php
+                        $totalunits = 0;
+                    @endphp
+                    @foreach ($enrolled_classes as $enrolled_class)
                         @php
-                            $totalunits = 0;
+                            $row_color = '';
+                            if($enrolled_class->class->dissolved === 1)
+                            {
+                                $row_color = 'dissolved';
+                            }elseif ($enrolled_class->class->tutorial === 1) {
+                                $row_color = 'tutorial';
+                            }elseif ($enrolled_class->class->f2f === 1) {
+                                $row_color = 'f2f';
+                            }
                         @endphp
-                        @foreach ($enrolled_classes as $enrolled_class)
-                            @php
-                                $row_color = '';
-                                if($enrolled_class->class->dissolved === 1)
-                                {
-                                    $row_color = 'dissolved';
-                                }elseif ($enrolled_class->class->tutorial === 1) {
-                                    $row_color = 'tutorial';
-                                }elseif ($enrolled_class->class->f2f === 1) {
-                                    $row_color = 'f2f';
-                                }
-                            @endphp
-                            <tr class="label {{ $row_color }}">
-                                <td class="">{{ $enrolled_class->class->code }}</td>
-                                <td class="">{{ $enrolled_class->class->curriculumsubject->subjectinfo->code }}</td>
-                                <td class="">{{ $enrolled_class->class->curriculumsubject->subjectinfo->name }}</td>
-                                <td class="mid">{{ ($enrolled_class->class->isprof === 1) ? '('.$enrolled_class->class->units.')' : $enrolled_class->class->units }}</td>
-                                <td class="mid">{{ $enrolled_class->class->lecunits }}</td>
-                                <td class="mid">{{ $enrolled_class->class->labunits }}</td>
-                                <td class="">{{ $enrolled_class->class->schedule->schedule }}</td>
-                                <td class="">{{ $enrolled_class->class->sectioninfo->code }}</td>
-                            </tr>
-                            @php
-                                $totalunits += $enrolled_class->class->units;
-                                $all_subjects[] = $enrolled_class->class->curriculumsubject->subjectinfo->id;
-    
-                                if($enrolled_class->class->curriculumsubject->subjectinfo->laboratory == 1)
-                                {
-                                    $laboratory_subjects[] = $enrolled_class->class->curriculumsubject->subjectinfo->id;
-                                }
-                            @endphp
-                        @endforeach
-                        <tr class="nohover">
-                            <td colspan="3"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ count($enrolled_classes) }})</h6></td>
-                            <td colspan="5"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolledunits">{{ $totalunits }}</span>) Total Units </h6>
-                            </td>
+                        <tr class="label {{ $row_color }}">
+                            <td class="">{{ $enrolled_class->class->code }}</td>
+                            <td class="">{{ $enrolled_class->class->curriculumsubject->subjectinfo->code }}</td>
+                            <td class="">{{ $enrolled_class->class->curriculumsubject->subjectinfo->name }}</td>
+                            <td class="mid">{{ ($enrolled_class->class->isprof === 1) ? '('.$enrolled_class->class->units.')' : $enrolled_class->class->units }}</td>
+                            <td class="mid">{{ $enrolled_class->class->lecunits }}</td>
+                            <td class="mid">{{ $enrolled_class->class->labunits }}</td>
+                            <td class="">{{ $enrolled_class->class->schedule->schedule }}</td>
+                            <td class="">{{ $enrolled_class->class->sectioninfo->code }}</td>
                         </tr>
-                    @else
-                        <tr class="">
-                            <td class="mid" colspan="8">No records to be displayed</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
-        </div>
+                        @php
+                            $totalunits += $enrolled_class->class->units;
+                            $all_subjects[] = $enrolled_class->class->curriculumsubject->subjectinfo->id;
+
+                            if($enrolled_class->class->curriculumsubject->subjectinfo->laboratory == 1)
+                            {
+                                $laboratory_subjects[] = $enrolled_class->class->curriculumsubject->subjectinfo->id;
+                            }
+                        @endphp
+                    @endforeach
+                    <tr class="nohover">
+                        <td colspan="3"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ count($enrolled_classes) }})</h6></td>
+                        <td colspan="5"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolledunits">{{ $totalunits }}</span>) Total Units </h6>
+                        </td>
+                    </tr>
+                @else
+                    <tr class="">
+                        <td class="mid" colspan="8">No records to be displayed</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
     
         @php
             $idno            = $assessment->enrollment->student->user->idno;
