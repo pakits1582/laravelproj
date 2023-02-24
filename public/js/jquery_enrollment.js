@@ -370,11 +370,16 @@ $(function(){
 
     function enrollClassSubjects(enrollment_id, section_id, class_subjects)
     {
+        var subjects = [];
+        $.each(class_subjects, function(k, v){
+            subjects.push({id: v.id, schedule: v.schedule.schedule});
+        });
+        
         $.ajax({
             url: "/enrolments/enrollclasssubjects",
             type: 'POST',
             dataType: 'json',
-            data: ({ 'enrollment_id':enrollment_id, 'section_id':section_id, 'class_subjects':class_subjects }),
+            data: ({ 'enrollment_id':enrollment_id, 'section_id':section_id, 'class_subjects':subjects }),
             beforeSend: function() {
 				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
 					show: 'fade',
@@ -477,7 +482,7 @@ $(function(){
                                     $(this).dialog('close');
                                     $('#deficiencies').html(deficiencies);
                                     enrollClassSubjects(enrollment_id, section_id, available_subjects);
-                                    returnEnrolledClassSubjects(enrollment_id);
+                                    //returnEnrolledClassSubjects(enrollment_id);
                                 }	
                             }//end of buttons
                         });//end of dialogbox
@@ -485,7 +490,7 @@ $(function(){
                 }else{
                     $('#deficiencies').html('');
                     enrollClassSubjects(enrollment_id, section_id, available_subjects);
-                    returnEnrolledClassSubjects(enrollment_id);
+                    //returnEnrolledClassSubjects(enrollment_id);
                 }
             },
             error: function (data) {
@@ -899,7 +904,7 @@ $(function(){
             success: function(response){
                 $("#confirmation").dialog('close');
                 console.log(response);
-                displayAssessmentPreview(enrollment_id);
+                displayAssessmentPreview(response);
             },
             error: function (data) {
                 console.log(data);
@@ -916,9 +921,111 @@ $(function(){
         e.preventDefault();
     });
 
-    function displayAssessmentPreview(enrollment_id)
+    function displayAssessmentPreview(assessment_id)
     {
-        alert('xxx');
+        $.ajax({
+            url: "/assessments/"+assessment_id,
+            type: 'GET',
+            beforeSend: function() {
+				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+			},
+            success: function(response){
+                $("#confirmation").dialog('close');
+                var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
+                    header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
+                    header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
+                    header += '</div><div class="modal-body">';
+                
+                var footer = '</div></div></div></div>';
+                $('#ui_content').html(header+response+footer);
+                $("#modalll").modal('show');
+                $("#save_assessment").focus();
+            },
+            error: function (data) {
+                $("#confirmation").dialog('close');
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#student").val(null).trigger('change');
+                }
+            }
+        });
     }
+
+    $(document).on("submit","#assessment_form", function(e){
+        var enrolled_units = $("#enrolledunits").text();
+        var assessment_id = $("#assessment_id").val();
+		var postData = $(this).serializeArray(); 
+		postData.push({name: 'enrolled_units', value: enrolled_units });
+        $("#save_assessment").prop("disabled", true);
+        
+        $.ajax({
+            url: "/assessments/"+assessment_id,
+            type: 'PUT',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function() {
+				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+			},
+            success: function(response){
+                $("#confirmation").dialog('close');
+                $("#save_assessment").prop("disabled", false);
+                $('#modalll').modal('hide');
+                if(response.data === true)
+                {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Assessment Saved</div><div class="message">Student was successfully assessed.<br>Print student assessment?</div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        draggable: false,
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: {
+                                'Cancel':function(){
+                                    $("#confirmation").dialog('close');
+                                    location.reload();				
+                                },
+                                'OK':function(){
+                                    $("#confirmation").dialog('close');
+                                    window.open("/assessments/printassessment/"+assessment_id, '_blank'); 
+                                    location.reload();				
+                                }//end of ok button	
+                            }//end of buttons
+                    });//end of dialogbox
+                    $(".ui-dialog-titlebar").hide();
+                    //end of dialogbox
+                }
+                
+            },
+            error: function (data) {
+                $("#confirmation").dialog('close');
+                $("#save_assessment").prop("disabled", false);
+
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
+        });
+        e.preventDefault();
+    });
 
 });

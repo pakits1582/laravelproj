@@ -519,7 +519,7 @@ class EnrollmentService
     }
 
     public function enrollClassSubjects($request)
-    {
+    {     
         DB::beginTransaction();
 
         $enrollment = Enrollment::findOrFail($request->enrollment_id);
@@ -533,34 +533,40 @@ class EnrollmentService
 
         foreach ($request->class_subjects as $key => $class_subject) {
             //ADD VALUES TO ACCESS ARRAY FOR MULTIPLE INPUT
-            $enroll_classes[] = new EnrolledClass([
+            $enroll_classes[] = [
+                'enrollment_id' => $request->enrollment_id,
                 'class_id' => $class_subject['id'],
                 'user_id' => Auth::id(),
-            ]);
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
             
-            if(!is_null($class_subject['schedule_id']))
+            if(!is_null($class_subject['schedule']))
             {
-                $class_schedules = (new ClassesService())->processSchedule($class_subject['schedule']['schedule']);
+                $class_schedules = (new ClassesService())->processSchedule($class_subject['schedule']);
 
                 foreach ($class_schedules as $key => $class_schedule) 
                 {
                     foreach ($class_schedule['days'] as $key => $day) {
-                        $enroll_class_schedules[] = new EnrolledClassSchedule([
+                        $enroll_class_schedules[] = [
+                            'enrollment_id' => $request->enrollment_id,
                             'class_id' => $class_subject['id'],
                             'from_time' => $class_schedule['timefrom'],
                             'to_time' => $class_schedule['timeto'],
                             'day' => $day,
                             'room' => $class_schedule['room'],
-                        ]);
+                        ];
                     }
                 }
             }
         }
 
-        $enrollment->enrolled_classes()->saveMany($enroll_classes);
-        $enrollment->enrolled_class_schedules()->saveMany($enroll_class_schedules);
+        $enrollment->enrolled_classes()->insert($enroll_classes);
+        $enrollment->enrolled_class_schedules()->insert($enroll_class_schedules);
 
         DB::commit();
+
+        return true;
     }
 
     public function enrolledClassSubjects($enrollment_id)

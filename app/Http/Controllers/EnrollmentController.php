@@ -137,9 +137,8 @@ class EnrollmentController extends Controller
 
     public function enrollclasssubjects(Request $request)
     {
-        $this->enrollmentService->enrollClassSubjects($request);
+        return $this->enrollmentService->enrollClassSubjects($request);
 
-        return true;
     }
 
     public function enrolledclasssubjects(Request $request)
@@ -198,7 +197,7 @@ class EnrollmentController extends Controller
 
         $enrollment->update($request->validated()+['acctok' => 1, 'user_id' => Auth::user()->id]);
 
-        Assessment::firstOrCreate([
+        $assessment = Assessment::firstOrCreate([
             'enrollment_id' => $enrollment->id,
             'period_id' => session('current_period'),
         ], [
@@ -209,6 +208,6 @@ class EnrollmentController extends Controller
 
         DB::commit();
 
-        return true;
+        return $assessment->id;
     }
 }

@@ -547,7 +547,7 @@
             <div class="mid m-3">
                 <input type="hidden" name="idno" required="" value="{{ $idno }}">
                 <input type="hidden" name="enrollment_id" required="" required="" value="{{ $enrollment_id }}">
-                <input type="hidden" name="assessment_id" value="{{ $assessment_id }}">
+                <input type="hidden" name="assessment_id" id="assessment_id" value="{{ $assessment_id }}">
                 <input type="hidden" name="validated" required="" value="{{ $validated }}">
 
                 <button type="submit" id="save_assessment" class="btn btn-success btn-icon-split actions mb-2">
