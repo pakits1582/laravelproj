@@ -405,11 +405,10 @@
                         @endif
                     @endforeach
                         <tr>
-                            <td colspan="3"><hr class="m-0"></td>
+                            <td colspan="2"><hr class="m-0"></td>
                         </tr>
                         <tr>
                             <td class=""><strong>Total {{ $feetype['type'] }}</strong></td>
-                            <td class="w100"></td>
                             <td class="right w100"><strong>{{ number_format($total,2) }}</strong></td>
                         </tr>
                         <tr><td colspan="2">&nbsp;</td></tr>

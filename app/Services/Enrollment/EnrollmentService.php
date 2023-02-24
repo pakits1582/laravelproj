@@ -538,7 +538,7 @@ class EnrollmentService
                 'user_id' => Auth::id(),
             ]);
             
-            if(!is_null($class_subject['schedule']['schedule']))
+            if(!is_null($class_subject['schedule_id']))
             {
                 $class_schedules = (new ClassesService())->processSchedule($class_subject['schedule']['schedule']);
 

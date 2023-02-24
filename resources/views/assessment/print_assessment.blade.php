@@ -7,7 +7,7 @@
     <title>Assessment</title>
     <style>
         @page{
-          margin-top: 100px;
+          margin-top: 30px;
         }
         header{
           position: fixed;
@@ -35,7 +35,7 @@
             font-size:14px;
         }
 
-        h1, h2, h3, h4, h5, h6, .bold, label {
+        h1, h2, h3, h4, h5, h6, .bold, label, span {
             font-family:centurygothicb !important;
         }
 
@@ -146,17 +146,42 @@
             width:850px !important;	
         }
 
+        .col10{display:inline-block;width:10%;}
+        .col15{display:inline-block;width:15%;}
+        .col20{display:inline-block;width:19%;}
+        .col25{display:inline-block;width:24%;}
+        .col30{display:inline-block;width:29%;}
+        .col33{display:inline-block;width:33%;}
+        .col35{display:inline-block;width:35%;}
+        .col40{display:inline-block;width:39%;}
+        .col50{display:inline-block;width:49%;}
+        .col60{display:inline-block;width:59%;}
+        .col70{display:inline-block;width:69%;}
+        .col75{display:inline-block;width:74%;}
+        .col80{display:inline-block;width:79%;}
+        .col90{display:inline-block;width:89%;}
+        .col100{display:inline-block;width:99%;}
+
 
         .bold, label{
             font-weight: 700;
+            font-size: 12px !important;
         }
 
         .mid{
             text-align: center;
         }
 
+        .right{
+            text-align: right;
+        }
+
         .nomargin{
             margin: 0px !important;
+        }
+
+        .trimmargin{
+            margin: 3px !important;
         }
 
         /******* TABLE ASSESS *********/
@@ -175,37 +200,60 @@
         }
         table.assess_table td {
             border:1px solid #ccc !important;
-            padding:3px !important;
             font-size: 10px !important;
+            padding-right: 3px;
+            padding-left: 3px;
+            line-height: 10px;
         }
 
         table.heading{
             border-collapse:collapse;
             clear:both;
             width:100%;
-            margin-bottom: 5px;
+            margin:10px 0px;
         }
         table.heading  th{
            font-size: 12px !important;
            font-family: centurygothicb !important;
         }
         table.heading tr:nth-child(odd) {
-            background-color:#f2f2f2;
+            /* background-color:#f2f2f2; */
         }
-        table.heading td label{
+        table.heading td{
             border-collapse:collapse;
-            border:1px solid #ccc !important;
-            padding:3px !important;
+            /* border:1px solid #ccc !important; */
+            /* padding:3px !important; */
+            margin:0px;
+            padding: 0px;
             font-size: 12px !important;
+            line-height: 10px;
         }
 
-        .text-black{
+        table.tablefees{
+            border-collapse:collapse;
+            border-spacing: 0;
+        }
+        table.tablefees td{
+            border-collapse:collapse;
+            font-size: 10px !important;
+            padding: 0px 3px;
+            margin: -3 !important!;
+            border-spacing: 0;
+            line-height: 10px;
+            /* border:1px solid #ccc !important; */
+        }
+        
+        .text-black, span{
             font-size: 10px;
+        }
+
+        hr{
+            color: #ccc;
+            margin: 3px;
         }
       </style>
 </head>
 <body>
-<form method="POST" action="" id="assessment_form">
     <div>
         <!-- Page Heading -->
         @php
@@ -223,24 +271,24 @@
             <div class="bold mid">{{ $configuration->address }}</div>
             <div class="bold mid">Assessment ({{ $assessment->enrollment->period->name }})</div>
         </div>
-        <table class="heading" style="width: 100%;">
+        <table class="heading" style="width: 100%;" cellpadding="0" cellspacing="0">
             <tr>
-                <td><label for="term" class="">Assessment No.</label></td>
-                <td><div class="text-black">{{ $assessment->enrollment->student->user->idno }}</div></td>
-                <td><label for="term" class="m-0 font-weight-bold text-primary">Enroll No. & Date</label></td>
-                <td><div class="text-black">{{ $assessment->enrollment->program->code }}-{{ $assessment->enrollment->year_level }}</div></td>
+                <td class="w120"><label>Enroll No. & Date</label></td>
+                <td><label>:</label> {{ $assessment->enrollment->id }} - {{ date("F d, Y H:i A", strtotime($assessment->enrollment->created_at)) }}</td>
+                <td class="w100"><label>Assessment No.</label></td>
+                <td><label>:</label> {{ $assessment->id }}</td>
             </tr>
             <tr>
-                <td><label for="term" class="m-0 font-weight-bold text-primary">ID Number</label></td>
-                <td><div class="text-black">{{ $assessment->enrollment->student->last_name }}, {{ $assessment->enrollment->student->first_name }} {{ $assessment->enrollment->student->name_suffix }} {{ $assessment->enrollment->student->middle_name }}</div></td>
-                <td><label for="term" class="m-0 font-weight-bold text-primary">Program & Year</label></td>
-                <td><div class="text-black">{{ $assessment->enrollment->section->code }}</div></td>
+                <td><label>ID Number</label></td>
+                <td><label>:</label> {{ $assessment->enrollment->student->user->idno }}</td>
+                <td><label>Program & Year</label></td>
+                <td><label>:</label> {{ $assessment->enrollment->program->code }}-{{ $assessment->enrollment->year_level }}</td>
             </tr>
             <tr>
-                <td><label for="term" class="m-0 font-weight-bold text-primary">Student Name</label></td>
-                <td><div class="text-black">{{ $assessment->enrollment->student->last_name }}, {{ $assessment->enrollment->student->first_name }} {{ $assessment->enrollment->student->name_suffix }} {{ $assessment->enrollment->student->middle_name }}</div></td>
-                <td><label for="term" class="m-0 font-weight-bold text-primary">Section</label></td>
-                <td><div class="text-black">{{ $assessment->enrollment->section->code }}</div></td>
+                <td><label>Student Name</label></td>
+                <td><label>:</label> {{ $assessment->enrollment->student->last_name }}, {{ $assessment->enrollment->student->first_name }} {{ $assessment->enrollment->student->name_suffix }} {{ $assessment->enrollment->student->middle_name }}</td>
+                <td><label>Section</label></td>
+                <td><label>:</label> {{ $assessment->enrollment->section->code }}</td>
             </tr>
         </table>
         <table class="assess_table">
@@ -294,9 +342,8 @@
                         @endphp
                     @endforeach
                     <tr class="nohover">
-                        <td colspan="3"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ count($enrolled_classes) }})</h6></td>
-                        <td colspan="5"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolledunits">{{ $totalunits }}</span>) Total Units </h6>
-                        </td>
+                        <td colspan="3" class="bold">Total Subjects ({{ count($enrolled_classes) }})</td>
+                        <td colspan="5" class="bold">(<span id="enrolledunits">{{ $totalunits }}</span>) Total Units</td>
                     </tr>
                 @else
                     <tr class="">
@@ -399,350 +446,320 @@
             $additionalfeetotal = 0;
             $totalfees = 0;
         @endphp
-    
+
         <div class="row">
-            <h6 class="mx-3 font-weight-bold text-black">Assessment of Fees:</h6> 
+            <h6 class="bold text-black trimmargin">ASSESSMENT OF FEES</h6> 
         </div>
-    
-        <div class="row">
-            <div class="col-md-6">
-                @if ($uniqueFeeTypes)
-                    @foreach ($uniqueFeeTypes->toArray() as $key => $feetype)
-                        <h6 class="mx-3 font-weight-bold text-black">{{ $feetype['type'] }}</h6>
-                        <table class="tablefees">
-                        @php
-                            $total = 0;
-                        @endphp
-                        @foreach ($feesArray as $k => $fee)
-                            {{-- {{ print_r($fee) }} --}}
-                            @if ($fee['fee']['fee_type_id'] == $feetype['id'])
+
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 50% !important;">
+                    @if ($uniqueFeeTypes)
+                        @foreach ($uniqueFeeTypes->toArray() as $key => $feetype)
+                            <h6 class="bold text-black nomargin">{{ $feetype['type'] }}</h6>
+                            <table class="tablefees" style="width: 100%;" cellpadding="0" cellspacing="0">
                                 @php
-                                    if(strcasecmp($feetype['type'], 'Tuition Fees') == 0)
-                                    {
-                                        if(strcasecmp($fee['fee']['name'], 'academic') == 0)
-                                        {
-                                            if($academic_subjects != 0)
-                                            {
-                                                switch ($fee['payment_scheme']) {
-                                                    case 1: //fixed
-                                                        $acadsubjtotal = $fee['rate'];
-                                                        $description   = $fee['fee']['name'].' (Fixed : '.$fee['rate'].')';
-                                                        break;
-                                                    case 2: //per units
-                                                        $acadsubjtotal = $academic_subjects*$fee['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$academic_subjects.' unit(s) x '.$fee['rate'].'/unit)';
-                                                        break;
-                                                    case 3: //per subject
-                                                        $acadsubjtotal = $total_subjects*$v['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
-                                                        break;
-                                                    default:
-                                                        $acadsubjtotal = $fee['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$fee['rate'].')';
-                                                        break;
-                                                }
-    
-                                            @endphp   
-                                                <tr>
-                                                    <td class="w350">{{ $description }}</td>
-                                                    <td class="right w100">{{ number_format($acadsubjtotal,2) }}</td>
-                                                    <input type="hidden" name="fees[]" value="{{ $fee['fee_id'] }}-{{ $acadsubjtotal }}" />
-                                                </tr>
-                                                @php
-                                                    $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $acadsubjtotal);
-                                                    $total += $acadsubjtotal;
-                                                    $totaltuition += $acadsubjtotal;
-                                                @endphp
-                                            @php
-                                            }
-                                        }
-                                        //PROFESSIONAL
-                                        if(strcasecmp($fee['fee']['name'], 'professional') == 0)
-                                        {
-                                            if($professional_subjects != 0)
-                                            {
-                                                switch ($fee['payment_scheme']) {
-                                                    case 1: //fixed
-                                                        $profsubjtotal = $fee['rate'];
-                                                        $description   = $fee['fee']['name'].' (Fixed : '.$fee['rate'].')';
-                                                        break;
-                                                    case 2: //per units
-                                                        $profsubjtotal = $professional_subjects*$fee['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$professional_subjects.' unit(s) x '.$fee['rate'].'/unit)';
-                                                        break;
-                                                    case 3: //per subject
-                                                        $profsubjtotal = $total_subjects*$v['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
-                                                        break;
-                                                    default:
-                                                        $profsubjtotal = $fee['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$fee['rate'].')';
-                                                        break;
-                                                }
-    
-                                            @endphp   
-                                                <tr>
-                                                    <td class="w350">{{ $description }}</td>
-                                                    <td class="right w100">{{ number_format($profsubjtotal,2) }}</td>
-                                                    <input type="hidden" name="fees[]" value="{{ $fee['fee_id'] }}-{{ $profsubjtotal }}" />
-                                                </tr>
-                                                @php
-                                                    $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $profsubjtotal);
-                                                    $total += $profsubjtotal;
-                                                    $totaltuition += $profsubjtotal;
-                                                @endphp
-                                            @php
-                                            }
-                                        }
-                                        //TUITION FEE
-                                        if(strcasecmp($fee['fee']['name'], 'tuition fee') == 0)
-                                        {
-                                            if($otalunits != 0)
-                                            {
-                                                switch ($fee['payment_scheme']) {
-                                                    case 1: //fixed
-                                                        $tuitiontotal = $fee['rate'];
-                                                        $description   = $fee['fee']['name'].' (Fixed : '.$fee['rate'].')';
-                                                        break;
-                                                    case 2: //per units
-                                                        $tuitiontotal = $total_units*$fee['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$total_units.' unit(s) x '.$fee['rate'].'/unit)';
-                                                        break;
-                                                    case 3: //per subject
-                                                        $tuitiontotal = $total_subjects*$v['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
-                                                        break;
-                                                    default:
-                                                        $tuitiontotal = $fee['rate'];
-                                                        $description   = $fee['fee']['name'].' ('.$fee['rate'].')';
-                                                        break;
-                                                }
-    
-                                            @endphp   
-                                                <tr>
-                                                    <td class="w350">{{ $description }}</td>
-                                                    <td class="right w100">{{ number_format($tuitiontotal,2) }}</td>
-                                                    <input type="hidden" name="fees[]" value="{{ $fee['fee_id'] }}-{{ $tuitiontotal }}" />
-                                                </tr>
-                                                @php
-                                                    $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $tuitiontotal);
-                                                    $total += $tuitiontotal;
-                                                    $totaltuition += $tuitiontotal;
-                                                @endphp
-                                            @php
-                                            }
-                                        }
-                                    }else{
-                                        $feesdesc = $fee['fee']['name'];
-                                        $rate = 0;
-    
-                                        switch ($fee['payment_scheme']) 
-                                        {
-                                            case 1: //fixed
-                                                $rate = $fee['rate'];
-                                                break;
-                                            case 2: //per units
-                                                $rate = $total_units*$fee['rate'];
-                                                break;
-                                            case 3: //per subject
-                                                $rate = $total_subjects*$fee['rate'];
-                                                break;
-                                            default:
-                                                $rate = $fee['rate'];
-                                                break;
-                                        }
-                                        if(strcasecmp($feetype['type'], 'Miscellaneous Fees') == 0) {
-                                            $miscfeetotal += $rate;
-                                        }
-                                        if(strcasecmp($feetype['type'], 'Other Miscellaneous Fees') == 0) {
-                                            $otherfeetotal += $rate;
-                                        }
-                                        if(strcasecmp($feetype['type'], 'Additional Fees') == 0) {
-                                            $additionalfeetotal += $rate;
-                                        }
-                                        if($fee['subject_id'] != 0 && strcasecmp($feetype['type'], 'Laboratory Fees') == 0)
-                                        {
-                                            if(in_array($fee['subject_id'], $laboratory_subjects) === true)
-                                            {
-                                                $feesdesc .= '('.$fee['subject']['code'].')';
-                                                $labfeetotal += $rate;
-                                            }
-                                        }
-                                        @endphp
-                                            <tr>
-                                                <td class="w350">{{ $feesdesc }}</td>
-                                                <td class="right w100">{{ number_format($rate,2) }}</td>
-                                                <input type="hidden" name="fees[]" value="{{ $fee['fee_id'] }}-{{ $rate }}" />
-                                            </tr>
-                                            @php
-                                                $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $rate);
-                                                $total += $rate;
-                                            @endphp
-                                        @php
-                                    }
+                                    $total = 0;
                                 @endphp
-                            @endif
-                        @endforeach
-                            <tr>
-                                <td colspan="3"><hr class="m-0"></td>
-                            </tr>
-                            <tr>
-                                <td class=""><strong>Total {{ $feetype['type'] }}</strong></td>
-                                <td class="w100"></td>
-                                <td class="right w100"><strong>{{ number_format($total,2) }}</strong></td>
-                            </tr>
-                            <tr><td colspan="2">&nbsp;</td></tr>
-                        </table>
-                        @php
-                            $totalfees += $total;
-                        @endphp
-                        <input type="hidden" name="assessbreakdown[]" value="{{ $feetype['id'] }}-{{ $total }}" />
-                    @endforeach
-                @endif
-            </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-8">
-                        <h6 class="mx-3 font-weight-bold text-black">TOTAL TUITION AND FEES:</h6> 
+                                @foreach ($feesArray as $k => $fee)
+                                    {{-- {{ print_r($fee) }} --}}
+                                    @if ($fee['fee']['fee_type_id'] == $feetype['id'])
+                                        @php
+                                            if(strcasecmp($feetype['type'], 'Tuition Fees') == 0)
+                                            {
+                                                if(strcasecmp($fee['fee']['name'], 'academic') == 0)
+                                                {
+                                                    if($academic_subjects != 0)
+                                                    {
+                                                        switch ($fee['payment_scheme']) {
+                                                            case 1: //fixed
+                                                                $acadsubjtotal = $fee['rate'];
+                                                                $description   = $fee['fee']['name'].' (Fixed : '.$fee['rate'].')';
+                                                                break;
+                                                            case 2: //per units
+                                                                $acadsubjtotal = $academic_subjects*$fee['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$academic_subjects.' unit(s) x '.$fee['rate'].'/unit)';
+                                                                break;
+                                                            case 3: //per subject
+                                                                $acadsubjtotal = $total_subjects*$v['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
+                                                                break;
+                                                            default:
+                                                                $acadsubjtotal = $fee['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$fee['rate'].')';
+                                                                break;
+                                                        }
+
+                                                    @endphp   
+                                                        <tr>
+                                                            <td class="">{{ $description }}</td>
+                                                            <td class="right w70">{{ number_format($acadsubjtotal,2) }}</td>                                                        </tr>
+                                                        @php
+                                                            $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $acadsubjtotal);
+                                                            $total += $acadsubjtotal;
+                                                            $totaltuition += $acadsubjtotal;
+                                                        @endphp
+                                                    @php
+                                                    }
+                                                }
+                                                //PROFESSIONAL
+                                                if(strcasecmp($fee['fee']['name'], 'professional') == 0)
+                                                {
+                                                    if($professional_subjects != 0)
+                                                    {
+                                                        switch ($fee['payment_scheme']) {
+                                                            case 1: //fixed
+                                                                $profsubjtotal = $fee['rate'];
+                                                                $description   = $fee['fee']['name'].' (Fixed : '.$fee['rate'].')';
+                                                                break;
+                                                            case 2: //per units
+                                                                $profsubjtotal = $professional_subjects*$fee['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$professional_subjects.' unit(s) x '.$fee['rate'].'/unit)';
+                                                                break;
+                                                            case 3: //per subject
+                                                                $profsubjtotal = $total_subjects*$v['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
+                                                                break;
+                                                            default:
+                                                                $profsubjtotal = $fee['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$fee['rate'].')';
+                                                                break;
+                                                        }
+
+                                                    @endphp   
+                                                        <tr>
+                                                            <td class="">{{ $description }}</td>
+                                                            <td class="right w70">{{ number_format($profsubjtotal,2) }}</td>
+                                                        </tr>
+                                                        @php
+                                                            $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $profsubjtotal);
+                                                            $total += $profsubjtotal;
+                                                            $totaltuition += $profsubjtotal;
+                                                        @endphp
+                                                    @php
+                                                    }
+                                                }
+                                                //TUITION FEE
+                                                if(strcasecmp($fee['fee']['name'], 'tuition fee') == 0)
+                                                {
+                                                    if($otalunits != 0)
+                                                    {
+                                                        switch ($fee['payment_scheme']) {
+                                                            case 1: //fixed
+                                                                $tuitiontotal = $fee['rate'];
+                                                                $description   = $fee['fee']['name'].' (Fixed : '.$fee['rate'].')';
+                                                                break;
+                                                            case 2: //per units
+                                                                $tuitiontotal = $total_units*$fee['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$total_units.' unit(s) x '.$fee['rate'].'/unit)';
+                                                                break;
+                                                            case 3: //per subject
+                                                                $tuitiontotal = $total_subjects*$v['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
+                                                                break;
+                                                            default:
+                                                                $tuitiontotal = $fee['rate'];
+                                                                $description   = $fee['fee']['name'].' ('.$fee['rate'].')';
+                                                                break;
+                                                        }
+
+                                                    @endphp   
+                                                        <tr>
+                                                            <td class="">{{ $description }}</td>
+                                                            <td class="right w70">{{ number_format($tuitiontotal,2) }}</td>
+                                                        </tr>
+                                                        @php
+                                                            $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $tuitiontotal);
+                                                            $total += $tuitiontotal;
+                                                            $totaltuition += $tuitiontotal;
+                                                        @endphp
+                                                    @php
+                                                    }
+                                                }
+                                            }else{
+                                                $feesdesc = $fee['fee']['name'];
+                                                $rate = 0;
+
+                                                switch ($fee['payment_scheme']) 
+                                                {
+                                                    case 1: //fixed
+                                                        $rate = $fee['rate'];
+                                                        break;
+                                                    case 2: //per units
+                                                        $rate = $total_units*$fee['rate'];
+                                                        break;
+                                                    case 3: //per subject
+                                                        $rate = $total_subjects*$fee['rate'];
+                                                        break;
+                                                    default:
+                                                        $rate = $fee['rate'];
+                                                        break;
+                                                }
+                                                if(strcasecmp($feetype['type'], 'Miscellaneous Fees') == 0) {
+                                                    $miscfeetotal += $rate;
+                                                }
+                                                if(strcasecmp($feetype['type'], 'Other Miscellaneous Fees') == 0) {
+                                                    $otherfeetotal += $rate;
+                                                }
+                                                if(strcasecmp($feetype['type'], 'Additional Fees') == 0) {
+                                                    $additionalfeetotal += $rate;
+                                                }
+                                                if($fee['subject_id'] != 0 && strcasecmp($feetype['type'], 'Laboratory Fees') == 0)
+                                                {
+                                                    if(in_array($fee['subject_id'], $laboratory_subjects) === true)
+                                                    {
+                                                        $feesdesc .= '('.$fee['subject']['code'].')';
+                                                        $labfeetotal += $rate;
+                                                    }
+                                                }
+                                                @endphp
+                                                    <tr>
+                                                        <td class="">{{ $feesdesc }}</td>
+                                                        <td class="right w70">{{ number_format($rate,2) }}</td>
+                                                    </tr>
+                                                    @php
+                                                        $allfees[] = array('fee' => $fee['fee_id'], 'amount' => $rate);
+                                                        $total += $rate;
+                                                    @endphp
+                                                @php
+                                            }
+                                        @endphp
+                                    @endif
+                                @endforeach
+                                <tr>
+                                    <td colspan="2"><hr class="trimmargin"></td>
+                                </tr>
+                                <tr>
+                                    <td class="bold">Total {{ $feetype['type'] }}</td>
+                                    <td class="bold right w100">{{ number_format($total,2) }}</td>
+                                </tr>
+                            </table>
+                            @php
+                                $totalfees += $total;
+                            @endphp
+                        @endforeach    
+                    @endif
+                </td>
+                <td style="width: 50% !important;" valign="top">
+                    <div class="col100">
+                        <div class="col70">
+                            <h6 class="bold text-black trimmargin">TOTAL TUITION AND FEES</h6> 
+                        </div>
+                        <div class="col30 right">
+                            <h6 class="bold text-black trimmargin">{{ 'Php '.number_format($totalfees, 2) }}</h6> 
+                        </div>
                     </div>
-                    <div class="col-md-4 font-weight-bold text-black">
-                        {{ 'Php '.number_format($totalfees, 2) }}
-                        <input type="hidden" name="totalfees" value="{{ $totalfees }}" >
+                     <div class="col100">
+                        <h6 class="bold text-black" style="margin: 0px 3px; padding: 0px; line-height:10px;">Payment Schedules</h6> 
                     </div>
-                </div>
-                <div class="row">
-                    <h6 class="mx-3 font-weight-bold text-black">Payment Schedules</h6> 
-                </div>
-                {{-- {{ print_r($payment_schedules->toArray()) }} --}}
-                @php
-                    $paymentsched = [];
-                    $paypassed = 0;
-                    if($payment_schedules->toArray())
-                    {
-                        foreach ($payment_schedules->toArray() as $key => $payment_schedule) 
-                        {
-                            if($payment_schedule['educational_level_id'] == NULL && $payment_schedule['year_level'] == NULL){
-                                $paypassed = 1;
-                            }else{
-                                if($payment_schedule['educational_level_id'] != NULL){
-                                    $paypassed = ($educational_level_id == $payment_schedule['educational_level_id']) ? 1 : 0;
-                                }
-                                if($payment_schedule['year_level'] != 0){
-                                    $paypassed = ($year_level == $payment_schedule['year_level']) ? 1 : 0;
-                                }
-                            }
-                            if($paypassed == 1)
-                            {
-                                $paymentsched[] = $payment_schedule;
-                            }
-                        }
-                    }
-    
-                    @endphp
-                        <table class="tablefees">
                     @php
-                    //FINAL COMPUTATION (AMOUNT DUE)
-                    $amountdue = 0;
-                    $fixedtuition = 0;
-                    $fixedmisc = 0;
-                    $fixedother = 0;
-                    foreach ($paymentsched as $key => $ps) 
-                    {
-                        $topay = 0;
-    
-                        $fixedtuition = ($ps['payment_type'] == 2) ? $ps['tuition'] : 0;
-                        $fixedmisc    = ($ps['payment_type'] == 2) ? $ps['miscellaneous'] : 0;
-                        $fixedother   = ($ps['payment_type'] == 2) ? $ps['others'] : 0;
-    
-                        $totaltuition  = $totaltuition-$fixedtuition;
-                        $miscfeetotal  = $miscfeetotal-$fixedmisc;
-                        $otherfeetotal = $otherfeetotal-$fixedother;
-    
-                        $tuitioncomp = ($ps['payment_type'] == 1) ? ($ps['tuition']/100) * $totaltuition : $ps['tuition'];
-                        $misccomp    = ($ps['payment_type'] == 1) ? ($ps['miscellaneous']/100) * $miscfeetotal : $ps['miscellaneous'];
-                        $otherscomp  = ($ps['payment_type'] == 1) ? ($ps['others']/100) * $otherfeetotal : $ps['others'];
-    
-                        if(strcasecmp($ps['description'], 'downpayment') == 0){
-                            $topay = $tuitioncomp+$misccomp+$otherscomp+$labfeetotal+$additionalfeetotal;
-                            $amountdue = $topay;
-                            @endphp
-                                <input type="hidden" name="downpayment" value="{{ $topay }}" />
-                            @php
-                        }else{
-                            $topay = $tuitioncomp+$misccomp+$otherscomp;
-                            @endphp
-                                <input type="hidden" name="exams[]" value="{{ $topay }}" />
-                            @php
-                            $exams[] = array('exams' => $topay);
+                        $paymentsched = [];
+                        $paypassed = 0;
+                        if($payment_schedules->toArray())
+                        {
+                            foreach ($payment_schedules->toArray() as $key => $payment_schedule) 
+                            {
+                                if($payment_schedule['educational_level_id'] == NULL && $payment_schedule['year_level'] == NULL){
+                                    $paypassed = 1;
+                                }else{
+                                    if($payment_schedule['educational_level_id'] != NULL){
+                                        $paypassed = ($educational_level_id == $payment_schedule['educational_level_id']) ? 1 : 0;
+                                    }
+                                    if($payment_schedule['year_level'] != 0){
+                                        $paypassed = ($year_level == $payment_schedule['year_level']) ? 1 : 0;
+                                    }
+                                }
+                                if($paypassed == 1)
+                                {
+                                    $paymentsched[] = $payment_schedule;
+                                }
+                            }
                         }
+
                         @endphp
-                            <tr>
-                                <td>{{ $ps['description'] }}</td>
-                                <td class="right w100">{{ number_format($topay,2) }}</td>
-                            </tr>
+                            <table class="tablefees" style="width: 100%;" cellpadding="0" cellspacing="0">
                         @php
-                    }
-                @endphp
+                        //FINAL COMPUTATION (AMOUNT DUE)
+                        $amountdue = 0;
+                        $fixedtuition = 0;
+                        $fixedmisc = 0;
+                        $fixedother = 0;
+                        foreach ($paymentsched as $key => $ps) 
+                        {
+                            $topay = 0;
+
+                            $fixedtuition = ($ps['payment_type'] == 2) ? $ps['tuition'] : 0;
+                            $fixedmisc    = ($ps['payment_type'] == 2) ? $ps['miscellaneous'] : 0;
+                            $fixedother   = ($ps['payment_type'] == 2) ? $ps['others'] : 0;
+
+                            $totaltuition  = $totaltuition-$fixedtuition;
+                            $miscfeetotal  = $miscfeetotal-$fixedmisc;
+                            $otherfeetotal = $otherfeetotal-$fixedother;
+
+                            $tuitioncomp = ($ps['payment_type'] == 1) ? ($ps['tuition']/100) * $totaltuition : $ps['tuition'];
+                            $misccomp    = ($ps['payment_type'] == 1) ? ($ps['miscellaneous']/100) * $miscfeetotal : $ps['miscellaneous'];
+                            $otherscomp  = ($ps['payment_type'] == 1) ? ($ps['others']/100) * $otherfeetotal : $ps['others'];
+
+                            if(strcasecmp($ps['description'], 'downpayment') == 0){
+                                $topay = $tuitioncomp+$misccomp+$otherscomp+$labfeetotal+$additionalfeetotal;
+                                $amountdue = $topay;
+                            }else{
+                                $topay = $tuitioncomp+$misccomp+$otherscomp;
+                                $exams[] = array('exams' => $topay);
+                            }
+                            @endphp
+                                <tr>
+                                    <td>{{ $ps['description'] }}</td>
+                                    <td class="right w100">{{ number_format($topay,2) }}</td>
+                                </tr>
+                            @php
+                        }
+                    @endphp
                         <tr><td colspan="2">&nbsp;</td></tr>
-                        <tr><td><strong>AMOUNT DUE</strong></td><td class="w100 right"><strong>{{ 'Php '.number_format($amountdue,2) }}</strong></td></tr>
+                        <tr><td><div class="bold">AMOUNT DUE</div></td><td class="w100 right"><div class="bold">{{ 'Php '.number_format($amountdue,2) }}</div></td></tr>
                         <tr><td colspan="2">&nbsp;</td></tr> 
                     </table>
-    
-                <div class="row">
-                    <div class="col-md-8">
-                        <h6 class="mx-3 font-weight-bold text-black">GRAND TOTAL</h6> 
+                    <div class="col100">
+                        <div class="col70">
+                            <h6 class="bold text-black trimmargin">GRAND TOTAL</h6> 
+                        </div>
+                        <div class="col30 right">
+                            <h6 class="bold text-black trimmargin">{{ 'Php '.number_format($totalfees, 2) }}</h6> 
+                        </div>
                     </div>
-                    <div class="col-md-4 font-weight-bold text-black">
-                        {{ 'Php '.number_format($totalfees, 2) }}
+                    <div class="col100">
+                        <div class="mid" style="font-size: 12px;">Note: SCHOOL FEES ARE SUBJECT FOR ADJUSTMENT</div>
                     </div>
-                </div>
-                <div class="m-3">
-                    <em><span>Note: </span>SCHOOL FEES ARE SUBJECT FOR ADJUSTMENT</em>
-                </div>
-                <table class="tablefees">
-                    <tr><td class="w200"><label>Approved/Verified by:</label></td><td>&nbsp;</td></tr>
-                    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-                    <tr><td id="blank">&nbsp;</td><td></td></tr>
-                    <tr><td class="mid border-top border-dark"><strong>Adviser</strong></td><td></td></tr>
-                    <tr><td colspan="2"><strong>Date Printed : </strong>{{ date("F d, Y") }}</td></tr>
-                    <tr><td colspan="2"><strong>Printed By : </strong>{{ Auth::user()->{ $info['info'] }->name }}</td></tr>
-                </table>
-                <div id="due" class="m-3">
-                    <em>
-                    @php
-                        if($configuration)
-                        {
-                            $noofdays = $configuration->due;
-                            $note = $configuration->note; 
-                            $due = date('F d, Y', strtotime($enrollment_date . ' +'.$noofdays.' days'));
-    
-                     @endphp
-                            {{ str_replace('DUE',$due,$note) }}
-                    @php
-                        }
-                    @endphp
-                    </em>
-                </div>
-                {{-- @if ($withbutton == 1)
-                <div class="mid m-3">
-                    <input type="hidden" name="idno" required="" value="{{ $idno }}">
-                    <input type="hidden" name="enrollment_id" required="" required="" value="{{ $enrollment_id }}">
-                    <input type="hidden" name="assessment_id" value="{{ $assessment_id }}">
-                    <input type="hidden" name="validated" required="" value="{{ $validated }}">
-    
-                    <button type="submit" id="save_assessment" class="btn btn-success btn-icon-split actions mb-2">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-save"></i>
-                        </span>
-                        <span class="text">Save Assessment</span>
-                    </button>
-                </div>
-                @endif --}}
-            </div>{{-- end of 2nd column --}}
-        </div>
-    </div>
-    </form>
+                    <p></p>
+                    <table class="" style="width: 100%;" cellpadding="0" cellspacing="0">
+                        <tr><td class="w200"><label>Approved/Verified by:</label></td><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                        <tr><td class="mid" style="border-top:1px solid black;"><div class="bold">Adviser</div></td><td></td></tr>
+                        <tr><td colspan="2" style="font-size: 12px !important"><span class="bold" style="font-size: 12px;">Date Printed : </span>{{ date("F d, Y") }}</td></tr>
+                        <tr><td colspan="2" style="font-size: 12px !important"><span class="bold" style="font-size: 12px;">Printed By : </span>{{ Auth::user()->{ $info['info'] }->name }}</td></tr>
+                    </table>
+                    <p></p>
+                    <div id="due" class="m-3">
+                        <div style="font-size: 12px;">
+                        @php
+                            if($configuration)
+                            {
+                                $noofdays = $configuration->due;
+                                $note = $configuration->note; 
+                                $due = date('F d, Y', strtotime($enrollment_date . ' +'.$noofdays.' days'));
         
+                         @endphp
+                                {{ str_replace('DUE',$due,$note) }}
+                        @php
+                            }
+                        @endphp
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>    
 </body>
 </html>
     
