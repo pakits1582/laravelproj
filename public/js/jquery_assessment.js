@@ -37,6 +37,15 @@ $(function(){
         dropdownParent: $("#ui_content4")
     });
 
+    function clearForm()
+    {
+        $("#form_assessment").find('input:text, input:password, input:file, select, textarea').val('');
+        $("#form_assessment").find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
+        $("#schedule_table, #assessment_preview").html('');
+        $("#student").val(null).trigger('change');
+        $(".actions").prop("disabled", true);
+    }
+
     function returnAssessmentPreview(assessment_id)
     {
         $.ajax({
@@ -81,15 +90,15 @@ $(function(){
                 dataType: 'json',
                 success: function(response){
                     console.log(response);
-                    if(response.data.success === false)
+                    if(response.data === false)
                     {
-                        showError(response.data.message);
-                        $("#student").val(null).trigger('change');
+                        showError('Student is not enrolled!');
+                        clearForm();
                     }else{
                         if(response.data.acctok === 0)
                         {
                             showError('Student enrollment is not yet saved! Please save enrollment first!');
-                            $(".actions").prop("disabled", true);
+                            clearForm();
                         }else{
                             // //DISPLAY ENROLLMENT
                             $("#enrollment_id").val(response.data.id);
@@ -121,7 +130,7 @@ $(function(){
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
-                        $("#student").val(null).trigger('change');
+                        clearForm();
                     }
                 }
             });

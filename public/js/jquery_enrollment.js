@@ -45,6 +45,15 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
+    function clearForm()
+    {
+        $("#form_enrollment").find('input:text, input:password, input:file, select, textarea').val('');
+        $("#form_enrollment").find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
+        $("#return_enrolled_subjects").html('<tr class=""><td class="mid" colspan="10">No records to be displayed</td></tr>');
+        $("#schedule_table, #deficiencies").html('');
+        $("#student, #program").val(null).trigger('change');
+    }
+
     function displayEnrollment(response)
     {
         if(response.data)
@@ -102,7 +111,7 @@ $(function(){
                 if(response.data.success === false)
                 {
                     showError(response.data.message);
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }else{
                     if(response.data.enrollment)
                     {
@@ -111,14 +120,14 @@ $(function(){
                             displayEnrollment(response);
                         }else{
                             showError('Student is already enrolled!');
-                            $("#student").val(null).trigger('change');
+                            clearForm()
                         }
                     }else{
                         //INSERT ENROLLMENT
                         if(response.data.student.program_id === null)
                         {
                             showError('Student has no program. Please update student information!');
-                            $("#student").val(null).trigger('change');
+                            clearForm()
                             
                         }else{
                             if(response.data.probi === 1 || response.data.balance.hasbal === 1){
@@ -161,7 +170,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }
             }
         });
@@ -178,7 +187,7 @@ $(function(){
                 console.log(response);
                 if(response.success === false){
                     showError(response.message);
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }else{
                     displayEnrollment(response);
                 }
@@ -188,7 +197,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }
             }
         });
@@ -207,7 +216,7 @@ $(function(){
                     if(response.data.success === false)
                     {
                         showError(response.data.message);
-                        $("#student").val(null).trigger('change');
+                        clearForm()
                     }else{
                         //CHECK ENROLMENT INFORMATION
                         enrollmentInfo(student_id, response.data.values);
@@ -218,7 +227,7 @@ $(function(){
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
-                        $("#student").val(null).trigger('change');
+                        clearForm()
                     }
                 }
             });
@@ -256,7 +265,7 @@ $(function(){
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
-                        $("#student").val(null).trigger('change');
+                        clearForm()
                     }
                 }
             });
@@ -292,7 +301,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }
             }
         });
@@ -362,7 +371,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }
             }
         });
@@ -401,7 +410,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }
             }
         });
@@ -531,7 +540,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }
             }
         });
@@ -955,7 +964,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
-                    $("#student").val(null).trigger('change');
+                    clearForm()
                 }
             }
         });

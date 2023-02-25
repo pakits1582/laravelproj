@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Term;
 use App\Libs\Helpers;
 use App\Models\Classes;
+use App\Models\Assessment;
 use App\Models\Enrollment;
 use App\Models\TaggedGrades;
 use App\Models\EnrolledClass;
@@ -555,6 +556,8 @@ class EnrollmentService
                             'to_time' => $class_schedule['timeto'],
                             'day' => $day,
                             'room' => $class_schedule['room'],
+                            'created_at' => now(),
+                            'updated_at' => now()
                         ];
                     }
                 }
@@ -699,10 +702,13 @@ class EnrollmentService
 
         foreach ($class_subjects as $key => $class_subject)
         {
-            $enroll_classes[] = new EnrolledClass([
+            $enroll_classes[] = [
+                'enrollment_id' => $request->enrollment_id,
                 'class_id' => $class_subject['id'],
                 'user_id' => Auth::id(),
-            ]);
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
             
             if(!is_null($class_subject['schedule']['schedule']))
             {
@@ -711,20 +717,23 @@ class EnrollmentService
                 foreach ($class_schedules as $key => $class_schedule) 
                 {
                     foreach ($class_schedule['days'] as $key => $day) {
-                        $enroll_class_schedules[] = new EnrolledClassSchedule([
+                        $enroll_class_schedules[] = [
+                            'enrollment_id' => $request->enrollment_id,
                             'class_id' => $class_subject['id'],
                             'from_time' => $class_schedule['timefrom'],
                             'to_time' => $class_schedule['timeto'],
                             'day' => $day,
                             'room' => $class_schedule['room'],
-                        ]);
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
                     }
                 }
             }
         }
 
-        $enrollment->enrolled_classes()->saveMany($enroll_classes);
-        $enrollment->enrolled_class_schedules()->saveMany($enroll_class_schedules);
+        $enrollment->enrolled_classes()->insert($enroll_classes);
+        $enrollment->enrolled_class_schedules()->insert($enroll_class_schedules);
 
         DB::commit();
 
@@ -751,6 +760,32 @@ class EnrollmentService
             'alert' => 'alert-success',
             'status' => 200
         ];
+    }
+
+    public function saveEnrollment($request, $enrollment)
+    {
+        DB::beginTransaction();
+
+        $enrollment->student()->update([
+            'program_id' => $request->program_id,
+            'year_level' => $request->year_level,
+            'curriculum_id' => $request->curriculum_id,
+        ]);
+
+        $enrollment->update($request->validated()+['acctok' => 1, 'user_id' => Auth::user()->id]);
+
+        $assessment = Assessment::firstOrCreate([
+            'enrollment_id' => $enrollment->id,
+            'period_id' => session('current_period'),
+        ], [
+            'enrollment_id' => $enrollment->id,
+            'period_id' => session('current_period'),
+            'user_id' => Auth::id()
+        ]);
+
+        DB::commit();
+
+        return $assessment->id;
     }
 }
 

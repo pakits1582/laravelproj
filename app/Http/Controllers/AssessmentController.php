@@ -9,11 +9,6 @@ use App\Services\FeeService;
 use Illuminate\Http\Request;
 use App\Models\Configuration;
 use App\Models\PaymentSchedule;
-use App\Services\PeriodService;
-use App\Models\AssessmentDetail;
-use Illuminate\Support\Facades\DB;
-use App\Models\AssessmentBreakdown;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Assessment\AssessmentService;
 use App\Services\Enrollment\EnrollmentService;
 

@@ -187,27 +187,7 @@ class EnrollmentController extends Controller
 
     public function saveenrollment(UpdateEnrollmentRequest $request, Enrollment $enrollment)
     {
-        DB::beginTransaction();
-
-        $enrollment->student()->update([
-            'program_id' => $request->program_id,
-            'year_level' => $request->year_level,
-            'curriculum_id' => $request->curriculum_id,
-        ]);
-
-        $enrollment->update($request->validated()+['acctok' => 1, 'user_id' => Auth::user()->id]);
-
-        $assessment = Assessment::firstOrCreate([
-            'enrollment_id' => $enrollment->id,
-            'period_id' => session('current_period'),
-        ], [
-            'enrollment_id' => $enrollment->id,
-            'period_id' => session('current_period'),
-            'user_id' => Auth::id()
-        ]);
-
-        DB::commit();
-
-        return $assessment->id;
+        return $this->enrollmentService->saveEnrollment($request, $enrollment);
+        
     }
 }
