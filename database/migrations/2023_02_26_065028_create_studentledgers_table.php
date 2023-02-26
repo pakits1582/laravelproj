@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('studentledger', function (Blueprint $table) {
+        Schema::create('studentledgers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('period_id')->index();
-            $table->foreign('period_id')->references('id')->on('periods')->onDelete('cascade');
-            $table->unsignedBigInteger('student_id')->index();
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->unsignedBigInteger('enrollment_id')->index();
+            $table->foreign('enrollment_id')->references('id')->on('enrollments')->onDelete('cascade');
+            $table->integer('source_id');
+            $table->string('type');
+            $table->decimal('amount', 9, 2)->default('0')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('studentledger');
+        Schema::dropIfExists('studentledgers');
     }
 };
