@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Enrollment;
 use App\Services\ValidationService;
 use Illuminate\Http\Request;
 
@@ -54,9 +55,44 @@ class ValidationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Enrollment $validation)
     {
-        //
+        $validation->load([
+            'studentledger_assessment',
+            'grade',
+            'assessment' => ['details']
+        ]);
+
+        return $validation;
+        // $validation->studentledgers()->delete();
+        // $validation->details()->delete();
+
+        // if(!is_null($validation->grade))
+        // {
+        //     return 'may gradeno';
+        // }else{
+        //     return 'wala';
+        // }
+
+        // if($validation->studentledgers
+        // ->isNotEmpty()) {
+        //     return 'may ledger';
+        // }else{
+        //     return 'walng ledger';
+        // }
+
+           // return $validation;
+        // if($validation->validated == 1)
+        // {
+        //     return [
+        //         'success' => false,
+        //         'message' => 'Student is already validated, uncheck validated checkbox to unvalidate enrollment.',
+        //         'alert' => 'alert-danger',
+        //         'status' => 401
+        //     ];
+        // }
+
+
     }
 
     /**

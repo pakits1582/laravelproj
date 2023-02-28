@@ -162,7 +162,7 @@ $(function(){
                             
                             $.ajax({
                                 url: "/validations/"+enrollment_id,
-                                type: 'POST',
+                                type: 'GET',
                                 dataType: 'json',
                                 beforeSend: function() {
                                     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({

@@ -74,7 +74,21 @@ class Enrollment extends Model
     public function assessment()
     {
         return $this->hasOne(Assessment::class, 'enrollment_id', 'id');
+    }
 
+    public function grade()
+    {
+        return $this->hasOne(Grade::class, 'enrollment_id', 'id');
+    }
+
+    public function studentledgers()
+    {
+        return $this->hasMany(Studentledger::class, 'enrollment_id', 'id');
+    }
+
+    public function studentledger_assessment()
+    {
+        return $this->hasOne(Studentledger::class, 'enrollment_id', 'id')->where('type', 'A');
     }
 
 

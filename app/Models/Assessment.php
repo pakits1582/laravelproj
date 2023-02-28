@@ -26,7 +26,6 @@ class Assessment extends Model
     public function details()
     {
         return $this->hasMany(AssessmentDetail::class, 'assessment_id', 'id');
-
     }
 
     public function exam()
