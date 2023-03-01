@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->unsignedBigInteger('period_id')->index();
             $table->foreign('period_id')->references('id')->on('periods')->onDelete('cascade');
-            $table->unsignedBigInteger('school_id')->index()->nullable()->default(0);
+            $table->unsignedBigInteger('school_id')->index()->nullable();
             $table->foreign('school_id')->references('id')->on('schools');
             $table->unsignedBigInteger('program_id')->index();
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');

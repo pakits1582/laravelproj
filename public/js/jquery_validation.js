@@ -118,10 +118,10 @@ $(function(){
                                 if(response.data.validated == 1)
                                 {
                                     $("#validated").prop("checked", true).prop("disabled",false);       
-                                    $("#status").html('Student\'s enrollment is already validated!').removeClass('red');
+                                    $("#status").html('Student\'s enrollment is already validated!').removeClass('text-danger').addClass(' text-primary');
                                 }else{
                                     $("#validated").prop("checked", false).prop("disabled",true);       
-                                    $("#status").html('Student\'s enrollment is not yet validated!').addClass('red');
+                                    $("#status").html('Student\'s enrollment is not yet validated!').removeClass('text-primary').addClass(' text-danger');
                                 }
                                 
                                 returnEnrolledClassSubjects(response.data.id);

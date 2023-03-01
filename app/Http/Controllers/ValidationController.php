@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Enrollment;
-use App\Services\ValidationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Services\ValidationService;
 
 class ValidationController extends Controller
 {
@@ -63,36 +64,69 @@ class ValidationController extends Controller
             'assessment' => ['details']
         ]);
 
-        return $validation;
-        // $validation->studentledgers()->delete();
-        // $validation->details()->delete();
+        if($validation->validated == 1)
+        {
+            return [
+                'success' => false,
+                'message' => 'Student is already validated, uncheck validated checkbox to unvalidate enrollment.',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
+        }
 
-        // if(!is_null($validation->grade))
-        // {
-        //     return 'may gradeno';
-        // }else{
-        //     return 'wala';
-        // }
+        DB::beginTransaction();
 
-        // if($validation->studentledgers
-        // ->isNotEmpty()) {
-        //     return 'may ledger';
-        // }else{
-        //     return 'walng ledger';
-        // }
+        $validation->validated = 1;   
+        $validation->save();
 
-           // return $validation;
-        // if($validation->validated == 1)
-        // {
-        //     return [
-        //         'success' => false,
-        //         'message' => 'Student is already validated, uncheck validated checkbox to unvalidate enrollment.',
-        //         'alert' => 'alert-danger',
-        //         'status' => 401
-        //     ];
-        // }
+        $validation->grade()->delete();
+        $validation->studentledger_assessment()->delete();
+        
 
+        $validation->grade()->create([
+            'enrollment_id' => $validation->id,
+            'student_id' => $validation->student_id,
+            'period_id' => $validation->period_id,
+            'program_id' => $validation->program_id,
+            'origin' => 1,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
+        $studentledger = $validation->studentledger_assessment()->create([
+            'enrollment_id' => $validation->id,
+            'source_id' => $validation->assessment->id,
+            'type' => 'A',
+            'amount' => $validation->assessment->amount,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        if($validation->assessment->details->isNotEmpty()) 
+        {
+            $studentledger_details = [];
+            foreach ($validation->assessment->details as $key => $assessment_detail) 
+            {
+                $studentledger_details[] = [
+                    'studentledger_id' => $studentledger->id,
+                    'fee_id' => $assessment_detail->fee_id,
+                    'amount' =>  $assessment_detail->amount,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+
+            $studentledger->details()->insert($studentledger_details);
+        }
+
+        DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Student enrollment successfully validated.',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
     }
 
     /**
