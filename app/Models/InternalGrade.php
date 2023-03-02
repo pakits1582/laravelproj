@@ -9,6 +9,9 @@ class InternalGrade extends Model
 {
     use HasFactory;
 
+    protected $table = 'internal_grades';
+    protected $fillable = ['grade_id', 'class_id', 'grading_system_id', 'completion_grade', 'units', 'final', 'user_id'];
+
     public function gradeinfo()
     {
         return $this->belongsTo(Grade::class, 'grade_id', 'id');

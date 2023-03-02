@@ -61,72 +61,16 @@ class ValidationController extends Controller
         $validation->load([
             'studentledger_assessment',
             'grade',
+            'enrolled_classes' => ['class'],
             'assessment' => ['details']
         ]);
 
-        if($validation->validated == 1)
-        {
-            return [
-                'success' => false,
-                'message' => 'Student is already validated, uncheck validated checkbox to unvalidate enrollment.',
-                'alert' => 'alert-danger',
-                'status' => 401
-            ];
-        }
+        return $this->validationService->validateEnrollment($validation);
+    }
 
-        DB::beginTransaction();
-
-        $validation->validated = 1;   
-        $validation->save();
-
-        $validation->grade()->delete();
-        $validation->studentledger_assessment()->delete();
-        
-
-        $validation->grade()->create([
-            'enrollment_id' => $validation->id,
-            'student_id' => $validation->student_id,
-            'period_id' => $validation->period_id,
-            'program_id' => $validation->program_id,
-            'origin' => 1,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        $studentledger = $validation->studentledger_assessment()->create([
-            'enrollment_id' => $validation->id,
-            'source_id' => $validation->assessment->id,
-            'type' => 'A',
-            'amount' => $validation->assessment->amount,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        if($validation->assessment->details->isNotEmpty()) 
-        {
-            $studentledger_details = [];
-            foreach ($validation->assessment->details as $key => $assessment_detail) 
-            {
-                $studentledger_details[] = [
-                    'studentledger_id' => $studentledger->id,
-                    'fee_id' => $assessment_detail->fee_id,
-                    'amount' =>  $assessment_detail->amount,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ];
-            }
-
-            $studentledger->details()->insert($studentledger_details);
-        }
-
-        DB::commit();
-
-        return [
-            'success' => true,
-            'message' => 'Student enrollment successfully validated.',
-            'alert' => 'alert-success',
-            'status' => 200
-        ];
+    public function unvalidate(Enrollment $enrollment)
+    {
+        return $this->validationService->unvalidateEnrollment($enrollment);
     }
 
     /**
