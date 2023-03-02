@@ -87,4 +87,19 @@ class AssessmentService
 
         return true;
     }
+    
+    public function reassessEnrollments()
+    {
+        
+    }
+
+    public function recomputePayments()
+    {
+
+    }
+
+    public function reenterClassSubjectsToGrades()
+    {
+        
+    }
 }

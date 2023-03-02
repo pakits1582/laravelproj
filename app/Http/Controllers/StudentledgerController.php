@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Studentledger;
+use App\Libs\Helpers;
 use Illuminate\Http\Request;
+use App\Models\Studentledger;
+use App\Services\StudentledgerService;
 
 class StudentledgerController extends Controller
 {
+    protected $studentledgerService;
+
+    public function __construct(StudentledgerService $studentledgerService)
+    {
+        $this->studentledgerService = $studentledgerService;
+        Helpers::setLoad(['jquery_studentledger.js', 'select2.full.min.js', 'jquery-dateformat.min.js']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,7 @@ class StudentledgerController extends Controller
      */
     public function index()
     {
-        //
+        return view('studentledger.index');
     }
 
     /**
