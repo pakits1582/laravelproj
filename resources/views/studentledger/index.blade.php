@@ -51,10 +51,16 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="term" class="m-0 font-weight-bold text-primary">* Student</label>
-                                                <select name="student_id" class="form-control select clearable" id="student">
-                                                    <option value="">- search student -</option>
+                                                <label for="period"  class="m-0 font-weight-bold text-primary">* Period</label>
+                                                <select name="period_id" class="form-control" id="period" required>
+                                                    <option value="">All Periods</option>
+                                                    @if ($periods)
+                                                        @foreach ($periods as $period)
+                                                            <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
+                                                        @endforeach
+                                                    @endif
                                                 </select>
+                                                <div id="error_period_id" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -72,37 +78,29 @@
                                             </div>                                 
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-1">
+                                    <div class="row  align-items-end">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Program</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-11">
-                                            <div class="form-group">
                                                 <input type="text" id="program" class="form-control text-uppercase clearable" readonly value="" placeholder="">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group right" id="button_group">
-                                        <button type="button" id="print_assessment" class="btn btn-success btn-icon-split actions mb-2" disabled>
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-print"></i>
-                                            </span>
-                                            <span class="text">Print Assessment</span>
-                                        </button>
-                                        <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2" disabled>
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-plus-square"></i>
-                                            </span>
-                                            <span class="text">(F2) Add Subjects</span>
-                                        </button>
-                                        <button type="button" id="delete_selected" class="btn btn-danger btn-icon-split actions mb-2" disabled>
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-trash"></i>
-                                            </span>
-                                            <span class="text">Delete Selected</span>
-                                        </button>
+                                        <div class="col-md-6">
+                                            <div class="form-group right" id="button_group">
+                                                <button type="button" id="print_soa" class="btn btn-success btn-icon-split actions mb-2" disabled>
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-print"></i>
+                                                    </span>
+                                                    <span class="text">Print Statement of Account</span>
+                                                </button>
+                                                <button type="button" id="print_permit" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-print"></i>
+                                                    </span>
+                                                    <span class="text">Print Permit</span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -116,24 +114,23 @@
             <div class="col-lg-12 mx-auto">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Assessment Preview</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Payables and Payments Trail</h6>
                     </div>
-                    <div class="card-body" id="assessment_preview">
+                    <div class="card-body" id="return_studentledger">
                         
                     </div>
                 </div>
             </div>
         </div>
-        {{-- DISPLAY SCHEDULE TABLE --}}
+
         <div class="row">
             <div class="col-lg-12 mx-auto">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Schedule Table</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Student Adjustment</h6>
                     </div>
-                    <div class="card-body">
-                        <div id="schedule_table">
-                        </div>
+                    <div class="card-body" id="">
+                        
                     </div>
                 </div>
             </div>

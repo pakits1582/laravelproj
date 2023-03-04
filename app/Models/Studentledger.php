@@ -14,8 +14,7 @@ class Studentledger extends Model
 
     public function enrollment()
     {
-        return $this->belongsTo(Enrollment::class);
-            
+        return $this->belongsTo(Enrollment::class);   
     }
 
     public function details()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Models\Studentledger;
+use App\Services\PeriodService;
 use App\Services\StudentledgerService;
 
 class StudentledgerController extends Controller
@@ -23,7 +24,9 @@ class StudentledgerController extends Controller
      */
     public function index()
     {
-        return view('studentledger.index');
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+
+        return view('studentledger.index', compact('periods'));
     }
 
     /**
@@ -90,5 +93,12 @@ class StudentledgerController extends Controller
     public function destroy(Studentledger $studentledger)
     {
         //
+    }
+
+    public function statementofaccounts(Request $request)
+    {
+        $soas = $this->studentledgerService->returnStatementOfAccounts($request->student_id, $request->period_id);
+
+        return $soas;
     }
 }
