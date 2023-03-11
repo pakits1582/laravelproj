@@ -28,6 +28,7 @@ use App\Http\Controllers\ExternalGradeController;
 use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\InternalGradeController;
 use App\Http\Controllers\PaymentScheduleController;
+use App\Http\Controllers\ScholarshipdiscountController;
 use App\Http\Controllers\StudentledgerController;
 
 /*
@@ -257,22 +258,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:validations']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
         
-
-        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
-        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
-        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
-        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
-
-        // // });
-       
-        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
-        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
-        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
-        //Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
-        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
-        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
-        // Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);
-        
         Route::get('/validations/{enrollment}/unvalidate', [ValidationController::class, 'unvalidate']);
         Route::resource('validations', ValidationController::class)->missing(function (Request $request) {
             return Redirect::route('validations.index');
@@ -301,6 +286,31 @@ Route::group(['middleware' => ['auth']], function () {
         //Route::get('/validations/{enrollment}/unvalidate', [ValidationController::class, 'unvalidate']);
         Route::resource('studentledgers', StudentledgerController::class)->missing(function (Request $request) {
             return Redirect::route('studentledgers.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:scholarshipdiscounts']], function () {
+        // Route::group(['middleware' => ['writeability:curriculum']], function () {
+        
+
+        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
+        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
+        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
+        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
+
+        // // });
+       
+        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
+        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
+        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
+        //Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
+        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
+        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
+        //Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);
+        
+        //Route::get('/validations/{enrollment}/unvalidate', [ValidationController::class, 'unvalidate']);
+        Route::resource('scholarshipdiscounts', ScholarshipdiscountController::class)->missing(function (Request $request) {
+            return Redirect::route('scholarshipdiscounts.index');
         });
     });
 

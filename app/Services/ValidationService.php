@@ -65,6 +65,7 @@ class ValidationService
             'source_id' => $validation->assessment->id,
             'type' => 'A',
             'amount' => $validation->assessment->amount,
+            'user_id' => Auth::id(),
             'created_at' => now(),
             'updated_at' => now()
         ]);

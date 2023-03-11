@@ -31,19 +31,22 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             try {
                 $user = Auth::user();
-                switch ($user->utype) {
-                    case User::TYPE_INSTRUCTOR:
-                        $info = 'instructorinfo';
-                        break;
-                    case User::TYPE_STUDENT:
-                        $info = 'studentinfo';
-                        break;
-                    default:
-                        $info = 'info';
-                        break;
+                if($user)
+                {
+                    switch ($user->utype) {
+                        case User::TYPE_INSTRUCTOR:
+                            $info = 'instructorinfo';
+                            break;
+                        case User::TYPE_STUDENT:
+                            $info = 'studentinfo';
+                            break;
+                        default:
+                            $info = 'info';
+                            break;
+                    }
+    
+                    $view->with(['user' => $user, 'info' => ['info' => $info]]);
                 }
-
-                $view->with(['user' => $user, 'info' => ['info' => $info]]);
             } catch (\Exception $e) {
                 Log::error(get_called_class(), [
                     'error' => $e->getMessage(),

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('source_id');
             $table->string('type');
             $table->decimal('amount', 9, 2)->default('0')->nullable();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

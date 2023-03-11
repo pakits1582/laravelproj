@@ -82,15 +82,15 @@ class User extends Authenticatable
         return $query->where('utype', self::TYPE_ADMIN);
     }
 
-    // public function scopeDean($query)
-    // {  
-    //     return $query->info->where('designation', Instructor::TYPE_DEAN);
-    // }
+    public function scopeDean($query)
+    {  
+        return $query->info->where('designation', Instructor::TYPE_DEAN);
+    }
 
-    // public function scopeProgramHead($query)
-    // {
-    //     return $query->info->where('designation', Instructor::TYPE_PROGRAM_HEAD);
-    // }
+    public function scopeProgramHead($query)
+    {
+        return $query->info->where('designation', Instructor::TYPE_PROGRAM_HEAD);
+    }
 
     public function scopeCreateWithRole($query, $request, $usertype)
     {
@@ -127,4 +127,16 @@ class User extends Authenticatable
 
         return $this->hasOne(SetupPeriod::class, 'user_id', 'id')->withDefault(['id' => $config->currentperiod->id ?? '', 'name' => $config->currentperiod->name ?? '', 'term' => $config->currentperiod->term_id ?? '']);
     }
+
+    public function userinfo()
+    {
+        if ($this->utype === 0) {
+            return $this->hasOne(Userinfo::class);
+        } elseif ($this->utype === 1) {
+            return $this->hasOne(Instructor::class);
+        } elseif ($this->utype === 2) {
+            return $this->hasOne(Student::class);
+        }
+    }
+
 }
