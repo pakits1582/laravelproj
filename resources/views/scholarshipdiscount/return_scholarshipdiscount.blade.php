@@ -9,20 +9,20 @@
                 <th colspan="2" class="w120">Misc.</th>
                 <th colspan="2" class="w120">Other Misc.</th>
                 <th colspan="2" class="w120">Laboratory</th>
-                <th colspan="2" class="w120">Total Assessment</th>
+                <th colspan="2" class="w120">Total Assess</th>
                 <th rowspan="2" class="w50"></th>
             </tr>
             <tr>
-                <th class="">Value</th>
-                <th class="">Type</th>
-                <th class="">Value</th>
-                <th class="">Type</th>
-                 <th class="">Value</th>
-                <th class="">Type</th>
-                 <th class="">Value</th>
-                <th class="">Type</th>
-                 <th class="">Value</th>
-                <th class="">Type</th>
+                <th class="w50">Value</th>
+                <th class="w50">Type</th>
+                <th class="w50">Value</th>
+                <th class="w50">Type</th>
+                <th class="w50">Value</th>
+                <th class="w50">Type</th>
+                <th class="w50">Value</th>
+                <th class="w50">Type</th>
+                <th class="w50">Value</th>
+                <th class="w50">Type</th>
             </tr>
         </thead>
         <tbody>
@@ -45,7 +45,7 @@
                     </tr> --}}
                 @endforeach
             @else
-                <tr><td colspan="6" class="mid">No records to be displayed!</td></tr>
+                <tr><td colspan="14" class="mid">No records to be displayed!</td></tr>
             @endif
         </tbody>
     </table>

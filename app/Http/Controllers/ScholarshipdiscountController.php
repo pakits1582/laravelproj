@@ -6,6 +6,8 @@ use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Models\Scholarshipdiscount;
 use App\Services\ScholarshipdiscountService;
+use App\Http\Requests\StoreScholarshipdiscount;
+use App\Http\Requests\StoreScholarshipdiscountRequest;
 
 class ScholarshipdiscountController extends Controller
 {
@@ -41,7 +43,7 @@ class ScholarshipdiscountController extends Controller
      */
     public function create()
     {
-        //
+        return view('scholarshipdiscount.create');
     }
 
     /**
@@ -50,9 +52,9 @@ class ScholarshipdiscountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreScholarshipdiscountRequest $request)
     {
-        //
+        dd($request->validated());
     }
 
     /**

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 20);
             $table->string('description');
-            $table->decimal('tution', 9, 2)->default('0')->nullable();
+            $table->decimal('tuition', 9, 2)->default('0')->nullable();
             $table->enum('tuition_type', ['rate', 'fixed'])->default('rate');
             $table->decimal('miscellaneous', 9, 2)->default('0')->nullable();
             $table->enum('miscellaneous_type', ['rate', 'fixed'])->default('rate');

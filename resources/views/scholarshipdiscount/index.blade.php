@@ -12,13 +12,13 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 {{-- <h6 class="m-0 font-weight-bold text-primary">departments Table</h6> --}}
-                <a href="{{ route('fees.create') }}" class="btn btn-primary btn-icon-split">
+                <a href="{{ route('scholarshipdiscounts.create') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus-square"></i>
                     </span>
                     <span class="text">Add New Scholarship or Discount</span>
                 </a>
-                <form method="POST" action="" id="filter_form" target="_blank" data-field="fees">
+                <form method="POST" action="" id="filter_form" target="_blank" data-field="scholarshipdiscounts">
                     @csrf
                     <div class="mt-3">
                         <div class="row">
