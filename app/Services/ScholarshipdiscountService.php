@@ -9,9 +9,28 @@ use Illuminate\Support\Facades\Auth;
 class ScholarshipdiscountService
 {
 
-    public function returnScholarhipAndDiscounts($request)
+    public function returnScholarhipAndDiscounts($request, $all = false)
     {
-        return [];
+        $query = Scholarshipdiscount::orderBy('code');
+
+        if($request->filled('keyword')) 
+        {
+            $query->where(function($query) use($request){
+                $query->where('code', 'like', $request->keyword.'%')
+                ->orWhere('description', 'like', $request->keyword.'%');
+            });
+        }
+    
+        if($request->filled('type'))
+        {
+            $query->where('type', $request->type);
+        }
+
+        if($all){
+            return $query->get();
+        }
+    
+        return $query->paginate(10);
     }
    
 }

@@ -54,7 +54,13 @@ class ScholarshipdiscountController extends Controller
      */
     public function store(StoreScholarshipdiscountRequest $request)
     {
-        dd($request->validated());
+        $insert = Scholarshipdiscount::firstOrCreate($request->validated(), $request->validated());
+
+        if ($insert->wasRecentlyCreated) {
+            return back()->with(['alert-class' => 'alert-success', 'message' => 'Scholarship/Discount sucessfully added!']);
+        }
+
+        return back()->with(['alert-class' => 'alert-danger', 'message' => 'Duplicate entry, scholarship/discount already exists!'])->withInput();
     }
 
     /**

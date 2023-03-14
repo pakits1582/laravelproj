@@ -28,21 +28,29 @@
         <tbody>
             @if (count($scholarshipdiscounts) > 0)
                 @foreach ($scholarshipdiscounts as $scholarshipdiscount)
-                    {{-- <tr>
+                    <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $fee->code }}</td>
-                        <td>{{ $fee->name }}</td>
-                        <td>{{ $fee->feetype->type }}</td>
-                        <td>{{ $fee->default_value }}</td>
+                        <td>{{ $scholarshipdiscount->code }}</td>
+                        <td>{{ $scholarshipdiscount->description }}</td>
+                        <td>{{ $scholarshipdiscount->tuition }}</td>
+                        <td>{{ $scholarshipdiscount->tuition_type }}</td>
+                        <td>{{ $scholarshipdiscount->miscellaneous }}</td>
+                        <td>{{ $scholarshipdiscount->miscellaneous_type }}</td>
+                        <td>{{ $scholarshipdiscount->othermisc }}</td>
+                        <td>{{ $scholarshipdiscount->othermisc_type }}</td>
+                        <td>{{ $scholarshipdiscount->laboratory }}</td>
+                        <td>{{ $scholarshipdiscount->laboratory_type }}</td>
+                        <td>{{ $scholarshipdiscount->totalassessment }}</td>
+                        <td>{{ $scholarshipdiscount->totalassessment_type }}</td>
                         <td class="mid">
-                            <a href="{{ route('fees.edit', ['fee' => $fee->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('scholarshipdiscounts.edit', ['scholarshipdiscount' => $scholarshipdiscount->id ]) }}" class="btn btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>
                                 <span class="text">Edit</span>
                             </a>
                         </td>
-                    </tr> --}}
+                    </tr>
                 @endforeach
             @else
                 <tr><td colspan="14" class="mid">No records to be displayed!</td></tr>

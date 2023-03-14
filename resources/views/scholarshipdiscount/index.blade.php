@@ -24,8 +24,8 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="fee_type" class="m-0 font-weight-bold text-primary">Type</label>
-                                    <select name="fee_type_id" class="form-control dropdownfilter" id="fee_type">
+                                    <label for="type" class="m-0 font-weight-bold text-primary">Type</label>
+                                    <select name="type" class="form-control dropdownfilter" id="type">
                                         <option value="">- select type -</option>
                                         <option value="1">Scholarship</option>
                                         <option value="2">Discount</option>
