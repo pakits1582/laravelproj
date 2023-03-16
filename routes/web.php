@@ -308,7 +308,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
         //Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);
         
-        //Route::get('/validations/{enrollment}/unvalidate', [ValidationController::class, 'unvalidate']);
+        Route::get('/scholarshipdiscounts/grant', [ScholarshipdiscountController::class, 'grant']);
         Route::resource('scholarshipdiscounts', ScholarshipdiscountController::class)->missing(function (Request $request) {
             return Redirect::route('scholarshipdiscounts.index');
         });

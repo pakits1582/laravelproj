@@ -8,6 +8,7 @@ use App\Models\Scholarshipdiscount;
 use App\Services\ScholarshipdiscountService;
 use App\Http\Requests\StoreScholarshipdiscount;
 use App\Http\Requests\StoreScholarshipdiscountRequest;
+use App\Http\Requests\UpdateScholarshipdiscountRequest;
 
 class ScholarshipdiscountController extends Controller
 {
@@ -82,7 +83,7 @@ class ScholarshipdiscountController extends Controller
      */
     public function edit(Scholarshipdiscount $scholarshipdiscount)
     {
-        //
+        return view('scholarshipdiscount.edit', compact('scholarshipdiscount'));
     }
 
     /**
@@ -92,9 +93,11 @@ class ScholarshipdiscountController extends Controller
      * @param  \App\Models\Scholarshipdiscount  $scholarshipdiscount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Scholarshipdiscount $scholarshipdiscount)
+    public function update(UpdateScholarshipdiscountRequest $request, Scholarshipdiscount $scholarshipdiscount)
     {
-        //
+        $scholarshipdiscount->update($request->validated());
+
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Scholarship/Discount sucessfully updated!']);
     }
 
     /**
@@ -106,5 +109,10 @@ class ScholarshipdiscountController extends Controller
     public function destroy(Scholarshipdiscount $scholarshipdiscount)
     {
         //
+    }
+
+    public function grant()
+    {
+        return 'xxx';
     }
 }
