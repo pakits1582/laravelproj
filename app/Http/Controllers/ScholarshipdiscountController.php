@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
+use App\Services\PeriodService;
 use App\Models\Scholarshipdiscount;
 use App\Services\ScholarshipdiscountService;
 use App\Http\Requests\StoreScholarshipdiscount;
@@ -113,6 +114,9 @@ class ScholarshipdiscountController extends Controller
 
     public function grant()
     {
-        return 'xxx';
+        $scholarshipdiscounts = Scholarshipdiscount::orderBy('description')->get();
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+
+        return view('scholarshipdiscount.grant.index', compact('scholarshipdiscounts', 'periods'));
     }
 }
