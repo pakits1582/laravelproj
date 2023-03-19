@@ -23,7 +23,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action=""  role="form" id="form_assessment">
+                                <form method="POST" action=""  role="form" id="form_scholarshipdiscountgrant">
                                     @csrf
                                     
                                     <div class="row">
@@ -101,8 +101,8 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="code"  class="m-0 font-weight-bold text-primary">Section</label>
-                                                <input type="text" id="section" class="form-control text-uppercase clearable" readonly value="" placeholder="">
+                                                <label for="code"  class="m-0 font-weight-bold text-primary">Enrollment No.</label>
+                                                <input type="text" name="enrollment_id" id="enrollment_id" class="form-control text-uppercase clearable" readonly value="" placeholder="">
 
                                             </div>                                 
                                         </div>
@@ -142,10 +142,11 @@
                                         <th class="w120">Laboratory</th>
                                         <th class="w120">Total Assessment</th>
                                         <th class="w120">Total Deduction</th>
+                                        <th class="w50">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-black" id="return_scholarshipdiscount_grant">
-                                    <tr><td class="mid" colspan="8">No records to be displayed!</td></tr>
+                                    <tr><td class="mid" colspan="9">No records to be displayed!</td></tr>
                                 </tbody>
 
                             </table>

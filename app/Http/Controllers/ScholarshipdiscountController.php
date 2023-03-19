@@ -6,6 +6,7 @@ use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use App\Models\Scholarshipdiscount;
+use App\Models\ScholarshipdiscountGrant;
 use App\Services\ScholarshipdiscountService;
 use App\Http\Requests\StoreScholarshipdiscount;
 use App\Http\Requests\StoreScholarshipdiscountRequest;
@@ -116,7 +117,21 @@ class ScholarshipdiscountController extends Controller
     {
         $scholarshipdiscounts = Scholarshipdiscount::orderBy('description')->get();
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
-
+        
         return view('scholarshipdiscount.grant.index', compact('scholarshipdiscounts', 'periods'));
+    }
+
+    public function scholarshipdiscountgrants(Request $request)
+    {
+        $scholarshipdiscountgrants = ScholarshipdiscountGrant::with(['scholarshipdiscount' => function ($q){
+            $q->orderBy('description');
+        }])->where('enrollment_id', $request->enrollment_id)->get();
+
+        return view('scholarshipdiscount.grant.return_grants', compact('scholarshipdiscountgrants'));
+    }
+
+    public function savegrant(Request $request)
+    {
+
     }
 }

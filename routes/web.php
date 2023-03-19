@@ -223,6 +223,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);
         Route::post('/enrolments/{enrollment}/saveenrollment', [EnrollmentController::class, 'saveenrollment']);
 
+        Route::get('/enrolments/{student}/{period?}', [EnrollmentController::class, 'show']);
+
 
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
             return Redirect::route('enrolments.index');
@@ -309,6 +311,8 @@ Route::group(['middleware' => ['auth']], function () {
         //Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);
         
         Route::get('/scholarshipdiscounts/grant', [ScholarshipdiscountController::class, 'grant']);
+        Route::post('/scholarshipdiscounts/scholarshipdiscountgrants', [ScholarshipdiscountController::class, 'scholarshipdiscountgrants']);
+        Route::post('/scholarshipdiscounts/savegrant', [ScholarshipdiscountController::class, 'savegrant']);
         Route::resource('scholarshipdiscounts', ScholarshipdiscountController::class)->missing(function (Request $request) {
             return Redirect::route('scholarshipdiscounts.index');
         });

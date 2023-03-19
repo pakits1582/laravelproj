@@ -66,9 +66,9 @@ class EnrollmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($student_id)
+    public function show($student_id, $period_id = null)
     {
-        $enrollment = $this->enrollmentService->studentEnrollment($student_id, session('current_period'),1);
+        $enrollment = $this->enrollmentService->studentEnrollment($student_id, $period_id ,1);
 
         return response()->json(['data' => $enrollment]);
     }

@@ -19,6 +19,12 @@ return new class extends Migration
             $table->foreign('enrollment_id')->references('id')->on('enrollments')->onDelete('cascade');
             $table->unsignedBigInteger('scholarshipdiscount_id')->index();
             $table->foreign('scholarshipdiscount_id')->references('id')->on('scholarshipdiscounts');
+            $table->decimal('tuition', 9, 2)->default('0')->nullable();
+            $table->decimal('miscellaneous', 9, 2)->default('0')->nullable();
+            $table->decimal('othermisc', 9, 2)->default('0')->nullable();
+            $table->decimal('laboratory', 9, 2)->default('0')->nullable();
+            $table->decimal('totalassessment', 9, 2)->default('0')->nullable();
+            $table->decimal('totaldeduction', 9, 2)->default('0')->nullable();
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

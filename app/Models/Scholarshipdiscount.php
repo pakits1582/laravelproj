@@ -28,4 +28,9 @@ class Scholarshipdiscount extends Model
             set: fn ($value) => strtoupper($value)
         );
     }
+
+    public function grants()
+    {
+        return $this->hasMany(ScholarshipdiscountGrant::class);
+    }
 }
