@@ -32,5 +32,10 @@ class ScholarshipdiscountService
     
         return $query->paginate(10);
     }
+
+    public function saveGrant($request)
+    {
+        return $request;
+    }
    
 }

@@ -107,17 +107,19 @@ jQuery.fn.center = function (){
 *** FUNCTION CLEAR ALL FORM FIELDS ***
 *************************************/
 function clearForm(form){
-  $(':input',form)
-  .not(':button, :submit, :reset, :hidden, :radio, :checkbox')
-  .val('');
-  $(':checkbox').prop('checked',false);
+    // $(':input',form)
+    // .not(':button, :submit, :reset, :hidden, :radio, :checkbox')
+    // .val
+    $('.clearable').val('');
+    $(':checkbox').prop('checked',false);
+    $(':submit').prop('disabled',true);
 }	
 
 function clearForm2(form){
-  $(':input',form)
-  .not(':button, :submit, :reset, :radio, :checkbox')
-  .val('');
-  $(':checkbox').prop('checked',false);
+    $(':input',form)
+    .not(':button, :submit, :reset, :radio, :checkbox')
+    .val('');
+    $(':checkbox').prop('checked',false);
 }	
 /******************************************
 **** FUNCTION CAPITALIZED FIRST LETTER ****

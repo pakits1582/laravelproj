@@ -132,6 +132,9 @@ class ScholarshipdiscountController extends Controller
 
     public function savegrant(Request $request)
     {
+        return $request;
+        // $grant = $this->scholarshipdiscountService->saveGrant($request);
 
+        // return response()->json(['data' => $grant]);
     }
 }

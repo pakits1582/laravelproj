@@ -104,12 +104,13 @@ $(function(){
                             // //DISPLAY ENROLLMENT
                             $("#enrollment_id").val(response.data.id);
                             $("#assessment_id").val(response.data.assessment.id);
-                            $("#program").val(response.data.program.name);
+                            $("#program").val(response.data.program.code);
                             $("#educational_level").val(response.data.program.level.code);
                             $("#college").val(response.data.program.collegeinfo.code);
                             $("#curriculum").val(response.data.curriculum.curriculum);
                             $("#year_level").val(response.data.year_level);
-                            $("#enrollment_id").val(response.data.id);
+                            $("#section").val(response.data.section.code);
+
                             $("#save_grant").prop("disabled", false);
 
                             returnScholarshipdiscountGrants(response.data.id);
@@ -133,8 +134,7 @@ $(function(){
 
     $(document).on("submit", "#form_scholarshipdiscountgrant", function(e){
         var postData   = $(this).serializeArray();
-        var student_id = $("#student").val();
-        var period_id  = $("#period").val();
+        var enrollment_id = $("#enrollment_id").val();
 
         $.ajax({
             url: "/scholarshipdiscounts/savegrant",
@@ -155,8 +155,10 @@ $(function(){
             success: function(response)
             {
                 $("#confirmation").dialog('close');
-                showMessageInForm('form_scholarshipdiscountgrant', response.data.alert, response.data.message);
-                returnScholarshipdiscountGrants(student_id, period_id);
+                console.log(response);
+               
+                // showMessageInForm('form_scholarshipdiscountgrant', response.data.alert, response.data.message);
+                // returnScholarshipdiscountGrants(enrollment_id);
             },
             error: function (data) {
                console.log(data);
