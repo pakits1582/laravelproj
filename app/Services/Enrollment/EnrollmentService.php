@@ -379,6 +379,11 @@ class EnrollmentService
         {
             foreach ($prerequisites as $key => $prerequisite)
             {
+                // Check if there are any failed prerequisites
+                if (!empty($failed_prerequisites)) {
+                    break;
+                }
+                
                 $subject_id = $prerequisite->curriculumsubject->subject_id;
                 $ispassed = 0;
 
