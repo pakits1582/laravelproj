@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Enrollment;
 use App\Models\Scholarshipdiscount;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +36,14 @@ class ScholarshipdiscountService
 
     public function saveGrant($request)
     {
-        return $request;
+        $enrollment = Enrollment::with(
+            [
+                'assessment' => [
+                    'breakdowns' => ['fee_type']
+                ]
+            ])->find($request->enrollment_id);
+
+        return $enrollment;
     }
    
 }

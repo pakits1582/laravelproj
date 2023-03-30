@@ -683,7 +683,7 @@ class EnrollmentService
             'curriculumsubject' => [
                 'subjectinfo', 
                 'curriculum',
-                'prerequisites' => ['curriculumsubject.subjectinfo','curriculumsubject.equivalents',], 
+                'prerequisites' => ['curriculumsubject.subjectinfo','curriculumsubject.equivalents'], 
                 'corequisites', 
                 'equivalents'
             ]

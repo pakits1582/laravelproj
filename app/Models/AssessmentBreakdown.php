@@ -18,4 +18,10 @@ class AssessmentBreakdown extends Model
         return $this->belongsTo(Assessment::class, 'assessment_id', 'id');
 
     }
+
+    public function fee_type()
+    {
+        return $this->belongsTo(FeeType::class, 'fee_type_id', 'id');
+
+    }
 }
