@@ -128,7 +128,7 @@
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-save"></i>
                                                     </span>
-                                                    <span class="text">Save Scholarhsip/Discount Grant</span>
+                                                    <span class="text">Save Scholarship/Discount Grant</span>
                                                 </button>
                                             </div>
                                         </div>

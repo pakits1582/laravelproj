@@ -43,7 +43,18 @@ class ScholarshipdiscountService
                 ]
             ])->find($request->enrollment_id);
 
-        return $enrollment;
+        $grant = Scholarshipdiscount::find($request->scholarshipdiscount_id);
+
+        if (empty($enrollment->assessment->breakdowns)) 
+        {
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Please re-assess student enrollment.',
+                'alert' => 'alert-danger'
+            ];
+        }
+
+        return 'continue';
     }
    
 }
