@@ -128,4 +128,9 @@ class FeeService
             ];
     }
 
+    public function getDefaultFee()
+    {
+        return Fee::with('feetype')->where('colindex', 1)->take(1)->get();
+    }
+
 }

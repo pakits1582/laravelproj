@@ -67,7 +67,7 @@ class EnrollmentService
 
     public function studentEnrollment($student_id, $period_id, $acctok = 0)
     {
-        $period_id = (NULL) ? session('current_period') : $period_id;
+        $period_id = ($period_id == NULL) ? session('current_period') : $period_id;
         
         $query = Enrollment::with(['period', 'student', 'program' => ['level', 'collegeinfo'], 'curriculum', 'section', 'assessment'])
                     ->where('student_id', $student_id)

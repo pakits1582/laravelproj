@@ -16,4 +16,11 @@ class StudentledgerDetail extends Model
     {
         return $this->belongsTo(Studentledger::class);
     }
+
+    public function fee()
+    {
+        return $this->belongsTo(Fee::class);
+    }
+
+
 }

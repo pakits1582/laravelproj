@@ -70,4 +70,16 @@ class StudentledgerService
 
         return $soas;
     }
+
+    public function getAllPaymentsMade($enrollment_id)
+    {
+        
+    }
+
+    public function insertStudentledgerDetails($ledgerno, $enrollment, $totaldeduction)
+    {
+        $defaultFee = (new FeeService())->getDefaultFee();
+
+        
+    }
 }
