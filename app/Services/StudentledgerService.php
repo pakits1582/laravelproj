@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Studentledger;
+use App\Models\StudentledgerDetail;
+use Database\Seeders\StudentSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,15 +73,35 @@ class StudentledgerService
         return $soas;
     }
 
-    public function getAllPaymentsMade($enrollment_id)
+    public function getAllPaidLedgerDetails($enrollment_id)
     {
-        
+        $query = StudentledgerDetail::query();
+        $query->select(
+            'studentledger_details.fee_id', 
+            'studentledger_details.amount',
+            'fees.code',
+            'fees.name',
+            'fee_types.type',
+            'fee_types.order'
+        );
+        $query->Join('studentledgers', 'studentledger_details.studentledger_id', 'studentledgers.id');
+        $query->Join('fees', 'studentledger_details.fee_id', 'fees.id');
+        $query->Join('fee_types', 'fees.fee_type_id', 'fee_types.id');
+
+        $query->where('studentledgers.enrollment_id', $enrollment_id);
+        $query->where('studentledgers.type', '!=', 'A');
+
+        return $query->get();
     }
 
     public function insertStudentledgerDetails($ledgerno, $enrollment, $totaldeduction)
     {
         $defaultFee = (new FeeService())->getDefaultFee();
+        $allPayableAssessmentDetails = $enrollment->assessment->details;
+        $allPaidLedgerDetails = $this->getAllPaidLedgerDetails($enrollment->id);
 
+
+        return $allPayableAssessmentDetails;
         
     }
 }

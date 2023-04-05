@@ -168,6 +168,8 @@ class ScholarshipdiscountService
             $ledger = Studentledger::firstOrCreate($ledgerData, $ledgerData);
             $ledgerDetails = (new StudentledgerService())->insertStudentledgerDetails($ledger->id, $enrollment, $totaldeduction);
 
+            return $ledgerDetails;
+            
             return [
                 'success' => true,
                 'message' => 'Scholarship/Discount sucessfully granted!.',
