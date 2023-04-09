@@ -94,14 +94,105 @@ class StudentledgerService
         return $query->get();
     }
 
-    public function insertStudentledgerDetails($ledgerno, $enrollment, $totaldeduction)
+    public function insertCreditStudentledgerDetails($studentledger, $enrollment, $totaldeduction)
     {
         $defaultFee = (new FeeService())->getDefaultFee();
-        $allPayableAssessmentDetails = $enrollment->assessment->details;
-        $allPaidLedgerDetails = $this->getAllPaidLedgerDetails($enrollment->id);
+        $allPayableAssessmentDetails = $enrollment->assessment->details->toArray();
+        $allPaidLedgerDetails = $this->getAllPaidLedgerDetails($enrollment->id)->toArray();
 
+        $feesArraytoledgerdetails = [];
+        $result = [];
 
-        return $allPayableAssessmentDetails;
+        if($allPaidLedgerDetails)
+        {
+            foreach($allPaidLedgerDetails as $paidfee)
+            {
+                if(!isset($result[$paidfee['fee_id']]))
+                {
+                    $result[$paidfee['fee_id']] = $paidfee;  // instantiate temporary city-keyed result array (avoid Notices)
+                }else{
+                    (float) $result[$paidfee['fee_id']]['amount'] += (float) $paidfee['amount'];  // add current value to previous value
+                }
+            }
+        }
+    
+        $paidledgerdetails = array_values($result);  // remove temporary keys
+
+        $feesArray = [];
+
+        if($allPayableAssessmentDetails)
+        {
+            foreach($allPayableAssessmentDetails as $key => $payablefee)
+            {
+                $a = array_search($payablefee['fee_id'], array_column($paidledgerdetails, 'fee_id'));
+                if($a !== false)
+                {
+                    $bal = $payablefee['amount'] - str_replace('-', "", $paidledgerdetails[$a]['amount']);
+                    
+                    if(str_replace('-', "", $paidledgerdetails[$a]['amount']) < $payablefee['amount'])
+                    {
+                        $feesArray[] = array('fee_id' => $payablefee['fee_id'], 'amount' => $bal);
+                    }
+                }else{
+                    $feesArray[] = array('fee_id' => $payablefee['fee_id'], 'amount' => $payablefee['amount']);
+                }
+            }
+        }
+
+        if(empty($feesArray))
+        {
+            $feesArraytoledgerdetails[] = array('fee_id' => $defaultFee[0]->id, 'amount' => '-'.$totaldeduction);
+        }else{
+            $diff = 0;
+
+            foreach($feesArray as $key => $value)
+            {
+                $feeamount = sprintf('%.9F',abs($value['amount']));
+                $totaldeduction = sprintf('%.9F',abs($totaldeduction));  
+                 
+                if($key == 0)
+                {
+                    $amount = ($feeamount >= $totaldeduction) ? $totaldeduction : $feeamount;
+                    $diff = bcsub($totaldeduction, $amount,2);   
+                    $feesArraytoledgerdetails[] = array('fee_id' => $value['fee_id'], 'amount' => '-'.str_replace(',', "", $amount));
+                }else{
+                    if($diff >= $feeamount)
+                    {
+                        $diff = bcsub($diff, $feeamount,2);
+                        $feesArraytoledgerdetails[] = array('fee_id' => $value['fee_id'], 'amount' => '-'.str_replace(',', "", $feeamount));
+                    
+                    }else if($diff < $feeamount && $diff > 0)
+                    {
+                        $feesArraytoledgerdetails[] = array('fee_id' => $value['fee_id'], 'amount' => '-'.$diff);
+                        $diff = bcsub($diff, $feeamount,2);
+                    }
+                }
+            }
+
+            if($diff > 0)
+            {
+                $feesArraytoledgerdetails[] = array('fee_id' => $defaultFee[0]->id, 'amount' => '-'.$diff);
+            }
+        }//END OF IFELSE EMPTY FEESARRAY
+
+        if($feesArraytoledgerdetails)
+        {
+            $studentledgerdetailsArray = [];
+            foreach ($feesArraytoledgerdetails as $key => $value)
+            {
+                $studentledgerdetailsArray[] = [
+                    'studentledger_id' => $studentledger->id, 
+                    'fee_id' => $value['fee_id'], 
+                    'amount' => $value['amount'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+            
+            $studentledger->details()->insert($studentledgerdetailsArray);
+        }
+
+        return true;
         
     }
 }

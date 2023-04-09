@@ -39,6 +39,8 @@ class ScholarshipdiscountService
 
     public function saveGrant($request)
     {
+        DB::beginTransaction();
+
         $enrollment = Enrollment::with(
             [
                 'assessment' => [
@@ -47,8 +49,6 @@ class ScholarshipdiscountService
                 ]
             ])->find($request->enrollment_id);
         
-        //return $enrollment;
-
         $grant = Scholarshipdiscount::find($request->scholarshipdiscount_id);
 
         if(empty($enrollment->assessment->breakdowns)) 
@@ -165,9 +165,11 @@ class ScholarshipdiscountService
                 'user_id' => Auth::user()->id
             ];
 
-            $ledger = Studentledger::firstOrCreate($ledgerData, $ledgerData);
-            $ledgerDetails = (new StudentledgerService())->insertStudentledgerDetails($ledger->id, $enrollment, $totaldeduction);
+            $studentledger = Studentledger::firstOrCreate($ledgerData, $ledgerData);
+            $ledgerDetails = (new StudentledgerService())->insertCreditStudentledgerDetails($studentledger, $enrollment, $totaldeduction);
 
+            DB::commit();
+            
             return $ledgerDetails;
             
             return [
