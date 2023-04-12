@@ -309,7 +309,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
         // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
         //Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);
-        
+        Route::delete('/scholarshipdiscounts/{scholarshipdiscountgrant}/deletegrant', [ScholarshipdiscountController::class, 'deletegrant']);
         Route::get('/scholarshipdiscounts/grant', [ScholarshipdiscountController::class, 'grant']);
         Route::post('/scholarshipdiscounts/scholarshipdiscountgrants', [ScholarshipdiscountController::class, 'scholarshipdiscountgrants']);
         Route::post('/scholarshipdiscounts/savegrant', [ScholarshipdiscountController::class, 'savegrant']);

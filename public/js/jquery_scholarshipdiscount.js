@@ -156,9 +156,14 @@ $(function(){
             {
                 $("#confirmation").dialog('close');
                 console.log(response);
-               
-                // showMessageInForm('form_scholarshipdiscountgrant', response.data.alert, response.data.message);
-                // returnScholarshipdiscountGrants(enrollment_id);
+                if(response.data.success === true)
+                {
+                    showSuccess(response.data.message);
+        
+                }else{
+                    showerror(response.data.message);
+                }
+                returnScholarshipdiscountGrants(enrollment_id)
             },
             error: function (data) {
                console.log(data);
@@ -173,4 +178,53 @@ $(function(){
 
         e.preventDefault();
     });
+
+    $(document).on("click", ".delete_grant", function(e){
+		var id = $(this).attr("id");
+        var enrollment_id = $("#enrollment_id").val();
+
+		$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to delete grant?</div>').dialog({
+			show: 'fade',
+			resizable: false,	
+			draggable: false,
+			width: 350,
+			height: 'auto',
+			modal: true,
+			buttons: {
+					'Cancel':function(){
+						$(this).dialog('close');
+					},
+					'OK':function(){
+						$(this).dialog('close');
+						$.ajax({
+							url: '/scholarshipdiscounts/'+id+'/deletegrant',
+							type: 'DELETE',
+							dataType: 'json',
+							success: function(response){
+								console.log(response);
+								if(response.data.success === true)
+                                {
+                                    showSuccess(response.data.message);
+                        
+                                }else{
+                                    showerror(response.data.message);
+                                }
+
+                                returnScholarshipdiscountGrants(enrollment_id);
+							},
+							error: function (data) {
+								//console.log(data);
+								var errors = data.responseJSON;
+								if ($.isEmptyObject(errors) === false) {
+									showError('Something went wrong! Can not perform requested action! '+errors.message);
+								}
+							}
+						});
+					}//end of ok button	
+				}//end of buttons
+			});//end of dialogbox
+			$(".ui-dialog-titlebar").hide();
+		//end of dialogbox
+		e.preventDefault();
+	});
 });

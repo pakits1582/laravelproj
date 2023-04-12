@@ -11,6 +11,7 @@ use App\Services\ScholarshipdiscountService;
 use App\Http\Requests\StoreScholarshipdiscount;
 use App\Http\Requests\StoreScholarshipdiscountRequest;
 use App\Http\Requests\UpdateScholarshipdiscountRequest;
+use App\Models\Studentledger;
 
 class ScholarshipdiscountController extends Controller
 {
@@ -136,5 +137,21 @@ class ScholarshipdiscountController extends Controller
         $grant = $this->scholarshipdiscountService->saveGrant($request);
 
         return response()->json(['data' => $grant]);
+    }
+
+    public function deletegrant(Request $request, ScholarshipdiscountGrant $scholarshipdiscountgrant)
+    {
+        $studentledger = Studentledger::where('enrollment_id', $scholarshipdiscountgrant->enrollment_id)
+                        ->where('source_id', $scholarshipdiscountgrant->id)->firstOrFail();
+
+        $studentledger->delete();
+        $scholarshipdiscountgrant->delete();
+
+        return response()->json(['data' =>[
+                'success' => true,
+                'message' => 'Scholarship/Discount sucessfully deleted!.',
+                'alert' => 'alert-success'
+            ]
+        ]);
     }
 }

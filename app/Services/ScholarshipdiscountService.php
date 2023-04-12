@@ -169,9 +169,7 @@ class ScholarshipdiscountService
             $ledgerDetails = (new StudentledgerService())->insertCreditStudentledgerDetails($studentledger, $enrollment, $totaldeduction);
 
             DB::commit();
-            
-            return $ledgerDetails;
-            
+                        
             return [
                 'success' => true,
                 'message' => 'Scholarship/Discount sucessfully granted!.',
