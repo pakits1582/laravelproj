@@ -1,17 +1,17 @@
 @extends('layout')
-@section('title') {{ 'Scholarship Discount Grant' }} @endsection
+@section('title') {{ 'Student Adjustment' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Scholarship Discount Grant</h1>
-        <p class="mb-4">Grant enrolled student scholarship or discount.</p>
+        <h1 class="h3 mb-2 text-gray-800">Student Adjustment</h1>
+        <p class="mb-4">Manage credit, debit, refund of enrolled student.</p>
         
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Scholarship/Discount {{ session('periodname') }}</h1>
+                <h1 class="h3 text-800 text-primary mb-0">Student Adjustment <span id="period_name">{{ session('periodname') }}</span></h1>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -23,7 +23,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action=""  role="form" id="form_scholarshipdiscountgrant">
+                                <form method="POST" action=""  role="form" id="form_studentadjustment">
                                     @csrf
                                     <div class="row align-items-end">
                                         <div class="col-md-2">
@@ -103,32 +103,42 @@
                                             <div class="form-group">
                                                 <label for="code"  class="m-0 font-weight-bold text-primary">Section</label>
                                                 <input type="text" name="" id="section" class="form-control text-uppercase clearable" readonly value="" placeholder="">
-
                                             </div>                                 
                                         </div>
                                     </div>
                                     <div class="row align-items-end">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="term" class="m-0 font-weight-bold text-primary">* Grant</label>
-                                                <select name="scholarshipdiscount_id" class="form-control" id="scholarshipdiscount" required>
-                                                    <option value="">- select grant -</option>
-                                                    @if ($scholarshipdiscounts)
-                                                        @foreach ($scholarshipdiscounts as $scholarshipdiscount)
-                                                            <option value="{{ $scholarshipdiscount->id }}">{{ $scholarshipdiscount->description }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
-                                                <div id="error_scholarshipdiscount_id" class="errors"></div>
+                                                <label for="term" class="m-0 font-weight-bold text-primary">* Particular</label>
+                                                <input type="text" name="particular" required id="particular" class="form-control text-uppercase clearable text-uppercase" value="" placeholder="">
+                                                <div id="error_particular" class="errors"></div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 right">
+                                        <div class="col-md-2">
+                                            <div class="form-group" id="button_group">
+                                                <label for="term" class="m-0 font-weight-bold text-primary">* Type</label>
+                                                <select name="type" class="form-control" id="type" required>
+                                                    <option value="1">CREDIT</option>
+                                                    <option value="2">DEBIT</option>
+                                                    <option value="3">REFUND</option>
+                                                </select>
+                                                <div id="error_type" class="errors"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group" id="button_group">
+                                                <label for="term" class="m-0 font-weight-bold text-primary">* Amount</label>
+                                                <input type="text" name="amount" id="amount" placeholder="0.00" required class="form-control text-uppercase clearable" value="">
+                                                <div id="error_amount" class="errors"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
                                             <div class="form-group right" id="button_group">
-                                                <button type="submit" id="save_grant" class="btn btn-success btn-icon-split actions" disabled>
+                                                <button type="submit" id="save_adjustment" class="btn btn-success btn-icon-split actions" disabled>
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-save"></i>
                                                     </span>
-                                                    <span class="text">Save Scholarship/Discount Grant</span>
+                                                    <span class="text">Save</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -146,26 +156,22 @@
             <div class="col-lg-12 mx-auto">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">List of Grants</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">List of Adjustments</h6>
                     </div>
                     <div class="card-body" id="">
                         <div class="table-responsive-sm">
                             <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
                                 <thead class="">
                                     <tr>
-                                        <th class="w170">Code</th>
-                                        <th class="">Description</th>
-                                        <th class="w120">Tuition</th>
-                                        <th class="w120">Miscellaneous</th>
-                                        <th class="w120">Other Misc.</th>
-                                        <th class="w120">Laboratory</th>
-                                        <th class="w120">Total Assessment</th>
-                                        <th class="w120">Total Deduction</th>
-                                        <th class="w50">Action</th>
+                                        <th class="w200">Date</th>
+                                        <th class="w150">Type</th>
+                                        <th class="">Particular</th>
+                                        <th class="w150">Amount</th>
+                                        <th class="w100">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-black" id="return_scholarshipdiscount_grant">
-                                    <tr><td class="mid" colspan="9">No records to be displayed!</td></tr>
+                                <tbody class="text-black" id="return_studentadjustments">
+                                    <tr><td class="mid" colspan="5">No records to be displayed!</td></tr>
                                 </tbody>
 
                             </table>
