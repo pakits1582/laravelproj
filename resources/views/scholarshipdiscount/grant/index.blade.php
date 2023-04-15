@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Scholarship/Discount {{ session('periodname') }}</h1>
+                <h1 class="h3 text-800 text-primary mb-0">Scholarship/Discount <span id="period_name">{{ session('periodname') }}</span></h1>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -76,7 +76,6 @@
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">* Period</label>
                                                 <select name="period_id" class="form-control" id="period" required>
-                                                    <option value="">- select period -</option>
                                                     @if ($periods)
                                                         @foreach ($periods as $period)
                                                             <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>

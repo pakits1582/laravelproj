@@ -30,7 +30,7 @@ class ScholarshipdiscountController extends Controller
      */
     public function index(Request $request)
     {
-        $scholarshipdiscounts = $this->scholarshipdiscountService->returnScholarhipAndDiscounts($request);
+        $scholarshipdiscounts = $this->scholarshipdiscountService->returnScholarshipAndDiscounts($request);
 
         if($request->ajax())
         {
@@ -124,9 +124,7 @@ class ScholarshipdiscountController extends Controller
 
     public function scholarshipdiscountgrants(Request $request)
     {
-        $scholarshipdiscountgrants = ScholarshipdiscountGrant::with(['scholarshipdiscount' => function ($q){
-            $q->orderBy('description');
-        }])->where('enrollment_id', $request->enrollment_id)->get();
+        $scholarshipdiscountgrants = $this->scholarshipdiscountService->returnStudentScholarshipdiscountGrants($request->enrollment_id, $request->period_id);
 
         return view('scholarshipdiscount.grant.return_grants', compact('scholarshipdiscountgrants'));
     }
@@ -139,10 +137,12 @@ class ScholarshipdiscountController extends Controller
         return response()->json(['data' => $grant]);
     }
 
-    public function deletegrant(Request $request, ScholarshipdiscountGrant $scholarshipdiscountgrant)
+    public function deletegrant(ScholarshipdiscountGrant $scholarshipdiscountgrant)
     {
+        $grant_type = ($scholarshipdiscountgrant->type == 1) ? 'S' : 'D';
+
         $studentledger = Studentledger::where('enrollment_id', $scholarshipdiscountgrant->enrollment_id)
-                        ->where('source_id', $scholarshipdiscountgrant->id)->firstOrFail();
+                        ->where('source_id', $scholarshipdiscountgrant->id)->where('type', $grant_type)->firstOrFail();
 
         $studentledger->delete();
         $scholarshipdiscountgrant->delete();

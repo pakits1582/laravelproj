@@ -322,24 +322,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:studentadjustments']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
         
-
-        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
-        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
-        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
-        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
-
-        // // });
-       
-        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
-        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
-        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
-        //Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
-        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
-        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
-        //Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);
         // Route::delete('/studentadjusments/{scholarshipdiscountgrant}/deletegrant', [StudentadjustmentController::class, 'deletegrant']);
         // Route::get('/studentadjusments/grant', [StudentadjustmentController::class, 'grant']);
-        // Route::post('/studentadjusments/scholarshipdiscountgrants', [StudentadjustmentController::class, 'scholarshipdiscountgrants']);
+        Route::post('/studentadjustments/studentadjustments', [StudentadjustmentController::class, 'studentadjustments']);
         // Route::post('/studentadjusments/savegrant', [StudentadjustmentController::class, 'savegrant']);
         Route::resource('studentadjustments', StudentadjustmentController::class)->missing(function (Request $request) {
             return Redirect::route('studentadjusments.index');

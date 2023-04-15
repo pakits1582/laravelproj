@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class ScholarshipdiscountService
 {
 
-    public function returnScholarhipAndDiscounts($request, $all = false)
+    public function returnScholarshipAndDiscounts($request, $all = false)
     {
         $query = Scholarshipdiscount::orderBy('code');
 
@@ -35,6 +35,22 @@ class ScholarshipdiscountService
         }
     
         return $query->paginate(10);
+    }
+
+    public function returnStudentScholarshipdiscountGrants($enrollment_id, $period_id = NULL)
+    {
+        $query = ScholarshipdiscountGrant::with(['scholarshipdiscount' => function ($q){
+            $q->orderBy('description');
+        }])->where('enrollment_id', $enrollment_id);
+
+        if($period_id != NULL)
+        {
+            $query->whereHas('enrollment', function($query) use($period_id){
+                $query->where('period_id', $period_id);
+            });
+        }
+
+        return $query->get();
     }
 
     public function saveGrant($request)

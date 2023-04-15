@@ -41,13 +41,13 @@ $(function(){
         dropdownParent: $("#ui_content4")
     });
 
-    function returnScholarshipdiscountGrants(enrollment_id)
+    function returnScholarshipdiscountGrants(enrollment_id, period_id)
     {
         if(enrollment_id){
             $.ajax({
                 url: "/scholarshipdiscounts/scholarshipdiscountgrants",
                 type: 'POST',
-                data: ({ 'enrollment_id':enrollment_id }),
+                data: ({ 'enrollment_id':enrollment_id, 'period_id':period_id }),
                 success: function(data){
                     console.log(data);
                     $("#return_scholarshipdiscount_grant").html(data);
@@ -58,15 +58,19 @@ $(function(){
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
                         clearForm()
+                        $("#return_scholarshipdiscount_grant").html('<tr><td class="mid" colspan="9">No records to be displayed!</td></tr>');
                     }
                 }
             });
         }
     }
 
-    $(document).on("change", "#student", function(e){
-        var student_id = $(this).val();
+    $(document).on("change", "#student, #period", function(e){
+        var student_id = $("#student").val();
         var period_id  = $("#period").val();
+
+        var period_name = $("#period option:selected").text();
+        $("#period_name").text(period_name);
 
         $.ajax({
             url: "/enrolments/"+student_id+"/"+period_id,
@@ -90,16 +94,19 @@ $(function(){
                 {
                     showError('Student is not enrolled!');
                     clearForm();
+                    $("#return_scholarshipdiscount_grant").html('<tr><td class="mid" colspan="9">No records to be displayed!</td></tr>');
                 }else{
                     if(response.data.acctok === 0)
                     {
                         showError('Student enrollment is not yet saved! Please save enrollment first!');
                         clearForm();
+                        $("#return_scholarshipdiscount_grant").html('<tr><td class="mid" colspan="9">No records to be displayed!</td></tr>');
                     }else{
                         if(response.data.assessed === 0)
                         {
                             showError('Student enrollment is not yet assessed! Please save assessment first!');
                             clearForm();
+                            $("#return_scholarshipdiscount_grant").html('<tr><td class="mid" colspan="9">No records to be displayed!</td></tr>');
                         }else{
                             // //DISPLAY ENROLLMENT
                             $("#enrollment_id").val(response.data.id);
@@ -113,7 +120,7 @@ $(function(){
 
                             $("#save_grant").prop("disabled", false);
 
-                            returnScholarshipdiscountGrants(response.data.id);
+                            returnScholarshipdiscountGrants(response.data.id, period_id);
                         }
                     }
                 }
@@ -135,6 +142,7 @@ $(function(){
     $(document).on("submit", "#form_scholarshipdiscountgrant", function(e){
         var postData   = $(this).serializeArray();
         var enrollment_id = $("#enrollment_id").val();
+        var period_id  = $("#period").val();
 
         $.ajax({
             url: "/scholarshipdiscounts/savegrant",
@@ -163,7 +171,7 @@ $(function(){
                 }else{
                     showerror(response.data.message);
                 }
-                returnScholarshipdiscountGrants(enrollment_id)
+                returnScholarshipdiscountGrants(enrollment_id, period_id)
             },
             error: function (data) {
                console.log(data);
@@ -182,6 +190,7 @@ $(function(){
     $(document).on("click", ".delete_grant", function(e){
 		var id = $(this).attr("id");
         var enrollment_id = $("#enrollment_id").val();
+        var period_id  = $("#period").val();
 
 		$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to delete grant?</div>').dialog({
 			show: 'fade',
@@ -210,7 +219,7 @@ $(function(){
                                     showerror(response.data.message);
                                 }
 
-                                returnScholarshipdiscountGrants(enrollment_id);
+                                returnScholarshipdiscountGrants(enrollment_id, period_id);
 							},
 							error: function (data) {
 								//console.log(data);

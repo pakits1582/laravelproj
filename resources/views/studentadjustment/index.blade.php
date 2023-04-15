@@ -76,7 +76,6 @@
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">* Period</label>
                                                 <select name="period_id" class="form-control" id="period" required>
-                                                    <option value="">- select period -</option>
                                                     @if ($periods)
                                                         @foreach ($periods as $period)
                                                             <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
