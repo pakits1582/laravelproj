@@ -22,15 +22,16 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\PostchargeController;
 use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\ExternalGradeController;
 use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\InternalGradeController;
-use App\Http\Controllers\PaymentScheduleController;
-use App\Http\Controllers\ScholarshipdiscountController;
-use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\StudentledgerController;
+use App\Http\Controllers\PaymentScheduleController;
+use App\Http\Controllers\StudentadjustmentController;
+use App\Http\Controllers\ScholarshipdiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -328,6 +329,18 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/studentadjusments/savegrant', [StudentadjustmentController::class, 'savegrant']);
         Route::resource('studentadjustments', StudentadjustmentController::class)->missing(function (Request $request) {
             return Redirect::route('studentadjusments.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:postcharges']], function () {
+        // Route::group(['middleware' => ['writeability:curriculum']], function () {
+        
+        // Route::delete('/studentadjusments/{scholarshipdiscountgrant}/deletegrant', [StudentadjustmentController::class, 'deletegrant']);
+        // Route::get('/studentadjusments/grant', [StudentadjustmentController::class, 'grant']);
+        //Route::post('/studentadjustments/studentadjustments', [StudentadjustmentController::class, 'studentadjustments']);
+        // Route::post('/studentadjusments/savegrant', [StudentadjustmentController::class, 'savegrant']);
+        Route::resource('postcharges', PostchargeController::class)->missing(function (Request $request) {
+            return Redirect::route('postcharges.index');
         });
     });
 

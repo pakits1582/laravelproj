@@ -643,4 +643,14 @@ class ClassesService
         return ['class' => $class, 'enrolled_students' => $enrolled_students];
     }
 
+    public function offeredClassesOfPeriod($period_id)
+    {
+        return Classes::query()
+        ->select('classes.*', 'subjects.code as subject_code', 'classes.code as class_code')
+        ->join('curriculum_subjects', 'classes.curriculum_subject_id', '=', 'curriculum_subjects.id')
+        ->join('subjects', 'curriculum_subjects.subject_id', '=', 'subjects.id')
+        ->where('classes.period_id', $period_id)
+        ->orderBy('subjects.code')
+        ->get();
+    }
 }

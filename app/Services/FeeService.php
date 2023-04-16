@@ -133,4 +133,15 @@ class FeeService
         return Fee::with('feetype')->where('colindex', 1)->take(1)->get();
     }
 
+    public function getAdditionalFees()
+    {
+        $query = Fee::with('feetype');
+
+        $query->whereHas('feetype', function($query){
+            $query->where('type', 'Additional Fees');
+        });
+
+        return $query->get();
+    }
+
 }
