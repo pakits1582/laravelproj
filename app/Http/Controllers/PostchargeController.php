@@ -34,9 +34,7 @@ class PostchargeController extends Controller
         $additionalfees = Fee::additionalFees()->get();
         $classes = (new ClassesService)->offeredClassesOfPeriod(session('current_period'));
 
-        return $classes;
-
-        return view('postcharge.index', compact('periods', 'programs', 'additionalfees'));
+        return view('postcharge.index', compact('periods', 'programs', 'additionalfees', 'classes'));
     }
 
     /**
