@@ -23,7 +23,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action=""  role="form" id="form_scholarshipdiscountgrant">
+                                <form method="POST" action=""  role="form" id="form_filterstudent">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-6">
@@ -42,11 +42,11 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Program</label>
-                                                <select name="program" class="form-control" id="program" required>
+                                                <select name="program_id" class="form-control" id="program">
                                                     <option value="">- select program -</option>
                                                     @if ($programs)
                                                         @foreach ($programs as $program)
-                                                            <option value="{{ $program->id }}">{{ $program->name }}</option>
+                                                            <option value="{{ $program->id }}">{{ $program->code }} - {{ $program->name }}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -58,7 +58,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Year Level</label>
-                                                <select name="year_level" class="form-control" id="year_level" required>
+                                                <select name="year_level" class="form-control" id="year_level">
                                                     <option value="">- select year level -</option>
                                                     <option value="1">First Year</option>
                                                     <option value="2">Second Year</option>
@@ -66,13 +66,13 @@
                                                     <option value="4">Fourth Year</option>
                                                     <option value="5">Fifth Year</option>
                                                 </select>
-                                                <div id="error_scholarshipdiscount_id" class="errors"></div>
+                                                <div id="error_year_level" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Section</label>
-                                                <select name="section" class="form-control" id="section" required>
+                                                <select name="section_id" class="form-control" id="section">
                                                     <option value="">- select section -</option>
                                                     {{-- @if ($scholarshipdiscounts)
                                                         @foreach ($scholarshipdiscounts as $scholarshipdiscount)
@@ -80,13 +80,13 @@
                                                         @endforeach
                                                     @endif --}}
                                                 </select>
-                                                <div id="error_scholarshipdiscount_id" class="errors"></div>
+                                                <div id="error_section" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Class Subject</label>
-                                                <select name="class" class="form-control" id="class" required>
+                                                <select name="class_id" class="form-control" id="class">
                                                     <option value="">- select class subject -</option>
                                                     @if ($classes)
                                                         @foreach ($classes as $class)
@@ -94,14 +94,14 @@
                                                         @endforeach
                                                     @endif
                                                 </select>
-                                                <div id="error_scholarshipdiscount_id" class="errors"></div>
+                                                <div id="error_class" class="errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">ID Number</label>
                                                 <input type="text" name="idno" id="idno" class="form-control">
-                                                <div id="error_scholarshipdiscount_id" class="errors"></div>
+                                                <div id="error_idno" class="errors"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +118,7 @@
                                         </div>
                                         <div class="col-md-6 right">
                                             <div class="form-group right" id="button_group">
-                                                <button type="submit" id="save_grant" class="btn btn-success btn-icon-split actions" disabled>
+                                                <button type="submit" id="save_grant" class="btn btn-success btn-icon-split actions">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-save"></i>
                                                     </span>

@@ -96,4 +96,27 @@ $(function(){
         e.preventDefault();
 	});
 
+    $(document).on("submit", "#form_filterstudent", function(e){
+        var postData = $(this).serializeArray();
+
+        $.ajax({
+            url: "/postcharges/filterstudents",
+            type: 'POST',
+            data: postData,
+            success: function(data){
+                console.log(data);
+                $("#return_filteredstudents").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#return_filteredstudents").html('<tr><td class="mid" colspan="5">No records to be displayed!</td></tr>');
+
+                }
+            }
+        });
+        e.preventDefault();
+    });
 });

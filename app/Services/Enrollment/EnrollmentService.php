@@ -794,5 +794,25 @@ class EnrollmentService
 
         return $assessment->id;
     }
+
+    public function filterEnrolledStudents($period_id, $program_id = NULL, $year_level = NULL, $class_id = NULL, $idno = NULL)
+    {
+        $query = Enrollment::with([
+            'student' => function($query) {
+                $query->select('id', 'last_name', 'first_name', 'middle_name', 'name_suffix', 'user_id');
+            },
+            'student.user' => function($query) {
+                $query->select('id', 'idno');
+            },
+            'program:id,code'
+        ])->where('period_id', $period_id);
+        
+
+        $query->when(isset($program_id) && !empty($program_id), function ($query) use($program_id) {
+            $query->where('program_id', $program_id);
+        });
+
+        return $query->get();
+    }
 }
 

@@ -337,7 +337,7 @@ Route::group(['middleware' => ['auth']], function () {
         
         // Route::delete('/studentadjusments/{scholarshipdiscountgrant}/deletegrant', [StudentadjustmentController::class, 'deletegrant']);
         // Route::get('/studentadjusments/grant', [StudentadjustmentController::class, 'grant']);
-        //Route::post('/studentadjustments/studentadjustments', [StudentadjustmentController::class, 'studentadjustments']);
+        Route::post('/postcharges/filterstudents', [PostchargeController::class, 'filterstudents']);
         // Route::post('/studentadjusments/savegrant', [StudentadjustmentController::class, 'savegrant']);
         Route::resource('postcharges', PostchargeController::class)->missing(function (Request $request) {
             return Redirect::route('postcharges.index');

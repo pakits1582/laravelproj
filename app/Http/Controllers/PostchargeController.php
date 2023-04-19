@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Fee;
 use App\Libs\Helpers;
+use App\Models\Enrollment;
 use App\Models\Postcharge;
 use App\Services\ClassesService;
+use App\Services\Enrollment\EnrollmentService;
 use App\Services\FeeService;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
@@ -101,5 +103,13 @@ class PostchargeController extends Controller
     public function destroy(Postcharge $postcharge)
     {
         //
+    }
+
+    public function filterstudents(Request $request)
+    {
+        $filteredstudents = (new EnrollmentService)->filterEnrolledStudents($request->period_id, $request->program_id);
+
+        //return $filteredstudents;
+        return view('postcharge.return_students', compact('filteredstudents'));
     }
 }

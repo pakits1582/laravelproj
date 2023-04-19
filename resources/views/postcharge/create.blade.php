@@ -23,7 +23,7 @@
                                                 <th class="w100">Crs & Yr</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="return_filtered_students" class="border">
+                                        <tbody id="return_filteredstudents" class="border">
                                             <tr>
                                                 <td class="mid" colspan="5">No records to be displayed</td>
                                             </tr>
