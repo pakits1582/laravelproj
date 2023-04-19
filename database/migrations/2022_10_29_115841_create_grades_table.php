@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('school_id')->references('id')->on('schools');
             $table->unsignedBigInteger('program_id')->index();
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->unsignedBigInteger('enrollment_id')->index();
+            $table->foreign('enrollment_id')->references('id')->on('enrollments')->onDelete('cascade');
             $table->tinyInteger('origin')->default(0);
             $table->timestamps();
         });

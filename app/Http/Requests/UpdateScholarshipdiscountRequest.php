@@ -28,15 +28,15 @@ class UpdateScholarshipdiscountRequest extends FormRequest
             'code' => ['required', 'max:50',  Rule::unique('scholarshipdiscounts')->where(fn ($query) => $query->where('description', $this->description))->ignore($this->scholarshipdiscount->id)],
             'description' => ['required', 'max:255',  Rule::unique('scholarshipdiscounts')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->scholarshipdiscount->id)],
             'tuition_type' => [],
-            'tuition' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/',
+            'tuition' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
             'miscellaneous_type' => [],
-            'miscellaneous' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/',
+            'miscellaneous' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
             'othermisc_type' => [],
-            'othermisc' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/',
+            'othermisc' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
             'laboratory_type' => [],
-            'laboratory' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/',
+            'laboratory' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
             'totalassessment_type' => [],
-            'totalassessment' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/',
+            'totalassessment' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
             'type' => 'required'
         ];
 

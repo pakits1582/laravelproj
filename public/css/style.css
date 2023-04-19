@@ -393,4 +393,11 @@ th{
 	color:red !important;	
 }
 
+.text-small{
+	font-size: 12px !important;
+}
+
+.text-medium{
+	font-size: 14px !important;
+}
 
