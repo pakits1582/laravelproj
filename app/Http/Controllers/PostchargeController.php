@@ -57,7 +57,20 @@ class PostchargeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'amount.*' => 'required|numeric',
+        ];
+    
+        $messages = [
+            'amount.*.required' => 'The amount field is required.',
+            'amount.*.numeric' => 'The amount field must be a number.',
+        ];
+    
+        $validatedData = $request->validate($rules, $messages);
+
+        $enrollments = (new EnrollmentService)->filterEnrolledStudents($request->period_id, NULL, NULL, NULL, NULL, $request->input('enrollment_ids'));
+        
+        return $enrollments;
     }
 
     /**
@@ -107,7 +120,13 @@ class PostchargeController extends Controller
 
     public function filterstudents(Request $request)
     {
-        $filteredstudents = (new EnrollmentService)->filterEnrolledStudents($request->period_id, $request->program_id);
+        $filteredstudents = (new EnrollmentService)->filterEnrolledStudents(
+            $request->period_id, 
+            $request->program_id, 
+            $request->year_level, 
+            $request->class_id, 
+            $request->idno
+        );
 
         //return $filteredstudents;
         return view('postcharge.return_students', compact('filteredstudents'));

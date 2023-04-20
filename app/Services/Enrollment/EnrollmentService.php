@@ -795,7 +795,7 @@ class EnrollmentService
         return $assessment->id;
     }
 
-    public function filterEnrolledStudents($period_id, $program_id = NULL, $year_level = NULL, $class_id = NULL, $idno = NULL)
+    public function filterEnrolledStudents($period_id, $program_id = NULL, $year_level = NULL, $class_id = NULL, $idno = NULL, $enrollment_ids = NULL)
     {
         $query = Enrollment::with([
             'student' => function($query) {
@@ -804,12 +804,34 @@ class EnrollmentService
             'student.user' => function($query) {
                 $query->select('id', 'idno');
             },
-            'program:id,code'
-        ])->where('period_id', $period_id);
+            'program:id,code',
+            'assessment',
+            'studentledger_assessment'
+        ])->where('period_id', $period_id)->where('validated', 1);
         
 
         $query->when(isset($program_id) && !empty($program_id), function ($query) use($program_id) {
             $query->where('program_id', $program_id);
+        });
+
+        $query->when(isset($year_level) && !empty($year_level), function ($query) use($year_level) {
+            $query->where('year_level', $year_level);
+        });
+
+        $query->when(isset($class_id) && !empty($class_id), function ($query) use($class_id) {
+            $query->whereHas('enrolled_classes', function($query) use($class_id){
+                $query->where('enrolled_classes.class_id', $class_id);
+            });
+        });
+
+        $query->when(isset($idno) && !empty($idno), function ($query) use($idno) {
+            $query->whereHas('student.user', function($query) use($idno){
+                $query->where('users.idno', $idno);
+            });
+        });
+
+        $query->when(isset($enrollment_ids) && !empty($enrollment_ids), function ($query) use($enrollment_ids) {
+            $query->whereIn('id', $enrollment_ids);
         });
 
         return $query->get();

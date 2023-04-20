@@ -1,12 +1,14 @@
 
 @if (count($filteredstudents) > 0)
-    @foreach ($filteredstudents as $student)
-        <tr>
-            <td class="w30 mid"><input type="checkbox" name="student[]" value="'" class="students"></td>
+    @foreach ($filteredstudents as $enrollment)
+        <tr class="checkstd">
+            <td class="w30 mid">
+                <input type="checkbox" name="enrollment_ids[]" value="{{ $enrollment->id }}" class="students">
+            </td>
             <td class="w50">{{ $loop->iteration }}</td>
-            <td class="w100">{{ $student->student->user->idno }}</td>
-            <td>{{ $student->student->last_name }}, {{ $student->student->first_name }} {{ $student->student->name_suffix }} {{ $student->student->middle_name }}</td>
-            <td class="w100">{{ $student->program->code }}-{{ $student->year_level }}</td>
+            <td class="w100">{{ $enrollment->student->user->idno }}</td>
+            <td>{{ $enrollment->student->last_name }}, {{ $enrollment->student->first_name }} {{ $enrollment->student->name_suffix }} {{ $enrollment->student->middle_name }}</td>
+            <td class="w100">{{ $enrollment->program->code }}-{{ $enrollment->year_level }}</td>
         </tr>
     @endforeach
 @else

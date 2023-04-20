@@ -61,7 +61,7 @@ $(function(){
     $(document).on("click", "#add_fee", function(e){
         var options = $("#additional_fees > option").clone();
 
-        var select =    '<div class="row align-items-center mb-1">';
+        var select =    '<div class="row align-items-center mb-1 addedfeeform">';
             select +=       '<div class="col-md-1">';
             select +=       '   <label for="term" class="m-0 font-weight-bold text-primary">Fee</label>';
             select +=       '</div>';
@@ -76,6 +76,7 @@ $(function(){
             select +=       '</div>';
             select +=       '<div class="col-md-3">';
             select +=       '   <input type="text" name="amount[]" id="" class="fee_amount form-control" placeholder="Amount" pattern="^[0-9]+(?:\.[0-9]{1,2})?$" title="CDA Currency Format - no currency sign and no comma(s) - cents (.##) are optional" autocomplete="off">';
+            select +=       '   <div id="error_amount" class="errors"></div>';
             select +=       '</div>';
             select +=       '<div class="col-md-1">';
             select +=       '   <a href="#" id="" class="removeaddfee btn btn-danger btn-circle btn-sm" title="Remove">';
@@ -117,6 +118,91 @@ $(function(){
                 }
             }
         });
+        e.preventDefault();
+    });
+
+    $(document).on("click",".checkstd", function(e){
+        if (e.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+   
+    $(document).on("change",".students", function(){
+        if($(this).is(':checked')){
+            $(this).closest('tr').addClass('selected');
+        }else{
+            $(this).prop('checked', false);
+            $(this).closest('tr').removeClass('selected');
+        }
+    });
+
+    $(document).on("click", "#checkallcheckbox", function(){
+		var stud = $(".students").length;
+		if(stud != 0){
+			if($(this).is(':checked')){
+				$('.students').each(function(i, obj) {
+					$(this).prop('checked',true);
+					$(this).closest('tr').addClass('selected');
+				});
+			}else{
+				$('.students').each(function(i, obj) {
+					$(this).prop('checked',false);
+					$(this).closest('tr').removeClass('selected');
+				});
+			}	
+		}else{
+			showError('No student/s to be selected please search student first!');
+			$(this).prop("checked",false);
+		}
+	});
+
+    $(document).on("submit", "#form_addpostcharge", function(e){
+        var students = $(".students:checked").length;
+        var postData = $("#form_addpostcharge").serializeArray();
+        var period_id = $("#period").val();
+
+        postData.push({name: 'period_id', value: period_id });
+
+        if(students == 0)
+        {
+			showError('No student selected! Please select students to be charged!');
+		}else{
+            $.ajax({
+                url: "/postcharges/",
+                type: 'POST',
+                data: postData,
+                dataType: 'json',
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
+                success: function(response){
+                   console.log(response);
+                   $("#confirmation").dialog('close');
+                },
+                error: function (data) {
+                    $("#confirmation").dialog('close');
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) {
+                        var errorText = '';
+                        $.each(errors.errors, function (key, value) {
+                            errorText += value;
+                        });
+
+                        showError(errorText);
+                    }
+                }
+            });
+        }
+        
         e.preventDefault();
     });
 });

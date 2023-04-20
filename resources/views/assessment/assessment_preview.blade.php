@@ -28,8 +28,8 @@
         <div class="col-md-4">
             <div class="text-black">{{ $assessment->enrollment->student->user->idno }}</div>
         </div>
-        <div class="col-md-2">
-            <label for="term" class="m-0 font-weight-bold text-primary">Program & Year</label>
+        <div class="col-md-1">
+            <label for="term" class="m-0 font-weight-bold text-primary">Program</label>
         </div>
         <div class="col-md-2">
             <div class="text-black">{{ $assessment->enrollment->program->code }}-{{ $assessment->enrollment->year_level }}</div>
@@ -38,7 +38,7 @@
         <div class="col-md-2">
             <label for="term" class="m-0 font-weight-bold text-primary">Assessment No.</label>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <div class="text-black">{{ $assessment->id }}</div>
         </div>
     </div>
@@ -49,7 +49,7 @@
         <div class="col-md-4">
             <div class="text-black">{{ $assessment->enrollment->student->last_name }}, {{ $assessment->enrollment->student->first_name }} {{ $assessment->enrollment->student->name_suffix }} {{ $assessment->enrollment->student->middle_name }}</div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <label for="term" class="m-0 font-weight-bold text-primary">Section</label>
         </div>
         <div class="col-md-2">
@@ -58,8 +58,8 @@
         <div class="col-md-2">
             <label for="term" class="m-0 font-weight-bold text-primary">Enrollment No.</label>
         </div>
-        <div class="col-md-1">
-            <div class="text-black">{{ $assessment->enrollment->id }}</div>
+        <div class="col-md-2">
+            <div class="text-black">{{ $assessment->enrollment->id }} - {{ \Carbon\Carbon::parse($assessment->enrollment->created_at)->format('F d, Y') }}</div>
         </div>
     </div>
     <div class="table-responsive-sm">
@@ -536,7 +536,7 @@
                         $note = $configuration->note; 
                         $due = date('F d, Y', strtotime($enrollment_date . ' +'.$noofdays.' days'));
 
-                 @endphp
+                @endphp
                         {{ str_replace('DUE',$due,$note) }}
                 @php
                     }

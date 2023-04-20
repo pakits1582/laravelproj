@@ -51,7 +51,8 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="text" name="amount[]" id="" class="fee_amount form-control" placeholder="Amount" pattern="^[0-9]+(?:\.[0-9]{1,2})?$" title="CDA Currency Format - no currency sign and no comma(s) - cents (.##) are optional" autocomplete="off">
+                                        <input type="text" name="amount[]" required id="" class="fee_amount form-control" placeholder="Amount" pattern="^[0-9]+(?:\.[0-9]{1,2})?$" title="CDA Currency Format - no currency sign and no comma(s) - cents (.##) are optional" autocomplete="off">
+                                        <div id="error_amount" class="errors"></div>
                                     </div>
                                     <div class="col-md-1">
                                         <a href="#" id="add_fee" class="btn btn-primary btn-circle btn-sm" title="Add Fee">
@@ -63,7 +64,7 @@
                             </div>
                             <h3 class="right text-black">TOTAL FEE: <span id="totalfee">0.00</span></h3>
                             <div class="form-group right" id="button_group">
-                                <button type="submit" id="save_grant" class="btn btn-success btn-icon-split actions">
+                                <button type="submit" id="save_postcharge" class="btn btn-success btn-icon-split actions">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-save"></i>
                                     </span>
