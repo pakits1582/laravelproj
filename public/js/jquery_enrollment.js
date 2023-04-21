@@ -896,8 +896,10 @@ $(function(){
         postData.push({name: 'enrolled_units', value: enrolledunits });
 
         $.ajax({
-            url: "/enrolments/"+enrollment_id+"/saveenrollment",
-            type: 'POST',
+            //url: "/enrolments/"+enrollment_id+"/saveenrollment",
+            //type: 'POST',
+            url: "/enrolments/"+enrollment_id,
+            type: 'PUT',
             dataType: 'json',
             data: postData,
             beforeSend: function() {
@@ -913,7 +915,7 @@ $(function(){
 			},
             success: function(response){
                 $("#confirmation").dialog('close');
-                console.log(response);
+                //console.log(response);
                 displayAssessmentPreview(response);
             },
             error: function (data) {
@@ -948,6 +950,8 @@ $(function(){
 				$(".ui-dialog-titlebar").hide();
 			},
             success: function(response){
+                //console.log(response);
+
                 $("#confirmation").dialog('close');
                 var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
                     header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';

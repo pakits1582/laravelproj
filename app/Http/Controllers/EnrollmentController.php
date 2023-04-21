@@ -91,9 +91,15 @@ class EnrollmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    // public function saveenrollment(UpdateEnrollmentRequest $request, Enrollment $enrollment)
+    // {
+    //     return $this->enrollmentService->saveEnrollment($request, $enrollment);
+        
+    // }
+    public function update(UpdateEnrollmentRequest $request, Enrollment $enrolment)
     {
-        //
+        return $this->enrollmentService->saveEnrollment($request, $enrolment);
     }
 
     /**
@@ -185,9 +191,4 @@ class EnrollmentController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function saveenrollment(UpdateEnrollmentRequest $request, Enrollment $enrollment)
-    {
-        return $this->enrollmentService->saveEnrollment($request, $enrollment);
-        
-    }
 }

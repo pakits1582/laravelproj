@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Fee;
 use App\Libs\Helpers;
+use App\Models\Assessment;
 use App\Models\Enrollment;
 use App\Models\Postcharge;
 use App\Services\ClassesService;
@@ -66,11 +67,9 @@ class PostchargeController extends Controller
             'amount.*.numeric' => 'The amount field must be a number.',
         ];
     
-        $validatedData = $request->validate($rules, $messages);
+        $request->validate($rules, $messages);
 
-        $enrollments = (new EnrollmentService)->filterEnrolledStudents($request->period_id, NULL, NULL, NULL, NULL, $request->input('enrollment_ids'));
-        
-        return $enrollments;
+        return $this->postchargeService->savePostcharge($request);
     }
 
     /**

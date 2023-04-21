@@ -804,8 +804,8 @@ class EnrollmentService
             'student.user' => function($query) {
                 $query->select('id', 'idno');
             },
-            'program:id,code',
-            'assessment',
+            'program:id,code,educational_level_id',
+            'assessment' => ['breakdowns', 'exam'],
             'studentledger_assessment'
         ])->where('period_id', $period_id)->where('validated', 1);
         
