@@ -805,7 +805,10 @@ class EnrollmentService
                 $query->select('id', 'idno');
             },
             'program:id,code,educational_level_id',
-            'assessment' => ['breakdowns', 'exam'],
+            'assessment' => [
+                'breakdowns' => ['fee_type'], 
+                'exam'
+            ],
             'studentledger_assessment'
         ])->where('period_id', $period_id)->where('validated', 1);
         

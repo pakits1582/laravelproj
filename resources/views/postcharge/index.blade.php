@@ -137,7 +137,7 @@
             </div>
         </div>
         <div id="form_container">
-            @include('postcharge.create');
+            @include('postcharge.create')
         </div>
     </div>
     <!-- /.container-fluid -->
