@@ -2,11 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\AssessmentBreakdown;
-use App\Models\AssessmentExam;
 use App\Models\FeeType;
+use App\Models\Assessment;
+use App\Models\Postcharge;
+use App\Models\Studentledger;
+use App\Models\AssessmentExam;
 use App\Models\PaymentSchedule;
 use Illuminate\Support\Facades\DB;
+use App\Models\AssessmentBreakdown;
+use App\Models\AssessmentDetail;
+use App\Models\StudentledgerDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Enrollment\EnrollmentService;
 
@@ -15,6 +20,8 @@ class PostchargeService
    
     public function savePostcharge($request)
     {
+        DB::beginTransaction();
+
         $enrollments = (new EnrollmentService)->filterEnrolledStudents($request->period_id, NULL, NULL, NULL, NULL, $request->input('enrollment_ids'));
         $additional_fee = FeeType::select('id')->where('type', 'Additional Fees')->get();
         
@@ -52,9 +59,10 @@ class PostchargeService
                 $studentledgers_update_array[] = [
                     'id' => $enrollment->studentledger_assessment->id,
                     'enrollment_id' => $enrollment->id,
-                    'source' => $enrollment->assessment->id,
+                    'source_id' => $enrollment->assessment->id,
                     'type' => 'A',
-                    'amount' => $enrollment->studentledger_assessment->amount+$total_amount
+                    'amount' => $enrollment->studentledger_assessment->amount+$total_amount,
+                    'user_id' => $enrollment->studentledger_assessment->user_id,
                 ];
 
                 foreach ($request->input('fees') as $k => $fee) 
@@ -68,7 +76,7 @@ class PostchargeService
                     ];
 
                     $assessment_details_array[] = [
-                        'studentledger_id' => $enrollment->assessment->id,
+                        'assessment_id' => $enrollment->assessment->id,
                         'fee_id' => $fee,
                         'amount' => $request->input('amount')[$k],
                         'created_at' => now(),
@@ -87,15 +95,22 @@ class PostchargeService
             }
         }
         
-        //return $assessment_exams_update_array;
         AssessmentExam::upsert($assessment_exams_update_array, ['id'], ['amount','downpayment','exam1','exam2','exam3','exam4','exam5','exam6','exam7','exam8','exam9','exam10']);
-        //return $assessment_breakdowns_update_array;
-        //AssessmentBreakdown::upsert($assessment_breakdowns_update_array, ['id'], ['amount']);
-        //Assessment::upsert($assessments_update_array, ['id'], ['amount']);
-        //Studentledger::upsert($studentledgers_update_array, ['id'], ['amount']);
-        //return $assessment_update_array;
+        AssessmentBreakdown::upsert($assessment_breakdowns_update_array, ['id'], ['amount']);
+        Assessment::upsert($assessments_update_array, ['id'], ['amount']);
+        AssessmentDetail::insert($assessment_details_array);
+        Studentledger::upsert($studentledgers_update_array, ['id'], ['amount']);
+        StudentledgerDetail::insert($studentledger_details_array);
+        Postcharge::insert($postcharges_array);
 
-        //return Postcharge::insert($postcharges_array);
+        DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Post Charge Successfully Saved!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
     }
 
     public function recomputeAssessmentBreakdownAdditionalFees($assessment_id, $total_amount, $assessment_breakdowns, $additonal_fee_id)
@@ -112,7 +127,7 @@ class PostchargeService
         ];
     }
 
-    public function recomputeAssessmentExams($level_payment_schedules, $assessment_breakdowns, $assessment_exam, $assessment_breakdown_additional_fees)
+    public function recomputeAssessmentExams($payment_schedules, $assessment_breakdowns, $assessment_exam, $assessment_breakdown_additional_fees)
     {
         $totaltuition = 0;
         $labfeetotal = 0;
@@ -144,7 +159,7 @@ class PostchargeService
         $fixedmisc = 0;
         $fixedother = 0;
         
-        foreach ($level_payment_schedules as $key => $ps) 
+        foreach ($payment_schedules as $key => $ps) 
         {
             $topay = 0;
 

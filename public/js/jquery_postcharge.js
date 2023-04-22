@@ -167,6 +167,8 @@ $(function(){
         {
 			showError('No student selected! Please select students to be charged!');
 		}else{
+            $("#save_postcharge").prop('disabled', true);
+				
             $.ajax({
                 url: "/postcharges/",
                 type: 'POST',
@@ -186,6 +188,23 @@ $(function(){
                 success: function(response){
                    console.log(response);
                    $("#confirmation").dialog('close');
+
+                    if(response.data.success === true)
+                    {
+                        showSuccess(response.data.message);
+                        $('.students').each(function(i, obj) {
+                            $(this).prop('checked',false);
+                            $(this).closest('tr').removeClass('selected');
+                        });
+
+                        $("#checkallcheckbox").prop('checked',false);
+                        $("#additional_fees, .fee_amount").val("").trigger('change');
+                        $(".addedfeeform").remove();
+                        $("#totalfee").text('0.00');
+                        $("#save_postcharge").prop('disabled', false);
+                    }else{
+                        showerror(response.data.message);
+                    }
                 },
                 error: function (data) {
                     $("#confirmation").dialog('close');

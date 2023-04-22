@@ -69,7 +69,9 @@ class PostchargeController extends Controller
     
         $request->validate($rules, $messages);
 
-        return $this->postchargeService->savePostcharge($request);
+        $postcharge = $this->postchargeService->savePostcharge($request);
+
+        return response()->json(['data' => $postcharge]);
     }
 
     /**
