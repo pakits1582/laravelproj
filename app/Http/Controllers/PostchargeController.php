@@ -63,8 +63,8 @@ class PostchargeController extends Controller
         ];
     
         $messages = [
-            'amount.*.required' => 'The amount field is required.',
-            'amount.*.numeric' => 'The amount field must be a number.',
+            'amount.*.required' => 'The amount :position field is required.',
+            'amount.*.numeric' => 'The amount :position field must be a number.',
         ];
     
         $request->validate($rules, $messages);

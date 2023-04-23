@@ -208,6 +208,7 @@ $(function(){
                 },
                 error: function (data) {
                     $("#confirmation").dialog('close');
+                    $("#save_postcharge").prop('disabled', false);
                     console.log(data);
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {

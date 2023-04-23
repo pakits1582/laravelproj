@@ -136,9 +136,56 @@
                 </div>
             </div>
         </div>
-        <div id="form_container">
-            @include('postcharge.create')
+        <div class="row">
+            <div class="col-lg-12 mx-auto">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Manage Post Charge</h6>
+                    </div>
+                    <div class="card-body" id="">
+                        <form method="POST" action=""  role="form" id="form_addpostcharge">
+                            @csrf
+                            <div class="row px-2">
+                                <div class="col-md-6 p-0">
+                                    <div class="form-group">
+                                        <h6 class="m-0 font-weight-bold text-primary">Students to be charged</h6>
+                                        <p class="font-italic text-info text-small">Note: Click on checkbox to select student to be charged.</p>
+                                        <div class="col-xs-8 col-xs-offset-2 well">
+                                            <table class="table table-scroll table-sm table-striped table-bordered text-medium" style="">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="w30 mid"><input type="checkbox" name="" id="checkallcheckbox"></th>
+                                                        <th class="w50">#</th>
+                                                        <th class="w100">ID No.</th>
+                                                        <th>Student Name</th>
+                                                        <th class="w100">Crs & Yr</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="return_filteredstudents" class="border"  style="height: 500px;">
+                                                    <tr>
+                                                        <td class="mid" colspan="5">No records to be displayed</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="form_container">
+                                        @include('postcharge.create')
+                                    </div>
+                                    <div id="form_container">
+                                        @include('postcharge.remove')
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        
     </div>
     <!-- /.container-fluid -->
 @endsection
