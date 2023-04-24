@@ -199,4 +199,39 @@ class PostchargeService
 
         return $assess_exam;
     }
+
+    public function removePostcharge($request)
+    {
+        DB::beginTransaction();
+
+        $enrollments = (new EnrollmentService)->filterEnrolledStudents($request->period_id, NULL, NULL, NULL, NULL, $request->input('enrollment_ids'));
+        
+        if($enrollments->isNotEmpty()) 
+        {   
+            //return $enrollments;
+            //delete fee from assessment_details
+            $assessment_ids = ($enrollments->isNotEmpty()) ? $enrollments->pluck('assessment.id')->toArray() : [];
+            $assessment_details = AssessmentDetail::where('fee_id', $request->fee_id)->whereIn('assessment_id', $assessment_ids)->delete();
+
+            //delete fee from studentledger_details
+            $studentledger_ids = ($enrollments->isNotEmpty()) ? $enrollments->pluck('studentledger_assessment.id')->toArray() : [];
+            $studentledger_details = StudentledgerDetail::where('fee_id', $request->fee_id)->whereIn('studentledger_id', $studentledger_ids)->delete();
+            
+            //delete student from postcharge
+            Postcharge::where('fee_id', $request->fee_id)->whereIn('enrollment_id', $request->enrollment_ids)->delete();
+
+
+
+
+            
+            //subtract from assessment the amount of postcharge
+            //recompute assessment exams
+            //subtract from assessment_breakdowns the amount of postcharge
+
+            
+            //subtract from studentledger the amount of postcharge
+            
+        }
+
+    }
 }

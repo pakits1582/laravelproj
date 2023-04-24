@@ -130,110 +130,87 @@
                     <div class="card-body">
                         <p class="font-italic text-info">Note: Names and signatures provided will be used for report generation.</p>
                         <div id="nav-tab-card" class="tab-pane fade show active">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label class="m-0 font-weight-bold text-primary">Name</label>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <label class="m-0 font-weight-bold text-primary">Initials</label>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label class="m-0 font-weight-bold text-primary">Signature</label>
-                                    </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="m-0 font-weight-bold text-primary">Name</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="m-0 font-weight-bold text-primary">Initials</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="m-0 font-weight-bold text-primary">Signature</label>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" name="president" placeholder="President's Name" class="form-control " value="{{ (old('president')) ? old('president') : ($configuration->president  ?? '') }}">
-                                        </div>
-                                        @error('president')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
+                            <div class="row align-items-end">
+                                <div class="col-md-6">
+                                    <label for="name"  class="m-0 font-weight-bold text-primary py-2">President</label>
+                                    <input type="text" name="president" placeholder="President's Name" class="form-control " value="{{ (old('president')) ? old('president') : ($configuration->president  ?? '') }}">
+                                    @error('president')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" name="pres_initials" placeholder="" class="form-control " value="{{ (old('pres_initials')) ? old('pres_initials') : ($configuration->pres_initials  ?? '') }}">
+                                    @error('pres_initials')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="pres_sig" style="background-image:url({{ (isset($configuration->pres_sig)) ? asset('images/'.$configuration->pres_sig) : '' }})" >
+                                        &nbsp;
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <input type="text" name="pres_initials" placeholder="" class="form-control " value="{{ (old('pres_initials')) ? old('pres_initials') : ($configuration->pres_initials  ?? '') }}">
-                                        </div>
-                                        @error('pres_initials')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="pres_sig" style="background-image:url({{ (isset($configuration->pres_sig)) ? asset('images/'.$configuration->pres_sig) : '' }})" >
-                                                &nbsp;
-                                            </div>
-                                            <input type="file" class="hidden" name="pres_sig" id="pres_sig_file" accept="image/*" />
-                                            @error('pres_sig')
-                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                    <input type="file" class="hidden" name="pres_sig" id="pres_sig_file" accept="image/*" />
+                                    @error('pres_sig')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" name="registrar" placeholder="Registrar's Name" class="form-control " value="{{ (old('registrar')) ? old('registrar') : ($configuration->registrar  ?? '') }}">
-                                        </div>
-                                        @error('registrar')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
+                            <div class="row align-items-end">
+                                <div class="col-md-6">
+                                    <label for="name"  class="m-0 font-weight-bold text-primary py-2">Registrar</label>
+                                    <input type="text" name="registrar" placeholder="Registrar's Name" class="form-control " value="{{ (old('registrar')) ? old('registrar') : ($configuration->registrar  ?? '') }}">
+                                    @error('registrar')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" name="reg_initials" placeholder="" class="form-control " value="{{ (old('reg_initials')) ? old('reg_initials') : ($configuration->reg_initials  ?? '') }}">
+                                    @error('reg_initials')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="reg_sig" style="background-image:url({{ (isset($configuration->reg_sig)) ? asset('images/'.$configuration->reg_sig) : '' }})">
+                                        &nbsp;
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <input type="text" name="reg_initials" placeholder="" class="form-control " value="{{ (old('reg_initials')) ? old('reg_initials') : ($configuration->reg_initials  ?? '') }}">
-                                        </div>
-                                        @error('reg_initials')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="reg_sig" style="background-image:url({{ (isset($configuration->reg_sig)) ? asset('images/'.$configuration->reg_sig) : '' }})">
-                                                &nbsp;
-                                            </div>
-                                            <input type="file" class="hidden" name="reg_sig" id="reg_sig_file" accept="image/*" />
-                                            @error('reg_sig')
-                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                    <input type="file" class="hidden" name="reg_sig" id="reg_sig_file" accept="image/*" />
+                                    @error('reg_sig')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" name="treasurer" placeholder="Tresurer's Name" class="form-control " value="{{ (old('treasurer')) ? old('treasurer') : ($configuration->treasurer  ?? '') }}">
-                                        </div>
-                                        @error('treasurer')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
+                            <div class="row align-items-end">
+                                <div class="col-md-6">
+                                    <label for="name"  class="m-0 font-weight-bold text-primary py-2">Treasurer</label>
+                                    <input type="text" name="treasurer" placeholder="Tresurer's Name" class="form-control " value="{{ (old('treasurer')) ? old('treasurer') : ($configuration->treasurer  ?? '') }}">
+                                    @error('treasurer')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" name="tres_initials" placeholder="" class="form-control " value="{{ (old('tres_initials')) ? old('tres_initials') : ($configuration->tres_initials  ?? '') }}">
+                                    @error('tres_initials')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="tres_sig" style="background-image:url({{ (isset($configuration->tres_sig)) ? asset('images/'.$configuration->tres_sig) : '' }})">
+                                        &nbsp;
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <input type="text" name="tres_initials" placeholder="" class="form-control " value="{{ (old('tres_initials')) ? old('tres_initials') : ($configuration->tres_initials  ?? '') }}">
-                                        </div>
-                                        @error('tres_initials')
-                                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="uploadfile signature card border-left-primary shadow h-100 py-2" id="tres_sig" style="background-image:url({{ (isset($configuration->tres_sig)) ? asset('images/'.$configuration->tres_sig) : '' }})">
-                                                &nbsp;
-                                            </div>
-                                            <input type="file" class="hidden" name="tres_sig" id="tres_sig_file" accept="image/*" />
-                                            @error('tres_sig')
-                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                    <input type="file" class="hidden" name="tres_sig" id="tres_sig_file" accept="image/*" />
+                                    @error('tres_sig')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

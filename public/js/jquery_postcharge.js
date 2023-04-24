@@ -156,9 +156,9 @@ $(function(){
 		}
 	});
 
-    $(document).on("submit", "#form_addpostcharge", function(e){
+    $(document).on("submit", "#form_postcharge", function(e){
         var students = $(".students:checked").length;
-        var postData = $("#form_addpostcharge").serializeArray();
+        var postData = $("#form_postcharge").serializeArray();
         var period_id = $("#period").val();
 
         postData.push({name: 'period_id', value: period_id });
@@ -223,6 +223,113 @@ $(function(){
             });
         }
         
+        e.preventDefault();
+    });
+
+    function returnChargedStudents(fee_id)
+    {
+        $.ajax({
+            url: "/postcharges/chargedstudents",
+            type: 'POST',
+            data: ({ 'fee_id':fee_id }),
+            success: function(data){
+                console.log(data);
+                $("#return_filteredstudents").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#return_filteredstudents").html('<tr><td class="mid" colspan="5">No records to be displayed!</td></tr>');
+
+                }
+            }
+        });
+    }
+
+    $(document).on("change", "#fee_to_remove", function(){
+        var fee_id = $("#fee_to_remove").val();
+
+        returnChargedStudents(fee_id);
+    });
+
+    $(document).on("click", "#remove_postcharge", function(e){
+        var students = $(".students:checked").length;
+        var fee_id = $("#fee_to_remove").val();
+        var period_id = $("#period").val();
+
+        var postData = $("#form_postcharge").serializeArray();
+        postData.push({name: 'period_id', value: period_id });
+
+        if(fee_id)
+        {
+            if(students == 0)
+            {
+                showError('No student selected! Please select students to be removed!');
+            }else{
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to remove charged students?</div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    draggable: false,
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons: {
+                            'Cancel':function(){
+                                $(this).dialog('close');
+                            },
+                            'OK':function(){
+                                $(this).dialog('close');
+                                $("#remove_postcharge").prop('disabled', true);
+				
+                                $.ajax({
+                                    url: "/postcharges/removecharged",
+                                    type: 'POST',
+                                    data: postData,
+                                    dataType: 'json',
+                                    beforeSend: function() {
+                                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                                            show: 'fade',
+                                            resizable: false,	
+                                            width: 350,
+                                            height: 'auto',
+                                            modal: true,
+                                            buttons: false
+                                        });
+                                        $(".ui-dialog-titlebar").hide();
+                                    },
+                                    success: function(response){
+                                        console.log(response);
+                                        $("#remove_postcharge").prop('disabled', false);
+                                        $("#confirmation").dialog('close');
+                                        // if(response.data.success === true)
+                                        // {
+                                        //     showSuccess(response.data.message);
+                                        // }else{
+                                        //     showerror(response.data.message);
+                                        // }
+                                        // returnChargedStudents(fee_id);
+                                    },
+                                    error: function (data) {
+                                        $("#confirmation").dialog('close');
+                                        $("#remove_postcharge").prop('disabled', false);
+                                        console.log(data);
+                                        var errors = data.responseJSON;
+                                        if ($.isEmptyObject(errors) === false) {
+                                            showError('Something went wrong! Can not perform requested action!');
+                                        }
+                                    }
+                                });
+                            }//end of ok button	
+                        }//end of buttons
+                });//end of dialogbox
+                $(".ui-dialog-titlebar").hide();
+            }
+        }else{
+            showError('Please select fee to be removed!');
+        }
+
         e.preventDefault();
     });
 });

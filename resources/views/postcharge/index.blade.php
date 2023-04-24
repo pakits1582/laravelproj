@@ -143,13 +143,13 @@
                         <h6 class="m-0 font-weight-bold text-primary">Manage Post Charge</h6>
                     </div>
                     <div class="card-body" id="">
-                        <form method="POST" action=""  role="form" id="form_addpostcharge">
+                        <form method="POST" action=""  role="form" id="form_postcharge">
                             @csrf
                             <div class="row px-2">
                                 <div class="col-md-6 p-0">
                                     <div class="form-group">
-                                        <h6 class="m-0 font-weight-bold text-primary">Students to be charged</h6>
-                                        <p class="font-italic text-info text-small">Note: Click on checkbox to select student to be charged.</p>
+                                        <h6 class="m-0 font-weight-bold text-primary">Student List</h6>
+                                        <p class="font-italic text-info text-small">Note: Click on checkbox to select student to be charged or removed.</p>
                                         <div class="col-xs-8 col-xs-offset-2 well">
                                             <table class="table table-scroll table-sm table-striped table-bordered text-medium" style="">
                                                 <thead>
@@ -161,7 +161,7 @@
                                                         <th class="w100">Crs & Yr</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="return_filteredstudents" class="border"  style="height: 500px;">
+                                                <tbody id="return_filteredstudents" class="border"  style="height: 490px;">
                                                     <tr>
                                                         <td class="mid" colspan="5">No records to be displayed</td>
                                                     </tr>

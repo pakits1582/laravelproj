@@ -13,7 +13,7 @@
                             <label for="term" class="m-0 font-weight-bold text-primary">Fee</label>
                         </div>
                         <div class="col-md-11">
-                            <select name="fee_id" class="form-control additional_fee" id="fee_to_remove" required>
+                            <select name="fee_id" class="form-control additional_fee" id="fee_to_remove">
                                 <option value="">- select additional fee -</option>
                                 @if ($additionalfees)
                                     @foreach ($additionalfees as $additionalfee)

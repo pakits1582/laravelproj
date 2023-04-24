@@ -114,9 +114,11 @@ class PostchargeController extends Controller
      * @param  \App\Models\Postcharge  $postcharge
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Postcharge $postcharge)
+    public function destroy(Request $request)
     {
-        //
+        $remove_postcharge = $this->postchargeService->removePostcharge($request);
+
+        return response()->json(['data' => $remove_postcharge]);
     }
 
     public function filterstudents(Request $request)
@@ -131,5 +133,22 @@ class PostchargeController extends Controller
 
         //return $filteredstudents;
         return view('postcharge.return_students', compact('filteredstudents'));
+    }
+
+    public function chargedstudents(Request $request)
+    {
+        $chargedstudents = Postcharge::with([
+            'enrollment' => [
+                'student' => function($query) {
+                    $query->select('id', 'last_name', 'first_name', 'middle_name', 'name_suffix', 'user_id');
+                },
+                'student.user' => function($query) {
+                    $query->select('id', 'idno');
+                },
+                'program:id,code,educational_level_id'
+            ]
+        ])->where('fee_id', $request->fee_id)->get();
+
+        return view('postcharge.return_charged_students', compact('chargedstudents'));
     }
 }

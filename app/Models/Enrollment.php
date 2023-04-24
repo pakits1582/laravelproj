@@ -91,6 +91,10 @@ class Enrollment extends Model
         return $this->hasOne(Studentledger::class, 'enrollment_id', 'id')->where('type', 'A');
     }
 
+    public function postcharges()
+    {
+        return $this->hasMany(Postcharge::class, 'enrollment_id', 'id');
+    }
 
 
 }

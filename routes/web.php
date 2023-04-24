@@ -335,10 +335,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:postcharges']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
         
-        // Route::delete('/studentadjusments/{scholarshipdiscountgrant}/deletegrant', [StudentadjustmentController::class, 'deletegrant']);
+        
         // Route::get('/studentadjusments/grant', [StudentadjustmentController::class, 'grant']);
+        Route::post('/postcharges/removecharged', [PostchargeController::class, 'destroy']);
         Route::post('/postcharges/filterstudents', [PostchargeController::class, 'filterstudents']);
-        // Route::post('/studentadjusments/savegrant', [StudentadjustmentController::class, 'savegrant']);
+        Route::post('/postcharges/chargedstudents', [PostchargeController::class, 'chargedstudents']);
         Route::resource('postcharges', PostchargeController::class)->missing(function (Request $request) {
             return Redirect::route('postcharges.index');
         });
