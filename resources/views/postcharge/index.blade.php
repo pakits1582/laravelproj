@@ -118,7 +118,7 @@
                                         </div>
                                         <div class="col-md-6 right">
                                             <div class="form-group right" id="button_group">
-                                                <button type="submit" id="save_grant" class="btn btn-success btn-icon-split actions">
+                                                <button type="submit" id="filter_student" class="btn btn-success btn-icon-split actions">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-save"></i>
                                                     </span>

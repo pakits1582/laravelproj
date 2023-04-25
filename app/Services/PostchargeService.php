@@ -90,7 +90,6 @@ class PostchargeService
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
-
                 }
             }
         }
@@ -205,33 +204,72 @@ class PostchargeService
         DB::beginTransaction();
 
         $enrollments = (new EnrollmentService)->filterEnrolledStudents($request->period_id, NULL, NULL, NULL, NULL, $request->input('enrollment_ids'));
-        
+        $additional_fee = FeeType::select('id')->where('type', 'Additional Fees')->get();
+
+        $assessment_exams_update_array = [];
+        $assessment_breakdowns_update_array = [];
+
+        $assessments_update_array = [];
+        $studentledgers_update_array = [];
+
         if($enrollments->isNotEmpty()) 
         {   
-            //return $enrollments;
+            $enrollments->load('postcharges');
+            $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $request->input('period_id'))->get();
+
+            foreach ($enrollments as $key => $enrollment) 
+            {
+                $level_payment_schedules = $payment_schedules->where('educational_level_id', $enrollment->program->educational_level_id)->toArray();
+                $postcharges = $enrollment->postcharges;
+                $postcharge_total = $postcharges->where('fee_id', $request->fee_id)->sum('amount');
+
+                $assessment_breakdown_additional_fees = $this->recomputeAssessmentBreakdownAdditionalFees($enrollment->assessment->id, '-'.$postcharge_total, $enrollment->assessment->breakdowns, $additional_fee[0]->id);
+                $assessment_exam = $this->recomputeAssessmentExams($level_payment_schedules, $enrollment->assessment->breakdowns, $enrollment->assessment->exam, $assessment_breakdown_additional_fees);
+
+                $assessment_exams_update_array[] = $assessment_exam;
+                $assessment_breakdowns_update_array[] = $assessment_breakdown_additional_fees;
+
+                $assessments_update_array[] = [
+                    'id' => $enrollment->assessment->id,
+                    'enrollment_id' => $enrollment->id,
+                    'period_id' => $request->input('period_id'),
+                    'amount' => $enrollment->assessment->amount-$postcharge_total
+                ];
+
+                $studentledgers_update_array[] = [
+                    'id' => $enrollment->studentledger_assessment->id,
+                    'enrollment_id' => $enrollment->id,
+                    'source_id' => $enrollment->assessment->id,
+                    'type' => 'A',
+                    'amount' => $enrollment->studentledger_assessment->amount-$postcharge_total,
+                    'user_id' => $enrollment->studentledger_assessment->user_id,
+                ];
+            }
+
             //delete fee from assessment_details
             $assessment_ids = ($enrollments->isNotEmpty()) ? $enrollments->pluck('assessment.id')->toArray() : [];
-            $assessment_details = AssessmentDetail::where('fee_id', $request->fee_id)->whereIn('assessment_id', $assessment_ids)->delete();
+            AssessmentDetail::where('fee_id', $request->fee_id)->whereIn('assessment_id', $assessment_ids)->delete();
 
             //delete fee from studentledger_details
             $studentledger_ids = ($enrollments->isNotEmpty()) ? $enrollments->pluck('studentledger_assessment.id')->toArray() : [];
-            $studentledger_details = StudentledgerDetail::where('fee_id', $request->fee_id)->whereIn('studentledger_id', $studentledger_ids)->delete();
+            StudentledgerDetail::where('fee_id', $request->fee_id)->whereIn('studentledger_id', $studentledger_ids)->delete();
             
             //delete student from postcharge
             Postcharge::where('fee_id', $request->fee_id)->whereIn('enrollment_id', $request->enrollment_ids)->delete();
-
-
-
-
-            
-            //subtract from assessment the amount of postcharge
-            //recompute assessment exams
-            //subtract from assessment_breakdowns the amount of postcharge
-
-            
-            //subtract from studentledger the amount of postcharge
-            
         }
 
+        AssessmentExam::upsert($assessment_exams_update_array, ['id'], ['amount','downpayment','exam1','exam2','exam3','exam4','exam5','exam6','exam7','exam8','exam9','exam10']);
+        AssessmentBreakdown::upsert($assessment_breakdowns_update_array, ['id'], ['amount']);
+        Assessment::upsert($assessments_update_array, ['id'], ['amount']);
+        Studentledger::upsert($studentledgers_update_array, ['id'], ['amount']);
+
+        DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Students are successcully removed from post charge!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
     }
 }

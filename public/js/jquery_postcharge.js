@@ -107,6 +107,7 @@ $(function(){
             success: function(data){
                 console.log(data);
                 $("#return_filteredstudents").html(data);
+                $("#fee_to_remove").val("").trigger('change');
             },
             error: function (data) {
                 console.log(data);
@@ -242,7 +243,6 @@ $(function(){
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
                     $("#return_filteredstudents").html('<tr><td class="mid" colspan="5">No records to be displayed!</td></tr>');
-
                 }
             }
         });
@@ -250,8 +250,11 @@ $(function(){
 
     $(document).on("change", "#fee_to_remove", function(){
         var fee_id = $("#fee_to_remove").val();
-
-        returnChargedStudents(fee_id);
+        
+        if(fee_id)
+        {
+            returnChargedStudents(fee_id);
+        }
     });
 
     $(document).on("click", "#remove_postcharge", function(e){
@@ -303,13 +306,13 @@ $(function(){
                                         console.log(response);
                                         $("#remove_postcharge").prop('disabled', false);
                                         $("#confirmation").dialog('close');
-                                        // if(response.data.success === true)
-                                        // {
-                                        //     showSuccess(response.data.message);
-                                        // }else{
-                                        //     showerror(response.data.message);
-                                        // }
-                                        // returnChargedStudents(fee_id);
+                                        if(response.data.success === true)
+                                        {
+                                            showSuccess(response.data.message);
+                                        }else{
+                                            showerror(response.data.message);
+                                        }
+                                        returnChargedStudents(fee_id);
                                     },
                                     error: function (data) {
                                         $("#confirmation").dialog('close');
