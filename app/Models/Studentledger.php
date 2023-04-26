@@ -27,5 +27,25 @@ class Studentledger extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function scdc_info()
+    {
+        return $this->belongsTo(ScholarshipdiscountGrant::class, 'source_id', 'id');
+    }
+
+    public function assessment_info()
+    {
+        return $this->belongsTo(Assessment::class, 'source_id', 'id');
+    }
+
+    public function studentadjustment_info()
+    {
+        return $this->belongsTo(Studentadjustment::class, 'source_id', 'id');
+    }
+
+    public function receipt_info()
+    {
+        //return $this->belongsTo(Studentadjustment::class, 'source_id', 'id');
+    }
+
     
 }

@@ -25,9 +25,9 @@
                                     <label for="term" class="m-0 font-weight-bold text-success">Current Period : {{ session('periodname') }}</label>
                                 </div>
                                 <div class="form-group">
-                                    <label for="period"  class="m-0 font-weight-bold text-primary">Period</label>
-                                    @include('partials.periods.dropdown')
-                                    <div id="error_period"></div>
+                                    <label for="period_change"  class="m-0 font-weight-bold text-primary">Period</label>
+                                    @include('partials.periods.dropdown',['fieldid' => 'period_change'])
+                                    <div id="error_period_change"></div>
                                 </div>
                                 <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Period</button>
                                 </form>

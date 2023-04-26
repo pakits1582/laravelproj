@@ -65,6 +65,17 @@ $(function(){
 
     }
 
+    $(document).on("change", "#period", function(e){
+        var student_id = $("#student").val();
+        var period_id  = $("#period").val();
+
+        var period_name = (period_id) ? $("#period option:selected").text() : 'All Periods';
+        $("#period_name").text(period_name);
+
+        returnStudentledger(student_id, period_id);
+
+    });
+
     $(document).on("change", "#student", function(){
         var student_id = $("#student").val();
         var period_id = $("#period").val();
@@ -88,7 +99,6 @@ $(function(){
                         $("#year_level").val(response.data.values.year_level);
                         
                         returnStudentledger(student_id, period_id);
-                        
                     }
                 },
                 error: function (data) {

@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-lg-12 mx-auto">
                         <div class="bg-white rounded-lg shadow-sm p-3">
-                            <p class="font-italic text-info">Note: You can filter students to be displayed by using the form below.</p>
+                            <p class="font-italic text-info">Note: You can filter students to be charged by using the form below.</p>
                             <!-- credit card info-->
                             <div id="nav-tab-card" class="tab-pane fade show active">
                                 @if(Session::has('message'))

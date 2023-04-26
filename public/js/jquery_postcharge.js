@@ -37,6 +37,14 @@ $(function(){
         dropdownParent: $("#ui_content4")
     });
 
+    $(document).on("change", "#period", function()
+    {
+        var period_name = $("#period option:selected").text();
+        $("#period_name").text(period_name);
+
+        $("#return_filteredstudents").html('<tr><td class="mid" colspan="5">No records to be displayed!</td></tr>');
+    });
+
     function parseCurrency(num) {
     	return parseFloat( num.replace( /,/g, '') );
 	}
@@ -227,12 +235,12 @@ $(function(){
         e.preventDefault();
     });
 
-    function returnChargedStudents(fee_id)
+    function returnChargedStudents(fee_id, period_id)
     {
         $.ajax({
             url: "/postcharges/chargedstudents",
             type: 'POST',
-            data: ({ 'fee_id':fee_id }),
+            data: ({ 'fee_id':fee_id, 'period_id':period_id }),
             success: function(data){
                 console.log(data);
                 $("#return_filteredstudents").html(data);
@@ -250,10 +258,11 @@ $(function(){
 
     $(document).on("change", "#fee_to_remove", function(){
         var fee_id = $("#fee_to_remove").val();
+        var period_id = $("#period").val();
         
         if(fee_id)
         {
-            returnChargedStudents(fee_id);
+            returnChargedStudents(fee_id, period_id);
         }
     });
 
