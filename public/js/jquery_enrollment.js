@@ -136,7 +136,7 @@ $(function(){
                                     message += '<li>The student was on academic probation in the previous semester enrolled. The student is advised to report to Academic Dean.<p></p></li>';
                                 }
                                 if(response.data.balance.hasbal === 1){
-                                    message += '<li>The student has previous balance last semester enrolled. The student is advised to report in Accounting Office.<p>'+response.data.balance.previous_balance.period+'</p><h1 class="nomargin mid" style="color:red">P '+response.data.balance.previous_balance.balance+'</h1></li>';
+                                    message += '<li>The student has previous balance last semester enrolled. The student is advised to report to the Accounting Office.<p>'+response.data.balance.previous_balance.period+'</p><h1 class="nomargin mid" style="color:red">P '+response.data.balance.previous_balance.balance+'</h1></li>';
                                 }
                                 message += '</ul>';
                         
@@ -150,6 +150,7 @@ $(function(){
                                     buttons: {
                                             'Cancel':function(){
                                                 $(this).dialog('close');	
+                                                $("#student").val("").trigger('change');
                                             },
                                             'OK':function(){
                                                 $(this).dialog('close');	

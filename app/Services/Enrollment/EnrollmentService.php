@@ -157,23 +157,15 @@ class EnrollmentService
         if($student['balance'])
         {
             $user_permissions = Auth::user()->permissions;
-            
-            if($user_permissions)
-            {
-                if(Helpers::is_column_in_array('can_withbalance', 'permission', $user_permissions->toArray()) === false){
-                    return [
-                        'success' => false,
-                        'message' => 'Your account does not have permission to enroll students with account balance!',
-                        'alert' => 'alert-danger'
-                    ];
-                }
+
+            if (!$user_permissions || !Helpers::is_column_in_array('can_withbalance', 'permission', $user_permissions->toArray())) {
+                return [
+                    'success' => false,
+                    'message' => 'Your account does not have permission to enroll students with account balance!',
+                    'alert' => 'alert-danger'
+                ];
             }
 
-            return [
-                'success' => false,
-                'message' => 'Your account does not have permission to enroll students with account balance!',
-                'alert' => 'alert-danger'
-            ];
         }
 
         $isnew = 0;
@@ -196,7 +188,7 @@ class EnrollmentService
             'year_level' => $year_level,
             'new' => $isnew ?? 0,
             'old' => $isOld ?? 0,
-            'probationary' => $student['probi'],
+            'probationary' => ($student['probi'] === true) ? 1 : 0,
             'user_id' => Auth::user()->id
         ];
 
