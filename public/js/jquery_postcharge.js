@@ -5,6 +5,15 @@ $(function(){
 		}
 	});
 
+    $('#example').DataTable({
+        scrollY: 500,
+        scrollX: true,
+        paging:false,
+        ordering: false,
+        info: false,
+        searching: false
+    });
+
     $("#student").select2({
 	    // dropdownParent: $("#ui_content3"),
         minimumInputLength: 2,

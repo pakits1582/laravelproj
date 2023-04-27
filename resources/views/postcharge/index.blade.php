@@ -152,6 +152,49 @@
                                         <p class="font-italic text-info text-small">Note: Click on checkbox to select student to be charged or removed.</p>
                                         {{-- <div class="col-xs-8 col-xs-offset-2 well" style="height: 520px; clear:both;"> --}}
                                             {{-- <div class="table-responsive"> --}}
+                                                <table id="example" class="table cell-border stripe hover" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>#</th>
+                                                            <th>ID No.</th>
+                                                            <th>Name</th>
+                                                            <th>Crs Yr</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><input type="checkbox" name="" id="checkallcheckbox"></td>
+                                                            <td>1</td>
+                                                            <td>Edinburgh</td>
+                                                            <td>System Architect asdadsad</td>
+                                                            <td>t.nixon@datatables</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input type="checkbox" name="" id="checkallcheckbox"></td>
+                                                            <td>1</td>
+                                                            <td>Edinburgh</td>
+                                                            <td>System Architect asdadsad</td>
+                                                            <td>t.nixon@datatables</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input type="checkbox" name="" id="checkallcheckbox"></td>
+                                                            <td>1</td>
+                                                            <td>Edinburgh</td>
+                                                            <td>System Architect asdadsad</td>
+                                                            <td>t.nixon@datatables</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input type="checkbox" name="" id="checkallcheckbox"></td>
+                                                            <td>1</td>
+                                                            <td>Edinburgh</td>
+                                                            <td>System Architect asdadsad</td>
+                                                            <td>t.nixon@datatables</td>
+                                                        </tr>
+                                                        
+                                                        
+                                                    </tbody>
+                                                </table>
                                             <div class="table-wrapper-scroll-y my-custom-scrollbar" style="height:500px;">
                                                 <table class="table table-sm table-bordered table-striped mb-0">
                                                     <thead>
