@@ -46,7 +46,7 @@ $(function(){
                 data: ({ 'student_id':student_id, 'period_id':period_id }),
                 success: function(data){
                     console.log(data);
-                    $("#return_studentledger").html(data);
+                    $("#return_soa").html(data);
                 },
                 error: function (data) {
                     console.log(data);

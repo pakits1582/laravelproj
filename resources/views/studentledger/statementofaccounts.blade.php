@@ -85,27 +85,10 @@
                                         <td colspan="3" class="right font-weight-bold text-primary">TOTAL:</td>
                                         <td class="right font-weight-bold text-primary">{{ number_format(str_replace('-', "", $debittotal),2) }}</td>
                                         <td class="right font-weight-bold text-primary">{{ number_format(str_replace('-', "", $credittotal),2) }}</td>
-                                        @php
-                                            $remaining_balance = bcsub($debittotal,str_replace('-', "", $credittotal),2);
-                                        @endphp
-                                        <td class="right font-weight-bold text-primary">{{ number_format($remaining_balance,2) }}</td>
+                                        <td class="right font-weight-bold text-primary">{{ number_format(bcsub($debittotal,str_replace('-', "", $credittotal),2),2) }}</td>
                                         <td class="right"></td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="7" class="right">
-                                            @if ($remaining_balance > 0)
-                                                <button type="button" id="print_permit" class="btn btn-primary btn-icon-split actions m-1">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-arrow-right"></i>
-                                                    </span>
-                                                    <span class="text">Forward Balance</span>
-                                                </button>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     @endforeach
@@ -114,6 +97,4 @@
         </div>
     </div>
 </div>
-
-@include('studentadjustment.create')
 

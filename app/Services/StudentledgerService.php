@@ -15,7 +15,7 @@ class StudentledgerService
     public function getAllStatementOfAccounts($student_id, $period_id="")
     {
         $ledgers = Studentledger::with([
-            'enrollment' => ['period'], 
+            'enrollment' => ['period', 'program'], 
             'user' => ['info', 'instructorinfo', 'studentinfo'],
             'scdc_info' => ['scholarshipdiscount'],
             'assessment_info',
@@ -41,8 +41,10 @@ class StudentledgerService
                 if (!isset($soa[$soa_period])) {
                     $soa[$soa_period] = [
                         'period_id'  => $soa_period,
-                        'periodcode' => $v->enrollment->period->code,
-                        'periodname' => $v->enrollment->period->name,
+                        'period_code' => $v->enrollment->period->code,
+                        'period_name' => $v->enrollment->period->name,
+                        'program_code' => $v->enrollment->program->code,
+                        'program_name' => $v->enrollment->program->name,
                         'ledgers'    => []
                     ];
                 }
@@ -96,74 +98,57 @@ class StudentledgerService
     {
         $soas = $this->getAllStatementOfAccounts($student_id, $period_id);
 
-        return $soas;
+        //return $soas;
 
         if($soas)
         {
-            $arr = [];
-            foreach ($soas as $key => $soa) 
-            {
-                $arr[$key]['period_id'] = $soa['period_id'];
-                $arr[$key]['periodname'] = $soa['periodname'];
-                $arr[$key]['periodcode'] = $soa['periodcode'];
-
-                foreach ($soa['ledgers'] as $k => $r) {
-                    $arr[$key]['soa'][$k] = $r;
-                    switch ($r['type']) {
+            return array_map(function ($soa) {
+                $newSoa = [
+                    'period_id' => $soa['period_id'],
+                    'period_name' => $soa['period_name'],
+                    'period_code' => $soa['period_code'],
+                    'program_code' => $soa['program_code'],
+                    'program_name' => $soa['program_name'],
+                    'soa' => [],
+                ];
+            
+                foreach ($soa['ledgers'] as $ledger) {
+                    $newLedger = [
+                        'id' => $ledger['id'],
+                        'type' => $ledger['type'],
+                        'amount' => $ledger['amount'],
+                        'user' => $ledger['user'],
+                        'created_at' => $ledger['created_at'],
+                    ];
+            
+                    switch ($ledger['type']) {
                         case 'A':
-                            $arr[$key]['soa'][$k]['particulars'] = 'ASSESSMENT';
-                            $arr[$key]['soa'][$k]['code'] = 'AS #'.$r['source_id'];
-                            $arr[$key]['soa'][$k]['debitcredit'] = 'debit';
-                            $arr[$key]['soa'][$k]['user'] = $r['user'];
+                            $newLedger['particular'] = 'ASSESSMENT';
+                            $newLedger['code'] = 'AS #'.$ledger['source_id'];
+                            $newLedger['debitcredit'] = 'debit';
                             break;
                         case 'S':
-                            //GET SCHOLARSHIP DETAILS
-                            //$sd = $this->sd_model->scholarshipdiscountgrantinfo($r['sourcedoc']);
-                            //$arr[$key]['soa'][$k]['particulars'] = $sd[0]->description;
-                            $arr[$key]['soa'][$k]['code'] = 'SC #'.$r['source_id'];
-                            $arr[$key]['soa'][$k]['debitcredit'] = 'credit';
-                            $arr[$key]['soa'][$k]['user'] = $r['user'];
+                        case 'D':
+                            $newLedger['particular'] = $ledger['ledger_info']['scholarshipdiscount']['description'];
+                            $newLedger['code'] = ($ledger['type'] == 'S' ? 'SC' : 'DC').' #'.$ledger['source_id'];
+                            $newLedger['debitcredit'] = 'credit';
                             break;
-                        // case 'D':
-                        //     $sd = $this->sd_model->scholarshipdiscountgrantinfo($r['sourcedoc']);
-                        //     $arr[$key]['soa'][$k]['particulars'] = $sd[0]->description;
-                        //     $arr[$key]['soa'][$k]['code'] = 'DC #'.$r['source_id'];
-                        //     $arr[$key]['soa'][$k]['debitcredit'] = 'credit';
-                        //     $arr[$key]['soa'][$k]['user'] = $r['user'];
-                        //     break;
-                        // case 'SA':
-                        //     $sa = $this->sa_model->studentadjustmentinfo($r['sourcedoc']);
-                        //     $arr[$key]['soa'][$k]['particulars'] = $sa[0]->name;
-                        //     $arr[$key]['soa'][$k]['code'] = 'SA #'.$r['source_id'];
-                        //     $arr[$key]['soa'][$k]['debitcredit'] = ($sa[0]->type == 1) ? 'credit' : 'debit';
-                        //     $arr[$key]['soa'][$k]['user'] = $r['user'];
-                        //     break;
-                        // case 'R':
-                        //     $receiptinfo = $this->model->receiptFeedetails($r['sourcedoc']);
-                        //     $particular = '';
-                        //     if($receiptinfo){ 
-                        //         $particular .= $receiptinfo[0]->feedesc; 
-                        //         if($receiptinfo[0]->bank != 0){
-                        //             $particular .= ' ['.$receiptinfo[0]->bankname.'- ('.date('m-d-y',strtotime($receiptinfo[0]->deposit_date)).')]';
-                        //         }
-                        //     }else{
-                        //         $particular .= 'RECEIPT';
-                        //     }
-                        //     $arr[$key]['soa'][$k]['cancelled'] = ($receiptinfo) ? $receiptinfo[0]->cancelled : 0;
-                        //     $arr[$key]['soa'][$k]['cancel_remark'] = ($receiptinfo) ? $receiptinfo[0]->cancel_remark : '';
-                        //     $arr[$key]['soa'][$k]['particulars'] = $particular;
-                        //     $arr[$key]['soa'][$k]['code'] = 'OR #'.$r['sourcedoc'];
-                        //     $arr[$key]['soa'][$k]['debitcredit'] = 'credit';
-                        //     $arr[$key]['soa'][$k]['user'] = ($receiptinfo) ? ($receiptinfo[0]->name) ? $receiptinfo[0]->name : '' : '';
-                        //     break;
-                        
+                        case 'SA':
+                            $newLedger['particular'] = $ledger['ledger_info']['particular'];
+                            $newLedger['code'] = 'SA #'.$ledger['source_id'];
+                            $newLedger['debitcredit'] = ($ledger['ledger_info']['type'] == 1) ? 'credit' : 'debit';
+                            break;
                     }
+            
+                    $newSoa['soa'][] = $newLedger;
                 }
-                //usort($arr[$key]['soa'], Others::make_comparer(['ledgerno',SORT_ASC]));
-            }
-
-            return $arr;
+            
+                return $newSoa;
+                
+            }, $soas);
         }
+
+
     }
 
     public function getAllPaidLedgerDetails($enrollment_id)

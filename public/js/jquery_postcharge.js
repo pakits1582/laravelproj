@@ -73,7 +73,7 @@ $(function(){
             select +=       '<div class="col-md-1">';
             select +=       '   <label for="term" class="m-0 font-weight-bold text-primary">Fee</label>';
             select +=       '</div>';
-            select +=       '<div class="col-md-7">';
+            select +=       '<div class="col-md-7"><div class="form-group">';
             select +=       '   <select name="fees[]" class="form-control additional_fee" id="" required>';
                                     options.each(function() {
                                         var optionValue = $(this).val();
@@ -81,16 +81,16 @@ $(function(){
                                         select += '<option value="'+optionValue+'">'+optionText+'</option>';
                                     });
             select +=       '   </select>';
-            select +=       '</div>';
-            select +=       '<div class="col-md-3">';
+            select +=       '</div></div>';
+            select +=       '<div class="col-md-3"><div class="form-group">';
             select +=       '   <input type="text" name="amount[]" id="" class="fee_amount form-control" placeholder="Amount" pattern="^[0-9]+(?:\.[0-9]{1,2})?$" title="CDA Currency Format - no currency sign and no comma(s) - cents (.##) are optional" autocomplete="off">';
             select +=       '   <div id="error_amount" class="errors"></div>';
-            select +=       '</div>';
-            select +=       '<div class="col-md-1">';
+            select +=       '</div></div>';
+            select +=       '<div class="col-md-1"><div class="form-group">';
             select +=       '   <a href="#" id="" class="removeaddfee btn btn-danger btn-circle btn-sm" title="Remove">';
             select +=       '       <i class="fas fa-times"></i>';
             select +=       '   </a>';
-            select +=       '</div>';
+            select +=       '</div></div>';
             select +=   '</div>';
 
         $('#postcharge_fees').append(select);
