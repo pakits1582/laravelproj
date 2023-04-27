@@ -162,37 +162,10 @@
                                                             <th>Crs Yr</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="return_filteredstudents">
                                                         <tr>
-                                                            <td><input type="checkbox" name="" id="checkallcheckbox"></td>
-                                                            <td>1</td>
-                                                            <td>Edinburgh</td>
-                                                            <td>System Architect asdadsad</td>
-                                                            <td>t.nixon@datatables</td>
+                                                            <td class="mid" colspan="5">No records to be displayed</td>
                                                         </tr>
-                                                        <tr>
-                                                            <td><input type="checkbox" name="" id="checkallcheckbox"></td>
-                                                            <td>1</td>
-                                                            <td>Edinburgh</td>
-                                                            <td>System Architect asdadsad</td>
-                                                            <td>t.nixon@datatables</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><input type="checkbox" name="" id="checkallcheckbox"></td>
-                                                            <td>1</td>
-                                                            <td>Edinburgh</td>
-                                                            <td>System Architect asdadsad</td>
-                                                            <td>t.nixon@datatables</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><input type="checkbox" name="" id="checkallcheckbox"></td>
-                                                            <td>1</td>
-                                                            <td>Edinburgh</td>
-                                                            <td>System Architect asdadsad</td>
-                                                            <td>t.nixon@datatables</td>
-                                                        </tr>
-                                                        
-                                                        
                                                     </tbody>
                                                 </table>
                                             <div class="table-wrapper-scroll-y my-custom-scrollbar" style="height:500px;">
