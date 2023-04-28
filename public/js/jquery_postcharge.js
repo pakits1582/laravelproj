@@ -5,15 +5,6 @@ $(function(){
 		}
 	});
 
-    // $('#example').DataTable({
-    //     scrollY: 500,
-    //     scrollX: true,
-    //     paging:false,
-    //     ordering: false,
-    //     info: false,
-    //     searching: false
-    // });
-
     $("#student").select2({
 	    // dropdownParent: $("#ui_content3"),
         minimumInputLength: 2,
@@ -42,6 +33,15 @@ $(function(){
         }
 	});
 
+    $('#scrollable_table').DataTable({
+        scrollY: '65vh',
+        scrollCollapse: true,
+        paging: false,
+        ordering: false,
+        info: false,
+        searching: false
+    });
+
     $("#period, #program, #class, .additional_fee").select2({
         dropdownParent: $("#ui_content4")
     });
@@ -51,6 +51,7 @@ $(function(){
         var period_name = $("#period option:selected").text();
         $("#period_name").text(period_name);
 
+        $("#fee_to_remove").val("").trigger('change');
         $("#return_filteredstudents").html('<tr><td class="mid" colspan="5">No records to be displayed!</td></tr>');
     });
 
@@ -147,10 +148,12 @@ $(function(){
    
     $(document).on("change",".students", function(){
         if($(this).is(':checked')){
-            $(this).closest('tr').addClass('selected');
+            //$(this).closest('tr').addClass('selected');
+            $(this).closest('tr').prop('style', 'background-color: rgba(52, 152, 219,0.5) !important;');
         }else{
             $(this).prop('checked', false);
-            $(this).closest('tr').removeClass('selected');
+            //$(this).closest('tr').removeClass('selected');
+            $(this).closest('tr').removeAttr('style');
         }
     });
 
@@ -160,12 +163,14 @@ $(function(){
 			if($(this).is(':checked')){
 				$('.students').each(function(i, obj) {
 					$(this).prop('checked',true);
-					$(this).closest('tr').addClass('selected');
+					//$(this).closest('tr').addClass('selected');
+                    $(this).closest('tr').prop('style', 'background-color: rgba(52, 152, 219,0.5) !important;');
 				});
 			}else{
 				$('.students').each(function(i, obj) {
 					$(this).prop('checked',false);
-					$(this).closest('tr').removeClass('selected');
+					//$(this).closest('tr').removeClass('selected');
+                    $(this).closest('tr').removeAttr('style');
 				});
 			}	
 		}else{

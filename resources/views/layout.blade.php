@@ -23,7 +23,9 @@
     <link href="{{ asset('css/select2.css') }}" rel="stylesheet">
     <link href="{{ asset('sbadmin/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/ui-lightness/jquery-ui-1.10.4.custom.css') }}" rel="stylesheet">
-    <link href="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"> --}}
+    
 </head>
 
 <body id="page-top">
@@ -151,6 +153,7 @@
     <div id="ui_content3"></div>
     <div id="ui_content4"></div>
     <!-- Bootstrap core JavaScript-->
+    {{-- <script src="{{ asset('js/jquery-3.5.1.js') }}"></script> --}}
     <script src="{{ asset('sbadmin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('sbadmin/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -162,11 +165,12 @@
     {{-- <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script> --}}
 
     <!-- Page level plugins -->
-    <script src="{{ asset('sbadmin/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    {{-- <script src="{{ asset('sbadmin/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="{{ asset('sbadmin/js/demo/datatables-demo.js') }}"></script>
+    <script src="{{ asset('sbadmin/js/demo/datatables-demo.js') }}"></script> --}}
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/common.js') }}"></script>
     <script src="{{ asset('js/moment.js') }}"></script>
     @php

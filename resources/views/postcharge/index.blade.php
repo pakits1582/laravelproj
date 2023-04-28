@@ -152,31 +152,36 @@
                                         <p class="font-italic text-info text-small">Note: Click on checkbox to select student to be charged or removed.</p>
                                         {{-- <div class="col-xs-8 col-xs-offset-2 well" style="height: 520px; clear:both;"> --}}
                                             {{-- <div class="table-responsive"> --}}
-                                                <table id="example" class="table cell-border stripe hover" style="width:100%">
+                                                <table id="scrollable_table" class="table cell-border stripe hover compact" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th></th>
-                                                            <th>#</th>
-                                                            <th>ID No.</th>
-                                                            <th>Name</th>
-                                                            <th>Crs Yr</th>
+                                                            <th class="w30"><input type="checkbox" name="" id="checkallcheckbox"></th>
+                                                            <th class="w50">#</th>
+                                                            <th class="w100">ID No.</th>
+                                                            <th class="w300">Name</th>
+                                                            <th class="w100">Crs Yr</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="return_filteredstudents">
                                                         <tr>
-                                                            <td class="mid" colspan="5">No records to be displayed</td>
+                                                            <td class="">&nbsp;</td>
+                                                            <td class="">&nbsp;</td>
+                                                            <td class="">&nbsp;</td>
+                                                            <td class="mid">No records to be displayed</td>
+                                                            <td class="">&nbsp;</td>
                                                         </tr>
+                                                        
                                                     </tbody>
                                                 </table>
-                                            <div class="table-wrapper-scroll-y my-custom-scrollbar" style="height:500px;">
+                                            {{-- <div class="table-wrapper-scroll-y my-custom-scrollbar" style="height:500px;">
                                                 <table class="table table-sm table-bordered table-striped mb-0">
                                                     <thead>
                                                         <tr>
-                                                            {{-- <th scope="col"><input type="checkbox" name="" id="checkallcheckbox"></th>
+                                                            <th scope="col"><input type="checkbox" name="" id="checkallcheckbox"></th>
                                                             <th scope="col">#</th>
                                                             <th scope="col">ID No.</th>
                                                             <th scope="col">Name</th>
-                                                            <th scope="col">Crs & Yr</th> --}}
+                                                            <th scope="col">Crs & Yr</th>
                                                             <th class="w30 mid"><input type="checkbox" name="" id="checkallcheckbox"></th>
                                                             <th class="w50">#</th>
                                                             <th class="w100">ID No.</th>
@@ -191,7 +196,7 @@
                                                     </tbody>
                                                   </table>
                                                 
-                                                {{-- <table class="table table-sm table-striped table-bordered text-medium" style="">
+                                                <table class="table table-sm table-striped table-bordered text-medium" style="">
                                                     <thead>
                                                         <tr>
                                                             <th class="w30 mid"><input type="checkbox" name="" id="checkallcheckbox"></th>
@@ -206,8 +211,8 @@
                                                             <td class="mid" colspan="5">No records to be displayed</td>
                                                         </tr>
                                                     </tbody>
-                                                </table> --}}
-                                            </div>
+                                                </table>
+                                            </div> --}}
                                         {{-- </div> --}}
                                     </div>
                                 </div>

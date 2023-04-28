@@ -13,6 +13,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
@@ -445,6 +446,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/evaluations/taggrade', [EvaluationController::class, 'taggrade']);
         Route::resource('evaluations', EvaluationController::class)->missing(function (Request $request) {
             return Redirect::route('evaluations.index');
+        }); 
+    });
+
+    Route::group(['middleware' => ['inaccess:receipts']], function () {
+        //Route::post('/evaluations/taggrade', [EvaluationController::class, 'taggrade']);
+        Route::resource('receipts', ReceiptController::class)->missing(function (Request $request) {
+            return Redirect::route('receipts.index');
         }); 
     });
 
