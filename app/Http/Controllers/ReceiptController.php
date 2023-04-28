@@ -33,6 +33,20 @@ class ReceiptController extends Controller
         return view('receipt.index', compact('periods', 'banks'));
     }
 
+    public function storebank(Request $request)
+    {
+        $insert = Bank::firstOrCreate(['name' => $request->bank],['name' => $request->bank]);
+
+        if ($insert->wasRecentlyCreated) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Bank successfully added!',
+                'alert' => 'alert-success',
+                'bank_id' => $insert->id,
+                'bank' => $request->bank
+            ], 200);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

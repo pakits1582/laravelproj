@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students')->nullOnDelete();
             $table->unsignedBigInteger('bank_id')->index()->nullable();
             $table->foreign('bank_id')->references('id')->on('banks')->nullOnDelete();
+            $table->integer('check_no')->nullable();
             $table->date('deposit_date')->nullable();
             $table->dateTime('receipt_date')->index();
             $table->decimal('amount', 9, 2)->default(0)->nullable();

@@ -451,6 +451,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:receipts']], function () {
         //Route::post('/evaluations/taggrade', [EvaluationController::class, 'taggrade']);
+        Route::view('/receipts/addbank', 'receipt.addbank')->middleware(['inaccess:receipts']);
+        Route::post('/receipts/savebank', [ReceiptController::class, 'storebank'])->name('savebank')->middleware(['inaccess:receipts']);
         Route::resource('receipts', ReceiptController::class)->missing(function (Request $request) {
             return Redirect::route('receipts.index');
         }); 
