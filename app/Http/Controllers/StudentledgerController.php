@@ -99,11 +99,20 @@ class StudentledgerController extends Controller
     {
         $soas = $this->studentledgerService->returnStatementOfAccounts($request->student_id, $request->period_id);
 
-        if(count($soas) > 1)
-        {
-            return view('studentledger.statementofaccounts', compact('soas'));
+        if($soas){
+            if(count($soas) > 1)
+            {
+                return view('studentledger.statementofaccounts', compact('soas'));
+            }
+    
+            return view('studentledger.statementofaccount', compact('soas'));
         }
 
-        return view('studentledger.statementofaccount', compact('soas'));
+        return response()->json(['data' =>[
+                'success' => false,
+                'message' => 'No records to be displayed!',
+                'alert' => 'alert-danger'
+            ]
+        ]);
     }
 }

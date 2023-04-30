@@ -8,6 +8,8 @@ use App\Models\Receipt;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use App\Services\ReceiptService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ReceiptController extends Controller
 {
@@ -29,12 +31,17 @@ class ReceiptController extends Controller
     {
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         $banks = Bank::all();
+        $last_user_receiptno = DB::table('receipts')->select(DB::raw('MAX(receipt_no) AS last_receiptno'))->where('user_id', Auth::id())->get()[0];
+        $last_user_receiptno = ($last_user_receiptno->last_receiptno) ? $last_user_receiptno->last_receiptno : 0;
+
         
-        return view('receipt.index', compact('periods', 'banks'));
+        return view('receipt.index', compact('periods', 'banks', 'last_user_receiptno'));
     }
 
     public function storebank(Request $request)
     {
+        $request->validate(['bank' => 'required']);
+
         $insert = Bank::firstOrCreate(['name' => $request->bank],['name' => $request->bank]);
 
         if ($insert->wasRecentlyCreated) {
@@ -46,6 +53,8 @@ class ReceiptController extends Controller
                 'bank' => $request->bank
             ], 200);
         }
+
+        return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, bank already exists!']);
     }
     /**
      * Show the form for creating a new resource.

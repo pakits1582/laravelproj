@@ -67,7 +67,7 @@
                                 <tr>
                                     <td colspan="4" class="right"><h2 class="m-0">TOTAL</h1></td>
                                     <td>
-                                        <input type="text" name="total_amount" id="total_amount" class="form-control text-uppercase clearable" readonly value="" placeholder="">
+                                        <input type="text" name="total_amount" id="total_amount" class="biginput form-control text-uppercase clearable" readonly value="" placeholder="">
                                     </td>
                                 </tr>
                             </tfoot>
