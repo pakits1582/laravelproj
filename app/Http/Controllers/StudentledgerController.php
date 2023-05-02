@@ -99,22 +99,13 @@ class StudentledgerController extends Controller
     {
         $soas = $this->studentledgerService->returnStatementOfAccounts($request->student_id, $request->period_id);
 
-        if($soas){
-            if(count($soas) > 1)
-            {
-                return view('studentledger.statementofaccounts', compact('soas'));
-            }
-
-            $has_adjustment = $request->has_adjustment;
-            return view('studentledger.statementofaccount', compact('soas', 'has_adjustment'));
+        if($soas && count($soas) > 1)
+        {
+            return view('studentledger.statementofaccounts', compact('soas'));
         }
 
-        return response()->json(['data' =>[
-                'success' => false,
-                'message' => 'No records to be displayed!',
-                'alert' => 'alert-danger'
-            ]
-        ]);
+        $has_adjustment = $request->has_adjustment;
+        return view('studentledger.statementofaccount', compact('soas', 'has_adjustment'));
     }
 
     public function previousbalancerefund(Request $request)
@@ -122,6 +113,12 @@ class StudentledgerController extends Controller
         $previous_balances = $this->studentledgerService->returnPreviousBalanceRefund($request->student_id, $request->period_id);
 
         return view('studentledger.previousbalance', compact('previous_balances'));
-        
+    }
+
+    public function paymentschedules(Request $request)
+    {
+        $payment_schedules = $this->studentledgerService->returnPaymentSchedules($request);
+
+        return $payment_schedules;
     }
 }

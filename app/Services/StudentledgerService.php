@@ -4,9 +4,10 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Studentledger;
+use App\Models\PaymentSchedule;
+use Illuminate\Support\Facades\DB;
 use App\Models\StudentledgerDetail;
 use Database\Seeders\StudentSeeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class StudentledgerService
@@ -317,6 +318,11 @@ class StudentledgerService
         }
         
         return $previousBalance;
-        
+    }
+
+    public function returnPaymentSchedules($request)
+    {
+        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $request->period_id)->where('educational_level_id', $request->educational_level_id)->get();
+
     }
 }

@@ -161,12 +161,7 @@ $(function(){
             data: ({ 'student_id':student_id, 'period_id':period_id, 'has_adjustment':false }),
             success: function(response){
                 console.log(response);
-                if (typeof response.data != 'undefined' && response.data.success == false) 
-                {
-                    $("#return_soa").html('<h6 class="m-0 font-weight-bold text-black mid">'+response.data.message+'</h6>');
-                } else {
-                    $("#return_soa").html(response);
-                }
+                $("#return_soa").html(response);
             },
             error: function (data) {
                 console.log(data);
@@ -197,7 +192,23 @@ $(function(){
 
     function returnPaymentSchedule(student_id, period_id, educational_level_id)
     {
-
+        $.ajax({
+            url: "/studentledgers/paymentschedules",
+            type: 'POST',
+            data: ({ 'student_id':student_id, 'period_id':period_id, 'educational_level_id':educational_level_id }),
+            success: function(response){
+                console.log(response);
+                $("#return_soa").html(response);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    clearForm()
+                }
+            }
+        });
     }
 
     $(document).on("change", "#student", function(){

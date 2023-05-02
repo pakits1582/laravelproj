@@ -46,12 +46,7 @@ $(function(){
                 data: ({ 'student_id':student_id, 'period_id':period_id, 'has_adjustment':true }),
                 success: function(response){
                     console.log(response);
-                    if (typeof response.data != 'undefined' && response.data.success == false) 
-                    {
-                        $("#return_soa").html('<h6 class="m-0 font-weight-bold text-black mid">'+response.data.message+'</h6>');
-                    } else {
-                        $("#return_soa").html(response);
-                    }
+                    $("#return_soa").html(response);
                 },
                 error: function (data) {
                     console.log(data);

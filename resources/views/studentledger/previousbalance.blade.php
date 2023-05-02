@@ -13,8 +13,8 @@
         <tbody class="text-black" id="">
             @foreach ($previous_balances as $previous_balance)
                 <tr class="">
-                    <td class="align-middle w150 right">{{ $previous_balance['period_code'] }}</td>
-                    <td class="align-middle right">{{ $previous_balance['period_name'] }}</td>
+                    <td class="align-middle w150 left">{{ $previous_balance['period_code'] }}</td>
+                    <td class="align-middle left">{{ $previous_balance['period_name'] }}</td>
                     <td class="align-middle w150 right">{{ number_format($previous_balance['debit'],2) }}</td>
                     <td class="align-middle w150 right">{{ number_format($previous_balance['credit'],2) }}</td>
                     <td class="align-middle w150 right">{{ number_format($previous_balance['balance'],2) }}</td>

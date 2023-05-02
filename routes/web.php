@@ -288,6 +288,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
         Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);
         Route::post('/studentledgers/previousbalancerefund', [StudentledgerController::class, 'previousbalancerefund']);
+        Route::post('/studentledgers/paymentschedules', [StudentledgerController::class, 'paymentschedules']);
         
         //Route::get('/validations/{enrollment}/unvalidate', [ValidationController::class, 'unvalidate']);
         Route::resource('studentledgers', StudentledgerController::class)->missing(function (Request $request) {
