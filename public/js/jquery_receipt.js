@@ -93,7 +93,7 @@ $(function(){
                     console.log(response);
                     if(response.data == false)
                     {
-                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Payment</div><div class="message">Student is not enrolled this semester.<br>Continue payment?</div>').dialog({
+                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Payment</div><div class="message">Student is not enrolled this term.<br>Continue payment?</div>').dialog({
 							show: 'fade',
 							resizable: false,	
 							draggable: true,
@@ -182,7 +182,17 @@ $(function(){
 
     function returnPreviousbalancerefund(student_id, period_id)
     {
-
+        $.ajax({
+			url: "/studentledgers/previousbalancerefund",
+            type: 'POST',
+			data: {'student_id':student_id,'period_id':period_id},
+			cache: false, 
+			success: function(data){
+				console.log(data);
+				$("#return_previousbalancerefund").html(data);
+				//alert(data);
+			} 
+		});
     }
 
     function returnPaymentSchedule(student_id, period_id, educational_level_id)

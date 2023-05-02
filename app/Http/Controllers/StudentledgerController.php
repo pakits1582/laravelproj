@@ -116,4 +116,12 @@ class StudentledgerController extends Controller
             ]
         ]);
     }
+
+    public function previousbalancerefund(Request $request)
+    {
+        $previous_balances = $this->studentledgerService->returnPreviousBalanceRefund($request->student_id, $request->period_id);
+
+        return view('studentledger.previousbalance', compact('previous_balances'));
+        
+    }
 }
