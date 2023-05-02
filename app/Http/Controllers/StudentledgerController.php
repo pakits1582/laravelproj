@@ -104,8 +104,9 @@ class StudentledgerController extends Controller
             {
                 return view('studentledger.statementofaccounts', compact('soas'));
             }
-    
-            return view('studentledger.statementofaccount', compact('soas'));
+
+            $has_adjustment = $request->has_adjustment;
+            return view('studentledger.statementofaccount', compact('soas', 'has_adjustment'));
         }
 
         return response()->json(['data' =>[

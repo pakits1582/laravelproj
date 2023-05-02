@@ -158,14 +158,15 @@ $(function(){
         $.ajax({
             url: "/studentledgers/statementofaccounts",
             type: 'POST',
-            data: ({ 'student_id':student_id, 'period_id':period_id }),
+            data: ({ 'student_id':student_id, 'period_id':period_id, 'has_adjustment':false }),
             success: function(response){
                 console.log(response);
-                if (typeof response.data != 'undefined') 
+                if (typeof response.data != 'undefined' && response.data.success == false) 
                 {
-                    $("#return_soa").html(response.data.message);
+                    $("#return_soa").html('<h6 class="m-0 font-weight-bold text-black mid">'+response.data.message+'</h6>');
+                } else {
+                    $("#return_soa").html(response);
                 }
-                $("#return_soa").html(response);
             },
             error: function (data) {
                 console.log(data);
@@ -176,6 +177,7 @@ $(function(){
                 }
             }
         });
+        
     }
 
     function returnPreviousbalancerefund(student_id, period_id)

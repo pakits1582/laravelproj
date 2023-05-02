@@ -37,16 +37,21 @@ $(function(){
         dropdownParent: $("#ui_content4")
     });
 
-    function returnStudentledger(student_id, period_id)
+    function returnStatementofaccount(student_id, period_id)
     {
         if(student_id){
             $.ajax({
                 url: "/studentledgers/statementofaccounts",
                 type: 'POST',
-                data: ({ 'student_id':student_id, 'period_id':period_id }),
-                success: function(data){
-                    console.log(data);
-                    $("#return_soa").html(data);
+                data: ({ 'student_id':student_id, 'period_id':period_id, 'has_adjustment':true }),
+                success: function(response){
+                    console.log(response);
+                    if (typeof response.data != 'undefined' && response.data.success == false) 
+                    {
+                        $("#return_soa").html('<h6 class="m-0 font-weight-bold text-black mid">'+response.data.message+'</h6>');
+                    } else {
+                        $("#return_soa").html(response);
+                    }
                 },
                 error: function (data) {
                     console.log(data);
@@ -72,7 +77,7 @@ $(function(){
         var period_name = (period_id) ? $("#period option:selected").text() : 'All Periods';
         $("#period_name").text(period_name);
 
-        returnStudentledger(student_id, period_id);
+        returnStatementofaccount(student_id, period_id);
 
     });
 
@@ -92,13 +97,13 @@ $(function(){
                         showError('Student not found!');
                         clearForm();
                     }else{
-                        $("#program").val(response.data.values.program.name);
-                        $("#educational_level").val(response.data.values.program.level.code);
-                        $("#college").val(response.data.values.program.collegeinfo.code);
-                        $("#curriculum").val(response.data.values.curriculum.curriculum);
-                        $("#year_level").val(response.data.values.year_level);
+                        $("#program").val(response.data.values.program.name ? response.data.values.program.name : "");
+                        $("#educational_level").val((response.data.values.program.level) ? response.data.values.program.level.code ? response.data.values.program.level.code : "" : "");
+                        $("#college").val((response.data.values.program.collegeinfo) ? response.data.values.program.collegeinfo.code ? response.data.values.program.collegeinfo.code : "" : "");
+                        $("#curriculum").val(response.data.values.curriculum.curriculum ? response.data.values.curriculum.curriculum : "");
+                        $("#year_level").val(response.data.values.year_level ? response.data.values.year_level : "");
                         
-                        returnStudentledger(student_id, period_id);
+                        returnStatementofaccount(student_id, period_id);
                     }
                 },
                 error: function (data) {

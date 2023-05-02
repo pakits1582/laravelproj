@@ -114,6 +114,9 @@
         </div>
     </div>
 </div>
-
-@include('studentadjustment.create')
+{{-- @dump($has_adjustment)
+{{ $has_adjustment }} --}}
+@if ($has_adjustment == 'true')
+    @include('studentadjustment.create')
+@endif
 

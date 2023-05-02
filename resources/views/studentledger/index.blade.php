@@ -110,7 +110,9 @@
                 </div>
             </div>
         </div>
-        <div id="return_soa"><h3 class="mid">No records to be displayed!</h3></div>
+        <div id="return_soa">
+            <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
+        </div>
     </div>
     <!-- /.container-fluid -->
 @endsection
