@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\AssessmentExam;
+use App\Models\Enrollment;
 use App\Models\User;
 use App\Models\Studentledger;
 use App\Models\PaymentSchedule;
 use Illuminate\Support\Facades\DB;
 use App\Models\StudentledgerDetail;
+use App\Services\Enrollment\EnrollmentService;
 use Database\Seeders\StudentSeeder;
 use Illuminate\Support\Facades\Auth;
 
@@ -323,6 +326,34 @@ class StudentledgerService
     public function returnPaymentSchedules($request)
     {
         $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $request->period_id)->where('educational_level_id', $request->educational_level_id)->get();
+        $enrollment = (new EnrollmentService())->studentEnrollment($request->student_id, $request->period_id, 1);
 
+        if($enrollment == false)
+        {
+            return 'false';
+        }
+
+        $enrollment->load('assessment.exam');
+        $soas = $this->getAllStatementOfAccounts($request->student_id, $request->period_id);
+        $debit = 0;
+        $credit = 0;
+
+        if ($soas) 
+        {
+            foreach ($soas as $soa) 
+            {
+                foreach ($soa['ledgers'] as $ledger) 
+                {
+                    $amount = $ledger['amount'];
+                    $type = $ledger['type'];
+                    $cancelled = $ledger['ledger_info']['receipt_info']['cancelled'] ?? 0;
+                    $credit += ($amount < 0 && $type == 'R' && $cancelled == 0) ? $amount : 0;
+                    $credit += ($amount < 0 && $type != 'R') ? $amount : 0;
+                    $debit += ($amount >= 0) ? $amount : 0;
+                }
+            }
+        }
+
+        return ['payment_schedules' => $payment_schedules, 'assessment_exam' => $enrollment->assessment->exam, 'debit' => $debit, 'credit' => $credit];
     }
 }

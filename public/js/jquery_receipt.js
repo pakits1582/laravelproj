@@ -198,7 +198,7 @@ $(function(){
             data: ({ 'student_id':student_id, 'period_id':period_id, 'educational_level_id':educational_level_id }),
             success: function(response){
                 console.log(response);
-                $("#return_soa").html(response);
+                $("#payment_schedule").html(response);
             },
             error: function (data) {
                 console.log(data);

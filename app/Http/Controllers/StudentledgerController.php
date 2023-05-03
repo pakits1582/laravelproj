@@ -117,8 +117,9 @@ class StudentledgerController extends Controller
 
     public function paymentschedules(Request $request)
     {
-        $payment_schedules = $this->studentledgerService->returnPaymentSchedules($request);
+        $payment_schedule = $this->studentledgerService->returnPaymentSchedules($request);
 
-        return $payment_schedules;
+        //return $payment_schedule;
+        return view('studentledger.payment_schedule', compact('payment_schedule'));
     }
 }

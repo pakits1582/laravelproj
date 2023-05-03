@@ -72,7 +72,7 @@ class EnrollmentService
         $query = Enrollment::with(['period', 'student', 'program' => ['level', 'collegeinfo'], 'curriculum', 'section', 'assessment'])
                     ->where('student_id', $student_id)
                     ->where('period_id', $period_id);
-            if($acctok === 1)
+            if($acctok == 1)
             {
                 $query->where('acctok', 1);
             }

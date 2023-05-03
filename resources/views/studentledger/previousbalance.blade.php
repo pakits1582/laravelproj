@@ -1,4 +1,5 @@
 @if ($previous_balances)
+<div class="table-responsive" id="table_data">
     <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
         <thead class="">
             <tr>
@@ -30,6 +31,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
 @else
     <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
 @endif
