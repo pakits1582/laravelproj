@@ -103,7 +103,7 @@ $(function(){
 							buttons: {
 									'OK':function(){
 										$(this).dialog('close');
-                                        returnStudentInfo(student_id, period_id, student_info);
+                                        returnStudentInfo(student_id, period_id, student_info, response.data);
 									},
 									'Cancel':function(){
                                         $(this).dialog('close');
@@ -113,7 +113,7 @@ $(function(){
 							});//end of dialogbox
 						$(".ui-dialog-titlebar").hide();
                     }else{
-                        returnStudentInfo(student_id, period_id, student_info);
+                        returnStudentInfo(student_id, period_id, student_info, response.data);
                     }
                 },
                 error: function (data) {
@@ -128,25 +128,25 @@ $(function(){
         }
     }
 
-    function returnStudentInfo(student_id, period_id, response)
+    function returnStudentInfo(student_id, period_id, student_info, enrollment)
     {
-        console.log(response);
-        if(response.data.values.program.code != '')
+        console.log(student_info);
+        if(student_info.data.values.program.code != '')
         {
-            $("#program").val(response.data.values.program.name ? response.data.values.program.name : "");
-            $("#educational_level").val((response.data.values.program.level) ? response.data.values.program.level.code ? response.data.values.program.level.code : "" : "");
-            $("#college").val((response.data.values.program.collegeinfo) ? response.data.values.program.collegeinfo.code ? response.data.values.program.collegeinfo.code : "" : "");
-            $("#curriculum").val(response.data.values.curriculum.curriculum ? response.data.values.curriculum.curriculum : "");
-            $("#year_level").val(response.data.values.year_level ? response.data.values.year_level : "");
-            var name = response.data.values.last_name;
-                name += ', '+response.data.values.first_name;
-                name += (response.data.values.name_suffix != '') ? ' '+response.data.values.name_suffix : '';
-                name += (response.data.values.middle_name != '') ? ' '+response.data.values.middle_name : '';
+            $("#program").val(student_info.data.values.program.name ? student_info.data.values.program.name : "");
+            $("#educational_level").val((student_info.data.values.program.level) ? student_info.data.values.program.level.code ? student_info.data.values.program.level.code : "" : "");
+            $("#college").val((student_info.data.values.program.collegeinfo) ? student_info.data.values.program.collegeinfo.code ? student_info.data.values.program.collegeinfo.code : "" : "");
+            $("#curriculum").val(student_info.data.values.curriculum.curriculum ? student_info.data.values.curriculum.curriculum : "");
+            $("#year_level").val(student_info.data.values.year_level ? student_info.data.values.year_level : "");
+            var name = student_info.data.values.last_name;
+                name += ', '+student_info.data.values.first_name;
+                name += (student_info.data.values.name_suffix != '') ? ' '+student_info.data.values.name_suffix : '';
+                name += (student_info.data.values.middle_name != '') ? ' '+student_info.data.values.middle_name : '';
             $("#payor_name").val(name);
 
             returnStatementofaccount(student_id, period_id);
             returnPreviousbalancerefund(student_id, period_id);
-            returnPaymentSchedule(student_id, period_id, response.data.values.program.level.id);
+            returnPaymentSchedule(student_id, period_id, student_info.data.values.program.level.id, enrollment);
         }else{
             showError('Student has no program. Please add program first!');
             $(".clearable").val("").trigger('change');
@@ -167,7 +167,7 @@ $(function(){
                 console.log(data);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
+                    showError('Something went wrong! Can not return statement of account!');
                     clearForm()
                 }
             }
@@ -190,12 +190,12 @@ $(function(){
 		});
     }
 
-    function returnPaymentSchedule(student_id, period_id, educational_level_id)
+    function returnPaymentSchedule(student_id, period_id, educational_level_id, enrollment)
     {
         $.ajax({
             url: "/studentledgers/paymentschedules",
             type: 'POST',
-            data: ({ 'student_id':student_id, 'period_id':period_id, 'educational_level_id':educational_level_id }),
+            data: ({ 'student_id':student_id, 'period_id':period_id, 'educational_level_id':educational_level_id, 'enrollment':enrollment }),
             success: function(response){
                 console.log(response);
                 $("#payment_schedule").html(response);
@@ -204,7 +204,7 @@ $(function(){
                 console.log(data);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
+                    showError('Something went wrong! Can not return payment schedule!');
                     clearForm()
                 }
             }
@@ -220,7 +220,19 @@ $(function(){
                 url: "/students/"+student_id,
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
                 success: function(response){
+                    $("#confirmation").dialog('close');
                     console.log(response);
                     if(response.data === false)
                     {
@@ -231,6 +243,7 @@ $(function(){
                     }
                 },
                 error: function (data) {
+                    $("#confirmation").dialog('close');
                     console.log(data);
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {

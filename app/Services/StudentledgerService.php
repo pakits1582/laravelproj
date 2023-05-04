@@ -323,18 +323,18 @@ class StudentledgerService
         return $previousBalance;
     }
 
-    public function returnPaymentSchedules($request)
+    public function returnPaymentSchedules($student_id, $period_id, $educational_level_id, $enrollment)
     {
-        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $request->period_id)->where('educational_level_id', $request->educational_level_id)->get();
-        $enrollment = (new EnrollmentService())->studentEnrollment($request->student_id, $request->period_id, 1);
+        //return $enrollment;
 
-        if($enrollment == false)
+        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $period_id)->where('educational_level_id', $educational_level_id)->get();
+
+        if($enrollment == 'false')
         {
             return 'false';
         }
 
-        $enrollment->load('assessment.exam');
-        $soas = $this->getAllStatementOfAccounts($request->student_id, $request->period_id);
+        $soas = $this->getAllStatementOfAccounts($student_id, $period_id);
         $debit = 0;
         $credit = 0;
 
@@ -349,11 +349,11 @@ class StudentledgerService
                     $cancelled = $ledger['ledger_info']['receipt_info']['cancelled'] ?? 0;
                     $credit += ($amount < 0 && $type == 'R' && $cancelled == 0) ? $amount : 0;
                     $credit += ($amount < 0 && $type != 'R') ? $amount : 0;
-                    $debit += ($amount >= 0) ? $amount : 0;
+                    $debit += ($amount >= 0 && $type != 'A') ? $amount : 0;
                 }
             }
         }
 
-        return ['payment_schedules' => $payment_schedules, 'assessment_exam' => $enrollment->assessment->exam, 'debit' => $debit, 'credit' => $credit];
+        return ['payment_schedules' => $payment_schedules, 'assessment_exam' => $enrollment['assessment']['exam'], 'debit' => $debit, 'credit' => $credit];
     }
 }

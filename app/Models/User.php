@@ -139,4 +139,9 @@ class User extends Authenticatable
         }
     }
 
+    public function paymentperiod()
+    {
+        return $this->hasOne(UserPaymentperiod::class, 'user_id', 'id');
+    }
+
 }
