@@ -33,6 +33,12 @@ $(function(){
         }
 	});
 
+    function clearFormFieldsFields()
+    {
+        $(".clearable").val("").trigger('change');
+        $("#return_soa, #return_previousbalancerefund, #payment_schedule").html('<h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>');
+    }
+
     $(document).on("change","#bank_id", function(e){
 		var val = $(this).val();
 
@@ -107,7 +113,7 @@ $(function(){
 									},
 									'Cancel':function(){
                                         $(this).dialog('close');
-										$(".clearable").val("").trigger('change');
+										clearFormFields();
 									}	
 								}//end of buttons
 							});//end of dialogbox
@@ -121,7 +127,7 @@ $(function(){
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
-                        clearForm()
+                        clearFormFields()
                     }
                 }
             });
@@ -149,7 +155,7 @@ $(function(){
             returnPaymentSchedule(student_id, period_id, student_info.data.values.program.level.id, enrollment);
         }else{
             showError('Student has no program. Please add program first!');
-            $(".clearable").val("").trigger('change');
+            clearFormFields();
         }
     }
 
@@ -168,7 +174,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not return statement of account!');
-                    clearForm()
+                    clearFormFields();
                 }
             }
         });
@@ -205,7 +211,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not return payment schedule!');
-                    clearForm()
+                    clearFormFields();
                 }
             }
         });
@@ -237,7 +243,7 @@ $(function(){
                     if(response.data === false)
                     {
                         showError('Student not found!');
-                        clearForm();
+                        clearFormFields();
                     }else{
                         returnEnrollment(student_id, period_id, response);
                     }
@@ -248,7 +254,7 @@ $(function(){
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
-                        clearForm();
+                        clearFormFields();
                     }
                 }
             });

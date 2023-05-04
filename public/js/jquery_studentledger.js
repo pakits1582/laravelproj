@@ -62,7 +62,8 @@ $(function(){
 
     function clearForm()
     {
-
+        $('.clearable').val("");
+        $("#return_soa").html('<h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>');
     }
 
     $(document).on("change", "#period", function(e){
