@@ -347,10 +347,42 @@ $(function(){
                 $("#fee_id").select2({
                     dropdownParent: $("#modalll")
                 });
+
+                $("#modalll").on('shown.bs.modal', function(){
+                    $(this).find('#fee_amount').focus();
+                });
             }
         });
 
         e.preventDefault();
+    });
+
+    function parseCurrency(num) {
+    	return parseFloat( num.replace( /,/g, '') );
+	}
+    
+    $(document).on("change", "#fee_id", function(){
+        var fee_id = $(this).val();
+
+        $.ajax({
+            type: "GET",
+            url: "/fees/"+fee_id,
+            success: function(data){
+                console.log(data);
+                if(!jQuery.isEmptyObject(data))
+                {
+                    $("#fee_code").val(data.fee_info.code);
+                    $("#fee_name").val(data.fee_info.name);
+                    $("#fee_type").val(data.fee_info.feetype.type);
+                    $("#fee_amount").val(data.fee_info.default_value).focus();  
+
+                    if(!jQuery.isEmptyObject(data.compounded_fees))
+                    {
+                        alert('xxx');
+                    }
+                }
+            }
+        });
     });
 
 });

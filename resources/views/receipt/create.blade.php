@@ -41,7 +41,7 @@
                                             <label for="fee_code" class="m-0 font-weight-bold text-primary">Fee Code</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" name="fee_code" id="fee_code" placeholder="" class="form-control text-uppercase mediuminput">
+                                            <input type="text" name="fee_code" id="fee_code" value="{{ ($default_fee) ? $default_fee->code  : '' }}" class="form-control text-uppercase mediuminput">
                                             @error('fee_code')
                                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                                             @enderror
@@ -54,7 +54,7 @@
                                             <label for="fee_name" class="m-0 font-weight-bold text-primary">Fee Name</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" name="fee_name" id="fee_name" class="form-control text-uppercase mediuminput">
+                                            <input type="text" name="fee_name" id="fee_name" value="{{ ($default_fee) ? $default_fee->name  : '' }}" class="form-control text-uppercase mediuminput">
                                             @error('fee_name')
                                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                                             @enderror
@@ -67,7 +67,7 @@
                                             <label for="fee_type" class="m-0 font-weight-bold text-primary">Fee Type</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" name="fee_type" id="fee_type" class="form-control text-uppercase mediuminput">
+                                            <input type="text" name="fee_type" value="{{ ($default_fee) ? $default_fee->feetype->type  : '' }}" id="fee_type" class="form-control text-uppercase mediuminput">
                                             @error('fee_type')
                                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                                             @enderror
@@ -77,15 +77,18 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label for="amount" class="m-0 font-weight-bold text-primary">* Amount</label>
+                                            <label for="fee_amount" class="m-0 font-weight-bold text-primary">* Amount</label>
                                         </div>
                                         <div class="col-md-3">
-                                            <input type="text" name="amount" id="amount" class="form-control biginput">
+                                            <input type="text" name="fee_amount" id="fee_amount" value="{{ ($default_fee) ? ($default_fee->default_value > 0 ? $default_fee->default_value : '') : '' }}" class="form-control biginput" pattern="^[0-9]+(?:\.[0-9]{1,2})?$" title="CDA Currency Format - no currency sign and no comma(s) - cents (.##) are optional" required autofocus="autofocus">
                                             @error('amount')
                                                 <p class="text-danger text-xs mt-1">{{$message}}</p>
                                             @enderror
                                         </div>
                                     </div>
+                                </div>
+                                <div id="selectedfeeshidden">
+
                                 </div>
                                 <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Add Fee</button>
                                 </form>

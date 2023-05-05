@@ -100,7 +100,9 @@ class FeeController extends Controller
      */
     public function show(Fee $fee)
     {
-        //
+        $fee_info =  $this->feeService->returnFeeInfo($fee->load('feetype'));
+
+        return response()->json($fee_info);
     }
 
     /**

@@ -369,7 +369,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::view('/fees/addnewtype', 'fee.addnewtype');
         Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
         Route::post('/fees/savetype', [FeeController::class, 'storetype'])->name('savetype');
-        Route::resource('fees', FeeController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
+        Route::resource('fees', FeeController::class)->missing(function (Request $request) {
             return Redirect::route('fees.index');
         });
     });

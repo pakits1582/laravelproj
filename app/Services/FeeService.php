@@ -143,5 +143,22 @@ class FeeService
 
         return $query->get();
     }
+    
+    public function returnFeeInfo($fee_info)
+    {
+        $compounded_fees = [];
+
+        if($fee_info->iscompound == 1)
+        {
+            $compound_fees = explode('=$', $fee_info->name);
+
+            if($compound_fees)
+            {
+                $compounded_fees = Fee::with('feetype')->whereIn('code', $compound_fees)->get();
+            }
+        }
+
+        return ['fee_info' => $fee_info, 'compounded_fees' => $compounded_fees];
+    }
 
 }
