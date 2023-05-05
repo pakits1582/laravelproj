@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fee;
 use App\Models\Bank;
 use App\Libs\Helpers;
 use App\Models\Receipt;
+use App\Services\FeeService;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use App\Services\ReceiptService;
@@ -61,9 +63,12 @@ class ReceiptController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $fees = (new FeeService)->returnFees($request,true);
+        $default_fee = Fee::with(['feetype'])->defaultFee()->first();
+        
+        return view('receipt.create', compact('fees', 'default_fee'));
     }
 
     /**

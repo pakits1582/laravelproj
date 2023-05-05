@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-md-4 mid">
                     <div class="form-group" id="button_group">
-                        <button type="submit" id="add_fee" class="btn btn-success btn-icon-split actions mb-0" disabled>
+                        <button type="submit" id="add_fee" class="btn btn-success btn-icon-split actions mb-0">
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus"></i>
                             </span>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="col-md-6 right">
                     <div class="form-group" id="button_group">
-                        <button type="submit" id="save_payment" class="btn btn-success btn-icon-split actions mb-2" disabled>
+                        <button type="submit" id="save_payment" class="btn btn-success btn-icon-split actions mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-save"></i>
                             </span>

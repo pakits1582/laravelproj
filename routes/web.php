@@ -284,8 +284,8 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
         // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
         //Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
-        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
-        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
+        Route::post('/studentledgers/computepaymentsched', [StudentledgerController::class, 'computepaymentsched']);
+        Route::post('/studentledgers/defaultpayperiod', [StudentledgerController::class, 'defaultpayperiod']);
         Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);
         Route::post('/studentledgers/previousbalancerefund', [StudentledgerController::class, 'previousbalancerefund']);
         Route::post('/studentledgers/paymentschedules', [StudentledgerController::class, 'paymentschedules']);
@@ -452,7 +452,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:receipts']], function () {
-        //Route::post('/evaluations/taggrade', [EvaluationController::class, 'taggrade']);
+        Route::get('/receipts/addpaymentfee', [ReceiptController::class, 'addpaymentfee']);
         Route::view('/receipts/addbank', 'receipt.addbank')->middleware(['inaccess:receipts']);
         Route::post('/receipts/savebank', [ReceiptController::class, 'storebank'])->name('savebank')->middleware(['inaccess:receipts']);
         Route::resource('receipts', ReceiptController::class)->missing(function (Request $request) {

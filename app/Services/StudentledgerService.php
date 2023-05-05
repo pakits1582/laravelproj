@@ -356,4 +356,64 @@ class StudentledgerService
 
         return ['payment_schedules' => $payment_schedules, 'assessment_exam' => $enrollment['assessment']['exam'], 'debit' => $debit, 'credit' => $credit];
     }
+
+    public function computePaymentSchedule($student_id, $period_id, $pay_period)
+    {
+        $enrollment = (new EnrollmentService())->studentEnrollment($student_id, $period_id, 1);
+        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $period_id)->where('educational_level_id', $enrollment->program->educational_level_id)->get();
+        $default_pay_period = (Auth::user()->paymentperiod) ? ((Auth::user()->paymentperiod->pay_period > max(array_keys($payment_schedules->toArray()))) ? max(array_keys($payment_schedules->toArray())) : Auth::user()->paymentperiod->pay_period) : 0;
+        
+        if($enrollment == 'false')
+        {
+            return 'false';
+        }
+
+        $soas = $this->getAllStatementOfAccounts($student_id, $period_id);
+        $debit = 0;
+        $credit = 0;
+
+        if ($soas) 
+        {
+            foreach ($soas as $soa) 
+            {
+                foreach ($soa['ledgers'] as $ledger) 
+                {
+                    $amount = $ledger['amount'];
+                    $type = $ledger['type'];
+                    $cancelled = $ledger['ledger_info']['receipt_info']['cancelled'] ?? 0;
+                    $credit += ($amount < 0 && $type == 'R' && $cancelled == 0) ? $amount : 0;
+                    $credit += ($amount < 0 && $type != 'R') ? $amount : 0;
+                    $debit += ($amount >= 0 && $type != 'A') ? $amount : 0;
+                }
+            }
+        }
+
+        $assessment_exam = $enrollment->assessment->exam;
+        $balance_due = 0;
+
+        if(max(array_keys($payment_schedules->toArray())) ==  $pay_period)
+        {   
+            $total_payables = $assessment_exam->amount+$debit;
+            $balance_due = $total_payables-str_replace('-', "", $credit);
+        }else{
+            $rembal = 0;
+
+            for($i=0; $i <= $pay_period; $i++)
+            {
+                if($i == 0)
+                {
+                    $rembal += $assessment_exam->downpayment;
+                }else{
+                    $exam = 'exam'.$i;
+                    $rembal += $assessment_exam->$exam;
+                }
+            }
+
+            $balance = ($rembal+$debit)-str_replace('-', "", $credit);
+
+            $balance_due = ($balance < 0) ? 0 : $balance;
+        }
+
+        return ['balance_due' => number_format($balance_due,2), 'default_pay_period' => $default_pay_period];
+    }
 }

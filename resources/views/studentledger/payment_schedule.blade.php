@@ -64,7 +64,7 @@
         <div class="row  align-items-end">
             <div class="col-md-10">
                 <div class="form-group mb-1">
-                    <select id="payment_schedule" class="form-control select clearable">
+                    <select id="pay_period" class="form-control select clearable">
                         @foreach ($payment_schedule['payment_schedules'] as $key => $schedule)
                             <option value="{{ $key }}" {{ ($key == $pay_period) ? 'selected' : '' }}>{{ $schedule->description }}</option>
                         @endforeach
@@ -74,14 +74,14 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group mb-1">
-                    <input class="" id="nograde" type="checkbox" value="1" name="nograde" {{ (old('nograde')) ? 'checked' : '' }} >
+                    <input class="" id="pay_period_default" type="checkbox" value="1" {{ ((Auth::user()->paymentperiod)) ? 'checked' : '' }}>
                 </div>
             </div>
         </div>
         <div class="row  align-items-end">
             <div class="col-md-12">
                 <div class="form-group mb-1">
-                   <h3 class="mid text-black">{{ ($payment_schedule['payment_schedules']) ? $payment_schedule['payment_schedules'][$pay_period]->description : 'No Payment Schedule' }}</h3>
+                   <h3 class="mid text-black" id="pay_period_text">{{ ($payment_schedule['payment_schedules']) ? $payment_schedule['payment_schedules'][$pay_period]->description : 'No Payment Schedule' }}</h3>
                 </div>
             </div>
         </div>
@@ -119,7 +119,7 @@
             </div>
             <div class="col-md-7">
                 <div class="form-group mb-1">
-                   <h3 class="mid font-weight-bold text-danger">{{ number_format($balance_due,2) }}</h3>
+                   <h3 class="mid font-weight-bold text-danger" id="balance_due">{{ number_format($balance_due,2) }}</h3>
                 </div>
             </div>
         </div>

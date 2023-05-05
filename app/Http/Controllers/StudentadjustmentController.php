@@ -108,7 +108,7 @@ class StudentadjustmentController extends Controller
 
         return response()->json(['data' =>[
                 'success' => true,
-                'message' => 'Student adjustment sucessfully deleted!.',
+                'message' => 'Student adjustment sucessfully deleted!',
                 'alert' => 'alert-success'
             ]
         ]);

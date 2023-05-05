@@ -6,6 +6,8 @@ use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Models\Studentledger;
 use App\Services\PeriodService;
+use App\Models\UserPaymentperiod;
+use Illuminate\Support\Facades\Auth;
 use App\Services\StudentledgerService;
 
 class StudentledgerController extends Controller
@@ -126,5 +128,24 @@ class StudentledgerController extends Controller
 
         //return $payment_schedule;
         return view('studentledger.payment_schedule', compact('payment_schedule'));
+    }
+
+    public function defaultpayperiod(Request $request)
+    {
+        $pay_period = UserPaymentperiod::updateOrCreate(['user_id' => Auth::id()], ['pay_period' => $request->pay_period]);
+
+        return response()->json(['data' =>[
+                'success' => true,
+                'message' => 'Default pay period saved!',
+                'alert' => 'alert-success'
+            ]
+        ]);
+    }
+
+    public function computepaymentsched(Request $request)
+    {
+        $payment_schedule = $this->studentledgerService->computePaymentSchedule($request->student_id, $request->period_id, $request->pay_period);
+        
+        return response()->json($payment_schedule);
     }
 }

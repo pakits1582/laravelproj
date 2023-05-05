@@ -33,7 +33,7 @@ $(function(){
         }
 	});
 
-    function clearFormFieldsFields()
+    function clearFormFields()
     {
         $(".clearable").val("").trigger('change');
         $("#return_soa, #return_previousbalancerefund, #payment_schedule").html('<h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>');
@@ -261,6 +261,96 @@ $(function(){
         }
     });
 
-    
+    $(document).on("click", "#pay_period_default", function(){
+        var pay_period = $("#pay_period").val();
+
+        if($(this).is(':checked')){
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Action</div><div class="message">Are you sure you want to make pay period as default?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: true,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'OK':function(){
+                            $(this).dialog('close');
+                            $.ajax({
+                                url: "/studentledgers/defaultpayperiod",
+                                type: 'POST',
+                                data: {'pay_period': pay_period},
+                                dataType: 'json',
+                                success: function(response){
+                                    console.log(response);
+                                    if(response.data.success === true)
+                                    {
+                                        showSuccess(response.data.message);
+                                    }
+                                },
+                                error: function (data) {
+                                    console.log(data);
+                                    var errors = data.responseJSON;
+                                    if ($.isEmptyObject(errors) == false) {
+                                        $.each(errors.errors, function (key, value) {
+                                            $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                                        });
+                                    }
+                                }
+                            });	
+                        },
+                        'Cancel':function(){
+                            $(this).dialog('close');
+                            $("#pay_period").prop("checked",false);			
+                        }	
+                    }//end of buttons
+                });//end of dialogbox
+            $(".ui-dialog-titlebar").hide();
+        }
+    });
+
+    $(document).on("change", "#pay_period", function(){
+        var pay_period = $(this).val();
+        var student_id = $("#student").val();
+        var period_id = $("#period_id").val();
+
+        $.ajax({
+			type: "POST",
+			url:  "/studentledgers/computepaymentsched",
+			dataType: 'json',
+			data:  {'student_id':student_id, 'period_id':period_id, 'pay_period': pay_period},
+			cache: false, 
+			success: function(response){
+				console.log(response);
+                var optionText = $("#pay_period option:selected").text();
+                
+                if(pay_period != response.default_pay_period){
+                    $("#pay_period_default").prop("checked", false);
+                }else{
+                    $("#pay_period_default").prop("checked", true);
+                }
+
+                $("#pay_period_text").html(optionText);
+                $("#balance_due").html(response.balance_due);
+			} 
+		});
+    });
+
+    $(document).on("click", "#add_fee", function(e){
+        $.ajax({
+            type: "GET",
+            url: "/receipts/create",
+            success: function(data){
+                console.log(data);
+                $('#ui_content').html(data);
+                $("#modalll").modal('show');
+
+                $("#fee_id").select2({
+                    dropdownParent: $("#modalll")
+                });
+            }
+        });
+
+        e.preventDefault();
+    });
 
 });

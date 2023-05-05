@@ -40,4 +40,9 @@ class Fee extends Model
                 $query->where('type', 'Additional Fees');
             });
     }
+
+    public function scopeDefaultFee($query)
+    {
+        $query->where('colindex', 1);
+    }
 }
