@@ -335,7 +335,8 @@ $(function(){
 		});
     });
 
-    $(document).on("click", "#add_fee", function(e){
+    function addpaymentfee()
+    {
         $.ajax({
             type: "GET",
             url: "/receipts/create",
@@ -353,8 +354,18 @@ $(function(){
                 });
             }
         });
+    }
+
+    $(document).on("click", "#add_fee", function(e){
+        addpaymentfee();       
 
         e.preventDefault();
+    });
+
+    $(document).keyup(function (event) {
+	    if (event.keyCode == 113) {
+            addpaymentfee();
+        }
     });
 
     function parseCurrency(num) {
@@ -487,4 +498,75 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on("click","#delete_fee", function(e){
+		var fee = $(".checks:checked").attr("id");
+		if($(".checks:checked").length == 0){
+			showError('Please select atleast one checkbox/fee to delete!');	
+		}else{
+			$("#check_"+fee).remove();
+			var sum = 0;
+			// iterate through each td based on class and add the values
+			$(".amount").each(function() {
+			    var value = parseCurrency($(this).text());
+			    // add only if the value is number
+			    if(!isNaN(value) && value.length != 0) {
+			        sum += parseFloat(value);
+			    }
+			});
+			var total = sum.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+			$("#total_amount").val(total);
+			if(total == '0.00'){
+				$("#feestobepayed").html('<tr id="norecord"><td colspan="5" class="mid">No fees selected</td></tr>');
+			}
+			$("#delete_fee").prop("disabled",true);
+		}
+		e.preventDefault();
+	});
+
+    $(document).on("submit", "#form_payment", function(e){
+        var postData = $("#form_receipt, #form_payment").serializeArray();
+        var amount = $("#total_amount").val();
+
+        if(parseFloat(amount) <= 0 || amount == '')
+        {
+			showError('Amount can not be empty, zero or lower! Please check value and try again!');
+		}else{
+            $.ajax({
+                type: "POST",
+                url:  "/receipts/",
+                dataType: 'json',
+                data:  postData,
+                cache: false, 
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Transaction<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
+                success: function(response){
+                    console.log(response);
+                    $("#confirmation").dialog('close');
+                    
+                },
+                error: function (data) {
+                    console.log(data);
+                    $("#confirmation").dialog('close');
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) == false) {
+                        showError('Something went wrong! System encountered some errors please check entries!');
+                        $.each(errors.errors, function (key, value) {
+                            $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                        });
+                    }
+                }
+            });
+        }
+
+        e.preventDefault();
+    });
 });

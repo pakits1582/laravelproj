@@ -424,5 +424,8 @@ div.dataTables_wrapper {
 	font-weight: bold !important;
 }
 
-
+#payment_schedule
+{
+	min-height: 300px;
+}
 

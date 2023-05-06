@@ -29,14 +29,16 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="receipt_no"  class="m-0 font-weight-bold text-primary">* Receipt No.</label>
-                                                <input type="text" name="receipt_no" id="receipt_no" class="form-control text-uppercase biginput"  value="{{ $last_user_receiptno }}" placeholder="Receipt No.">
+                                                <input type="text" name="receipt_no" id="receipt_no" required class="form-control text-uppercase biginput"  value="{{ $last_user_receiptno }}" placeholder="Receipt No.">
+                                                <div id="error_receipt_no"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6"></div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="receipt_date"  class="m-0 font-weight-bold text-primary">* Date</label>
-                                                <input type="text" name="receipt_date" id="receipt_date" class="form-control text-uppercase biginput datepicker" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" placeholder="">
+                                                <input type="text" name="receipt_date" id="receipt_date" required class="form-control text-uppercase biginput datepicker" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" placeholder="">
+                                                <div id="error_receipt_date"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -44,15 +46,17 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Student</label>
-                                                <select name="student_id" class="form-control select clearable" id="student">
+                                                <select name="student_id" class="form-control select clearable" required id="student">
                                                     <option value="">- search student -</option>
                                                 </select>
+                                                <div id="error_student_id"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="payor_name" class="m-0 font-weight-bold text-primary">Payor Name</label>
-                                                <input type="text" name="payor_name" id="payor_name" class="form-control text-uppercase clearable" value="" placeholder="">
+                                                <input type="text" name="payor_name" id="payor_name" required class="form-control text-uppercase clearable" value="" placeholder="">
+                                                <div id="error_payor_name"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -61,7 +65,8 @@
                                             <div class="form-group">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Payment Period</label>
                                                 <input type="text" id="period" class="form-control text-uppercase" readonly value="{{ session('periodname') }}" placeholder="">
-                                                <input type="hidden" name="period_id" id="period_id" value="{{ session('current_period') }}">
+                                                <input type="hidden" name="period_id" id="period_id" required value="{{ session('current_period') }}">
+                                                <div id="error_period_id"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -81,7 +86,7 @@
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <label for="program" class="m-0 font-weight-bold text-primary">Program</label>
-                                                <input type="text" name="program" id="program" class="form-control text-uppercase clearable text-uppercase" readonly value="" placeholder="">
+                                                <input type="text" id="program" class="form-control text-uppercase clearable text-uppercase" readonly value="" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-md-3">

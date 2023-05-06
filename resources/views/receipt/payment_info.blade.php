@@ -2,7 +2,7 @@
     @csrf
     <div class="row">
         <div class="col-md-9">
-            <div class="row align-items-end">
+            <div class="row align-items-start">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="term" class="m-0 font-weight-bold text-primary">Bank Name</label>
@@ -20,18 +20,20 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="check_no" class="m-0 font-weight-bold text-primary">Check No.</label>
-                        <input type="text" id="check_no" class="form-control text-uppercase clearable" value="" placeholder="">
+                        <input type="text" name="check_no" id="check_no" class="form-control text-uppercase clearable" value="" placeholder="">
+                        <div id="error_check_no"></div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="deposit_date" class="m-0 font-weight-bold text-primary">Deposite Date</label>
-                        <input type="text" id="deposit_date" class="form-control text-uppercase clearable" readonly value="" placeholder="">
+                        <input type="text" name="deposit_date" id="deposit_date" class="form-control text-uppercase clearable datepicker" value="" placeholder="">
+                        <div id="error_deposit_date"></div>
                     </div>
                 </div>
                 <div class="col-md-4 mid">
                     <div class="form-group" id="button_group">
-                        <button type="submit" id="add_fee" class="btn btn-success btn-icon-split mb-0">
+                        <button type="button" id="add_fee" class="btn btn-success btn-icon-split mb-0">
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus"></i>
                             </span>
@@ -67,7 +69,7 @@
                                 <tr>
                                     <td colspan="4" class="right"><h2 class="m-0">TOTAL</h1></td>
                                     <td>
-                                        <input type="text" name="total_amount" id="total_amount" class="biginput form-control text-uppercase clearable" readonly value="" placeholder="">
+                                        <input type="text" name="total_amount" id="total_amount" required class="biginput form-control text-uppercase clearable" readonly value="" placeholder="">
                                     </td>
                                 </tr>
                             </tfoot>
@@ -78,9 +80,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline">
-                        <input type="hidden" value="0" name="cancel_receipt" >
-                        <input type="checkbox" class="checkbox" name="cancel_receipt" value="1" id="cancel_receipt"> Cancel Transaction</label> | 
-                    <a href="#" id="reprint_receipt"><label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline">Re-print Receipt</label></a>
+                        <input type="checkbox" class="checkbox" value="1" id="cancel_receipt"> Cancel Transaction</label> | 
+                        <a href="#" id="reprint_receipt"><label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline">Re-print Receipt</label></a>
                 </div>
                 <div class="col-md-6 right">
                     <div class="form-group" id="button_group">
@@ -96,7 +97,7 @@
         </div>
         <div class="col-md-3 d-flex flex-column">
             <label for="code" class="m-0 font-weight-bold text-primary">Payment Schedule</label>
-            <div id="payment_schedule" class="border border-primary h-100 p-2"></div>
+            <div id="payment_schedule" class="border border-primary p-2"></div>
         </div>
     </div>
 </form>

@@ -12,6 +12,7 @@ use App\Services\PeriodService;
 use App\Services\ReceiptService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreReceiptRequest;
 
 class ReceiptController extends Controller
 {
@@ -77,9 +78,11 @@ class ReceiptController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreReceiptRequest $request)
     {
-        //
+        $saved_receipt = $this->receiptService->saveReceipt($request);
+
+        return $saved_receipt;
     }
 
     /**
