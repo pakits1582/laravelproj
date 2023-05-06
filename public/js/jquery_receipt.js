@@ -369,6 +369,8 @@ $(function(){
             url: "/fees/"+fee_id,
             success: function(data){
                 console.log(data);
+
+                var fees_selected = '';
                 if(!jQuery.isEmptyObject(data))
                 {
                     $("#fee_code").val(data.fee_info.code);
@@ -378,11 +380,111 @@ $(function(){
 
                     if(!jQuery.isEmptyObject(data.compounded_fees))
                     {
-                        alert('xxx');
+						$.each(data.compounded_fees, function(key,value) {
+                            fees_selected += '<input type="hidden" name="feeselected"';
+                            fees_selected += 'value="'+value.default_value+'"'; 
+                            fees_selected += 'id="'+value.id+'"';
+                            fees_selected += 'data-feecode="'+value.code+'"';
+                            fees_selected += 'data-feedesc="'+value.name+'"';
+                            fees_selected += 'data-type="'+value.feetype.type+'"'; 
+                            fees_selected += 'data-inassess="'+value.feetype.inassess+'"'; 
+                            fees_selected += ' data-compound="1" />';
+						}); 
+                    }else{
+                        fees_selected += '<input type="hidden" name="feeselected"';
+                        fees_selected += 'value="'+data.fee_info.default_value+'"'; 
+                        fees_selected += 'id="'+data.fee_info.id+'"';
+                        fees_selected += 'data-feecode="'+data.fee_info.code+'"';
+                        fees_selected += 'data-feedesc="'+data.fee_info.name+'"';
+                        fees_selected += 'data-type="'+data.fee_info.feetype.type+'"'; 
+                        fees_selected += 'data-inassess="'+data.fee_info.feetype.inassess+'"'; 
+                        fees_selected += '/>';
                     }
                 }
+                $("#selectedfeeshidden").html(fees_selected);
             }
         });
+    });
+
+    $(document).on("submit","#addpaymentfee_form", function(e){
+        var amount = $("#fee_amount").val();
+
+        if(parseFloat(amount) <= 0)
+        {
+			showError('Amount can not be zero or lower! Please check value and try again!');
+		}else{
+            let checkbox = $("input:checkbox.checks");
+			let selectedfeeshidden = $("input[name='feeselected']");
+
+            if((checkbox.length+selectedfeeshidden.length) > 6){
+				showError('Maximum number of fees in a receipt is 6!')
+			}else{
+				var tablerow = '';
+				if(selectedfeeshidden.length > 0)
+                {
+					selectedfeeshidden.each(function(){
+						let feeid    = $(this).attr("id")
+						//let defval = ($(this).attr("value") == '') ? amount : $(this).attr("value");
+						let defval;
+						if($(this).attr("data-compound") == 1){
+							defval = $(this).attr("value");
+						}else{
+							defval = amount;
+						}
+						let feecode  = $(this).attr("data-feecode")
+						let feedesc  = $(this).attr("data-feedesc")
+						let feetype  = $(this).attr("data-type")
+						let inassess = $(this).attr("data-inassess")
+						//alert(feeid+'-'+defval+'-'+feecode+'-'+feedesc+'-'+feetype+'-'+inassess);
+						let duplifee = 0;
+						let count = 0;
+
+						checkbox.each(function() {
+						    var val = $(this).val();
+						    duplifee = (feeid == val) ? 1 : 0;
+						    count ++;
+						});
+
+						var checkid = (duplifee == 1) ? feeid+'_'+count : feeid;
+						var num = parseFloat(defval).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+
+						    tablerow += '<tr class="label" id="check_'+checkid+'">';
+							tablerow += '<td class="mid"><input type="checkbox" id="'+checkid+'" value="'+feeid+'"  class="checks nomargin"/>';
+							tablerow += '<input type="hidden" name="fees[]" value="'+feeid+'"/></td>';
+							tablerow += '<td><input type="hidden" name="feecodes[]" value="'+feecode+'" />'+feecode+'</td>';
+							tablerow += '<td>'+feedesc+'</td>';
+							tablerow += '<td>'+feetype+'</td>';
+							tablerow += '<td class="amount right"><input type="hidden" name="amount[]" value="'+num+'" />'+num;
+							tablerow += '<input type="hidden" name="inassess[]" value="'+inassess+'" /></td>';
+							tablerow += '</tr>';
+					});
+					/*alert(tablerow);
+					console.log(tablerow);*/
+
+					$("#norecord").remove();
+					$('#feestobepayed').append(tablerow);
+
+					var sum = 0;
+					// iterate through each td based on class and add the values
+					$(".amount").each(function() {
+					    var value = parseCurrency($(this).text());
+					    // add only if the value is number
+					    if(!isNaN(value) && value.length != 0) {
+					        sum += parseFloat(value);
+					    }
+					});
+
+					var total = sum.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+					$("#total_amount").val(total);
+					$('#addpaymentfee_form')[0].reset();
+					$('#modalll').modal('toggle'); 
+					$("#save_payment").focus();
+				}else{
+					showError('The system encountered internal problem, please refresh page and try again!');
+				}
+			}
+        }
+        e.preventDefault();
     });
 
 });

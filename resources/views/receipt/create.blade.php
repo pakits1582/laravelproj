@@ -88,7 +88,14 @@
                                     </div>
                                 </div>
                                 <div id="selectedfeeshidden">
-
+                                    <input type="hidden" name="feeselected" 
+                                        value="{{ ($default_fee) ? $default_fee->amount  : '' }}" 
+                                        id="{{ ($default_fee) ? $default_fee->id  : '' }}"
+                                        data-feecode="{{ ($default_fee) ? $default_fee->code  : '' }}" 
+                                        data-feedesc="{{ ($default_fee) ? $default_fee->name  : '' }}" 
+                                        data-type="{{ ($default_fee) ? $default_fee->feetype->type  : '' }}" 
+                                        data-inassess="{{ ($default_fee) ? $default_fee->feetype->inassess  : '' }}" 
+                                    />
                                 </div>
                                 <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Add Fee</button>
                                 </form>
