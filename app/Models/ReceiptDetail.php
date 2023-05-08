@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Receipt extends Model
+class ReceiptDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['period_id', 'receipt_no', 'fee_id', 'student_id', 'bank_id', 'deposit_date', 'receipt_date', 'amount', 'deffered', 'cancelled', 'cancel_remark', 'in_assess', 'user_id'];
+    protected $table = 'receipt_details';
+    protected $fillable = ['receipt_no', 'source_id', 'type', 'fee_id', 'amount', 'payor_name'];
 
     public function payorName(): Attribute
     {
@@ -19,4 +20,6 @@ class Receipt extends Model
             set: fn ($value) => strtoupper($value)
         );
     }
+
+    
 }
