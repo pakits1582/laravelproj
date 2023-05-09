@@ -23,7 +23,8 @@ class StudentledgerService
             'user' => ['info', 'instructorinfo', 'studentinfo'],
             'scdc_info' => ['scholarshipdiscount'],
             'assessment_info',
-            'studentadjustment_info'
+            'studentadjustment_info',
+            'receipt_info' => ['fee', 'student', 'bank']
         ]);
 
         $ledgers->whereHas('enrollment', function ($query) use ($period_id, $student_id) {
@@ -36,7 +37,7 @@ class StudentledgerService
 
         $allSOA = $ledgers->get();
 
-        //return $allSOA;
+        return $allSOA;
         $soa = [];
         if($allSOA)
         {
@@ -142,6 +143,8 @@ class StudentledgerService
                             $newLedger['code'] = 'SA #'.$ledger['source_id'];
                             $newLedger['debitcredit'] = ($ledger['ledger_info']['type'] == 1) ? 'credit' : 'debit';
                             break;
+                        case 'R':
+
                     }
             
                     $newSoa['soa'][] = $newLedger;
@@ -272,7 +275,7 @@ class StudentledgerService
             $studentledger->details()->insert($studentledgerdetailsArray);
         }
 
-        return true;
+        return $feesArraytoledgerdetails;
     }
 
     public function returnPreviousBalanceRefund($student_id, $period_id)

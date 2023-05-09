@@ -19,4 +19,19 @@ class Receipt extends Model
             set: fn ($value) => strtoupper($value)
         );
     }
+
+    public function fee()
+    {
+        return $this->belongsTo(Fee::class, 'fee_id', 'id');
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id', 'id');
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class, 'bank_id', 'id');
+    }
 }

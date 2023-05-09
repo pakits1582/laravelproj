@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\Receipt;
 use App\Models\Enrollment;
+use App\Models\ReceiptDetail;
 use Illuminate\Support\Str;
+use App\Models\Studentledger;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +18,7 @@ class ReceiptService
         $nonassessfeesArr = [];
 
         $nonAssessReceiptDetailsArray = [];
+        $inAssessReceiptDetailsArray = [];
         $receiptArray = [];
 
         //SEPARATE INASSESS FEES AND NON ASSESS FEES
@@ -49,7 +52,7 @@ class ReceiptService
             }
         }
 
-        $enrollment = Enrollment::with(['student','assessment'])->where('student_id', $request->student_id)->where('period_id', $request->period_id)->first();
+        $enrollment = Enrollment::with(['student'])->where('student_id', $request->student_id)->where('period_id', $request->period_id)->first();
     
         if($enrollment)
         { 
@@ -85,9 +88,48 @@ class ReceiptService
 
         DB::beginTransaction();
 
+        if($enrollment && !empty($inassessfeesArr))
+        {
+            if($enrollment->validated == 0 && $enrollment->assessed == 1)
+            {
+                //VALIDATE ENROLLMENT
+                $enrollment->load([
+                    'studentledger_assessment',
+                    'grade',
+                    'enrolled_classes' => ['class'],
+                    'assessment' => ['details']
+                ]);
 
+                $validation = (new ValidationService())->validation($enrollment);
+            }
 
-        return $receiptArray;
+            $ledgerData = [
+                'enrollment_id' => $enrollment->id,
+                'source_id' => $request->receipt_no,
+                'type' => 'R',
+                'amount' => '-'.$total_inassess,
+                'user_id' => Auth::user()->id
+            ];
+
+            $studentledger = Studentledger::firstOrCreate($ledgerData, $ledgerData);
+            $ledgerDetails = (new StudentledgerService())->insertCreditStudentledgerDetails($studentledger, $enrollment, $total_inassess);
+            
+            if(!empty($ledgerDetails))
+            {
+                foreach ($ledgerDetails as $key => $fee) 
+                {
+                    $inAssessReceiptDetailsArray[] = ['receipt_no' => $request->receipt_no, 'source_id' => $enrollment->assessment->id, 'type' => 'A', 'fee_id' => $fee['fee_id'], 'amount' => str_replace(",", "", $fee['amount']), 'payor_name' => $request->payor_name];
+                }
+            }
+        }
+
+        Receipt::insert($receiptArray);
+        ReceiptDetail::insert($nonAssessReceiptDetailsArray);
+        ReceiptDetail::insert($inAssessReceiptDetailsArray);
+
+        DB::commit();
+
+        return true;
     }
 
 

@@ -22,27 +22,41 @@ class ValidationService
 
         DB::beginTransaction();
 
-        $validation->validated = 1;   
-        $validation->save();
+        $this->validation($validation);
 
-        $validation->grade()->delete();
-        $validation->studentledger_assessment()->delete();
+        DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Student enrollment successfully validated.',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
+    }
+
+    public function validation($enrollment)
+    {
+        $enrollment->validated = 1;   
+        $enrollment->save();
+
+        $enrollment->grade()->delete();
+        $enrollment->studentledger_assessment()->delete();
         
 
-        $grade = $validation->grade()->create([
-            'enrollment_id' => $validation->id,
-            'student_id' => $validation->student_id,
-            'period_id' => $validation->period_id,
-            'program_id' => $validation->program_id,
+        $grade = $enrollment->grade()->create([
+            'enrollment_id' => $enrollment->id,
+            'student_id' => $enrollment->student_id,
+            'period_id' => $enrollment->period_id,
+            'program_id' => $enrollment->program_id,
             'origin' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
-        if($validation->enrolled_classes->isNotEmpty()) 
+        if($enrollment->enrolled_classes->isNotEmpty()) 
         {
             $internal_grades = [];
-            foreach ($validation->enrolled_classes as $key => $enrolled_class) 
+            foreach ($enrollment->enrolled_classes as $key => $enrolled_class) 
             {
                 $internal_grades[] = [
                     'grade_id' => $grade->id,
@@ -60,20 +74,20 @@ class ValidationService
             $grade->internalgrades()->insert($internal_grades);
         }
 
-        $studentledger = $validation->studentledger_assessment()->create([
-            'enrollment_id' => $validation->id,
-            'source_id' => $validation->assessment->id,
+        $studentledger = $enrollment->studentledger_assessment()->create([
+            'enrollment_id' => $enrollment->id,
+            'source_id' => $enrollment->assessment->id,
             'type' => 'A',
-            'amount' => $validation->assessment->amount,
+            'amount' => $enrollment->assessment->amount,
             'user_id' => Auth::id(),
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
-        if($validation->assessment->details->isNotEmpty()) 
+        if($enrollment->assessment->details->isNotEmpty()) 
         {
             $studentledger_details = [];
-            foreach ($validation->assessment->details as $key => $assessment_detail) 
+            foreach ($enrollment->assessment->details as $key => $assessment_detail) 
             {
                 $studentledger_details[] = [
                     'studentledger_id' => $studentledger->id,
@@ -86,15 +100,6 @@ class ValidationService
 
             $studentledger->details()->insert($studentledger_details);
         }
-
-        DB::commit();
-
-        return [
-            'success' => true,
-            'message' => 'Student enrollment successfully validated.',
-            'alert' => 'alert-success',
-            'status' => 200
-        ];
     }
 
     public function unvalidateEnrollment($enrollment)

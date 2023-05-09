@@ -239,6 +239,9 @@ $(function(){
                 },
                 success: function(response){
                     $("#confirmation").dialog('close');
+                    $("#feestobepayed").html('<tr id="norecord"><td colspan="5" class="mid">No fees selected</td></tr>');
+                    $("#total_amount").val('');
+
                     console.log(response);
                     if(response.data === false)
                     {

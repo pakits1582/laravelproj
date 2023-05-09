@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('period_id')->index();
             $table->foreign('period_id')->references('id')->on('periods');
-            $table->integer('receipt_no')->unique()->index();
+            $table->integer('receipt_no')->index();
             $table->unsignedBigInteger('fee_id')->index()->nullable();
             $table->foreign('fee_id')->references('id')->on('fees')->nullOnDelete();
             $table->unsignedBigInteger('student_id')->index()->nullable();

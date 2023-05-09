@@ -44,8 +44,9 @@ class Studentledger extends Model
 
     public function receipt_info()
     {
-        //return $this->belongsTo(Studentadjustment::class, 'source_id', 'id');
+        return $this->belongsTo(Receipt::class, 'source_id', 'receipt_no')->where('in_assess', 1);
     }
+
 
     
 }
