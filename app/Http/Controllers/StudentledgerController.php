@@ -144,7 +144,9 @@ class StudentledgerController extends Controller
 
     public function computepaymentsched(Request $request)
     {
-        $payment_schedule = $this->studentledgerService->computePaymentSchedule($request->student_id, $request->period_id, $request->pay_period);
+       // return $request;
+
+        $payment_schedule = $this->studentledgerService->computePaymentSchedule($request->student_id, $request->period_id, $request->pay_period, $request->enrollment);
         
         return response()->json($payment_schedule);
     }

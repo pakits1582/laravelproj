@@ -5,6 +5,8 @@ $(function(){
 		}
 	});
 
+    var enrollment_outside;
+
     $("#student").select2({
 	    // dropdownParent: $("#ui_content3"),
         minimumInputLength: 2,
@@ -110,6 +112,7 @@ $(function(){
 									'OK':function(){
 										$(this).dialog('close');
                                         returnStudentInfo(student_id, period_id, student_info, response.data);
+                                        enrollment_outside = response.data;
 									},
 									'Cancel':function(){
                                         $(this).dialog('close');
@@ -120,6 +123,7 @@ $(function(){
 						$(".ui-dialog-titlebar").hide();
                     }else{
                         returnStudentInfo(student_id, period_id, student_info, response.data);
+                        enrollment_outside = response.data;
                     }
                 },
                 error: function (data) {
@@ -320,7 +324,7 @@ $(function(){
 			type: "POST",
 			url:  "/studentledgers/computepaymentsched",
 			dataType: 'json',
-			data:  {'student_id':student_id, 'period_id':period_id, 'pay_period': pay_period},
+			data:  {'student_id':student_id, 'period_id':period_id, 'pay_period': pay_period, 'enrollment':enrollment_outside},
 			cache: false, 
 			success: function(response){
 				console.log(response);

@@ -29,7 +29,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="receipt_no"  class="m-0 font-weight-bold text-primary">* Receipt No.</label>
-                                                <input type="text" name="receipt_no" id="receipt_no" required class="form-control text-uppercase biginput"  value="{{ $last_user_receiptno }}" placeholder="Receipt No.">
+                                                <input type="text" name="receipt_no" id="receipt_no" required class="form-control text-uppercase biginput"  value="{{ $last_user_receiptno+1 }}" placeholder="Receipt No.">
                                                 <div id="error_receipt_no"></div>
                                             </div>
                                         </div>

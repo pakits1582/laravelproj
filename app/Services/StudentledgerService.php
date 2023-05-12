@@ -2,16 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\AssessmentExam;
-use App\Models\Enrollment;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Enrollment;
 use App\Models\Studentledger;
+use App\Models\AssessmentExam;
 use App\Models\PaymentSchedule;
 use Illuminate\Support\Facades\DB;
 use App\Models\StudentledgerDetail;
-use App\Services\Enrollment\EnrollmentService;
 use Database\Seeders\StudentSeeder;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Enrollment\EnrollmentService;
 
 class StudentledgerService
 {
@@ -37,7 +38,6 @@ class StudentledgerService
 
         $allSOA = $ledgers->get();
 
-        return $allSOA;
         $soa = [];
         if($allSOA)
         {
@@ -144,7 +144,14 @@ class StudentledgerService
                             $newLedger['debitcredit'] = ($ledger['ledger_info']['type'] == 1) ? 'credit' : 'debit';
                             break;
                         case 'R':
-
+                            $particular = '';
+                            $particular .= $ledger['ledger_info']['fee']['name'];
+                            $particular .= ($ledger['ledger_info']['bank_id']) ? ' ['.$ledger['ledger_info']['bank']['name'].' - ('.Carbon::parse($ledger['ledger_info']['deposit_date'])->format('m-d-y').')]' : '';
+                            $newLedger['cancelled'] = $ledger['ledger_info']['cancelled'];
+                            $newLedger['cancel_remark'] = $ledger['ledger_info']['cancel_remark'];
+                            $newLedger['particular'] = $particular;
+                            $newLedger['code'] = 'OR #'.$ledger['source_id'];
+                            $newLedger['debitcredit'] = 'credit';
                     }
             
                     $newSoa['soa'][] = $newLedger;
@@ -303,7 +310,7 @@ class StudentledgerService
                 {
                     $amount = $ledger['amount'];
                     $type = $ledger['type'];
-                    $cancelled = $ledger['ledger_info']['receipt_info']['cancelled'] ?? 0;
+                    $cancelled = $ledger['ledger_info']['cancelled'] ?? 0;
                     $credit += ($amount < 0 && $type == 'R' && $cancelled == 0) ? $amount : 0;
                     $credit += ($amount < 0 && $type != 'R') ? $amount : 0;
                     $debit += ($amount >= 0) ? $amount : 0;
@@ -349,7 +356,7 @@ class StudentledgerService
                 {
                     $amount = $ledger['amount'];
                     $type = $ledger['type'];
-                    $cancelled = $ledger['ledger_info']['receipt_info']['cancelled'] ?? 0;
+                    $cancelled = $ledger['ledger_info']['cancelled'] ?? 0;
                     $credit += ($amount < 0 && $type == 'R' && $cancelled == 0) ? $amount : 0;
                     $credit += ($amount < 0 && $type != 'R') ? $amount : 0;
                     $debit += ($amount >= 0 && $type != 'A') ? $amount : 0;
@@ -360,16 +367,15 @@ class StudentledgerService
         return ['payment_schedules' => $payment_schedules, 'assessment_exam' => $enrollment['assessment']['exam'], 'debit' => $debit, 'credit' => $credit];
     }
 
-    public function computePaymentSchedule($student_id, $period_id, $pay_period)
+    public function computePaymentSchedule($student_id, $period_id, $pay_period, $enrollment)
     {
-        $enrollment = (new EnrollmentService())->studentEnrollment($student_id, $period_id, 1);
-        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $period_id)->where('educational_level_id', $enrollment->program->educational_level_id)->get();
-        $default_pay_period = (Auth::user()->paymentperiod) ? ((Auth::user()->paymentperiod->pay_period > max(array_keys($payment_schedules->toArray()))) ? max(array_keys($payment_schedules->toArray())) : Auth::user()->paymentperiod->pay_period) : 0;
-        
         if($enrollment == 'false')
         {
             return 'false';
         }
+
+        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $period_id)->where('educational_level_id', $enrollment['program']['educational_level_id'])->get();
+        $default_pay_period = (Auth::user()->paymentperiod) ? ((Auth::user()->paymentperiod->pay_period > max(array_keys($payment_schedules->toArray()))) ? max(array_keys($payment_schedules->toArray())) : Auth::user()->paymentperiod->pay_period) : 0;
 
         $soas = $this->getAllStatementOfAccounts($student_id, $period_id);
         $debit = 0;
@@ -383,7 +389,7 @@ class StudentledgerService
                 {
                     $amount = $ledger['amount'];
                     $type = $ledger['type'];
-                    $cancelled = $ledger['ledger_info']['receipt_info']['cancelled'] ?? 0;
+                    $cancelled = $ledger['ledger_info']['cancelled'] ?? 0;
                     $credit += ($amount < 0 && $type == 'R' && $cancelled == 0) ? $amount : 0;
                     $credit += ($amount < 0 && $type != 'R') ? $amount : 0;
                     $debit += ($amount >= 0 && $type != 'A') ? $amount : 0;
@@ -391,12 +397,12 @@ class StudentledgerService
             }
         }
 
-        $assessment_exam = $enrollment->assessment->exam;
+        $assessment_exam = $enrollment['assessment']['exam'];
         $balance_due = 0;
 
         if(max(array_keys($payment_schedules->toArray())) ==  $pay_period)
         {   
-            $total_payables = $assessment_exam->amount+$debit;
+            $total_payables = $assessment_exam['amount']+$debit;
             $balance_due = $total_payables-str_replace('-', "", $credit);
         }else{
             $rembal = 0;
@@ -405,10 +411,10 @@ class StudentledgerService
             {
                 if($i == 0)
                 {
-                    $rembal += $assessment_exam->downpayment;
+                    $rembal += $assessment_exam['downpayment'];
                 }else{
                     $exam = 'exam'.$i;
-                    $rembal += $assessment_exam->$exam;
+                    $rembal += $assessment_exam[$exam];
                 }
             }
 

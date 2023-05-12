@@ -1,3 +1,4 @@
+{{-- @dump($soas) --}}
 @if ($soas)
     <div class="row">
         <div class="col-lg-12 mx-auto">
@@ -63,22 +64,20 @@
                                                     $acronym = (count($name) == 1) ? $name[0] : current($name)[0].'. '.end($name);
                                                 }
 
-                                                //$particulars = ($r['type'] == 'R' && $r['cancelled'] == 1) ? $r['particulars'].' - CANCELLED ('.$r['cancel_remark'].')' : $r['particulars'];
+                                                $particular = ($ledger['type'] == 'R' && $ledger['cancelled'] == 1) ? $ledger['particular'].' - CANCELLED ('.$ledger['cancel_remark'].')' : $ledger['particular'];
                                             @endphp 
                                             <tr>
                                                 <td class="w200">{{ \Carbon\Carbon::parse($ledger['created_at'])->format('F d, Y') }}</td>
                                                 <td class="w150">{{ $ledger['code'] }}</td>
-                                                <td class="">{{ $ledger['particular'] }}</td>
+                                                <td class="">{{ $particular }}</td>
                                                 <td class="w100">{{ number_format($debit,2) }}</td>
                                                 <td class="w100">{{ number_format(str_replace('-', "", $credit),2) }}</td>
                                                 <td class="w100">{{ number_format($balance,2) }}</td>
                                                 <td class="w150">{{ $acronym }}</td>
-
-                                                
                                                 @php
                                                     $debittotal += $debit;
-                                                    //$credittotal += ($ledger['type' == 'R'] && $ledger['cancelled'] == 1) ? 0 : $credit; 
-                                                    $credittotal += $credit; 
+                                                    $credittotal += ($ledger['type'] == 'R' && $ledger['cancelled'] == 1) ? 0 : $credit; 
+                                                    //$credittotal += $credit; 
                                                 @endphp
                                             </tr>
                                         @endforeach
