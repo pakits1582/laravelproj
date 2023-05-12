@@ -129,7 +129,11 @@ class ReceiptService
 
         DB::commit();
 
-        return true;
+        return [
+            'success' => true,
+            'message' => 'Payment sucessfully saved!',
+            'alert' => 'alert-success'
+        ];
     }
 
 
