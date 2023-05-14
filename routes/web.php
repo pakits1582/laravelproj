@@ -452,6 +452,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:receipts']], function () {
+        //Route::get('/receipts/{receipt}/receipt_no', [ReceiptController::class, 'show']);
         Route::get('/receipts/addpaymentfee', [ReceiptController::class, 'addpaymentfee']);
         Route::view('/receipts/addbank', 'receipt.addbank')->middleware(['inaccess:receipts']);
         Route::post('/receipts/savebank', [ReceiptController::class, 'storebank'])->name('savebank')->middleware(['inaccess:receipts']);

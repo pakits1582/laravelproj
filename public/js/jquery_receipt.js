@@ -576,4 +576,25 @@ $(function(){
 
         e.preventDefault();
     });
+
+    $(document).on("keyup","#receipt_no", function(e){
+		if (e.keyCode == '13')  {
+			var receipt_no = $("#receipt_no").val();
+
+            if(receipt_no)
+            {
+                $.ajax({
+                    type: "GET",
+                    url:  "/receipts/"+receipt_no,
+                    dataType: 'json',
+                    cache: false, 
+                    success: function(response){
+                        console.log(response);
+                    } 
+                });
+            }else{
+                location.reload();
+            }
+		}
+	});
 });

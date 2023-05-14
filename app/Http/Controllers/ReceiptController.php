@@ -91,9 +91,11 @@ class ReceiptController extends Controller
      * @param  \App\Models\Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function show(Receipt $receipt)
+    public function show($receipt_no)
     {
-        //
+        $receipt_info = Receipt::with(['student', 'fee', 'bank', 'details'])->where('receipt_no', $receipt_no)->get();
+
+        return $receipt_info;
     }
 
     /**

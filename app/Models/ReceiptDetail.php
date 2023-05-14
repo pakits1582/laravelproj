@@ -16,10 +16,13 @@ class ReceiptDetail extends Model
     public function payorName(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => strtoupper($attributes['particular']),
+            get: fn ($value, $attributes) => strtoupper($attributes['payor_name']),
             set: fn ($value) => strtoupper($value)
         );
     }
 
-    
+    public function receipt()
+    {
+        return $this->belongsTo(Receipt::class, 'receipt_no', 'receipt_no');
+    }
 }
