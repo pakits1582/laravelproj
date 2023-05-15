@@ -221,10 +221,8 @@ $(function(){
         });
     }
 
-    $(document).on("change", "#student", function(){
-        var student_id = $("#student").val();
-        var period_id = $("#period_id").val();
-
+    function studentInfo(student_id, period_id)
+    {
         if(student_id){
             $.ajax({
                 url: "/students/"+student_id,
@@ -266,6 +264,13 @@ $(function(){
                 }
             });
         }
+    }
+
+    $(document).on("change", "#student", function(){
+        var student_id = $("#student").val();
+        var period_id = $("#period_id").val();
+
+        studentInfo(student_id, period_id);
     });
 
     $(document).on("click", "#pay_period_default", function(){
@@ -590,6 +595,11 @@ $(function(){
                     cache: false, 
                     success: function(response){
                         console.log(response);
+                        if(response.student_id)
+                        {
+                            studentInfo(response.student_id, response.period_id);
+                            
+                        }
                     } 
                 });
             }else{

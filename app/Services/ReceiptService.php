@@ -118,7 +118,15 @@ class ReceiptService
             {
                 foreach ($ledgerDetails as $key => $fee) 
                 {
-                    $inAssessReceiptDetailsArray[] = ['receipt_no' => $request->receipt_no, 'source_id' => $enrollment->assessment->id, 'type' => 'A', 'fee_id' => $fee['fee_id'], 'amount' => str_replace(",", "", $fee['amount']), 'payor_name' => $request->payor_name];
+                    $inAssessReceiptDetailsArray[] = [
+                        'receipt_no' => $request->receipt_no, 
+                        'source_id' => $enrollment->assessment->id, 
+                        'type' => 'A', 'fee_id' => $fee['fee_id'], 
+                        'amount' => str_replace(",", "", $fee['amount']), 
+                        'payor_name' => $request->payor_name,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
                 }
             }
         }
@@ -136,5 +144,44 @@ class ReceiptService
         ];
     }
 
+    public function receiptInfo($receipt_no)
+    {
+        $receipt_info = Receipt::with(['period','student', 'fee' => ['feetype'], 'bank', 'details'])->where('receipt_no', $receipt_no)->get();
 
+        if($receipt_info->isEmpty())
+        {
+            return false;
+        }
+
+        $receipt_details = [];
+        $total_amount = 0;
+
+        foreach ($receipt_info as $key => $receipt) 
+        {
+            $receipt_details[] = [
+                'fee_id' => $receipt->fee_id,
+                'fee_code' => $receipt->fee->code,
+                'fee_name' => $receipt->fee->name,
+                'fee_type' => $receipt->fee->feetype->type,
+                'amount' => $receipt->amount
+            ];
+            $total_amount += $receipt->amount;
+        }
+
+        $receipt_info = [
+            'student_id' => $receipt_info[0]->student_id,
+            'payor_name' => $receipt_info[0]->details[0]->payor_name,
+            'receipt_date' => $receipt_info[0]->receipt_date,
+            'period_id' => $receipt_info[0]->period_id,
+            'period_name' => $receipt_info[0]->period->name,
+            'bank_id' => $receipt_info[0]->bank_id,
+            'check_no' => $receipt_info[0]->check_no,
+            'deposite_date' => $receipt_info[0]->deposit_date,
+            'cancelled' => $receipt_info[0]->cancelled,
+            'total_amount' => $total_amount,
+            'receipt_details' => $receipt_details
+        ];
+
+        return $receipt_info;
+    }
 }

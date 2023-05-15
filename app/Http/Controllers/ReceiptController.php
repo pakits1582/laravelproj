@@ -93,9 +93,9 @@ class ReceiptController extends Controller
      */
     public function show($receipt_no)
     {
-        $receipt_info = Receipt::with(['student', 'fee', 'bank', 'details'])->where('receipt_no', $receipt_no)->get();
+        $receipt_info = $this->receiptService->receiptInfo($receipt_no);
 
-        return $receipt_info;
+        return response()->json($receipt_info);
     }
 
     /**

@@ -35,6 +35,11 @@ class Receipt extends Model
         return $this->belongsTo(Bank::class, 'bank_id', 'id');
     }
 
+    public function period()
+    {
+        return $this->belongsTo(Period::class, 'period_id', 'id');
+    }
+
     public function details()
     {
         return $this->hasMany(ReceiptDetail::class, 'receipt_no', 'receipt_no');
