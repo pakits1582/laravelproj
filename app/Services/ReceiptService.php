@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Receipt;
 use App\Models\Enrollment;
-use App\Models\ReceiptDetail;
 use Illuminate\Support\Str;
+use App\Models\ReceiptDetail;
 use App\Models\Studentledger;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class ReceiptService
                 'bank_id' => $request->bank_id,
                 'check_no' => $request->check_no,
                 'deposit_date' => $request->deposit_date,
-                'receipt_date' => $request->receipt_date,
+                'receipt_date' => Carbon::create($request->receipt_date)->setTimeFromTimeString(Carbon::now()->toTimeString()),
                 'amount' => str_replace(",", "", $request->amount[$key]),
                 'in_assess' => $request->inassess[$key],
                 'user_id' => Auth::id(),
@@ -146,8 +147,10 @@ class ReceiptService
 
     public function receiptInfo($receipt_no)
     {
-        $receipt_info = Receipt::with(['period','student', 'fee' => ['feetype'], 'bank', 'details'])->where('receipt_no', $receipt_no)->get();
+        $receipt_info = Receipt::with(['period','student' => ['user'], 'fee' => ['feetype'], 'bank', 'details'])->where('receipt_no', $receipt_no)->get();
 
+        //return $receipt_info;
+        
         if($receipt_info->isEmpty())
         {
             return false;
@@ -159,29 +162,70 @@ class ReceiptService
         foreach ($receipt_info as $key => $receipt) 
         {
             $receipt_details[] = [
+                'id' => $receipt->id,
                 'fee_id' => $receipt->fee_id,
                 'fee_code' => $receipt->fee->code,
                 'fee_name' => $receipt->fee->name,
                 'fee_type' => $receipt->fee->feetype->type,
-                'amount' => $receipt->amount
+                'amount' => $receipt->amount,
+                'inassess' => $receipt->inassess
             ];
             $total_amount += $receipt->amount;
         }
 
         $receipt_info = [
             'student_id' => $receipt_info[0]->student_id,
+            'student_name' => $receipt_info[0]->student->name,
+            'student_idno' => $receipt_info[0]->student->user->idno,
             'payor_name' => $receipt_info[0]->details[0]->payor_name,
             'receipt_date' => $receipt_info[0]->receipt_date,
             'period_id' => $receipt_info[0]->period_id,
             'period_name' => $receipt_info[0]->period->name,
             'bank_id' => $receipt_info[0]->bank_id,
             'check_no' => $receipt_info[0]->check_no,
-            'deposite_date' => $receipt_info[0]->deposit_date,
+            'deposit_date' => $receipt_info[0]->deposit_date,
             'cancelled' => $receipt_info[0]->cancelled,
-            'total_amount' => $total_amount,
+            'total_amount' => number_format($total_amount,2),
             'receipt_details' => $receipt_details
         ];
 
         return $receipt_info;
+    }
+
+    public function cancelReceipt($request)
+    {
+        if(!$request->cancel_remark)
+        {
+            return [
+                'success' => false,
+                'message' => 'Cancellation remark is required!',
+                'alert' => 'alert-danger'
+            ];
+        }
+
+        $receipt_info = Receipt::with(['details','receipt_ledger' => ['details']])->where('receipt_no', $request->receipt_no)->first();
+
+        if(!$receipt_info)
+        {
+            return [
+                'success' => false,
+                'message' => 'Receipt Number is not yet in use, you can not cancel unused receipt.',
+                'alert' => 'alert-danger'
+            ];
+        }
+
+        DB::beginTransaction();
+
+        $receipt_info->details()->delete();
+        $receipt_info->update(['cancelled' => 1, 'cancel_remark' => strtoupper($request->cancel_remark)]);
+        $receipt_info->receipt_ledger->details()->delete();
+
+        DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Receipt cancelled sucessfully!',
+            'alert' => 'alert-success'
+        ];
     }
 }

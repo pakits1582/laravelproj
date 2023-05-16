@@ -452,10 +452,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:receipts']], function () {
-        //Route::get('/receipts/{receipt}/receipt_no', [ReceiptController::class, 'show']);
+        Route::post('/receipts/cancelreceipt', [ReceiptController::class, 'cancelreceipt']);
         Route::get('/receipts/addpaymentfee', [ReceiptController::class, 'addpaymentfee']);
-        Route::view('/receipts/addbank', 'receipt.addbank')->middleware(['inaccess:receipts']);
-        Route::post('/receipts/savebank', [ReceiptController::class, 'storebank'])->name('savebank')->middleware(['inaccess:receipts']);
+        Route::view('/receipts/addbank', 'receipt.addbank');
+        Route::post('/receipts/savebank', [ReceiptController::class, 'storebank'])->name('savebank');
         Route::resource('receipts', ReceiptController::class)->missing(function (Request $request) {
             return Redirect::route('receipts.index');
         }); 

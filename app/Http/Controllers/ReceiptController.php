@@ -131,4 +131,11 @@ class ReceiptController extends Controller
     {
         //
     }
+
+    public function cancelreceipt(Request $request)
+    {
+        $cancel_receipt = $this->receiptService->cancelReceipt($request);
+
+        return response()->json($cancel_receipt);
+    }
 }

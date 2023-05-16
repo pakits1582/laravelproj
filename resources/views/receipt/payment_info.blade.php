@@ -6,7 +6,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="term" class="m-0 font-weight-bold text-primary">Bank Name</label>
-                        <select name="bank_id" class="form-control select clearable" id="bank_id">
+                        <select name="bank_id" class="form-control select bank_clearable" id="bank_id">
                             <option value="">- search bank -</option>
                             @if ($banks)
                                 @foreach ($banks as $bank)
@@ -20,14 +20,14 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="check_no" class="m-0 font-weight-bold text-primary">Check No.</label>
-                        <input type="text" name="check_no" id="check_no" class="form-control text-uppercase clearable" value="" placeholder="">
+                        <input type="text" name="check_no" id="check_no" class="form-control text-uppercase bank_clearable" value="" placeholder="">
                         <div id="error_check_no"></div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="deposit_date" class="m-0 font-weight-bold text-primary">Deposite Date</label>
-                        <input type="text" name="deposit_date" id="deposit_date" class="form-control text-uppercase clearable datepicker" value="" placeholder="">
+                        <label for="deposit_date" class="m-0 font-weight-bold text-primary">Deposit Date</label>
+                        <input type="text" name="deposit_date" id="deposit_date" class="form-control text-uppercase bank_clearable datepicker" value="" placeholder="">
                         <div id="error_deposit_date"></div>
                     </div>
                 </div>
@@ -79,9 +79,9 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline">
+                    <label for="cancel_receipt"  class="m-0 font-weight-bold text-primary checkbox-inline">
                         <input type="checkbox" class="checkbox" value="1" id="cancel_receipt"> Cancel Transaction</label> | 
-                        <a href="#" id="reprint_receipt"><label for="new"  class="m-0 font-weight-bold text-primary checkbox-inline">Re-print Receipt</label></a>
+                        <a href="#" id="reprint_receipt"><label for=""  class="m-0 font-weight-bold text-primary checkbox-inline">Re-print Receipt</label></a>
                 </div>
                 <div class="col-md-6 right">
                     <div class="form-group" id="button_group">

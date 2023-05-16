@@ -44,4 +44,9 @@ class Receipt extends Model
     {
         return $this->hasMany(ReceiptDetail::class, 'receipt_no', 'receipt_no');
     }
+
+    public function receipt_ledger()
+    {
+        return $this->belongsTo(Studentledger::class, 'receipt_no', 'source_id')->where('type', 'R');
+    }
 }

@@ -221,6 +221,14 @@ $(function(){
         });
     }
 
+    function clearFields()
+    {
+        $("#feestobepayed").html('<tr id="norecord"><td colspan="5" class="mid">No fees selected</td></tr>');
+        $("#total_amount, .bank_clearable").val('');
+        $("#cancel_receipt").prop("checked", false).prop("disabled", false);
+        $("#save_payment").prop("disabled", false);
+    }
+
     function studentInfo(student_id, period_id)
     {
         if(student_id){
@@ -241,8 +249,7 @@ $(function(){
                 },
                 success: function(response){
                     $("#confirmation").dialog('close');
-                    $("#feestobepayed").html('<tr id="norecord"><td colspan="5" class="mid">No fees selected</td></tr>');
-                    $("#total_amount").val('');
+                    clearFields();
 
                     console.log(response);
                     if(response.data === false)
@@ -597,9 +604,46 @@ $(function(){
                         console.log(response);
                         if(response.student_id)
                         {
-                            studentInfo(response.student_id, response.period_id);
-                            
+                            var $newOption = $("<option selected='selected'></option>").val(response.student_id).text('('+response.student_idno+') '+response.student_name);
+			                $("#student").append($newOption).trigger('change');
                         }
+
+                        window.setTimeout(function(){
+                            $("#payor_name").val(response.payor_name);
+                            $("#receipt_date").val(response.receipt_date);
+                            $("#period_id").val(response.period_id);
+                            $("#period").val(response.period_name);
+
+                            $("#cancel_receipt").prop("checked", (response.cancelled == 1) ? true : false);
+                            $("#cancel_receipt").prop("disabled", (response.cancelled == 1) ? true : false);		
+
+                            $("#bank_id").val(response.bank_id);
+                            $("#check_no").val(response.check_no);
+                            $("#deposit_date").val(response.deposit_date);
+
+                            $("#total_amount").val(response.total_amount);
+
+                            if(!jQuery.isEmptyObject(response.receipt_details))
+                            {
+                                var tablerow = '';
+                                $.each(response.receipt_details, function(k,v) {
+                                    tablerow += '<tr class="label" id="check_'+v.id+'">';
+                                    tablerow += '<td class="mid"><input type="checkbox" id="'+v.id+'" value="'+v.fee_id+'"  class="checks nomargin"/>';
+                                    tablerow += '<input type="hidden" name="fees[]" value="'+v.fee_id+'"/></td>';
+                                    tablerow += '<td><input type="hidden" name="feecodes[]" value="'+v.fee_code+'" />'+v.fee_code+'</td>';
+                                    tablerow += '<td>'+v.fee_name+'</td>';
+                                    tablerow += '<td>'+v.fee_type+'</td>';
+                                    tablerow += '<td class="amount right"><input type="hidden" name="amount[]" value="'+v.amount+'" />'+v.amount;
+                                    tablerow += '<input type="hidden" name="inassess[]" value="'+v.inassess+'" /></td>';
+                                    tablerow += '</tr>';
+                                }); 
+
+                                $("#norecord").remove();
+                                $('#feestobepayed').append(tablerow);
+                            }
+
+                            $("#save_payment").prop("disabled", true);
+                        }, 1000);
                     } 
                 });
             }else{
@@ -607,4 +651,45 @@ $(function(){
             }
 		}
 	});
+
+    $(document).on("change","#cancel_receipt", function(e){
+        var receipt_no = $("#receipt_no").val();
+
+        if($(this).is(':checked'))
+        {
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Cancellation</div><div class="message">Are you sure you want to cancel receipt transaction? You can not undo this operation<p></p><input type="text" class="form-control text-uppercase" id="cancel_remark" placeholder="Cancellation Remark" /></div>').dialog({
+				show: 'fade',
+				resizable: false,	
+				draggable: true,
+				width: 350,
+				height: 'auto',
+				modal: true,
+				buttons: {
+						'Cancel':function(){
+							$(this).dialog('close');
+							$("#cancel_receipt").prop("checked",false);				
+						},
+                        'OK':function(){
+							var cancel_remark = $("#cancel_remark").val();
+							if(cancel_remark)
+                            {
+								$.ajax({
+                                        type: "POST",
+										url:  "/receipts/cancelreceipt",
+										data:  {'receipt_no':receipt_no, 'cancel_remark':cancel_remark},
+                                        dataType: 'json',
+										cache: false, 
+										success: function(response){
+											console.log(response);
+										} 
+								});
+							}else{
+								showError('Cancellation remark is required!');
+							}
+						}	
+					}//end of buttons
+				});//end of dialogbox
+			$(".ui-dialog-titlebar").hide();
+        }
+    });
 });
