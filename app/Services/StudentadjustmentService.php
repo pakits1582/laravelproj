@@ -28,30 +28,49 @@ class StudentadjustmentService
     {
         DB::beginTransaction();
 
+        //return $request->student_id;
+
+        // $enrollment = Enrollment::with(
+        //     [
+        //         'assessment' => [
+        //             'breakdowns' => ['fee_type'],
+        //             'details'
+        //         ]
+        //     ])->find($request->enrollment_id);
+
         $enrollment = Enrollment::with(
             [
                 'assessment' => [
                     'breakdowns' => ['fee_type'],
                     'details'
                 ]
-            ])->find($request->enrollment_id);
+            ])->where('student_id', $request['student_id'])->where('period_id', $request['period_id'])->first();
 
-        switch ($request->type) {
+        if(!$enrollment)
+        {
+            return [
+                'success' => false,
+                'message' => 'Student is not enrolled in the selected semester!',
+                'alert' => 'alert-danger'
+            ];
+        }
+
+        switch ($request['type']) {
             case '1':
-                $particular = 'CREDIT ADJUSTMENT - '.$request->particular;
+                $particular = 'CREDIT ADJUSTMENT - '.$request['particular'];
                 break;
             case '2':
-                $particular = 'DEBIT ADJUSTMENT - '.$request->particular;
+                $particular = 'DEBIT ADJUSTMENT - '.$request['particular'];
                 break;
             case '3':
-                $particular = 'DEBIT REFUND - '.$request->particular;
+                $particular = 'DEBIT REFUND - '.$request['particular'];
                 break;
         }
 
         $postData = [
-            'enrollment_id' => $request->validated()['enrollment_id'],
-            'type' => $request->validated()['type'],
-            'amount' => $request->validated()['amount'],
+            'enrollment_id' => $enrollment->id,
+            'type' => $request['type'],
+            'amount' => $request['amount'],
             'particular' => strtoupper($particular)
         ];
 
@@ -59,10 +78,10 @@ class StudentadjustmentService
 
         if ($insert->wasRecentlyCreated) {
 
-            $amount = ($request->validated()['type'] == 1) ? '-'.$request->validated()['amount'] : $request->validated()['amount'];
+            $amount = ($request['type'] == 1) ? '-'.$request['amount'] : $request['amount'];
 
             $ledgerData = [
-                'enrollment_id' => $request->enrollment_id,
+                'enrollment_id' => $enrollment->id,
                 'source_id' => $insert->id,
                 'type' => 'SA',
                 'amount' => $amount,
@@ -71,9 +90,9 @@ class StudentadjustmentService
 
             $studentledger = Studentledger::firstOrCreate($ledgerData, $ledgerData);
 
-            if($request->validated()['type'] == 1)
+            if($request['type'] == 1)
             {
-                $ledgerDetails = (new StudentledgerService())->insertCreditStudentledgerDetails($studentledger, $enrollment, $amount);
+                $ledgerDetails = (new StudentledgerService())->insertCreditStudentledgerDetails($studentledger, $enrollment, $request['amount']);
             }
             
             DB::commit();

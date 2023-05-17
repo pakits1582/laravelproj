@@ -24,9 +24,8 @@ class StoreStudentadjustmentRequest extends FormRequest
     public function rules()
     {
         return [  
-            'enrollment_id' => '',
-            'period_id' => '',
-            'student_id' => '',
+            'period_id' => 'required',
+            'student_id' => 'required',
             'type' => 'required',
             'particular' => 'required|max:255',
             'amount' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/'

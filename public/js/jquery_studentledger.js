@@ -147,7 +147,7 @@ $(function(){
                     showSuccess(response.data.message);
         
                 }else{
-                    showerror(response.data.message);
+                    showError(response.data.message);
                 }
 
                 returnStatementofaccount(student_id, period_id);

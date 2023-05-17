@@ -53,7 +53,7 @@ class StudentadjustmentController extends Controller
      */
     public function store(StoreStudentadjustmentRequest $request)
     {
-        $adjustment = $this->studentadjustmentService->saveStudentadjustment($request);
+        $adjustment = $this->studentadjustmentService->saveStudentadjustment($request->validated());
 
         return response()->json(['data' => $adjustment]);
     }

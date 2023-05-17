@@ -172,7 +172,7 @@ $(function(){
                 }else{
                     showError(response.data.message);
                 }
-                returnStudentadjustments(enrollment_id, period_id);
+                //returnStudentadjustments(enrollment_id, period_id);
             },
             error: function (data) {
                console.log(data);
@@ -217,7 +217,7 @@ $(function(){
                                     showSuccess(response.data.message);
                         
                                 }else{
-                                    showerror(response.data.message);
+                                    showError(response.data.message);
                                 }
 
                                 returnStudentadjustments(enrollment_id, period_id);
