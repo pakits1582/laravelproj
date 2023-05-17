@@ -15,6 +15,17 @@ class ReceiptService
 {
     public function saveReceipt($request)
     {
+        $receipt = Receipt::where('receipt_no', $request->receipt_no)->first();
+
+        if($receipt)
+        {
+            return [
+                'success' => false,
+                'message' => 'Receipt already used!',
+                'alert' => 'alert-danger'
+            ];
+        }
+        
         $inassessfeesArr  = [];
         $nonassessfeesArr = [];
 
@@ -49,7 +60,14 @@ class ReceiptService
                 $total_inassess += str_replace(",", "", $request->amount[$key]);
             }else{
                 $nonassessfeesArr[] = ['fee_id' => $fee, 'code' => $request->feecodes[$key], 'amount' => str_replace(",", "", $request->amount[$key]), 'inassess' => $request->inassess[$key]];
-                $nonAssessReceiptDetailsArray[] = ['receipt_no' => $request->receipt_no, 'fee_id' => $fee, 'amount' => str_replace(",", "", $request->amount[$key]), 'payor_name' => $request->payor_name];
+                $nonAssessReceiptDetailsArray[] = [
+                    'receipt_no' => $request->receipt_no, 
+                    'fee_id' => $fee, 
+                    'amount' => str_replace(",", "", $request->amount[$key]), 
+                    'payor_name' => strtoupper($request->payor_name),
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
             }
         }
 
@@ -148,8 +166,6 @@ class ReceiptService
     public function receiptInfo($receipt_no)
     {
         $receipt_info = Receipt::with(['period','student' => ['user'], 'fee' => ['feetype'], 'bank', 'details'])->where('receipt_no', $receipt_no)->get();
-
-        //return $receipt_info;
         
         if($receipt_info->isEmpty())
         {
@@ -175,9 +191,9 @@ class ReceiptService
 
         $receipt_info = [
             'student_id' => $receipt_info[0]->student_id,
-            'student_name' => $receipt_info[0]->student->name,
-            'student_idno' => $receipt_info[0]->student->user->idno,
-            'payor_name' => $receipt_info[0]->details[0]->payor_name,
+            'student_name' => ($receipt_info[0]->student->name) ?? '',
+            'student_idno' => ($receipt_info[0]->student->user->idno) ?? '',
+            'payor_name' => (!empty($receipt_info[0]->details[0]->payor_name)) ? $receipt_info[0]->details[0]->payor_name : (($receipt_info[0]->student_id) ? $receipt_info[0]->student->name : ''),
             'receipt_date' => $receipt_info[0]->receipt_date,
             'period_id' => $receipt_info[0]->period_id,
             'period_name' => $receipt_info[0]->period->name,
@@ -216,10 +232,21 @@ class ReceiptService
 
         DB::beginTransaction();
 
-        $receipt_info->details()->delete();
+        if($receipt_info->student_id != NULL)
+        {
+            $receipt_info->details()->delete();
+        }
+        
         $receipt_info->update(['cancelled' => 1, 'cancel_remark' => strtoupper($request->cancel_remark)]);
-        $receipt_info->receipt_ledger->details()->delete();
 
+        if ($receipt_info->receipt_ledger && $receipt_info->receipt_ledger->details) 
+        {
+            if ($receipt_info->receipt_ledger->details->count() > 0) 
+            {
+                $receipt_info->receipt_ledger->details()->delete();
+            }
+        }
+        
         DB::commit();
 
         return [

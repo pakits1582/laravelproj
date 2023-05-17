@@ -81,7 +81,7 @@
                 <div class="col-md-6">
                     <label for="cancel_receipt"  class="m-0 font-weight-bold text-primary checkbox-inline">
                         <input type="checkbox" class="checkbox" value="1" id="cancel_receipt"> Cancel Transaction</label> | 
-                        <a href="#" id="reprint_receipt"><label for=""  class="m-0 font-weight-bold text-primary checkbox-inline">Re-print Receipt</label></a>
+                        <a href="#" id="reprint_receipt" class="pointer"><span class="m-0 font-weight-bold text-primary checkbox-inline">Re-print Receipt</span></a>
                 </div>
                 <div class="col-md-6 right">
                     <div class="form-group" id="button_group">

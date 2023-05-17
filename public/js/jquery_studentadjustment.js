@@ -165,12 +165,12 @@ $(function(){
             {
                 $("#confirmation").dialog('close');
                 console.log(response);
-                if(response.data.success === true)
+                if(response.data.success == true)
                 {
                     showSuccess(response.data.message);
         
                 }else{
-                    showerror(response.data.message);
+                    showError(response.data.message);
                 }
                 returnStudentadjustments(enrollment_id, period_id);
             },

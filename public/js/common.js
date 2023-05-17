@@ -53,38 +53,38 @@ function showMessageInForm(form, alert, message){
 *** FUNCTION DATEPICKERS ***
 ***************************/
 var pickerOpts = { 
-dateFormat: $.datepicker.ATOM,
-//minDate: "-1m -2w",
-changeYear: true,
-changeMonth: true,
-//maxDate: new Date()
-//maxDate: "-15y",
+    dateFormat: $.datepicker.ATOM,
+    //minDate: "-1m -2w",
+    changeYear: true,
+    changeMonth: true,
+    //maxDate: new Date()
+    //maxDate: "-15y",
 };	
 
 var pickerOpts3 = { 
-dateFormat: $.datepicker.ATOM,
-//minDate: new Date(),
-maxDate: new Date(),
-changeYear: true,
-changeMonth: true
+    dateFormat: $.datepicker.ATOM,
+    //minDate: new Date(),
+    maxDate: new Date(),
+    changeYear: true,
+    changeMonth: true
 };	
 
 var pickerOpts2 = { 
-dateFormat: $.datepicker.ATOM,
-//minDate: new Date(),
-changeYear: true,
-changeMonth: true,
-maxDate: new Date(),
-dateFormat:'mm-dd-yy'
-//maxDate: "-18y",
+    dateFormat: $.datepicker.ATOM,
+    //minDate: new Date(),
+    changeYear: true,
+    changeMonth: true,
+    maxDate: new Date(),
+    dateFormat:'mm-dd-yy'
+    //maxDate: "-18y",
 };	
 
 var pickerOpts4 = { 
-dateFormat: $.datepicker.ATOM,
-//minDate: new Date(),
-//maxDate: new Date(),
-changeYear: true,
-changeMonth: true
+    dateFormat: $.datepicker.ATOM,
+    //minDate: new Date(),
+    //maxDate: new Date(),
+    changeYear: true,
+    changeMonth: true
 };	
 
 /*$("#examto").datepicker('option', 'minDate', new Date($.now()));*/

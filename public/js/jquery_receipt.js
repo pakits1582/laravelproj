@@ -270,6 +270,8 @@ $(function(){
                     }
                 }
             });
+        }else{
+
         }
     }
 
@@ -545,6 +547,7 @@ $(function(){
     $(document).on("submit", "#form_payment", function(e){
         var postData = $("#form_receipt, #form_payment").serializeArray();
         var amount = $("#total_amount").val();
+        var receipt_no = $("#receipt_no").val();
 
         if(parseFloat(amount) <= 0 || amount == '')
         {
@@ -570,6 +573,33 @@ $(function(){
                 success: function(response){
                     console.log(response);
                     $("#confirmation").dialog('close');
+
+                    if(response.success == false)
+                    {
+                        showError(response.message);
+                    }else{
+                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">'+response.message+'</div><div class="message">Print payment receipt?</div>').dialog({
+							show: 'fade',
+							resizable: false,	
+							draggable: true,
+							width: 350,
+							height: 'auto',
+							modal: true,
+							buttons: {
+									'OK':function(){
+										window.open("/receipts/printreceipt/"+receipt_no, '_blank'); 
+										$(this).dialog('close');
+										location.reload();
+									},
+									'Cancel':function(){
+										$(this).dialog('close');
+										location.reload();				
+									}	
+									
+								}//end of buttons
+							});//end of dialogbox
+						$(".ui-dialog-titlebar").hide();
+                    }
                     
                 },
                 error: function (data) {
@@ -602,48 +632,56 @@ $(function(){
                     cache: false, 
                     success: function(response){
                         console.log(response);
-                        if(response.student_id)
+                        if(response == false)
                         {
-                            var $newOption = $("<option selected='selected'></option>").val(response.student_id).text('('+response.student_idno+') '+response.student_name);
-			                $("#student").append($newOption).trigger('change');
-                        }
-
-                        window.setTimeout(function(){
-                            $("#payor_name").val(response.payor_name);
-                            $("#receipt_date").val(response.receipt_date);
-                            $("#period_id").val(response.period_id);
-                            $("#period").val(response.period_name);
-
-                            $("#cancel_receipt").prop("checked", (response.cancelled == 1) ? true : false);
-                            $("#cancel_receipt").prop("disabled", (response.cancelled == 1) ? true : false);		
-
-                            $("#bank_id").val(response.bank_id);
-                            $("#check_no").val(response.check_no);
-                            $("#deposit_date").val(response.deposit_date);
-
-                            $("#total_amount").val(response.total_amount);
-
-                            if(!jQuery.isEmptyObject(response.receipt_details))
+                            location.reload();
+                        }else{
+                            if(response.student_id)
                             {
-                                var tablerow = '';
-                                $.each(response.receipt_details, function(k,v) {
-                                    tablerow += '<tr class="label" id="check_'+v.id+'">';
-                                    tablerow += '<td class="mid"><input type="checkbox" id="'+v.id+'" value="'+v.fee_id+'"  class="checks nomargin"/>';
-                                    tablerow += '<input type="hidden" name="fees[]" value="'+v.fee_id+'"/></td>';
-                                    tablerow += '<td><input type="hidden" name="feecodes[]" value="'+v.fee_code+'" />'+v.fee_code+'</td>';
-                                    tablerow += '<td>'+v.fee_name+'</td>';
-                                    tablerow += '<td>'+v.fee_type+'</td>';
-                                    tablerow += '<td class="amount right"><input type="hidden" name="amount[]" value="'+v.amount+'" />'+v.amount;
-                                    tablerow += '<input type="hidden" name="inassess[]" value="'+v.inassess+'" /></td>';
-                                    tablerow += '</tr>';
-                                }); 
-
-                                $("#norecord").remove();
-                                $('#feestobepayed').append(tablerow);
+                                var $newOption = $("<option selected='selected'></option>").val(response.student_id).text('('+response.student_idno+') '+response.student_name);
+                                $("#student").append($newOption).trigger('change');
+                            }else{
+                                $("#student").val("").trigger('change');
+                                clearFormFields();
                             }
 
-                            $("#save_payment").prop("disabled", true);
-                        }, 1000);
+                            window.setTimeout(function(){
+                                $("#payor_name").val(response.payor_name);
+                                $("#receipt_date").val(response.receipt_date);
+                                $("#period_id").val(response.period_id);
+                                $("#period").val(response.period_name);
+
+                                $("#cancel_receipt").prop("checked", (response.cancelled == 1) ? true : false);
+                                $("#cancel_receipt").prop("disabled", (response.cancelled == 1) ? true : false);		
+
+                                $("#bank_id").val(response.bank_id);
+                                $("#check_no").val(response.check_no);
+                                $("#deposit_date").val(response.deposit_date);
+
+                                $("#total_amount").val(response.total_amount);
+
+                                if(!jQuery.isEmptyObject(response.receipt_details))
+                                {
+                                    var tablerow = '';
+                                    $.each(response.receipt_details, function(k,v) {
+                                        tablerow += '<tr class="label" id="check_'+v.id+'">';
+                                        tablerow += '<td class="mid"><input type="checkbox" id="'+v.id+'" value="'+v.fee_id+'"  class="checks nomargin"/>';
+                                        tablerow += '<input type="hidden" name="fees[]" value="'+v.fee_id+'"/></td>';
+                                        tablerow += '<td><input type="hidden" name="feecodes[]" value="'+v.fee_code+'" />'+v.fee_code+'</td>';
+                                        tablerow += '<td>'+v.fee_name+'</td>';
+                                        tablerow += '<td>'+v.fee_type+'</td>';
+                                        tablerow += '<td class="amount right"><input type="hidden" name="amount[]" value="'+v.amount+'" />'+v.amount;
+                                        tablerow += '<input type="hidden" name="inassess[]" value="'+v.inassess+'" /></td>';
+                                        tablerow += '</tr>';
+                                    }); 
+
+                                    $("#norecord").remove();
+                                    $('#feestobepayed').html(tablerow);
+                                }
+
+                                $("#save_payment").prop("disabled", true);
+                            }, 1000);
+                        }
                     } 
                 });
             }else{
@@ -681,6 +719,14 @@ $(function(){
 										cache: false, 
 										success: function(response){
 											console.log(response);
+                                            if(response.success == true)
+                                            {
+                                                showSuccess(response.message);
+                                            }
+
+                                            window.setTimeout(function(){
+                                                location.reload();
+                                            }, 1500);
 										} 
 								});
 							}else{
@@ -691,5 +737,36 @@ $(function(){
 				});//end of dialogbox
 			$(".ui-dialog-titlebar").hide();
         }
+    });
+
+    $(document).on("click", "#reprint_receipt", function(e){
+        var receipt_no = $("#receipt_no").val();
+
+        if(receipt_no)
+        {
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Reprint</div><div class="message">Are you sure you want to reprint receipt transaction?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: true,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $(this).dialog('close');
+                        },
+                        'OK':function(){
+                            window.open("/receipts/printreceipt/"+receipt_no, '_blank'); 
+                            $(this).dialog('close');
+                            location.reload();
+                        }	
+                    }//end of buttons
+                });//end of dialogbox
+            $(".ui-dialog-titlebar").hide();
+        }else{
+            showError('No receipt to be re printed!');
+        }
+
+        e.preventDefault();
     });
 });

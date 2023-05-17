@@ -429,3 +429,7 @@ div.dataTables_wrapper {
 	min-height: 300px;
 }
 
+.pointer{
+	cursor: pointer !important;
+}
+

@@ -82,7 +82,7 @@ class ReceiptController extends Controller
     {
         $saved_receipt = $this->receiptService->saveReceipt($request);
 
-        return $saved_receipt;
+        return response()->json($saved_receipt);
     }
 
     /**
@@ -137,5 +137,10 @@ class ReceiptController extends Controller
         $cancel_receipt = $this->receiptService->cancelReceipt($request);
 
         return response()->json($cancel_receipt);
+    }
+
+    public function printreceipt($receipt_no)
+    {
+        return $receipt_no;
     }
 }

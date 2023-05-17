@@ -47,6 +47,8 @@ $(function(){
                 success: function(response){
                     console.log(response);
                     $("#return_soa").html(response);
+
+                    $(".datepicker").datepicker(pickerOpts);
                 },
                 error: function (data) {
                     console.log(data);
@@ -113,5 +115,54 @@ $(function(){
             });
         }
 
+    });
+
+    $(document).on("submit", "#form_studentadjustment", function(e){
+        var student_id = $("#student").val();
+        var period_id  = $("#period").val();
+        var postData = $("#form_studentledger, #form_studentadjustment").serializeArray();
+
+        $.ajax({
+            url: "/studentadjustments",
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons:false
+                });
+                $(".ui-dialog-titlebar").hide();
+            },
+            success: function(response)
+            {
+                $("#confirmation").dialog('close');
+                console.log(response);
+                if(response.data.success === true)
+                {
+                    showSuccess(response.data.message);
+        
+                }else{
+                    showerror(response.data.message);
+                }
+
+                returnStatementofaccount(student_id, period_id);
+            },
+            error: function (data) {
+               console.log(data);
+               var errors = data.responseJSON;
+               if ($.isEmptyObject(errors) == false) {
+                   $.each(errors.errors, function (key, value) {
+                       $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                   });
+               }
+           }
+        });
+
+        e.preventDefault();
     });
 });
