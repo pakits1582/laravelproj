@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Period;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Models\Studentledger;
 use App\Services\PeriodService;
+use App\Services\StudentService;
 use App\Models\UserPaymentperiod;
 use Illuminate\Support\Facades\Auth;
 use App\Services\StudentledgerService;
@@ -149,5 +152,24 @@ class StudentledgerController extends Controller
         $payment_schedule = $this->studentledgerService->computePaymentSchedule($request->student_id, $request->period_id, $request->pay_period, $request->enrollment);
         
         return response()->json($payment_schedule);
+    }
+
+    public function forwardbalance(Request $request)
+    {
+        $student = Student::with(['user'])->where('id', $request->student_id)->first();
+        
+        $soas = $this->studentledgerService->getAllStatementOfAccounts($request->student_id,'');
+        $soas_balances = $this->studentledgerService->soaBalance($soas);
+
+        $forward_period = $request->period_id;
+        $soa_to_forward = array_values(array_filter($soas_balances, function ($soa) use($forward_period) {
+            return $soa['period_id'] == $forward_period;
+        }));
+
+        $studentledgers = array_values(array_filter($soas_balances, function ($soa) use($forward_period) {
+            return $soa['period_id'] != $forward_period;
+        }));
+
+        return view('studentledger.forwardbalance', compact('student', 'soa_to_forward', 'studentledgers'));
     }
 }

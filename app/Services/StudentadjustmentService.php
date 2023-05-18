@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Enrollment;
 use App\Models\Studentledger;
 use App\Models\Studentadjustment;
@@ -27,16 +28,6 @@ class StudentadjustmentService
     public function saveStudentadjustment($request)
     {
         DB::beginTransaction();
-
-        //return $request->student_id;
-
-        // $enrollment = Enrollment::with(
-        //     [
-        //         'assessment' => [
-        //             'breakdowns' => ['fee_type'],
-        //             'details'
-        //         ]
-        //     ])->find($request->enrollment_id);
 
         $enrollment = Enrollment::with(
             [
@@ -66,15 +57,19 @@ class StudentadjustmentService
                 $particular = 'DEBIT REFUND - '.$request['particular'];
                 break;
         }
-
+ 
         $postData = [
             'enrollment_id' => $enrollment->id,
             'type' => $request['type'],
             'amount' => $request['amount'],
             'particular' => strtoupper($particular)
         ];
-
-        $insert = Studentadjustment::firstOrCreate($postData, $postData+['user_id' =>  Auth::user()->id]);
+        
+        $insert = Studentadjustment::firstOrCreate($postData, $postData+
+            ['user_id' =>  Auth::user()->id, 
+            'created_at' => (isset($request['created_at'])) ? Carbon::create($request['created_at'])->setTimeFromTimeString(Carbon::now()->toTimeString()) : now(),
+            'updated_at' => (isset($request['created_at'])) ? Carbon::create($request['created_at'])->setTimeFromTimeString(Carbon::now()->toTimeString()) : now()
+        ]);
 
         if ($insert->wasRecentlyCreated) {
 

@@ -284,6 +284,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
         // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
         //Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
+        Route::post('/studentledgers/forwardbalance', [StudentledgerController::class, 'forwardbalance']);
         Route::post('/studentledgers/computepaymentsched', [StudentledgerController::class, 'computepaymentsched']);
         Route::post('/studentledgers/defaultpayperiod', [StudentledgerController::class, 'defaultpayperiod']);
         Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);

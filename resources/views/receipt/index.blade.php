@@ -79,6 +79,7 @@
                                             <div class="form-group">
                                                 <label for="code"  class="m-0 font-weight-bold text-primary">Level</label>
                                                 <input type="text" id="educational_level" class="form-control text-uppercase clearable" readonly value="" placeholder="">
+                                                <input type="hidden" id="educational_level_id" value="">
                                             </div>                                 
                                         </div>
                                     </div>

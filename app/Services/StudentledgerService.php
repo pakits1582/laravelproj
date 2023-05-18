@@ -333,6 +333,40 @@ class StudentledgerService
         return $previousBalance;
     }
 
+    public function soaBalance($soas)
+    {
+        $soasBalance = [];
+
+        if ($soas) 
+        {
+            foreach ($soas as $soa) 
+            {
+                $debit = 0;
+                $credit = 0;
+                foreach ($soa['ledgers'] as $ledger) 
+                {
+                    $amount = $ledger['amount'];
+                    $type = $ledger['type'];
+                    $cancelled = $ledger['ledger_info']['cancelled'] ?? 0;
+                    $credit += ($amount < 0 && $type == 'R' && $cancelled == 0) ? $amount : 0;
+                    $credit += ($amount < 0 && $type != 'R') ? $amount : 0;
+                    $debit += ($amount >= 0) ? $amount : 0;
+                }
+                $balance = $debit + $credit;
+                $soasBalance[] = [
+                    'period_id' => $soa['period_id'],
+                    'period_code' => $soa['period_code'],
+                    'period_name' => $soa['period_name'],
+                    'balance' => $balance,
+                    'debit' => $debit,
+                    'credit' => $credit,
+                ];
+            }
+        }
+        
+        return $soasBalance;
+    }
+
     public function returnPaymentSchedules($student_id, $period_id, $educational_level_id, $enrollment)
     {
         //return $enrollment;

@@ -27,6 +27,7 @@ class StoreStudentadjustmentRequest extends FormRequest
             'period_id' => 'required',
             'student_id' => 'required',
             'type' => 'required',
+            'created_at' => '',
             'particular' => 'required|max:255',
             'amount' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/'
         ];

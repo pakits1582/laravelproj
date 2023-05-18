@@ -10,8 +10,9 @@ class Studentadjustment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['enrollment_id', 'type', 'particular', 'amount', 'user_id'];
-
+    protected $fillable = ['enrollment_id', 'type', 'particular', 'amount', 'user_id', 'created_at', 'updated_at'];
+    public $timestamps = false;
+    
     public function particular(): Attribute
     {
         return new Attribute(
