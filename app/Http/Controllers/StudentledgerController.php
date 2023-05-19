@@ -172,4 +172,12 @@ class StudentledgerController extends Controller
 
         return view('studentledger.forwardbalance', compact('student', 'soa_to_forward', 'studentledgers'));
     }
+
+    public function saveforwardedbalance(Request $request)
+    {
+        $save_forward = $this->studentledgerService->saveForwardedBalance($request);
+
+        //return $save_forward;
+        return response()->json($save_forward);
+    }
 }

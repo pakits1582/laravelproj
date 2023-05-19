@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group right" id="button_group">
-                                <button type="submit" id="save_adjustment" class="btn btn-success btn-icon-split actions">
+                                <button type="submit" id="save_adjustment" class="btn btn-success btn-icon-split">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-save"></i>
                                     </span>

@@ -146,7 +146,7 @@ $(function(){
                 {
                     $("#confirmation").dialog('close');
                     console.log(response);
-                    if(response.data.success === true)
+                    if(response.data.success == true)
                     {
                         showSuccess(response.data.message);
             
@@ -187,6 +187,57 @@ $(function(){
                 $("#modalll").modal('show');
             }
         });
+        e.preventDefault();
+    });
+
+    $(document).on("submit", "#form_forwardbalance", function(e){
+        var student_id = $("#student").val();
+        var period_id  = $("#period").val();
+        var postData = $("#form_forwardbalance").serializeArray();
+        var checkboxperiod = $(".checks:checked");
+
+		if(checkboxperiod.length == 0)
+        {
+			showError('Please select atleast one checkbox/period to forward to!');	
+		}else{
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Balance Forward</div><div class="message">Are you sure you want to forward balance to selected period?<br>You can not undo this, continue? </div>').dialog({
+				show: 'fade',
+				resizable: false,	
+				draggable: false,
+				width: 350,
+				height: 'auto',
+				modal: true,
+				buttons: {
+						'Cancel':function(){
+							$(this).dialog('close');
+						},
+						'OK':function(){
+							$(this).dialog('close');
+							
+							$.ajax({
+								url: "/studentledgers/saveforwardedbalance",
+								type: 'post',
+								data: postData,
+                                dataType: 'json',
+								success: function(response){
+									console.log(response);
+                                    $('#modalll').modal('toggle'); 
+                                    if(response.success == true)
+                                    {
+                                        showSuccess(response.message);
+                            
+                                    }else{
+                                        showError(response.message);
+                                    }
+                                    returnStatementofaccount(student_id, period_id);
+								}
+							});
+						}//end of ok button	
+					}//end of buttons
+				});//end of dialogbox
+				$(".ui-dialog-titlebar").hide();
+        }
+
         e.preventDefault();
     });
 });

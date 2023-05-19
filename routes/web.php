@@ -271,19 +271,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:studentledgers']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-        
-
-        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
-        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
-        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
-        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
-
-        // // });
-       
-        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
-        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
-        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
-        //Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
+    
+        Route::post('/studentledgers/saveforwardedbalance', [StudentledgerController::class, 'saveforwardedbalance']);
         Route::post('/studentledgers/forwardbalance', [StudentledgerController::class, 'forwardbalance']);
         Route::post('/studentledgers/computepaymentsched', [StudentledgerController::class, 'computepaymentsched']);
         Route::post('/studentledgers/defaultpayperiod', [StudentledgerController::class, 'defaultpayperiod']);

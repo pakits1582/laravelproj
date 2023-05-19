@@ -11,6 +11,10 @@ class Studentledger extends Model
 
     protected $fillable = ['enrollment_id', 'source_id', 'type', 'amount', 'user_id'];
     
+    
+    const TYPE_CREDIT = 1;
+    const TYPE_DEBIT = 2;
+    const TYPE_REFUND = 3;
 
     public function enrollment()
     {

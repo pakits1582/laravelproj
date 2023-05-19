@@ -4,10 +4,12 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\Studentledger;
 use App\Models\AssessmentExam;
 use App\Models\PaymentSchedule;
+use App\Models\Studentadjustment;
 use Illuminate\Support\Facades\DB;
 use App\Models\StudentledgerDetail;
 use Database\Seeders\StudentSeeder;
@@ -458,5 +460,178 @@ class StudentledgerService
         }
 
         return ['balance_due' => number_format($balance_due,2), 'default_pay_period' => $default_pay_period];
+    }
+
+    public function saveForwardedBalance($request)
+    {
+        
+        DB::beginTransaction();
+
+        $student = Student::with(['user'])->where('id', $request->student_id)->first();
+
+        if(!$student)
+        {
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Student can not be found!',
+                'alert' => 'alert-danger'
+            ];
+        }
+
+        $soas = $this->getAllStatementOfAccounts($request->student_id,'');
+        $soas_balances = $this->soaBalance($soas);
+
+        $period_to = $request->period_to;
+        $soa_period_to = array_values(array_filter($soas_balances, function ($soa) use($period_to) {
+            return $soa['period_id'] == $period_to;
+        }));
+        $period_to_enrollment = Enrollment::with(
+            [
+                'assessment' => [
+                    'breakdowns' => ['fee_type'],
+                    'details'
+                ]
+            ])->where('student_id', $request->student_id)->where('period_id', $period_to)->first();
+
+
+        $period_from = $request->period_from;
+        $soa_period_from = array_values(array_filter($soas_balances, function ($soa) use($period_from) {
+            return $soa['period_id'] == $period_from;
+        }));
+
+        $period_from = $request->period_from;
+        $soa_period_from = array_values(array_filter($soas_balances, function ($soa) use($period_from) {
+            return $soa['period_id'] == $period_from;
+        }));
+
+        $period_from_enrollment = Enrollment::with(
+            [
+                'assessment' => [
+                    'breakdowns' => ['fee_type'],
+                    'details'
+                ]
+            ])->where('student_id', $request->student_id)->where('period_id', $period_from)->first();
+
+        if(!$soa_period_to || !$soa_period_from || !$period_to_enrollment || !$period_from_enrollment)
+        {
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Can not perform requested action!',
+                'alert' => 'alert-danger'
+            ];
+        }
+
+        if($request->balance < 0)
+        {
+            //PERIOD FROM
+            $particular_from = 'DEBIT ADJUSTMENT - Balance forwarded to period '.$soa_period_to[0]['period_name'];
+            $particular_to = 'CREDIT ADJUSTMENT - Balance forwarded from period '.$soa_period_from[0]['period_name'];
+
+            $debit_PostData = [
+                'enrollment_id' => $period_from_enrollment->id,
+                'type' => Studentledger::TYPE_DEBIT,
+                'particular' => $particular_from,
+                'amount' => str_replace('-', "", str_replace(',', "", $request->balance)),
+                'user_id' => Auth::user()->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            $insert_debitPostData = Studentadjustment::firstOrCreate($debit_PostData, $debit_PostData);
+            
+            $debit_ledgerData = [
+                'enrollment_id' => $period_from_enrollment->id,
+                'source_id' => $insert_debitPostData->id,
+                'type' => 'SA',
+                'amount' => $request->balance,
+                'user_id' => Auth::user()->id
+            ];
+
+            $debit_studentledger = Studentledger::firstOrCreate($debit_ledgerData, $debit_ledgerData);
+
+            //PERIOD TO
+            $credit_PostData = [
+                'enrollment_id' => $period_to_enrollment->id,
+                'type' => Studentledger::TYPE_CREDIT,
+                'particular' => $particular_to,
+                'amount' => str_replace('-', "", str_replace(',', "", $request->balance)),
+                'user_id' => Auth::user()->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            $insert_creditPostData = Studentadjustment::firstOrCreate($credit_PostData, $credit_PostData);
+
+            $credit_ledgerData = [
+                'enrollment_id' => $period_to_enrollment->id,
+                'source_id' => $insert_creditPostData->id,
+                'type' => 'SA',
+                'amount' => '-'.$request->balance,
+                'user_id' => Auth::user()->id
+            ];
+
+            $credit_studentledger = Studentledger::firstOrCreate($credit_ledgerData, $credit_ledgerData);
+            $credit_ledgerDetails = (new StudentledgerService())->insertCreditStudentledgerDetails($credit_studentledger, $period_to_enrollment, $request->balance);
+
+        }else if($request->balance > 0){
+    
+            $particular_from = 'CREDIT ADJUSTMENT - Balance forwarded to period '.$soa_period_to[0]['period_name'];
+            $particular_to = 'DEBIT ADJUSTMENT - Balance forwarded from period '.$soa_period_from[0]['period_name'];
+
+            //PERIOD FROM (CREDIT)
+            $credit_PostData = [
+                'enrollment_id' => $period_from_enrollment->id,
+                'type' => Studentledger::TYPE_CREDIT,
+                'particular' => $particular_from,
+                'amount' => str_replace('-', "", str_replace(',', "", $request->balance)),
+                'user_id' => Auth::user()->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            $insert_creditPostData = Studentadjustment::firstOrCreate($credit_PostData, $credit_PostData);
+
+            $credit_ledgerData = [
+                'enrollment_id' => $period_from_enrollment->id,
+                'source_id' => $insert_creditPostData->id,
+                'type' => 'SA',
+                'amount' => '-'.$request->balance,
+                'user_id' => Auth::user()->id
+            ];
+
+            $credit_studentledger = Studentledger::firstOrCreate($credit_ledgerData, $credit_ledgerData);
+            $ledgerDetails = (new StudentledgerService())->insertCreditStudentledgerDetails($credit_studentledger, $period_from_enrollment, $request->balance);
+            
+            //PERIOD TO (DEBIT)
+            $debit_PostData = [
+                'enrollment_id' => $period_to_enrollment->id,
+                'type' => Studentledger::TYPE_DEBIT,
+                'particular' => $particular_to,
+                'amount' => str_replace('-', "", str_replace(',', "", $request->balance)),
+                'user_id' => Auth::user()->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            $insert_debitPostData = Studentadjustment::firstOrCreate($debit_PostData, $debit_PostData);
+
+            $debit_ledgerData = [
+                'enrollment_id' => $period_to_enrollment->id,
+                'source_id' => $insert_debitPostData->id,
+                'type' => 'SA',
+                'amount' => $request->balance,
+                'user_id' => Auth::user()->id
+            ];
+
+            $debit_studentledger = Studentledger::firstOrCreate($debit_ledgerData, $debit_ledgerData);
+        }
+
+        DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Balance successfully forwarded!',
+            'alert' => 'alert-success'
+        ];
     }
 }
