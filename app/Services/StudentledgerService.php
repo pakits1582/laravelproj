@@ -543,7 +543,7 @@ class StudentledgerService
                 'enrollment_id' => $period_from_enrollment->id,
                 'source_id' => $insert_debitPostData->id,
                 'type' => 'SA',
-                'amount' => $request->balance,
+                'amount' => str_replace('-', "", str_replace(',', "", $request->balance)),
                 'user_id' => Auth::user()->id
             ];
 
@@ -566,7 +566,7 @@ class StudentledgerService
                 'enrollment_id' => $period_to_enrollment->id,
                 'source_id' => $insert_creditPostData->id,
                 'type' => 'SA',
-                'amount' => '-'.$request->balance,
+                'amount' => str_replace(',', "", $request->balance),
                 'user_id' => Auth::user()->id
             ];
 
