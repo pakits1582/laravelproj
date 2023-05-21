@@ -829,4 +829,95 @@ $(function(){
 
         e.preventDefault();
     });
+
+    $(document).on("click", ".forward_balance", function(e){
+        var period_id = $(this).attr("id");
+        var student_id = $("#student").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/studentledgers/forwardbalance",
+            data: ({ 'student_id':student_id, 'period_id':period_id}),
+            success: function(data){
+                console.log(data);
+                $('#ui_content').html(data);
+                $("#modalll").modal('show');
+            }
+        });
+
+        e.preventDefault();
+    });
+
+    $(document).on("click", "#forward_balance", function(e){
+        var student_id = $("#student").val();
+        var period_id  = $("#period_id").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/studentledgers/forwardbalance",
+            data: ({ 'student_id':student_id, 'period_id':period_id}),
+            success: function(data){
+                console.log(data);
+                $('#ui_content').html(data);
+                $("#modalll").modal('show');
+            }
+        });
+        e.preventDefault();
+    });
+
+    $(document).on("submit", "#form_forwardbalance", function(e){
+        var student_id = $("#student").val();
+        var period_id  = $("#period_id").val();
+        var educational_level_id = $("#educational_level_id").val();
+
+        var postData = $("#form_forwardbalance").serializeArray();
+        var checkboxperiod = $(".checks:checked");
+
+		if(checkboxperiod.length == 0)
+        {
+			showError('Please select atleast one checkbox/period to forward to!');	
+		}else{
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Balance Forward</div><div class="message">Are you sure you want to forward balance to selected period?<br>You can not undo this, continue? </div>').dialog({
+				show: 'fade',
+				resizable: false,	
+				draggable: false,
+				width: 350,
+				height: 'auto',
+				modal: true,
+				buttons: {
+						'Cancel':function(){
+							$(this).dialog('close');
+						},
+						'OK':function(){
+							$(this).dialog('close');
+							
+							$.ajax({
+								url: "/studentledgers/saveforwardedbalance",
+								type: 'post',
+								data: postData,
+                                dataType: 'json',
+								success: function(response){
+									console.log(response);
+                                    $('#modalll').modal('toggle'); 
+                                    if(response.success == true)
+                                    {
+                                        showSuccess(response.message);
+                            
+                                    }else{
+                                        showError(response.message);
+                                    }
+                                    returnStatementofaccount(student_id, period_id);
+                                    returnPaymentSchedule(student_id, period_id, educational_level_id, enrollment_outside);
+                                    returnPreviousbalancerefund(student_id, period_id);
+								}
+							});
+						}//end of ok button	
+					}//end of buttons
+				});//end of dialogbox
+				$(".ui-dialog-titlebar").hide();
+        }
+
+        e.preventDefault();
+    });
+    
 });
