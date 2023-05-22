@@ -90,7 +90,7 @@ $(function(){
                 dataType: 'json',
                 success: function(response){
                     console.log(response);
-                    if(response.data === false)
+                    if(response.data == false)
                     {
                         showError('Student not found!');
                         clearForm();

@@ -23,11 +23,9 @@ class InternalGradeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, InstructorService $instructorService)
+    public function index()
     {
-        $instructors = $instructorService->returnInstructors($request, true);
-        
-        return view('gradeinternal.index', compact('instructors'));
+        return view('gradeinternal.index');
     }
 
     /**
@@ -94,5 +92,12 @@ class InternalGradeController extends Controller
     public function destroy(InternalGrade $internalGrade)
     {
         //
+    }
+
+    public function internalgrades(Request $request)
+    {
+        $internal_grades = $this->internalGradeService->getInternalGrades($request->grade_id);
+
+        return $internal_grades;
     }
 }

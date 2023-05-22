@@ -96,10 +96,17 @@ class GradeController extends Controller
         //
     }
 
-    public function getgradeinfobystudentandperiod(Request $request)
+    public function gradeinfo(Request $request)
     {
-        $grade = $this->gradeService->getGradeInfoByStudentAndPeriod($request->student, session('current_period'), $request->origin);
-
-        return response()->json(['data' => $grade]);
+        $grade = Grade::oforigin($request->origin)->where('student_id', $request->student_id)->where('period_id', $request->period_id)->first();
+        
+        return response()->json($grade);
     }
+
+    // public function getgradeinfobystudentandperiod(Request $request)
+    // {
+    //     $grade = $this->gradeService->getGradeInfoByStudentAndPeriod($request->student, session('current_period'), $request->origin);
+
+    //     return response()->json(['data' => $grade]);
+    // }
 }

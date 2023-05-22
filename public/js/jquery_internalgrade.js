@@ -77,22 +77,27 @@ $(function(){
 
     $(document).on("change", "#student", function(e){
         var student_id = $("#student").val();
+        var period_id = $("#period_id").val();
 
         if(student_id){
             $.ajax({
-                url: "/grades/"+student_id+"/internal",
+                url: "/students/"+student_id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
                     console.log(response);
-                    if(response.data)
+                    if(response.data == false)
                     {
-                        $("#curriculum").val(response.data.curriculum);
-                        $("#year_level").val(response.data.year_level);            
-                        $("#grade_id").val(response.data.grade_id);
-                        $("#educational_level").val(response.data.level);
-                        $("#college").val(response.data.college);
-                        $("#program").val(response.data.program);
+                        showError('Student not found!');
+                        clearForm();
+                    }else{
+                        $("#program").val(response.data.values.program.name ? response.data.values.program.name : "");
+                        $("#educational_level").val((response.data.values.program.level) ? response.data.values.program.level.code ? response.data.values.program.level.code : "" : "");
+                        $("#college").val((response.data.values.program.collegeinfo) ? response.data.values.program.collegeinfo.code ? response.data.values.program.collegeinfo.code : "" : "");
+                        $("#curriculum").val(response.data.values.curriculum.curriculum ? response.data.values.curriculum.curriculum : "");
+                        $("#year_level").val(response.data.values.year_level ? response.data.values.year_level : "");
+                        
+                        returnGradeInfo(student_id, period_id, 0);
                     }
                 },
                 error: function (data) {
@@ -100,14 +105,54 @@ $(function(){
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
-                        $("#student").val(null).trigger('change');
+                        clearForm();
                     }
                 }
             });
-        }else{
-            //$('#form_enrollment')[0].reset();
         }
 
         e.preventDefault();
     });
+
+    function returnGradeInfo(student_id, period_id, origin)
+    {
+        $.ajax({
+            type: "POST",
+            url:  "/grades/gradeinfo",
+            data:  {'student_id':student_id, 'period_id':period_id, 'origin':origin},
+            dataType: 'json',
+            cache: false, 
+            success: function(response){
+                console.log(response);
+                $("#grade_id").val(response.id);
+                returnInternalGrades(response.id);
+            } 
+        });
+    }
+
+    function returnInternalGrades(grade_id)
+    {
+        if(grade_id)
+        {
+            $.ajax({
+                type: "POST",
+                url:  "/gradeinternals/internalgrades",
+                data:  {'grade_id':grade_id},
+                cache: false, 
+                success: function(response){
+                    console.log(response);
+                    
+                },
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) {
+                        showError('Something went wrong! Can not perform requested action!');
+                        $("#return_internal_grades").html('<tr><td class="mid" colspan="13">No records to be displayed!</td></tr>');
+
+                    }
+                }
+            });
+        }
+    }
 });

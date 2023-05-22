@@ -27,5 +27,8 @@ class InternalGrade extends Model
         return $this->belongsTo(GradingSystem::class, 'grading_system_id', 'id');
     }
 
-    
+    public function completion_grade()
+    {
+        return $this->belongsTo(GradingSystem::class, 'completion_grade', 'id');
+    }
 }

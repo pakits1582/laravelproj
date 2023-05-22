@@ -48,7 +48,7 @@ class ValidationService
             'student_id' => $enrollment->student_id,
             'period_id' => $enrollment->period_id,
             'program_id' => $enrollment->program_id,
-            'origin' => 1,
+            'origin' => 0,
             'created_at' => now(),
             'updated_at' => now()
         ]);

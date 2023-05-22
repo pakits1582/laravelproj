@@ -142,5 +142,35 @@ class InternalGradeService
 
         return $query->get();
     }
+
+    public function getInternalGrades($grade_id)
+    {
+        $query = InternalGrade::query();
+        $query->select(
+            'internal_grades.*', 
+            'grading_systems.value AS grade', 
+            'remarks.remark',
+            'cgr.remark AS completion_remark',
+            'cggs.value AS completion_grade',
+            'classes.curriculum_subject_id',
+            'classes.code AS classcode',
+            'curriculum_subjects.subject_id',
+            'subjects.code',
+            'subjects.units',
+            'subjects.name'
+        );
+        $query->leftJoin('grades', 'internal_grades.grade_id', 'grades.id');
+        $query->leftJoin('classes', 'internal_grades.class_id', 'classes.id');
+        $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'classes.curriculum_subject_id');
+        $query->leftJoin('subjects', 'subjects.id', 'curriculum_subjects.subject_id');
+        $query->leftJoin('grading_systems', 'internal_grades.grading_system_id', 'grading_systems.id');
+        $query->leftJoin('remarks', 'grading_systems.remark_id', 'remarks.id');
+        $query->leftJoin('grading_systems AS cggs', 'internal_grades.completion_grade', 'cggs.id');
+        $query->leftJoin('remarks AS cgr', 'cggs.remark_id', 'cgr.id');
+        
+        $query->where('internal_grades.grade_id', $grade_id);
+
+        return $query->get();
+    }
 }
 

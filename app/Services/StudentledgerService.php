@@ -48,6 +48,7 @@ class StudentledgerService
                 if (!isset($soa[$soa_period])) {
                     $soa[$soa_period] = [
                         'period_id'  => $soa_period,
+                        'period_year' => $v->enrollment->period->year,
                         'period_code' => $v->enrollment->period->code,
                         'period_name' => $v->enrollment->period->name,
                         'program_code' => $v->enrollment->program->code,
@@ -97,6 +98,10 @@ class StudentledgerService
                 );
             }
         }
+
+        usort($soa, function ($a, $b) {
+            return $a['period_year'] <=> $b['period_year'];
+        });
 
         return array_values($soa);
     }

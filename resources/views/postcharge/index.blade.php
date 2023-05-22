@@ -152,7 +152,7 @@
                                         <p class="font-italic text-info text-small">Note: Click on checkbox to select student to be charged or removed.</p>
                                         {{-- <div class="col-xs-8 col-xs-offset-2 well" style="height: 520px; clear:both;"> --}}
                                             {{-- <div class="table-responsive"> --}}
-                                                <table id="scrollable_table" class="table cell-border stripe hover compact" style="width:100%">
+                                                <table id="scrollable_table" class="table table-sm table-striped table-bordered hover compact" style="width:100%; font-size: 14px;">
                                                     <thead>
                                                         <tr>
                                                             <th class="w30"><input type="checkbox" name="" id="checkallcheckbox"></th>

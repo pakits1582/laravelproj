@@ -398,9 +398,9 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::view('/subjects/import', 'subject.import')->name('subjects.import');
         // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
         // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
-        // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
         //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
-        Route::get('/grades/{student}/{origin}', [GradeController::class, 'getgradeinfobystudentandperiod']);
+        //Route::get('/grades/{student}/{origin}', [GradeController::class, 'getgradeinfobystudentandperiod']);
+        Route::post('/grades/gradeinfo', [GradeController::class, 'gradeinfo']);
         Route::resource('grades', GradeController::class)->missing(function (Request $request) {
             return Redirect::route('grades.index');
         });
@@ -412,7 +412,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
         // Route::post('/subjects/generatepdf', [SubjectController::class, 'generatepdf'])->name('subjects.generatepdf');4
         //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
-        //Route::post('/gradeinternals/saveremark', [GradingSystemController::class, 'storeremark'])->name('saveremark');
+        Route::post('/gradeinternals/internalgrades', [InternalGradeController::class, 'internalgrades']);
         Route::resource('gradeinternals', InternalGradeController::class)->missing(function (Request $request) {
             return Redirect::route('gradeinternals.index');
         });
