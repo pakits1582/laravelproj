@@ -155,14 +155,22 @@ class InternalGradeService
             'classes.curriculum_subject_id',
             'classes.code AS classcode',
             'curriculum_subjects.subject_id',
-            'subjects.code',
+            'subjects.code AS subjectcode',
             'subjects.units',
-            'subjects.name'
+            'subjects.name',
+            'sections.code AS sectioncode',
+            'classes.instructor_id',
+            'instructors.last_name',
+            'instructors.first_name',
+            'instructors.middle_name',
+            'instructors.name_suffix'
         );
         $query->leftJoin('grades', 'internal_grades.grade_id', 'grades.id');
         $query->leftJoin('classes', 'internal_grades.class_id', 'classes.id');
         $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'classes.curriculum_subject_id');
         $query->leftJoin('subjects', 'subjects.id', 'curriculum_subjects.subject_id');
+        $query->leftJoin('sections', 'sections.id', 'classes.section_id');
+        $query->leftJoin('instructors', 'instructors.id', 'classes.instructor_id');
         $query->leftJoin('grading_systems', 'internal_grades.grading_system_id', 'grading_systems.id');
         $query->leftJoin('remarks', 'grading_systems.remark_id', 'remarks.id');
         $query->leftJoin('grading_systems AS cggs', 'internal_grades.completion_grade', 'cggs.id');
