@@ -94,7 +94,7 @@
                                     </span>
                                     <span class="text">Add Internal Grade</span>
                                 </button>
-                                <button type="button" id="internal_grade_info" class="btn btn-primary btn-icon-split actions mb-2 mb-md-0" disabled>
+                                <button type="button" id="internal_grade_info" class="btn btn-primary btn-icon-split actions mb-2 mb-md-0">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-edit"></i>
                                     </span>
@@ -110,7 +110,6 @@
                                 <thead class="">
                                     <tr>
                                         <th class="w30"></th>
-                                        <th class="w20"></th>
                                         <th class="w170">Section</th>
                                         <th class="w50">Class</th>
                                         <th class="w150">Subject Code</th>
@@ -118,8 +117,9 @@
                                         <th class="w80">Grade</th>
                                         <th class="w50">C. G.</th>
                                         <th class="w50">Units</th>
-                                        <th class="w120">Remark</th>
+                                        <th class="w150">Remark</th>
                                         <th class="w170">Instructor</th>
+                                        <th class="50"></th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-black" id="return_internal_grades">

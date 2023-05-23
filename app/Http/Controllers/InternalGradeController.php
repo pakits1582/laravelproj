@@ -33,9 +33,9 @@ class InternalGradeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        return view('gradeinternal.add_multiple');
     }
 
     /**
@@ -98,6 +98,6 @@ class InternalGradeController extends Controller
     {
         $internal_grades = $this->internalGradeService->getInternalGrades($request->grade_id);
 
-        return $internal_grades;
+        return view('gradeinternal.internalgrades', compact('internal_grades'));
     }
 }

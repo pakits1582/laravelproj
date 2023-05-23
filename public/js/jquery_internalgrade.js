@@ -141,7 +141,7 @@ $(function(){
                 cache: false, 
                 success: function(response){
                     console.log(response);
-                    
+                    $("#return_internal_grades").html(response);
                 },
                 error: function (data) {
                     console.log(data);
@@ -153,6 +153,38 @@ $(function(){
                     }
                 }
             });
+        }else{
+            $("#grade_id").val("");
+            $("#return_internal_grades").html('<tr><td class="mid" colspan="13">No records to be displayed!</td></tr>');
         }
     }
+
+    $(document).on("change", "#period_id", function()
+    {
+        var student_id = $("#student").val();
+        var period_id = $("#period_id").val();
+
+        if(student_id && period_id)
+        {
+            returnGradeInfo(student_id, period_id, 0);
+        }else{
+            $("#grade_id").val("");
+            $("#return_internal_grades").html('<tr><td class="mid" colspan="13">No records to be displayed!</td></tr>');
+        }
+    });
+
+    $(document).on("click", "#add_internal_grade", function(){
+        var grade_id = $("#grade_id").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/gradeinternals/create",
+            data: ({ 'grade_id':grade_id }),
+            success: function(data){
+                console.log(data);
+                $('#ui_content').html(data);
+                $("#modalll").modal('show');
+            }
+        });
+    });
 });
