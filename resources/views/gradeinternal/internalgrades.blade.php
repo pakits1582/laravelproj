@@ -5,13 +5,13 @@
 	    $total_units = 0;
     @endphp
     @foreach ($internal_grades as $internal_grade)
-        <tr>
+        <tr  id="remove_{{ $internal_grade->id }}">
             <td>{{ $loop->iteration }}</td>
             <td class="">{{ $internal_grade->sectioncode }}</td>
             <td class="">{{ $internal_grade->classcode }}</td>
             <td class="">{{ ($internal_grade->wga == 1) ? '*'.$internal_grade->subjectcode : $internal_grade->subjectcode }}</td>
             <td class="">{{ $internal_grade->subjectname }}</td>
-            <td class="tutorial" contenteditable="true" id="{{ $internal_grade->id }}" data-value="{{ ($internal_grade->final == 1) ? $internal_grade->grade : '' }}">{{ ($internal_grade->final == 1) ? $internal_grade->grade : '' }}</td>
+            <td class="editable tutorial mid text-uppercase" contenteditable="true" id="{{ $internal_grade->id }}" data-value="{{ ($internal_grade->final == 1) ? $internal_grade->grade : '' }}">{{ ($internal_grade->final == 1) ? $internal_grade->grade : '' }}</td>
             <td class="">{{ ($internal_grade->final == 1) ? $internal_grade->completion_grade : '' }}</td>
             <td class="mid">{{ $internal_grade->units }}</td>
             @php

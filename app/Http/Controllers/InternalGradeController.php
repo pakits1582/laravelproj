@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\GradingSystem;
 use Illuminate\Http\Request;
 use App\Models\InternalGrade;
 use App\Services\InstructorService;
@@ -99,5 +100,13 @@ class InternalGradeController extends Controller
         $internal_grades = $this->internalGradeService->getInternalGrades($request->grade_id);
 
         return view('gradeinternal.internalgrades', compact('internal_grades'));
+    }
+
+    public function inlineupdategrade(Request $request)
+    {
+        $internal_grade = $this->internalGradeService->saveInlineUpdateGrade($request);
+
+        return response()->json($internal_grade);
+
     }
 }

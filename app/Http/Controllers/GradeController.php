@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Libs\Helpers;
 use App\Models\Grade;
 use Illuminate\Http\Request;
+use App\Services\PeriodService;
 use App\Services\Grade\GradeService;
 
 class GradeController extends Controller
@@ -14,7 +16,7 @@ class GradeController extends Controller
     public function __construct(GradeService $gradeService)
     {
         $this->gradeService = $gradeService;
-        //Helpers::setLoad(['jquery_internalgrade.js', 'select2.full.min.js']);
+        Helpers::setLoad(['jquery_grades.js', 'select2.full.min.js']);
     }
 
 
@@ -25,7 +27,9 @@ class GradeController extends Controller
      */
     public function index()
     {
-        //
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+
+        return view('grade.index', compact('periods'));
     }
 
     /**
@@ -101,6 +105,21 @@ class GradeController extends Controller
         $grade = Grade::oforigin($request->origin)->where('student_id', $request->student_id)->where('period_id', $request->period_id)->first();
         
         return response()->json($grade);
+    }
+
+    public function gradefile(Request $request)
+    {
+
+        $grade_file = Grade::with(['period', 'school', 'program'])->where('student_id', $request->student_id);
+
+        if (!empty($request->period_id)) 
+        {
+            $grade_file->where('period_id', $request->period_id);
+        }
+
+        $grades = $grade_file->get();
+
+        return response()->json($grades);
     }
 
     // public function getgradeinfobystudentandperiod(Request $request)

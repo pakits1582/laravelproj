@@ -17,6 +17,28 @@
                 <div class="row">
                     <div class="col-lg-12 mx-auto">
                         <div id="nav-tab-card" class="tab-pane fade show active">
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="year_level" class="m-0 font-weight-bold text-primary">Grade No.</label>
+                                        <select name="grade_id" class="form-control" id="grade_id">
+                                            <option value="">- select grade no -</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <p class="m-0 font-italic text-info" style="">
+                                        Note: Select Grade No. after searching student to display external grades.
+                                       
+                                    </p>            
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="code"  class="m-0 font-weight-bold text-primary">Curriculum</label>
+                                        <input type="text" id="curriculum" class="form-control text-uppercase clearable" readonly value="" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -46,7 +68,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="class_start" class="m-0 font-weight-bold text-primary">Period</label>
                                         <select name="period_id" class="form-control" id="period">
@@ -60,12 +82,6 @@
                                                 @endforeach
                                             @endif
                                         </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="code"  class="m-0 font-weight-bold text-primary">Curriculum</label>
-                                        <input type="text" id="curriculum" class="form-control text-uppercase" readonly value="" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-md-6">

@@ -75,6 +75,21 @@ $(function(){
 	    dropdownParent: $("#ui_content4")
 	});
 
+    function returnGradeInfo(student_id, period_id, origin)
+    {
+        $.ajax({
+            type: "POST",
+            url:  "/grades/gradeinfo",
+            data:  {'student_id':student_id, 'period_id':period_id, 'origin':origin},
+            dataType: 'json',
+            cache: false, 
+            success: function(response){
+                console.log(response);
+                $("#grade_id").val(response.id);
+            } 
+        });
+    }
+
     $(document).on("change", "#student", function(e){
         var student_id = $("#student").val();
         var period_id = $("#period_id").val();
@@ -98,6 +113,7 @@ $(function(){
                         $("#year_level").val(response.data.values.year_level ? response.data.values.year_level : "");
                         
                         returnGradeInfo(student_id, period_id, 0);
+                        returnGradefile(student_id, period_id);
                     }
                 },
                 error: function (data) {
@@ -114,55 +130,6 @@ $(function(){
         e.preventDefault();
     });
 
-    function returnGradeInfo(student_id, period_id, origin)
-    {
-        $.ajax({
-            type: "POST",
-            url:  "/grades/gradeinfo",
-            data:  {'student_id':student_id, 'period_id':period_id, 'origin':origin},
-            dataType: 'json',
-            cache: false, 
-            success: function(response){
-                console.log(response);
-                $("#grade_id").val(response.id);
-                returnInternalGrades(response.id);
-            } 
-        });
-    }
-
-    function returnInternalGrades(grade_id, nextr="")
-    {
-        if(grade_id)
-        {
-            $.ajax({
-                type: "POST",
-                url:  "/gradeinternals/internalgrades",
-                data:  {'grade_id':grade_id},
-                cache: false, 
-                success: function(response){
-                    console.log(response);
-                    $("#return_internal_grades").html(response);
-
-                    if (nextr !== "") {
-                        $("#"+nextr).focus();
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                    var errors = data.responseJSON;
-                    if ($.isEmptyObject(errors) === false) {
-                        showError('Something went wrong! Can not perform requested action!');
-                        $("#return_internal_grades").html('<tr><td class="mid" colspan="13">No records to be displayed!</td></tr>');
-
-                    }
-                }
-            });
-        }else{
-            $("#grade_id").val("");
-            $("#return_internal_grades").html('<tr><td class="mid" colspan="13">No records to be displayed!</td></tr>');
-        }
-    }
-
     $(document).on("change", "#period_id", function()
     {
         var student_id = $("#student").val();
@@ -171,74 +138,34 @@ $(function(){
         if(student_id && period_id)
         {
             returnGradeInfo(student_id, period_id, 0);
-        }else{
-            $("#grade_id").val("");
-            $("#return_internal_grades").html('<tr><td class="mid" colspan="13">No records to be displayed!</td></tr>');
         }
+
+        returnGradefile(student_id, period_id);
+
     });
 
-    // $(document).on("click", "#add_internal_grade", function(){
-    //     var grade_id = $("#grade_id").val();
+    function returnGradefile(student_id, period_id)
+    {
+        $.ajax({
+            type: "POST",
+            url:  "/grades/gradefile",
+            data:  {'student_id':student_id, 'period_id': period_id},
+            dataType: 'json',
+            cache: false, 
+            success: function(response){
+                console.log(response);
+               
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    $("#return_gradefile").html('<h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>');
 
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "/gradeinternals/create",
-    //         data: ({ 'grade_id':grade_id }),
-    //         success: function(data){
-    //             console.log(data);
-    //             $('#ui_content').html(data);
-    //             $("#modalll").modal('show');
-    //         }
-    //     });
-    // });
+                }
+            }
+        });
+    }
 
-    $(document).on('keydown', ".editable",function(e){  
-		if (e.which === 13 && e.shiftKey === false || e.which === 32){
-			var td      = $(this);
-			var internal_grade_id = $(this).attr("id");
-			var grade   = $(this).text(); 
-			var origval = $(this).attr("data-value");
-            var grade_id = $("#grade_id").val();
-
-			if(grade != origval)
-			{
-				$.ajax({
-					type: "POST",
-					url: "/gradeinternals/inlineupdategrade",
-					data: ({"internal_grade_id":internal_grade_id, "grade":grade}),
-					cache: false,
-					success: function(response){
-                        console.log(response);
-
-                        if(response.success == true)
-                        {
-                            showSuccess(response.message);
-
-                            var nextr = $(td).closest('tr').next('tr').attr("id");
-							nextr = (typeof nextr !== "undefined") ? nextr.replace('remove_','') : '';
-
-							returnInternalGrades(grade_id, nextr);
-                
-                        }else{
-                            showError(response.message);
-                            td.text(origval);
-                        }
-                        
-						// if(data == 1)
-						// {
-						// 	var nextr = $(td).closest('tr').next('tr').attr("id");
-						// 	nextr = (typeof nextr !== "undefined") ? nextr.replace('remove_','') : '';
-
-						// 	showSuccess('Internal grade updated successfully!');
-						// 	returnInternalgrades(idno,period,nextr);
-						// }else{
-						// 	showError(data);
-						// 	td.text(origval);
-						// }	
-					}
-				});
-			}
-	        return false;
-	    }
-	});
 });

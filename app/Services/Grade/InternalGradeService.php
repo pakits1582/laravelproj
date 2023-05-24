@@ -2,8 +2,9 @@
 
 namespace App\Services\Grade;
 
-use App\Models\InternalGrade;
 use App\Libs\Helpers;
+use App\Models\GradingSystem;
+use App\Models\InternalGrade;
 
 class InternalGradeService
 {
@@ -180,6 +181,47 @@ class InternalGradeService
         $query->where('internal_grades.grade_id', $grade_id);
 
         return $query->get();
+    }
+
+    public function saveInlineUpdateGrade($request)
+    {
+        $internal_grade = InternalGrade::with('classinfo.curriculumsubject.subjectinfo')->find($request->internal_grade_id);
+
+        if(!$internal_grade)
+        {
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Internal Grade can not be found!',
+                'alert' => 'alert-danger'
+            ];
+        }
+
+        $subject_educational_level_id = $internal_grade->classinfo->curriculumsubject->subjectinfo->educational_level_id;
+
+        if($request->grade != '')
+        {
+            $grading_system = GradingSystem::where('educational_level_id', $subject_educational_level_id)->where('value', $request->grade)->first();
+
+            if(!$grading_system)
+            {
+                return [
+                    'success' => false,
+                    'message' => 'Something went wrong! Grade entered does not exists in the grading system!',
+                    'alert' => 'alert-danger'
+                ];
+            }
+        }
+        
+        $internal_grade->update([
+            'grading_system_id' => ($request->grade == '') ? NULL : $grading_system->id,
+            'final' => 1
+        ]);
+
+        return [
+            'success' => true,
+            'message' => 'Internal grade updated successfully!',
+            'alert' => 'alert-success'
+        ];
     }
 }
 

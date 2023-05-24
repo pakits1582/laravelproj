@@ -2,7 +2,7 @@
     <div class="col-lg-12 mx-auto">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">External Grade Form</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Add External Grade Form</h6>
             </div>
             <div class="card-body">
                 {{-- {{ dd($schools) }} --}}
@@ -12,20 +12,17 @@
                 <form method="POST" action="{{ route('gradeexternals.store') }}" class="form_externalgrade"  role="form" id="form_externalgrade">
                     @csrf
                     <div class="row">
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <div class="form-group">
-                                <label for="year_level" class="m-0 font-weight-bold text-primary">Grade No.</label>
-                                <select name="grade_id" class="form-control" id="grade_id">
-                                    <option value="">- select grade -</option>
-                                </select>
+                                
                             </div>
-                        </div>
-                        <div class="col-md-9">
+                        </div> --}}
+                        <div class="col-md-12">
                             <p class="m-0 font-italic text-info" style="font-size: 12px;">
                                 Note: 
                                 <ul class="m-0 font-italic text-info" style="font-size: 12px;">
-                                    <li>If student has multiple external grade record from different schools in the same term you can view grades by selecting grade no.</li>
-                                    <li>Selecting grade number will automatically display the school and program where the grade will be save.</li>
+                                    <li>If student has multiple external grade record from different schools in the same term you can view external grades saved by selecting grade no.</li>
+                                    <li>Selecting grade number will automatically display the school and program where the grade will be saved.</li>
                                     <li>If grade no. is selected, changing school or program will be applied to all subjects of the grade no. after saving.</li>
                                 </ul>
                             </p>                        
