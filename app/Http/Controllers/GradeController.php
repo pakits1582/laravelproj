@@ -7,6 +7,8 @@ use App\Models\Grade;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use App\Services\Grade\GradeService;
+use App\Services\Grade\ExternalGradeService;
+use App\Services\Grade\InternalGradeService;
 
 class GradeController extends Controller
 {
@@ -109,17 +111,9 @@ class GradeController extends Controller
 
     public function gradefile(Request $request)
     {
+        $grade_files = $this->gradeService->returnGradeFiles($request);
 
-        $grade_file = Grade::with(['period', 'school', 'program'])->where('student_id', $request->student_id);
-
-        if (!empty($request->period_id)) 
-        {
-            $grade_file->where('period_id', $request->period_id);
-        }
-
-        $grades = $grade_file->get();
-
-        return response()->json($grades);
+        return view('grade.gradefile', compact('grade_files'));
     }
 
     // public function getgradeinfobystudentandperiod(Request $request)

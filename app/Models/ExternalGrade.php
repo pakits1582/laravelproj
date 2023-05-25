@@ -17,7 +17,7 @@ class ExternalGrade extends Model
     public function subjectCode(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => strtoupper($attributes['subject_code']),
+            get: fn ($value, $attributes) => strtoupper($attributes['subject_code']) ?? '',
             set: fn ($value) => strtoupper($value)
         );
     }
@@ -25,7 +25,7 @@ class ExternalGrade extends Model
     public function subjectDescription(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => strtoupper($attributes['subject_description']),
+            get: fn ($value, $attributes) => strtoupper($attributes['subject_description']) ?? '',
             set: fn ($value) => strtoupper($value)
         );
     }
@@ -33,7 +33,7 @@ class ExternalGrade extends Model
     public function completionGrade(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => strtoupper($attributes['completion_grade']),
+            get: fn ($value, $attributes) => strtoupper($attributes['completion_grade']) ?? '',
             set: fn ($value) => strtoupper($value)
         );
     }
@@ -41,7 +41,7 @@ class ExternalGrade extends Model
     public function equivalentGrade(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => strtoupper($attributes['equivalent_grade']),
+            get: fn ($value, $attributes) => strtoupper($attributes['equivalent_grade']) ?? '',
             set: fn ($value) => strtoupper($value)
         );
     }
@@ -49,7 +49,7 @@ class ExternalGrade extends Model
     public function units(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => strtoupper($attributes['units']),
+            get: fn ($value, $attributes) => strtoupper($attributes['units']) ?? '',
             set: fn ($value) => strtoupper($value)
         );
     }
@@ -57,7 +57,7 @@ class ExternalGrade extends Model
     public function grade(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => strtoupper($attributes['grade']),
+            get: fn ($value, $attributes) => strtoupper($attributes['grade']) ?? '',
             set: fn ($value) => strtoupper($value)
         );
     }

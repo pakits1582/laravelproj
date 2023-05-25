@@ -140,5 +140,21 @@ class ExternalGradeService
 
     }
 
+    public function getExternalGrades($grade_id)
+    {
+        $query = ExternalGrade::query();
+        $query->select(
+            'external_grades.*', 
+            'remarks.remark'
+        );
+        $query->leftJoin('grades', 'external_grades.grade_id', 'grades.id');
+        $query->leftJoin('remarks', 'external_grades.remark_id', 'remarks.id');
+
+        $query->where('external_grades.grade_id', $grade_id);
+
+        return $query->get();
+
+    }
+
 }
 

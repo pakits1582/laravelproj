@@ -68,7 +68,7 @@
                                             <option value="">All Periods</option>
                                             @if ($periods)
                                                 @foreach ($periods as $period)
-                                                    <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
+                                                    <option value="{{ $period->id }}">{{ $period->name }}</option>
                                                 @endforeach
                                             @endif
                                         </select>

@@ -95,9 +95,52 @@ class GradeService
         Grade::where('id', $grade_id)->firstOrFail()->delete();
     }
 
-    public function getExternalGradeInfo($student_id, $period_id, $school_id, $program_id)
+    public function returnGradeFiles($request)
     {
+        $grade_file = Grade::with(['period', 'school', 'program'])->where('student_id', $request->student_id);
 
+        if (!empty($request->period_id)) 
+        {
+            $grade_file->where('period_id', $request->period_id);
+        }
+
+        $grades = $grade_file->get();
+
+        $grade_files = [];
+        if($grades)
+        {
+            foreach ($grades as $key => $v) 
+            {
+                $grade_id = $v->id;
+                if (!isset($grade_files[$grade_id])) {
+                    $grade_files[$grade_id] = [
+                        'grade_id'  => $grade_id,
+                        'period_id'  => $v->period->id,
+                        'period_year' => $v->period->year,
+                        'period_code' => $v->period->code,
+                        'period_name' => $v->period->name,
+                        'program_code' => $v->program->code,
+                        'program_name' => $v->program->name,
+                        'school_code' => $v->school->code ?? '',
+                        'school_name' => $v->school->name ?? '',
+                        'origin' => $v->origin
+                    ];
+
+                    if($v->origin == 0)
+                    {
+                        $grade_files[$grade_id]['grades'] = (new InternalGradeService())->getInternalGrades($grade_id)->toArray();
+                    }else{
+                        $grade_files[$grade_id]['grades'] = (new ExternalGradeService())->getExternalGrades($grade_id)->toArray();
+                    }
+                }
+            }
+        }
+
+        usort($grade_files, function ($a, $b) {
+            return $a['period_year'] <=> $b['period_year'];
+        });
+
+        return array_values($grade_files);
     }
 
 }

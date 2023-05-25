@@ -150,11 +150,11 @@ $(function(){
             type: "POST",
             url:  "/grades/gradefile",
             data:  {'student_id':student_id, 'period_id': period_id},
-            dataType: 'json',
+            // dataType: 'json',
             cache: false, 
             success: function(response){
                 console.log(response);
-               
+                $("#return_gradefile").html(response);
             },
             error: function (data) {
                 console.log(data);
