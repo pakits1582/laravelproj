@@ -110,15 +110,15 @@
                                 <thead class="">
                                     <tr>
                                         <th class="w30"></th>
-                                        <th class="w170">Section</th>
+                                        <th class="w150">Section</th>
                                         <th class="w50">Class</th>
                                         <th class="w150">Subject Code</th>
-                                        <th class="">Description</th>
-                                        <th class="w80">Grade</th>
-                                        <th class="w50">C. G.</th>
+                                        <th class="">Subject Description</th>
                                         <th class="w50">Units</th>
+                                        <th class="w50">Grade</th>
+                                        <th class="w50">C. G.</th>
                                         <th class="w150">Remark</th>
-                                        <th class="w170">Instructor</th>
+                                        <th class="w150">Instructor</th>
                                         <th class="50"></th>
                                     </tr>
                                 </thead>

@@ -26,6 +26,9 @@
                         @php
                             if($grade_file['origin'] == 0)
                             {
+                                $units_sum   = 0;
+                                $grade_sum   = 0;
+                                $total_units = 0;
                         @endphp
                                 <div class="table-responsive" id="table_data">
                                     <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
@@ -34,7 +37,7 @@
                                                 <th class="w30"></th>
                                                 <th class="w150">Section</th>
                                                 <th class="w50">Class</th>
-                                                <th class="">Subject Code</th>
+                                                <th class="w150">Subject Code</th>
                                                 <th class="">Subject Description</th>
                                                 <th class="w50">Units</th>
                                                 <th class="w50">Grade</th>
@@ -47,7 +50,7 @@
                                             @if (count($grade_file['grades']) > 0)
                                                 @foreach ($grade_file['grades'] as $grade)
                                                     <tr>
-                                                        <td class="mid">{{ $loop->iteration }}</td>
+                                                        <td class="">{{ $loop->iteration }}</td>
                                                         <td>{{ $grade['sectioncode'] }}</td>
                                                         <td>{{ $grade['classcode'] }}</td>
                                                         <td>{{ ($grade['gwa'] == 1) ? '*'.$grade['subjectcode'] : $grade['subjectcode'] }}</td>
@@ -77,9 +80,37 @@
                                                         @endif
                                                         <td class="">{{ $faculty }}</td>
                                                     </tr>
+                                                    @php
+                                                        $total_units += $grade['units'];
+
+                                                        //START COMPUTATION OF AVERAGE
+                                                        if($grade['final'] == 1){
+                                                            if($grade['gwa'] == 0 && is_numeric($grade['grade']))
+                                                            {
+                                                                $units_sum += $grade['units'];
+                                                                $grade_sum += $grade['grade'] * $grade['units'];
+                                                            }else if($grade['grade'] == 'INC'){
+                                                                $units_sum += $grade['units'];
+                                                                $grade_sum += is_numeric($grade['completion_grade']) ? $grade['completion_grade'] * $grade['units'] : 0;
+                                                            }
+                                                        }
+                                                    @endphp
                                                 @endforeach
                                             @endif
                                         </tbody>
+                                        @php
+                                            $gwa =  ($grade_sum > 0) ? number_format(@($grade_sum/$units_sum),2) : '';
+                                        @endphp
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <div class="m-0 font-italic text-info"><span>Note: </span>* in subject code denotes subject is excluded in GWA.
+                                                </td> 
+                                                <td class="mid font-weight-bold">{{ $total_units }}</td>    
+                                                <td class="mid font-weight-bold">{{ $gwa }}</td> 
+                                                <td colspan="3"></td>      
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                         @php
@@ -92,7 +123,7 @@
                                                 <th class="w30"></th>
                                                 <th class="w150">School</th>
                                                 <th class="w150">Program</th>
-                                                <th class="">Subject Code</th>
+                                                <th class="w150">Subject Code</th>
                                                 <th class="">Subject Description</th>
                                                 <th class="w50">Units</th>
                                                 <th class="w50">Grade</th>
@@ -119,6 +150,13 @@
                                                 @endforeach
                                             @endif
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="10">
+                                                    <div class="m-0 font-italic text-info"><span>Note: </span>Grade file is from external source.</div>
+                                                </td> 
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                         @php

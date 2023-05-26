@@ -103,9 +103,11 @@ $(function(){
                     console.log(response);
                     if(response.data == false)
                     {
+                        $('.actions').prop('disabled', true);
                         showError('Student not found!');
                         clearForm();
                     }else{
+                        $('.actions').prop('disabled', false);
                         $("#program").val(response.data.values.program.name ? response.data.values.program.name : "");
                         $("#educational_level").val((response.data.values.program.level) ? response.data.values.program.level.code ? response.data.values.program.level.code : "" : "");
                         $("#college").val((response.data.values.program.collegeinfo) ? response.data.values.program.collegeinfo.code ? response.data.values.program.collegeinfo.code : "" : "");
@@ -121,6 +123,7 @@ $(function(){
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
+                        $('.actions').prop('disabled', true);
                         clearForm();
                     }
                 }
@@ -140,6 +143,10 @@ $(function(){
             returnGradeInfo(student_id, period_id, 0);
         }
 
+        if(!period_id)
+        {
+            $("#grade_id").val("");
+        }
         returnGradefile(student_id, period_id);
 
     });
@@ -162,7 +169,7 @@ $(function(){
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
                     $("#return_gradefile").html('<h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>');
-
+                    $('.actions').prop('disabled', true);
                 }
             }
         });
