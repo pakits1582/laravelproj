@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Grade;
+use App\Models\School;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use App\Services\Grade\GradeService;
@@ -64,8 +66,10 @@ class GradeController extends Controller
     public function show($id)
     {
         $gradeinfo = $this->gradeService->returnGradeInfo($id);
-
-        return $gradeinfo;
+        $schools = School::all()->sortBy('code');
+        $programs = Program::all()->sortBy('code');
+        
+        return view('grade.grade_information', compact('gradeinfo', 'schools', 'programs'));
     }
 
     /**
@@ -115,6 +119,7 @@ class GradeController extends Controller
 
         return view('grade.gradefile', compact('grade_files'));
     }
+
 
     // public function getgradeinfobystudentandperiod(Request $request)
     // {

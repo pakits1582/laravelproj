@@ -64,7 +64,7 @@ class GradeService
 
     public function returnGradeInfo($grade_id)
     {
-        return Grade::find($grade_id);
+        return Grade::with(['student' => ['user'], 'period'])->find($grade_id);
     }
 
     public function storeGrade($request, $origin)

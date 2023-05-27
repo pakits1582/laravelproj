@@ -223,22 +223,29 @@ $(function(){
                             showError(response.message);
                             td.text(origval);
                         }
-                        
-						// if(data == 1)
-						// {
-						// 	var nextr = $(td).closest('tr').next('tr').attr("id");
-						// 	nextr = (typeof nextr !== "undefined") ? nextr.replace('remove_','') : '';
-
-						// 	showSuccess('Internal grade updated successfully!');
-						// 	returnInternalgrades(idno,period,nextr);
-						// }else{
-						// 	showError(data);
-						// 	td.text(origval);
-						// }	
 					}
 				});
 			}
 	        return false;
 	    }
 	});
+
+    $(document).on("click", "#grade_information", function(){
+        var grade_id = $("#grade_id").val();
+
+        if(grade_id)
+        {
+            $.ajax({
+                type: "GET",
+                url: "/grades/"+grade_id,
+                success: function(data){
+                    console.log(data);
+                    $('#ui_content').html(data);
+                    $("#grade_information_modal").modal('show');
+                }
+            });
+        }else{
+            showError('Grade No. is required if adding Grade Information')
+        }
+    });
 });

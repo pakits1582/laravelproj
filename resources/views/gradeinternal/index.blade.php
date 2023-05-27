@@ -94,7 +94,7 @@
                                     </span>
                                     <span class="text">Add Internal Grade</span>
                                 </button> --}}
-                                <button type="button" id="internal_grade_info" class="btn btn-primary btn-icon-split actions mb-2 mb-md-0">
+                                <button type="button" id="grade_information" class="btn btn-primary btn-icon-split actions mb-2 mb-md-0">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-edit"></i>
                                     </span>
