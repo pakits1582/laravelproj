@@ -16,59 +16,49 @@
                 </div>
                 <div class="card-body">
                     <h6 class="mb-3 font-weight-bold text-primary">Grade Information Remark</h6>
-                    <form method="POST" action="" id="">
+                    <form method="POST" action="" id="form_grade_information">
                         @csrf
-                        <p class="font-italic text-info">Note: All entry in this area will be displayed after grade records of selected period or term.</p>
+                        <p class="font-italic text-info">Note: All remarks will be displayed on selected display drop down of grade records of selected period or term.</p>
                         <div id="grade_remarks">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="year_level" class="m-0 font-weight-bold text-primary">Display</label>
-                                        <select name="display[]" class="form-control" class="display">
-                                            <option value="1">After</option>
-                                            <option value="2">Before</option>
-                                        </select>
-                                    </div>
+                            <div class="row mb-1 ">
+                                <div class="col-md-2">
+                                    <label for="" class="m-0 font-weight-bold text-primary">Display</label>
+                                    <select name="displays[]" class="form-control">
+                                        <option value="1">After</option>
+                                        <option value="2">Before</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label for="year_level" class="m-0 font-weight-bold text-primary">Remark</label>
-                                        <textarea name="note" class="form-control text-uppercase" rows="2"></textarea>
-                                    </div>
+                                <div class="col-md-6">
+                                    <label for="remark" class="m-0 font-weight-bold text-primary">Remark</label>
+                                    <textarea name="remarks[]" class="form-control text-uppercase remark" rows="2"></textarea>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="year_level" class="m-0 font-weight-bold text-primary">Underline</label>
-                                        <select name="underline[]" class="form-control" class="display">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                    </div>
+                                    <label for="" class="m-0 font-weight-bold text-primary">Underline</label>
+                                    <select name="underlines[]" class="form-control">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="year_level" class="m-0 font-weight-bold text-primary">Add/Remove</label>
-                                        <button type="button" id="add_remark" class="btn btn-primary btn-icon-split mb-2">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-plus"></i>
-                                            </span>
-                                            <span class="text">Add Remark</span>
-                                        </button>
-                                    </div>
+                                    <label for="year_level" class="m-0 font-weight-bold text-primary">Action</label>
+                                    <button type="button" id="add_remark" class="btn btn-primary btn-icon-split mb-2">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-plus"></i>
+                                        </span>
+                                        <span class="text">Add Remark</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </form>
                     <hr>
                     <h6 class="mb-3 font-weight-bold text-primary">Graduation and Thesis Information</h6>
-                    <form method="post" id="" action="" >
-                        @csrf
                         <p class="font-italic text-info">Note: All entry in this area will be displayed after grade records of selected period or term.</p>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="year_level" class="m-0 font-weight-bold text-primary">School</label>
-                                    <select name="school_id" class="form-control" id="school">
+                                    <label for="school_id" class="m-0 font-weight-bold text-primary">School</label>
+                                    <select name="school_id" class="form-control" id="school_id">
                                         <option value="">- select school -</option>
                                         @if ($schools)
                                             @foreach ($schools as $school)
@@ -103,79 +93,84 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="year_level" class="m-0 font-weight-bold text-primary">Thesis Title</label>
-                                    <textarea name="note" class="form-control" rows="2"></textarea>
+                                    <label for="thesis_title" class="m-0 font-weight-bold text-primary">Thesis Title</label>
+                                    <textarea name="thesis_title" id="thesis_title" class="form-control" rows="2"></textarea>
+                                    <div id="error_thesis_title"></div> 
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="term" class="m-0 font-weight-bold text-primary">Graduation Date</label>
-                                    <input type="text" id="curriculum" class="form-control text-uppercase clearable" value="" placeholder="">
+                                    <label for="graduation_date" class="m-0 font-weight-bold text-primary">Graduation Date</label>
+                                    <input type="text" name="graduation_date" id="graduation_date" class="form-control text-uppercase datepicker" value="" placeholder="">
+                                    <div id="error_graduation_date"></div> 
                                 </div>                                         
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="term" class="m-0 font-weight-bold text-primary">Graduation Award</label>
-                                    <select name="program_id" class="form-control" id="program_id">
+                                    <label for="graduation_award" class="m-0 font-weight-bold text-primary">Graduation Award</label>
+                                    <select name="graduation_award" class="form-control" id="graduation_award">
                                         <option value="">- select award -</option>
                                         <option value="1">MAGNA CUM LAUDE</option>
                                         <option value="2">SUMMA CUM LAUDE</option>
                                         <option value="3">CUM LAUDE</option>
                                     </select> 
-                                    <div id="error_program_id"></div>  
+                                    <div id="error_graduation_award"></div>  
                                 </div>                                         
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="year_level" class="m-0 font-weight-bold text-primary">S.O./Resolution</label>
-                                    <select name="program_id" class="form-control" id="program_id">
+                                    <label for="soresolution_id" class="m-0 font-weight-bold text-primary">S.O./Resolution</label>
+                                    <select name="soresolution_id" class="form-control" id="soresolution_id">
                                         <option value="">- select award -</option>
                                         <option value="1">MAGNA CUM LAUDE</option>
                                         <option value="2">SUMMA CUM LAUDE</option>
                                         <option value="3">CUM LAUDE</option>
                                     </select> 
-                                    <div id="error_program_id"></div>  
+                                    <div id="error_soresolution_id"></div>  
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="term" class="m-0 font-weight-bold text-primary">Number (No.)</label>
-                                    <input type="text" id="curriculum" class="form-control text-uppercase clearable" value="" placeholder="">
+                                    <label for="soresolution_no" class="m-0 font-weight-bold text-primary">Number (No.)</label>
+                                    <input type="text" name="soresolution_no" id="soresolution_no" class="form-control text-uppercase clearable" value="" placeholder="">
+                                    <div id="error_soresolution_no"></div> 
                                 </div>                                         
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="term" class="m-0 font-weight-bold text-primary">Series</label>
-                                    <input type="text" id="curriculum" class="form-control text-uppercase clearable" value="" placeholder="">
+                                    <label for="soresolution_series" class="m-0 font-weight-bold text-primary">Series</label>
+                                    <input type="text" name="soresolution_series" id="soresolution_series" class="form-control text-uppercase clearable" value="" placeholder="">
+                                    <div id="error_soresolution_series"></div>  
                                 </div>                                         
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="term" class="m-0 font-weight-bold text-primary">Issued By</label>
-                                    <select name="program_id" class="form-control" id="program_id">
+                                    <label for="issueing_office_id" class="m-0 font-weight-bold text-primary">Issued By</label>
+                                    <select name="issueing_office_id" class="form-control" id="issueing_office_id">
                                         <option value="">- select award -</option>
                                         <option value="1">MAGNA CUM LAUDE</option>
                                         <option value="2">SUMMA CUM LAUDE</option>
                                         <option value="3">CUM LAUDE</option>
                                     </select> 
-                                    <div id="error_program_id"></div>  
+                                    <div id="error_issueing_office_id"></div>  
                                 </div>                                         
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="year_level" class="m-0 font-weight-bold text-primary">Issued Date</label>
-                                    <input type="text" id="curriculum" class="form-control text-uppercase clearable" value="" placeholder="">
-                                    <div id="error_program_id"></div>  
+                                    <label for="issued_date" class="m-0 font-weight-bold text-primary">Issued Date</label>
+                                    <input type="text" name="issued_date" id="issued_date" class="form-control text-uppercase" value="" placeholder="">
+                                    <div id="error_issued_date"></div>  
                                 </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label for="term" class="m-0 font-weight-bold text-primary">Remark</label>
-                                    <input type="text" id="curriculum" class="form-control text-uppercase clearable" value="" placeholder="">
+                                    <label for="remark" class="m-0 font-weight-bold text-primary">Remark</label>
+                                    <input type="text" name="remark" id="remark" class="form-control text-uppercase" value="" placeholder="">
+                                    <div id="error_remark"></div>  
                                 </div>                                         
                             </div>
                         </div>

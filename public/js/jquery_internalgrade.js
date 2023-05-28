@@ -248,4 +248,39 @@ $(function(){
             showError('Grade No. is required if adding Grade Information')
         }
     });
+
+    $(document).on("click", "#add_remark", function(e){
+
+        var select =    '<div class="row mb-1 addedremarkform">';
+            select +=       '<div class="col-md-2">';
+            select +=       '<select name="display[]" class="form-control" class="display">';
+            select +=       '<option value="1">After</option>';
+            select +=       '<option value="2">Before</option>';
+            select +=       '</select>';
+            select +=       '</div>';
+
+            select +=       '<div class="col-md-6">';
+            select +=       '<textarea name="note" class="form-control text-uppercase" rows="2"></textarea>';
+            select +=       '</div>';
+            select +=       '<div class="col-md-2">';
+            select +=       '<select name="underline[]" class="form-control" class="display">';
+            select +=       '<option value="1">Yes</option>';
+            select +=       '<option value="0">No</option>';
+            select +=       '</select>';
+            select +=       '</div>';
+
+            select +=       '<div class="col-md-2">';
+            select +=       '<button type="button" id="remove_remark" class="btn btn-danger btn-icon-split mb-2">';
+            select +=       '<span class="icon text-white-50">';
+            select +=       '<i class="fas fa-trash"></i>';
+            select +=       '</span>';
+            select +=       '<span class="text">Remove</span>';
+            select +=       '</button>';
+            select +=       '</div>';
+            select +=  '</div>';
+
+        $('#grade_remarks').append(select);
+
+        e.preventDefault();
+    });
 });
