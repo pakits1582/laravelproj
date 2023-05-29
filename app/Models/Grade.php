@@ -53,6 +53,16 @@ class Grade extends Model
     {
         return $this->hasMany(ExternalGrade::class);
     }
+
+    public function grade_info()
+    {
+        return $this->hasOne(GradeInformation::class, 'grade_id', 'id');
+    }
+
+    public function grade_remarks()
+    {
+        return $this->hasMany(GradeRemark::class, 'grade_id', 'id');
+    }
     
 
 

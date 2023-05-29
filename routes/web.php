@@ -398,8 +398,10 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::view('/subjects/import', 'subject.import')->name('subjects.import');
         // Route::post('/subjects/import', [SubjectController::class, 'import'])->name('subjects.uploadimport');
         // Route::post('/subjects/export', [SubjectController::class, 'export'])->name('subjects.downloadexcel');
-        //Route::view('/gradeinternals/addnewremark', 'gradingsystem.addnewremark');
-        //Route::get('/grades/{student}/{origin}', [GradeController::class, 'getgradeinfobystudentandperiod']);
+        Route::view('/grades/addsoresolution', 'grade.addsoresolution');
+        Route::view('/grades/addissuedby', 'grade.addissuedby');
+        Route::post('/grades/savesoresolution', [GradeController::class, 'savesoresolution'])->name('savesoresolution');
+        Route::post('/grades/saveissuedby', [GradeController::class, 'saveissuedby'])->name('saveissuedby');
         Route::post('/grades/gradeinfo', [GradeController::class, 'gradeinfo']);
         Route::post('/grades/gradefile', [GradeController::class, 'gradefile']);
         Route::resource('grades', GradeController::class)->missing(function (Request $request) {

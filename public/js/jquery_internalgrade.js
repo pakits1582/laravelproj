@@ -242,6 +242,12 @@ $(function(){
                     console.log(data);
                     $('#ui_content').html(data);
                     $("#grade_information_modal").modal('show');
+
+                    $("#school_id, #program_id").select2({
+                        dropdownParent: $("#grade_information_modal")
+                    });
+
+                    $(".datepicker").datepicker(pickerOpts);
                 }
             });
         }else{
@@ -253,34 +259,141 @@ $(function(){
 
         var select =    '<div class="row mb-1 addedremarkform">';
             select +=       '<div class="col-md-2">';
-            select +=       '<select name="display[]" class="form-control" class="display">';
-            select +=       '<option value="1">After</option>';
-            select +=       '<option value="2">Before</option>';
-            select +=       '</select>';
+            select +=           '<select name="display[]" class="form-control" class="display">';
+            select +=               '<option value="1">After</option>';
+            select +=               '<option value="2">Before</option>';
+            select +=           '</select>';
             select +=       '</div>';
 
             select +=       '<div class="col-md-6">';
-            select +=       '<textarea name="note" class="form-control text-uppercase" rows="2"></textarea>';
+            select +=           '<textarea name="note" class="form-control text-uppercase" rows="2"></textarea>';
             select +=       '</div>';
             select +=       '<div class="col-md-2">';
-            select +=       '<select name="underline[]" class="form-control" class="display">';
-            select +=       '<option value="1">Yes</option>';
-            select +=       '<option value="0">No</option>';
-            select +=       '</select>';
+            select +=           '<select name="underline[]" class="form-control" class="display">';
+            select +=               '<option value="1">Yes</option>';
+            select +=               '<option value="0">No</option>';
+            select +=           '</select>';
             select +=       '</div>';
 
             select +=       '<div class="col-md-2">';
-            select +=       '<button type="button" id="remove_remark" class="btn btn-danger btn-icon-split mb-2">';
-            select +=       '<span class="icon text-white-50">';
-            select +=       '<i class="fas fa-trash"></i>';
-            select +=       '</span>';
-            select +=       '<span class="text">Remove</span>';
-            select +=       '</button>';
+            select +=           '<button type="button" id="" class="remove_remark btn btn-danger btn-icon-split mb-2">';
+            select +=               '<span class="icon text-white-50">';
+            select +=               '<i class="fas fa-trash"></i>';
+            select +=               '</span>';
+            select +=               '<span class="text">Remove</span>';
+            select +=           '</button>';
             select +=       '</div>';
             select +=  '</div>';
 
         $('#grade_remarks').append(select);
 
+        e.preventDefault();
+    });
+
+    $(document).on("click", ".remove_remark", function(e){
+		$(this).closest("div.row").remove();
+        e.preventDefault();
+	});
+
+    $(document).on("change", "#soresolution_id", function(){
+        var val = $(this).val();
+
+        if(val == 'addsoresolution')
+        {
+            $("#soresolution_id option:selected").prop('selected', false);
+
+            $.ajax({
+                type: "GET",
+                url: "/grades/addsoresolution",
+                success: function(data){
+                    console.log(data);
+                    $('#ui_content2').html(data);
+                    $("#soresolution_modal").modal('show');
+                }
+            });
+        }
+    });
+
+    $(document).on("submit",'#addsoresolution_form', function(e) {
+        var postData = $(this).serializeArray();
+        var url = $(this).attr('data-action');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            success: function(data){
+                $('.alert').remove();
+
+                $("#addsoresolution_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
+                if(data.success){
+                    $('#soresolution_id option:last').before($("<option></option>").attr("value", data.soresolution_id).text(data.title));
+                    $('#addsoresolution_form')[0].reset();
+                }
+            },
+            error: function (data) {
+                //console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
+                }
+            }
+        });	
+        
+        e.preventDefault();
+    });
+
+    $(document).on("change", "#issueing_office_id", function(){
+        var val = $(this).val();
+
+        if(val == 'addissuedby')
+        {
+            $("#issueing_office_id option:selected").prop('selected', false);
+
+            $.ajax({
+                type: "GET",
+                url: "/grades/addissuedby",
+                success: function(data){
+                    console.log(data);
+                    $('#ui_content2').html(data);
+                    $("#isseudby_modal").modal('show');
+                }
+            });
+        }
+    });
+
+    $(document).on("submit",'#addissuedby_form', function(e) {
+        var postData = $(this).serializeArray();
+        var url = $(this).attr('data-action');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            success: function(data){
+                $('.alert').remove();
+
+                $("#addissuedby_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
+                if(data.success){
+                    $('#issueing_office_id option:last').before($("<option></option>").attr("value", data.issueing_office_id).text(data.code));
+                    $('#addissuedby_form')[0].reset();
+                }
+            },
+            error: function (data) {
+                //console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
+                }
+            }
+        });	
+        
         e.preventDefault();
     });
 });

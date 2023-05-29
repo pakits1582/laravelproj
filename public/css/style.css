@@ -433,3 +433,12 @@ div.dataTables_wrapper {
 	cursor: pointer !important;
 }
 
+.modal {
+	background: rgba(0, 0, 0, 0.5); 
+}
+.modal-backdrop {
+	display: none;
+}
+    
+    
+

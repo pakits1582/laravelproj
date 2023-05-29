@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('issueing_office', function (Blueprint $table) {
+        Schema::create('issueing_offices', function (Blueprint $table) {
             $table->id();
             $table->string('code');
             $table->string('name');
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('soresolution_no')->nullable();
             $table->string('soresolution_series')->nullable();
             $table->unsignedBigInteger('issueing_office_id')->index()->nullable();
-            $table->foreign('issueing_office_id')->references('id')->on('issueing_office')->nullOnDelete();
+            $table->foreign('issueing_office_id')->references('id')->on('issueing_offices')->nullOnDelete();
             $table->date('issued_date')->nullable();
             $table->string('remark')->nullable();
             $table->timestamps();
