@@ -1,5 +1,5 @@
 
- <div class="modal fade" id="grade_information_modal">
+ <div class="modal fade" id="grade_information_modal" data-backdrop="static">
  <div class="modal-dialog modal-xl" role="document" style="max-width: 80% !important">
      <div class="modal-content">
          <div class="modal-header">
@@ -78,7 +78,7 @@
                                                 @endforeach
                                             @endif
                                         </select>
-                                        <div id="error_school_id"></div>
+                                        <div id="error_school_id" class="errors"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -95,7 +95,7 @@
                                                 @endforeach
                                             @endif
                                         </select> 
-                                        <div id="error_program_id"></div>  
+                                        <div id="error_program_id" class="errors"></div>  
                                     </div>                                         
                                 </div>
                             </div>
@@ -106,14 +106,14 @@
                                         <textarea name="thesis_title" id="thesis_title" class="form-control" rows="2">
                                             {{ $gradeinfo->grade_info ? $gradeinfo->grade_info->thesis_title : '' }}
                                         </textarea>
-                                        <div id="error_thesis_title"></div> 
+                                        <div id="error_thesis_title" class="errors"></div> 
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="graduation_date" class="m-0 font-weight-bold text-primary">Graduation Date</label>
                                         <input type="text" name="graduation_date" id="graduation_date" class="form-control text-uppercase datepicker" value="{{ $gradeinfo->grade_info ? $gradeinfo->grade_info->graduation_date : '' }}" placeholder="">
-                                        <div id="error_graduation_date"></div> 
+                                        <div id="error_graduation_date" class="errors"></div> 
                                     </div>                                         
                                 </div>
                                 <div class="col-md-3">
@@ -125,14 +125,14 @@
                                             <option value="2" {{ $gradeinfo->grade_info ? ($gradeinfo->grade_info->graduation_award == 2 ? 'selected' : '') : '' }}>SUMMA CUM LAUDE</option>
                                             <option value="3" {{ $gradeinfo->grade_info ? ($gradeinfo->grade_info->graduation_award == 3 ? 'selected' : '') : '' }}>CUM LAUDE</option>
                                         </select> 
-                                        <div id="error_graduation_award"></div>  
+                                        <div id="error_graduation_award" class="errors"></div>  
                                     </div>                                         
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="soresolution_id" class="m-0 font-weight-bold text-primary text-uppercase">S.O./Resolution</label>
+                                        <label for="soresolution_id" class="m-0 font-weight-bold text-primary">S.O./Resolution</label>
                                         <select name="soresolution_id" class="form-control" id="soresolution_id">
                                             <option value="">- select s.o/resolution -</option>
                                             @if ($soresolutions)
@@ -145,21 +145,21 @@
                                             @endif
                                             <option value="addsoresolution" id="">- Click to add entry -</option>
                                         </select> 
-                                        <div id="error_soresolution_id"></div>  
+                                        <div id="error_soresolution_id" class="errors"></div>  
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="soresolution_no" class="m-0 font-weight-bold text-primary">Number (No.)</label>
                                         <input type="text" name="soresolution_no" id="soresolution_no" class="form-control text-uppercase clearable" value="{{ $gradeinfo->grade_info ? $gradeinfo->grade_info->soresolution_no : '' }}" placeholder="">
-                                        <div id="error_soresolution_no"></div> 
+                                        <div id="error_soresolution_no" class="errors"></div> 
                                     </div>                                         
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="soresolution_series" class="m-0 font-weight-bold text-primary">Series</label>
                                         <input type="text" name="soresolution_series" id="soresolution_series" class="form-control text-uppercase clearable" value="{{ $gradeinfo->grade_info ? $gradeinfo->grade_info->soresolution_series : '' }}" placeholder="">
-                                        <div id="error_soresolution_series"></div>  
+                                        <div id="error_soresolution_series" class="errors"></div>  
                                     </div>                                         
                                 </div>
                                 <div class="col-md-3">
@@ -177,7 +177,7 @@
                                             @endif
                                             <option value="addissuedby" id="">- Click to add entry -</option>
                                         </select> 
-                                        <div id="error_issueing_office_id"></div>  
+                                        <div id="error_issueing_office_id" class="errors"></div>  
                                     </div>                                         
                                 </div>
                             </div>
@@ -186,14 +186,14 @@
                                     <div class="form-group">
                                         <label for="issued_date" class="m-0 font-weight-bold text-primary">Issued Date</label>
                                         <input type="text" name="issued_date" id="issued_date" class="form-control text-uppercase datepicker" value="{{ $gradeinfo->grade_info ? $gradeinfo->grade_info->issued_date : '' }}" placeholder="">
-                                        <div id="error_issued_date"></div>  
+                                        <div id="error_issued_date" class="errors"></div>  
                                     </div>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="form-group">
                                         <label for="remark" class="m-0 font-weight-bold text-primary">Remark</label>
                                         <input type="text" name="remark" id="remark" class="form-control text-uppercase" value="{{ $gradeinfo->grade_info ? $gradeinfo->grade_info->remark : '' }}" placeholder="">
-                                        <div id="error_remark"></div>  
+                                        <div id="error_remark" class="errors"></div>  
                                     </div>                                         
                                 </div>
                             </div>

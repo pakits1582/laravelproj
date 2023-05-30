@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreGradeInformationRequest;
 use App\Libs\Helpers;
 use App\Models\Grade;
 use App\Models\IssueingOffice;
@@ -54,9 +55,11 @@ class GradeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreGradeInformationRequest $request)
     {
-        //
+        $grade_information = $this->gradeService->saveGradeInformationAndRemarks($request);
+
+        return response()->json($grade_information);
     }
 
     /**

@@ -435,6 +435,7 @@ div.dataTables_wrapper {
 
 .modal {
 	background: rgba(0, 0, 0, 0.5); 
+	overflow: auto !important;
 }
 .modal-backdrop {
 	display: none;

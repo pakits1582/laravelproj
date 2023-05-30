@@ -241,11 +241,13 @@ $(function(){
                 success: function(data){
                     console.log(data);
                     $('#ui_content').html(data);
+                    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+
                     $("#grade_information_modal").modal('show');
 
                     $("#school_id, #program_id").select2({
                         dropdownParent: $("#grade_information_modal")
-                    });
+                    }).focus();
 
                     $(".datepicker").datepicker(pickerOpts);
                 }
@@ -259,17 +261,17 @@ $(function(){
 
         var select =    '<div class="row mb-1 addedremarkform">';
             select +=       '<div class="col-md-2">';
-            select +=           '<select name="display[]" class="form-control" class="display">';
+            select +=           '<select name="displays[]" class="form-control" class="display">';
             select +=               '<option value="1">After</option>';
             select +=               '<option value="2">Before</option>';
             select +=           '</select>';
             select +=       '</div>';
 
             select +=       '<div class="col-md-6">';
-            select +=           '<textarea name="note" class="form-control text-uppercase" rows="2"></textarea>';
+            select +=           '<textarea name="remarks[]" class="form-control text-uppercase" rows="2"></textarea>';
             select +=       '</div>';
             select +=       '<div class="col-md-2">';
-            select +=           '<select name="underline[]" class="form-control" class="display">';
+            select +=           '<select name="underlines[]" class="form-control" class="display">';
             select +=               '<option value="1">Yes</option>';
             select +=               '<option value="0">No</option>';
             select +=           '</select>';
@@ -309,6 +311,10 @@ $(function(){
                     console.log(data);
                     $('#ui_content2').html(data);
                     $("#soresolution_modal").modal('show');
+
+                    $("#soresolution_modal").on('hidden.bs.modal', function(){
+                        $('#school_id, #program_id').select2().focus();
+                    });
                 }
             });
         }
@@ -360,6 +366,10 @@ $(function(){
                     console.log(data);
                     $('#ui_content2').html(data);
                     $("#isseudby_modal").modal('show');
+
+                    $("#isseudby_modal").on('hidden.bs.modal', function(){
+                        $('#school_id, #program_id').select2().focus();
+                    });
                 }
             });
         }
@@ -394,6 +404,42 @@ $(function(){
             }
         });	
         
+        e.preventDefault();
+    });
+
+    $(document).on("submit", "#form_grade_information", function(e){
+        var postData = $("#form_grade_information").serializeArray();
+
+        $.ajax({
+            url: "grades",
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                $(".errors").html('');
+                $('#school_id, #program_id').select2().focus();
+                
+                // if(response.success == true)
+                // {
+                //     showSuccess(response.message);
+        
+                // }else{
+                //     showError(response.message);
+                // }
+            },
+            error: function (data) {
+                //console.log(data);
+                $('#school_id, #program_id').select2().focus();
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
+                }
+            }
+        });
+
         e.preventDefault();
     });
 });

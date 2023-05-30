@@ -2,9 +2,10 @@
 
 namespace App\Services\Grade;
 
-use App\Models\Grade;
 use App\Libs\Helpers;
+use App\Models\Grade;
 use App\Services\StudentService;
+use Illuminate\Support\Facades\DB;
 
 class GradeService
 {
@@ -141,6 +142,45 @@ class GradeService
         });
 
         return array_values($grade_files);
+    }
+
+    public function saveGradeInformationAndRemarks($request)
+    {
+        DB::beginTransaction();
+
+        $grade = Grade::find($request->grade_id);
+
+        if(!$grade)
+        {
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Can not perform requested action!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ]; 
+        }
+
+        $grade_remarks = [];
+
+        if(!empty($request->remarks))
+        {
+            foreach ($request->remarks as $key => $remark) 
+            {
+                if($remark !== null)
+                {
+                    $grade_remarks[] = [
+                        'grade_id' => $grade->id,
+                        'display' => $request->input('displays.'.$key),
+                        'remark' => $remark,
+                        'underline' => $request->input('underlines.'.$key),
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
+                }
+            }
+        }
+
+        return $grade_remarks;
     }
 
 }
