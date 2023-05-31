@@ -43,8 +43,6 @@ $(function(){
 
     function getStudentExternalGrades(student_id, grade_id = '')
     {
-
-        
         var period_id = $("#period").val();
         var school_id = $("#school").val();
         var program_id = $("#program_id").val();
@@ -143,29 +141,26 @@ $(function(){
 
     $(document).on("change", "#grade_id", function(e){
         var grade_id = $("#grade_id").val();
+        var period_id = $("#period").val();
+        var student_id = $("#student").val();
 
         $("#cancel").trigger('click');
 
         if(grade_id){
+
             $.ajax({
-                url: "/grades/"+grade_id,
-                type: 'GET',
+                type: "POST",
+                url:  "/grades/gradeinfo",
+                data:  {'student_id':student_id, 'period_id':period_id, 'origin':1},
                 dataType: 'json',
+                cache: false, 
                 success: function(response){
-                    //console.log(response);
+                    console.log(response);
                     $("#school").val(response.school_id).trigger('change');
                     $("#program_id").val(response.program_id).trigger('change');
 
                     getExternalGradeSubjects(grade_id);
-                },
-                error: function (data) {
-                    console.log(data);
-                    var errors = data.responseJSON;
-                    if ($.isEmptyObject(errors) === false) {
-                        showError('Something went wrong! Can not perform requested action!');
-                        $("#student").val(null).trigger('change');
-                    }
-                }
+                } 
             });
         }else{
             $("#school").val('').trigger('change');
@@ -440,4 +435,220 @@ $(function(){
         }
 		e.preventDefault();
 	});
+
+    $(document).on("click", "#grade_information", function(){
+        var grade_id = $("#grade_id").val();
+
+        if(grade_id)
+        {
+            $.ajax({
+                type: "GET",
+                url: "/grades/"+grade_id,
+                success: function(data){
+                    console.log(data);
+                    $('#ui_content').html(data);
+
+                    $("#grade_information_modal").modal('show');
+
+                    // $("#school_id, #program_id").select2({
+                    //     dropdownParent: $("#grade_information_modal")
+                    // }).focus();
+
+                    $("#grade_information_modal").on('shown.bs.modal', function(){
+                        $('#school_id, #program_id').select2().focus();
+                    });
+
+                    $(".datepicker").datepicker(pickerOpts);
+                }
+            });
+        }else{
+            showError('Grade No. is required if adding Grade Information')
+        }
+    });
+
+    $(document).on("click", "#add_remark", function(e){
+
+        var select =    '<div class="row mb-1 addedremarkform">';
+            select +=       '<div class="col-md-2">';
+            select +=           '<select name="displays[]" class="form-control" class="display">';
+            select +=               '<option value="1">After</option>';
+            select +=               '<option value="2">Before</option>';
+            select +=           '</select>';
+            select +=       '</div>';
+
+            select +=       '<div class="col-md-6">';
+            select +=           '<textarea name="remarks[]" class="form-control text-uppercase" rows="2"></textarea>';
+            select +=       '</div>';
+            select +=       '<div class="col-md-2">';
+            select +=           '<select name="underlines[]" class="form-control" class="display">';
+            select +=               '<option value="1">Yes</option>';
+            select +=               '<option value="0">No</option>';
+            select +=           '</select>';
+            select +=       '</div>';
+
+            select +=       '<div class="col-md-2">';
+            select +=           '<button type="button" id="" class="remove_remark btn btn-danger btn-icon-split mb-2">';
+            select +=               '<span class="icon text-white-50">';
+            select +=               '<i class="fas fa-trash"></i>';
+            select +=               '</span>';
+            select +=               '<span class="text">Remove</span>';
+            select +=           '</button>';
+            select +=       '</div>';
+            select +=  '</div>';
+
+        $('#grade_remarks').append(select);
+
+        e.preventDefault();
+    });
+
+    $(document).on("click", ".remove_remark", function(e){
+		$(this).closest("div.row").remove();
+        e.preventDefault();
+	});
+
+    $(document).on("change", "#soresolution_id", function(){
+        var val = $(this).val();
+
+        if(val == 'addsoresolution')
+        {
+            $("#soresolution_id option:selected").prop('selected', false);
+
+            $.ajax({
+                type: "GET",
+                url: "/grades/addsoresolution",
+                success: function(data){
+                    console.log(data);
+                    $('#ui_content2').html(data);
+                    $("#soresolution_modal").modal('show');
+
+                    $("#soresolution_modal").on('hidden.bs.modal', function(){
+                        $('#school_id, #program_id').select2().focus();
+                    });
+                }
+            });
+        }
+    });
+
+    $(document).on("submit",'#addsoresolution_form', function(e) {
+        var postData = $(this).serializeArray();
+        var url = $(this).attr('data-action');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            success: function(data){
+                $('.alert').remove();
+
+                $("#addsoresolution_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
+                if(data.success){
+                    $('#soresolution_id option:last').before($("<option></option>").attr("value", data.soresolution_id).text(data.title));
+                    $('#addsoresolution_form')[0].reset();
+                }
+            },
+            error: function (data) {
+                //console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
+                }
+            }
+        });	
+        
+        e.preventDefault();
+    });
+
+    $(document).on("change", "#issueing_office_id", function(){
+        var val = $(this).val();
+
+        if(val == 'addissuedby')
+        {
+            $("#issueing_office_id option:selected").prop('selected', false);
+
+            $.ajax({
+                type: "GET",
+                url: "/grades/addissuedby",
+                success: function(data){
+                    console.log(data);
+                    $('#ui_content2').html(data);
+                    $("#isseudby_modal").modal('show');
+
+                    $("#isseudby_modal").on('hidden.bs.modal', function(){
+                        $('#school_id, #program_id').select2().focus();
+                    });
+                }
+            });
+        }
+    });
+
+    $(document).on("submit",'#addissuedby_form', function(e) {
+        var postData = $(this).serializeArray();
+        var url = $(this).attr('data-action');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            success: function(data){
+                $('.alert').remove();
+
+                $("#addissuedby_form").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>')
+                if(data.success){
+                    $('#issueing_office_id option:last').before($("<option></option>").attr("value", data.issueing_office_id).text(data.code));
+                    $('#addissuedby_form')[0].reset();
+                }
+            },
+            error: function (data) {
+                //console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
+                }
+            }
+        });	
+        
+        e.preventDefault();
+    });
+
+    $(document).on("submit", "#form_grade_information", function(e){
+        var postData = $("#form_grade_information").serializeArray();
+
+        $.ajax({
+            url: "grades",
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                $(".errors").html('');
+                $('#school_id, #program_id').select2().focus();
+                
+                if(response.success == true)
+                {
+                    showSuccess(response.message);
+        
+                }else{
+                    showError(response.message);
+                }
+            },
+            error: function (data) {
+                //console.log(data);
+                $('#school_id, #program_id').select2().focus();
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
+                }
+            }
+        });
+
+        e.preventDefault();
+    });
 });
