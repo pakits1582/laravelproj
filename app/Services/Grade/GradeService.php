@@ -4,6 +4,7 @@ namespace App\Services\Grade;
 
 use App\Libs\Helpers;
 use App\Models\Grade;
+use App\Models\GradeInformation;
 use App\Services\StudentService;
 use Illuminate\Support\Facades\DB;
 
@@ -65,7 +66,7 @@ class GradeService
 
     public function returnGradeInfo($grade_id)
     {
-        return Grade::with(['student' => ['user'], 'period', 'grade_info'])->find($grade_id);
+        return Grade::with(['student' => ['user'], 'period', 'grade_info', 'grade_remarks'])->find($grade_id);
     }
 
     public function storeGrade($request, $origin)
@@ -146,6 +147,7 @@ class GradeService
 
     public function saveGradeInformationAndRemarks($request)
     {
+        
         DB::beginTransaction();
 
         $grade = Grade::find($request->grade_id);
@@ -171,16 +173,30 @@ class GradeService
                     $grade_remarks[] = [
                         'grade_id' => $grade->id,
                         'display' => $request->input('displays.'.$key),
-                        'remark' => $remark,
-                        'underline' => $request->input('underlines.'.$key),
+                        'remark' => strtoupper($remark),
+                        'underlined' => $request->input('underlines.'.$key),
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
                 }
             }
         }
+        $grade->grade_remarks()->delete();
 
-        return $grade_remarks;
+        if($grade_remarks)
+        {
+            $grade->grade_remarks()->insert($grade_remarks);
+        }
+
+        $grade_information = GradeInformation::updateOrCreate(['grade_id' => $request->grade_id], $request->except(['displays', 'remarks', 'underlines']));
+
+        DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Grade Information successfully saved!',
+            'alert' => 'alert-success'
+        ];
     }
 
 }

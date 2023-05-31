@@ -34,6 +34,35 @@
                                 </div>
                             </div>
                             <div id="grade_remarks">
+                                @if ($gradeinfo->grade_remarks)
+                                    @foreach ($gradeinfo->grade_remarks as $remark)
+                                        <div class="row mb-1 ">
+                                            <div class="col-md-2">
+                                                <select name="displays[]" class="form-control">
+                                                    <option value="1" {{ $remark->display == 1 ? 'selected' : '' }}>After</option>
+                                                    <option value="2" {{ $remark->display == 2 ? 'selected' : '' }}>Before</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <textarea name="remarks[]" class="form-control text-uppercase remark" rows="2">{{ $remark->remark }}</textarea>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <select name="underlines[]" class="form-control">
+                                                    <option value="1" {{ $remark->underlined == 1 ? 'selected' : '' }}>Yes</option>
+                                                    <option value="0" {{ $remark->underlined == 0 ? 'selected' : '' }}>No</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" id="" class="remove_remark btn btn-danger btn-icon-split mb-2">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-trash"></i>
+                                                    </span>
+                                                    <span class="text">Remove</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                                 <div class="row mb-1 ">
                                     <div class="col-md-2">
                                         <select name="displays[]" class="form-control">
@@ -103,9 +132,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="thesis_title" class="m-0 font-weight-bold text-primary">Thesis Title</label>
-                                        <textarea name="thesis_title" id="thesis_title" class="form-control" rows="2">
-                                            {{ $gradeinfo->grade_info ? $gradeinfo->grade_info->thesis_title : '' }}
-                                        </textarea>
+                                        <textarea name="thesis_title" id="thesis_title" class="form-control text-uppercase" rows="2">{{ $gradeinfo->grade_info ? $gradeinfo->grade_info->thesis_title : '' }}</textarea>
                                         <div id="error_thesis_title" class="errors"></div> 
                                     </div>
                                 </div>

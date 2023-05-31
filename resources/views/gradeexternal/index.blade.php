@@ -108,7 +108,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Student's External Grade File</h6>
                             </div>
                             <div class="col-md-6 text-right">
-                                <button type="button" id="internal_grade_info" class="btn btn-primary btn-icon-split mb-2 mb-md-0" disabled>
+                                <button type="button" id="grade_information" class="btn btn-primary btn-icon-split mb-2 mb-md-0">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-edit"></i>
                                     </span>

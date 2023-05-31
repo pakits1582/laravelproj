@@ -6,8 +6,8 @@ $(function(){
 		}
 	});
     
-    $('.datepicker').datepicker(pickerOpts);  
-
+    $('.datepicker').datepicker(pickerOpts); 
+    
     $("#student").select2({
 	    dropdownParent: $("#ui_content2"),
         minimumInputLength: 2,
@@ -241,13 +241,16 @@ $(function(){
                 success: function(data){
                     console.log(data);
                     $('#ui_content').html(data);
-                    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
                     $("#grade_information_modal").modal('show');
 
-                    $("#school_id, #program_id").select2({
-                        dropdownParent: $("#grade_information_modal")
-                    }).focus();
+                    // $("#school_id, #program_id").select2({
+                    //     dropdownParent: $("#grade_information_modal")
+                    // }).focus();
+
+                    $("#grade_information_modal").on('shown.bs.modal', function(){
+                        $('#school_id, #program_id').select2().focus();
+                    });
 
                     $(".datepicker").datepicker(pickerOpts);
                 }
@@ -420,13 +423,13 @@ $(function(){
                 $(".errors").html('');
                 $('#school_id, #program_id').select2().focus();
                 
-                // if(response.success == true)
-                // {
-                //     showSuccess(response.message);
+                if(response.success == true)
+                {
+                    showSuccess(response.message);
         
-                // }else{
-                //     showError(response.message);
-                // }
+                }else{
+                    showError(response.message);
+                }
             },
             error: function (data) {
                 //console.log(data);
