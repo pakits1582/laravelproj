@@ -125,7 +125,7 @@ class Helpers
                     ['header' => 'Post Charges', 'link' => 'postcharges', 'id' => 'postcharge'],
                     ['header' => 'Scholarship/Discounts', 'link' => 'scholarshipdiscounts', 'id' => 'scholarshipdiscount'],
                     ['header' => 'Statement of Accounts', 'link' => 'studentledgers', 'id' => 'studentledger'],
-                    ['header' => 'Scholarship/Discount Grant', 'link' => 'scholarshipdiscounts/grant', 'id' => 'scholarshipdiscountgrant'],
+                    ['header' => 'Scholarship Grants', 'link' => 'scholarshipdiscounts/grant', 'id' => 'scholarshipdiscountgrant'],
                     ['header' => 'Student Adjustments', 'link' => 'studentadjustments', 'id' => 'studentadjustment'],
                 ],
             ],

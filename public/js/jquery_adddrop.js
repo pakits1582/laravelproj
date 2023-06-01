@@ -33,25 +33,13 @@ $(function(){
         }
 	});
 
-    $(document).on("change",".select_enrolled_class, .check_searched_class", function(){
-		if($(this).is(':checked')){
-			$(this).closest('tr').addClass('selected');
-		}else{	
-			$(this).closest('tr').removeClass('selected');
-		}
-	});
-
-    $("#program").select2({
-	    dropdownParent: $("#ui_content2")
-	});
-
-    function clearForm()
+    function clearFormFields()
     {
         $("#section").find('option').remove().end().append('<option value="">- select section -</option>');
         $("#curriculum").find('option').remove().end().append('<option value="">- select curriculum -</option>');
 
-        $("#form_enrollment").find('input:text, input:password, input:file, select, textarea').val('');
-        $("#form_enrollment").find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
+        $("#form_adddrop").find('input:text, input:password, input:file, select, textarea').val('');
+        $("#form_adddrop").find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
         $("#return_enrolled_subjects").html('<tr class=""><td class="mid" colspan="10">No records to be displayed</td></tr>');
         $("#schedule_table, #deficiencies").html('');
         $("#student, #program").val(null).trigger('change');
@@ -91,197 +79,39 @@ $(function(){
             $(".actions").prop("disabled", false);
         }else{
             $(".actions").prop("disabled", true);
-            $('#form_enrollment')[0].reset();
+            $('#form_adddrop')[0].reset();
         }
 
         returnEnrolledClassSubjects(response.data.enrollment.id);
         enrollmentScheduleTable(response.data.enrollment.id);
     }
 
+    function returnEnrolledClassSubjects(enrollment_id)
+    {
+        $.ajax({
+            url: "/enrolments/enrolledclasssubjects",
+            type: 'POST',
+            //dataType: 'json',
+            data: ({ 'enrollment_id':enrollment_id }),
+            success: function(data){
+                console.log(data);
+                $("#return_enrolled_subjects").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    clearFormFields()
+                }
+            }
+        });
+    }
+
     function enrollmentScheduleTable(enrollment_id)
     {
         $("#schedule_table").html('display schedule table!');
     }
-
-    function enrollmentInfo(student_id, studentinfo)
-    {
-        $.ajax({
-            url: "/enrolments/enrolmentinfo ",
-            type: 'POST',
-            dataType: 'json',
-            data: ({ 'student_id' : student_id, 'studentinfo' : studentinfo }),
-            success: function(response){
-                console.log(response);
-                if(response.data.success === false)
-                {
-                    showError(response.data.message);
-                    clearForm()
-                }else{
-                    if(response.data.enrollment)
-                    {
-                        if(response.data.enrollment.acctok === 0)
-                        {
-                            displayEnrollment(response);
-                        }else{
-                            showError('Student is already enrolled!');
-                            clearForm()
-                        }
-                    }else{
-                        //INSERT ENROLLMENT
-                        if(response.data.student.program_id === null)
-                        {
-                            showError('Student has no program. Please update student information!');
-                            clearForm()
-                            
-                        }else{
-                            if(response.data.probi === 1 || response.data.balance.hasbal === 1){
-                                var message = '<h3>'+response.data.student.last_name+', '+response.data.student.first_name+' '+response.data.student.middle_name+'</h3><ul class="left">';
-                                if(response.data.probi === 1){
-                                    message += '<li>The student was on academic probation in the previous semester enrolled. The student is advised to report to Academic Dean.<p></p></li>';
-                                }
-                                if(response.data.balance.hasbal === 1){
-                                    message += '<li>The student has previous balance last semester enrolled. The student is advised to report to the Accounting Office.<p>'+response.data.balance.previous_balance.period+'</p><h1 class="nomargin mid" style="color:red">P '+response.data.balance.previous_balance.balance+'</h1></li>';
-                                }
-                                message += '</ul>';
-                        
-                                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Continue Enrollment?</div><div class="message">'+message+'<p></p>Continue student enrollment?</div>').dialog({
-                                    show: 'fade',
-                                    resizable: false,	
-                                    draggable: true,
-                                    width: 500,
-                                    height: 'auto',
-                                    modal: true,
-                                    buttons: {
-                                            'Cancel':function(){
-                                                $(this).dialog('close');	
-                                                $("#student").val("").trigger('change');
-                                            },
-                                            'OK':function(){
-                                                $(this).dialog('close');	
-                                                insertStudentEnrollment(response);
-                                            }	
-                                        }//end of buttons
-                                    });//end of dialogbox
-                                $(".ui-dialog-titlebar").hide();
-                            }else{
-                                insertStudentEnrollment(response);
-                            }
-                        }
-                    }
-                }
-            },
-            error: function (data) {
-                console.log(data);
-                var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
-                    clearForm()
-                }
-            }
-        });
-    }
-
-    function insertStudentEnrollment(studentinfo)
-    {
-        $.ajax({
-            url: "/enrolments",
-            type: 'POST',
-            dataType: 'json',
-            data: ({ 'studentinfo' : studentinfo }),
-            success: function(response){
-                console.log(response);
-                if(response.success === false){
-                    showError(response.message);
-                    clearForm()
-                }else{
-                    displayEnrollment(response);
-                }
-            },
-            error: function (data) {
-                console.log(data);
-                var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
-                    clearForm()
-                }
-            }
-        });
-    }
-
-    $(document).on("change","#student", function(){
-        var student_id = $("#student").val();
-
-        if(student_id){
-            $.ajax({
-                url: "/students/"+student_id,
-                type: 'GET',
-                dataType: 'json',
-                success: function(response){
-                    console.log(response);
-                    if(response.data.success === false)
-                    {
-                        showError(response.data.message);
-                        clearForm()
-                    }else{
-                        //CHECK ENROLMENT INFORMATION
-                        enrollmentInfo(student_id, response.data.values);
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                    var errors = data.responseJSON;
-                    if ($.isEmptyObject(errors) === false) {
-                        showError('Something went wrong! Can not perform requested action!');
-                        clearForm()
-                    }
-                }
-            });
-        }else{
-            $('#form_enrollment')[0].reset();
-        }
-    });
-
-    $(document).on("change","#program", function(e){
-        var program_id = $("#program").val();
-
-        if(program_id)
-        {
-            $.ajax({
-                url: "/programs/"+program_id,
-                type: 'GET',
-                dataType: 'json',
-                success: function(response){
-                    console.log(response);
-
-                    $("#educational_level").val(response.program.level.code);
-                    $("#college").val(response.program.collegeinfo.code);
-
-                    var curricula = '<option value="">- select curriculum -</option>';
-                    $.each(response.program.curricula, function(k, v){
-                        curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
-                    });
-                    
-                    $("#curriculum").html(curricula);
-                    $("#year_level").val('');
-                    $("#section").html('<option value="">- select section -</option>');
-                },
-                error: function (data) {
-                    console.log(data);
-                    var errors = data.responseJSON;
-                    if ($.isEmptyObject(errors) === false) {
-                        showError('Something went wrong! Can not perform requested action!');
-                        clearForm()
-                    }
-                }
-            });
-        }else{
-            $("#curriculum").html('<option value="">- select curriculum -</option>');
-            $("#year_level").val('');
-            $("#section").html('<option value="">- select section -</option>');
-        }
-
-        e.preventDefault();
-    });
 
     function getSections(program_id, year_level, selected_value)
     {
@@ -306,7 +136,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
-                    clearForm()
+                    clearFormFields()
                 }
             }
         });
@@ -360,195 +190,131 @@ $(function(){
         e.preventDefault();
     });
 
-    function returnEnrolledClassSubjects(enrollment_id)
-    {
-        $.ajax({
-            url: "/enrolments/enrolledclasssubjects",
-            type: 'POST',
-            //dataType: 'json',
-            data: ({ 'enrollment_id':enrollment_id }),
-            success: function(data){
-                console.log(data);
-                $("#return_enrolled_subjects").html(data);
-            },
-            error: function (data) {
-                console.log(data);
-                var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
-                    clearForm()
-                }
-            }
-        });
-    }
 
-    function enrollClassSubjects(enrollment_id, section_id, class_subjects)
+    $(document).on("change",".select_enrolled_class, .check_searched_class", function(){
+		if($(this).is(':checked')){
+			$(this).closest('tr').addClass('selected');
+		}else{	
+			$(this).closest('tr').removeClass('selected');
+		}
+	});
+
+    $("#program").select2({
+	    dropdownParent: $("#ui_content2")
+	});
+
+    function enrollmentInfo(student_id, studentinfo)
     {
-        var subjects = [];
-        $.each(class_subjects, function(k, v){
-            subjects.push({id: v.id, schedule: v.schedule.schedule});
-        });
-        
         $.ajax({
-            url: "/enrolments/enrollclasssubjects",
+            url: "/enrolments/enrolmentinfo ",
             type: 'POST',
             dataType: 'json',
-            data: ({ 'enrollment_id':enrollment_id, 'section_id':section_id, 'class_subjects':subjects }),
-            beforeSend: function() {
-				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-					show: 'fade',
-					resizable: false,	
-					width: 350,
-					height: 'auto',
-					modal: true,
-					buttons: false
-				});
-				$(".ui-dialog-titlebar").hide();
-			},
+            data: ({ 'student_id' : student_id, 'studentinfo' : studentinfo }),
             success: function(response){
-                $("#confirmation").dialog('close');
                 console.log(response);
-                returnEnrolledClassSubjects(enrollment_id);
-            },
-            error: function (data) {
-                console.log(data);
-                var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
-                    clearForm()
-                }
-            }
-        });
-    }
-
-    function enrollSection(student_id, section_id, enrollment_id)
-    {
-        $.ajax({
-            url: "/enrolments/enrollsection",
-            type: 'POST',
-            data: ({ 'student_id' : student_id, 'section_id' : section_id, 'enrollment_id' : enrollment_id }),
-            dataType: 'json',
-            beforeSend: function() {
-				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-					show: 'fade',
-					resizable: false,	
-					width: 350,
-					height: 'auto',
-					modal: true,
-					buttons: false
-				});
-				$(".ui-dialog-titlebar").hide();
-			},
-            success: function(response){
-                $("#confirmation").dialog('close');
-                console.log(response);
-
-                var full_subjects = [];
-                var unfinished_prerequisites = [];
-                var available_subjects = [];
-                var deficiencies = '';
-                var return_subjects_table = '';
-
-                if ($.isEmptyObject(response.data) === false) {
-                    $.each(response.data, function(k, v){
-                        var available = true;
-
-                        if(parseInt(v.total_slots_taken) >= parseInt(v.total_slots)){
-                            full_subjects.push('<strong>('+v.code+') - '+v.curriculumsubject.subjectinfo.code+'</strong>');	
-                            deficiencies += '<strong>('+v.code+' - '+v.curriculumsubject.subjectinfo.code+') - FULL</strong></br>';
-                            available = false;
-                        }
-
-                        if($.isEmptyObject(v.unfinished_prerequisites) === false){
-                            unfinished_prerequisites.push('<strong>('+v.code+') - '+v.curriculumsubject.subjectinfo.code+'</strong>');	
-                            deficiencies += '<strong>('+v.code+' - '+v.curriculumsubject.subjectinfo.code+') - PREREQUISITE</strong></br>';
-                            available = false;
-                        }
-
-                        if(available === true){
-                            available_subjects.push(v);
-                        }
-                    });
-                }
-
-                // // console.log(full_subjects);
-                // // console.log(unfinished_prerequisites);
-                // console.log(available_subjects);
-
-                if($.isEmptyObject(full_subjects) === false || $.isEmptyObject(unfinished_prerequisites) === false)
+                if(response.data.success === false)
                 {
-                    var message = '<div class="ui_title_confirm">The following subjects will not be included</div><div class="message">';
-                    message += (!$.isEmptyObject(full_subjects)) ? '<div>Closed Subjects </div>'+ full_subjects.join(", ") : "" ;
-				    message += (!$.isEmptyObject(unfinished_prerequisites)) ? '<div>Pre-Requisites not finished</div>'+ unfinished_prerequisites.join(", ") : "" ;
-                    $("#ui_content").html('<div class="confirmation"></div>'+message+'<div>Continue student enrollment?</div></div>').dialog({
-                        show: 'fade',
-                        resizable: false,	
-                        draggable: true,
-                        width: 'auto',
-                        height: 'auto',
-                        modal: true,
-                        buttons: {
-                                'Cancel':function(){
-                                    $(this).dialog('close');
-                                    $("#section").val('');	
-                                },
-                                'OK':function(){
-                                    $(this).dialog('close');
-                                    $('#deficiencies').html(deficiencies);
-                                    enrollClassSubjects(enrollment_id, section_id, available_subjects);
-                                    //returnEnrolledClassSubjects(enrollment_id);
-                                }	
-                            }//end of buttons
-                        });//end of dialogbox
-                    $(".ui-dialog-titlebar").hide();
+                    showError(response.data.message);
+                    clearFormFields()
                 }else{
-                    $('#deficiencies').html('');
-                    enrollClassSubjects(enrollment_id, section_id, available_subjects);
-                    //returnEnrolledClassSubjects(enrollment_id);
+                    if(response.data.enrollment)
+                    {
+                        if(response.data.enrollment.acctok == 1 && response.data.enrollment.assessed == 1)
+                        {
+                            displayEnrollment(response);
+                        }else{
+                            showError('Student enrollment is not yet saved or assessed!');
+                            clearFormFields()
+                        }
+                    }else{
+                        showError('Student is not yet enrolled!')
+                        clearFormFields()
+                    }
                 }
             },
             error: function (data) {
                 console.log(data);
-                $("#confirmation").dialog('close');
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
+                    clearFormFields()
                 }
             }
         });
     }
 
-    $(document).on("change", "#section", function(e){
-        var section_id = $(this).val();
-        
-        $.ajax({
-            url: "/enrolments/checksectionslot",
-            type: 'POST',
-            data: ({ 'section_id' : section_id }),
-            dataType: 'json',
-            success: function(response){
-                console.log(response);
-                $("#schedule_table").html(response);
-                if(response.data.success === false){
-                    showError(response.data.message);
-                    $("#section").val('');
-                }else{
-                    var student_id = $("#student").val();
-                    var enrollment_id = $("#enrollment_id").val();
+    $(document).on("change","#student", function(){
+        var student_id = $("#student").val();
 
-                    enrollSection(student_id, section_id, enrollment_id);
+        if(student_id){
+            $.ajax({
+                url: "/students/"+student_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response){
+                    console.log(response);
+                    if(response.data.success === false)
+                    {
+                        showError(response.data.message);
+                        clearFormFields()
+                    }else{
+                        //CHECK ENROLMENT INFORMATION
+                        enrollmentInfo(student_id, response.data.values);
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) {
+                        showError('Something went wrong! Can not perform requested action!');
+                        clearFormFields()
+                    }
                 }
-            },
-            error: function (data) {
-                console.log(data);
-                $("#schedule_table").html(data.responseJSON);
-                var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
-                    clearForm()
+            });
+        }else{
+            $('#form_adddrop')[0].reset();
+        }
+    });
+
+    $(document).on("change","#program", function(e){
+        var program_id = $("#program").val();
+
+        if(program_id)
+        {
+            $.ajax({
+                url: "/programs/"+program_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response){
+                    console.log(response);
+
+                    $("#educational_level").val(response.program.level.code);
+                    $("#college").val(response.program.collegeinfo.code);
+
+                    var curricula = '<option value="">- select curriculum -</option>';
+                    $.each(response.program.curricula, function(k, v){
+                        curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
+                    });
+                    
+                    $("#curriculum").html(curricula);
+                    $("#year_level").val('');
+                    $("#section").html('<option value="">- select section -</option>');
+                },
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) {
+                        showError('Something went wrong! Can not perform requested action!');
+                        clearForm()
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            $("#curriculum").html('<option value="">- select curriculum -</option>');
+            $("#year_level").val('');
+            $("#section").html('<option value="">- select section -</option>');
+        }
+
         e.preventDefault();
     });
 
@@ -1075,5 +841,6 @@ $(function(){
         });
         e.preventDefault();
     });
+
 
 });

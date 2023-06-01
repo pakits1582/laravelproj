@@ -10,6 +10,7 @@ use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\AdddropController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\ProgramController;
@@ -231,6 +232,35 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
             return Redirect::route('enrolments.index');
+        });
+    });
+
+    Route::group(['middleware' => ['inaccess:adddrop']], function () {
+        // Route::group(['middleware' => ['writeability:curriculum']], function () {
+        
+
+        // Route::post('/enrolments/studentenrollmentunitsallowed', [EnrollmentController::class, 'studentenrollmentunitsallowed']);
+        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
+        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
+        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
+        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
+
+        // // });
+       
+        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
+        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
+        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
+        // Route::get('/enrolments/searchandaddclasses', [EnrollmentController::class, 'searchandaddclasses']);
+        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
+        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
+        // Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);
+        // //Route::post('/enrolments/{enrollment}/saveenrollment', [EnrollmentController::class, 'saveenrollment']);
+
+        // Route::get('/enrolments/{student}/{period?}', [EnrollmentController::class, 'show']);
+
+
+        Route::resource('adddrop', AdddropController::class)->missing(function (Request $request) {
+            return Redirect::route('adddrop.index');
         });
     });
 

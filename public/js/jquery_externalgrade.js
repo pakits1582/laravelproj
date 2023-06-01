@@ -56,7 +56,7 @@ $(function(){
                 success: function(response){
                     //console.log(response);
 
-                    var grade_nos = '<option value="">- select grade -</option>';
+                    var grade_nos = '<option value="">- select grade no -</option>';
                     var arr = [];
                     $.each(response.data, function(k, v){
                         arr.push(v.id);
@@ -487,7 +487,7 @@ $(function(){
             select +=       '</div>';
 
             select +=       '<div class="col-md-2">';
-            select +=           '<button type="button" id="" class="remove_remark btn btn-danger btn-icon-split mb-2">';
+            select +=           '<button type="button" id="" class="remove_remark btn btn-danger btn-icon-split mb-2 w170" style="justify-content:left;">';
             select +=               '<span class="icon text-white-50">';
             select +=               '<i class="fas fa-trash"></i>';
             select +=               '</span>';

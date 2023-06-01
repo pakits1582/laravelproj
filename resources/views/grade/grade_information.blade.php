@@ -11,7 +11,7 @@
          <div class="modal-body">
             <div class="card shadow ">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ ($gradeinfo->origin == 0) ? 'Internal' : 'External' }} Grade Information ({{ $gradeinfo->student->user->idno }}) {{ $gradeinfo->student->name }}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{ ($gradeinfo->origin == 0) ? 'Internal' : 'External' }} Grade Information <span class="m-0 font-weight-bold text-black">({{ $gradeinfo->student->user->idno }}) {{ $gradeinfo->student->name }}</span></h6>
                 </div>
                 <div class="card-body">
                     <h6 class="mb-3 font-weight-bold text-primary">Grade Information Remark</h6>
@@ -80,7 +80,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" id="add_remark" class="btn btn-primary btn-icon-split mb-2">
+                                        <button type="button" id="add_remark" class="btn btn-primary btn-icon-split mb-2 w170" style="justify-content:left;">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-plus"></i>
                                             </span>
