@@ -24,6 +24,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\MasterlistController;
 use App\Http\Controllers\PostchargeController;
 use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\ConfigurationController;
@@ -484,6 +485,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/receipts/savebank', [ReceiptController::class, 'storebank'])->name('savebank');
         Route::resource('receipts', ReceiptController::class)->missing(function (Request $request) {
             return Redirect::route('receipts.index');
+        }); 
+    });
+
+    Route::group(['middleware' => ['inaccess:masterlist']], function () {
+        Route::resource('masterlist', MasterlistController::class)->missing(function (Request $request) {
+            return Redirect::route('masterlist.index');
         }); 
     });
 

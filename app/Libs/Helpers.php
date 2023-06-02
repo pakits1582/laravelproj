@@ -78,7 +78,7 @@ class Helpers
                     ['header' => 'Students', 'link' => 'students', 'id' => 'student'],
                     ['header' => 'Class List', 'link' => 'classlists', 'id' => 'classlist'],
                     ['header' => 'Grading System', 'link' => 'gradingsystems', 'id' => 'gradingsystem'],
-                    ['header' => 'Master List', 'link' => 'masterlists', 'id' => 'masterlist'],
+                    ['header' => 'Master List', 'link' => 'masterlist', 'id' => 'masterlist'],
                     ['header' => 'Faculty Loads', 'link' => 'facultyloads', 'id' => 'facultyload'],
                     ['header' => 'Enrolment Summary', 'link' => 'enrolmentsummary', 'id' => 'enrolmentsummary'],
                     ['header' => 'Attendances', 'link' => 'attendances', 'id' => 'attendance'],
