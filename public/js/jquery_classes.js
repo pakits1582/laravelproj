@@ -961,4 +961,36 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on('keydown', ".editable",function(e){  
+		if (e.which === 13 && e.shiftKey === false || e.which === 32){
+			var td        = $(this);
+			var class_id  = $(this).attr("id");
+			var slots     = $(this).text(); 
+			var origslots = $(this).attr("data-value");
+
+			if(slots != origslots)
+			{
+				$.ajax({
+					type: "POST",
+					url: "/classes/inlineupdateslots",
+					data: ({"class_id":class_id, "slots":slots}),
+					cache: false,
+					success: function(response){
+                        console.log(response);
+                        if(response.success == true)
+                        {
+                            showSuccess(response.message);
+                            td.attr("data-value", slots);
+                        }else{
+                            showError(response.message);
+                            td.text(origslots);
+                        }
+
+					}
+				});
+			}
+	        return false;
+	    }
+	});
+
 });

@@ -653,4 +653,35 @@ class ClassesService
         ->orderBy('subjects.code')
         ->get();
     }
+
+    public function saveInlineUpdateSlots($request)
+    {
+        $class = Classes::find($request->class_id);
+
+        if(!$class)
+        {
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Class subject can not be found!',
+                'alert' => 'alert-danger'
+            ];
+        }
+
+        if(!empty($request->slots) && !is_numeric($request->slots))
+        {
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Slots entered is non-numeric characters!',
+                'alert' => 'alert-danger'
+            ];
+        }
+        
+        $class->update(['slots' => ($request->slots == '') ? NULL : $request->slots]);
+
+        return [
+            'success' => true,
+            'message' => 'Class slots updated successfully!',
+            'alert' => 'alert-success'
+        ];
+    }
 }

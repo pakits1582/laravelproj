@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Services\AdddropService;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\UpdateEnrollmentRequest;
+use App\Models\Assessment;
 
 class AdddropController extends Controller
 {
@@ -76,9 +80,24 @@ class AdddropController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateEnrollmentRequest $request)
     {
-        //
+        $enrollment = Enrollment::findOrFail($request->enrollment_id);
+        $assessment = Assessment::findOrFail($enrollment->id);
+
+        DB::beginTransaction();
+
+        $enrollment->student()->update([
+            'program_id' => $request->program_id,
+            'year_level' => $request->year_level,
+            'curriculum_id' => $request->curriculum_id,
+        ]);
+
+        $enrollment->update($request->validated());
+
+        DB::commit();
+
+        return $assessment->id;
     }
 
     /**

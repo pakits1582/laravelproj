@@ -5,6 +5,7 @@ namespace App\Services\Assessment;
 use App\Models\AssessmentDetail;
 use Illuminate\Support\Facades\DB;
 use App\Models\AssessmentBreakdown;
+use App\Models\Enrollment;
 use Illuminate\Support\Facades\Auth;
 
 class AssessmentService
@@ -83,23 +84,71 @@ class AssessmentService
             $assessment->exam()->create($exams);
         }
 
+        //IF ENROLLMENT IS VALIDATED
+        $enrollment = Enrollment::with(['enrolled_classes' => ['class'], 'studentledger_assessment', 'grade', 'assessment' => ['details']])->findOrFail($assessment->enrollment_id);
+
+        if($enrollment && $enrollment->validated == 1)
+        {
+            $this->reenterInternalGrades($enrollment);
+            $this->updateStudentledgerAssessment($enrollment, $request->totalfees);
+            $this->reenterStudentLedgerDetails($enrollment);
+        }
+
         DB::commit();
 
         return true;
     }
-    
-    public function reassessEnrollments()
+
+    public function reenterInternalGrades($enrollment)
     {
-        
+        $grade_id = $enrollment->grade->id;
+
+        if($enrollment->enrolled_classes->isNotEmpty()) 
+        {
+            $internal_grades = [];
+            foreach ($enrollment->enrolled_classes as $key => $enrolled_class) 
+            {
+                $internal_grades[] = [
+                    'grade_id' => $grade_id,
+                    'class_id' => $enrolled_class->class->id,
+                    'units' => $enrolled_class->class->units,
+                    'grading_system_id' => NULL,
+                    'completion_grade' => NULL,
+                    'final' => 0,
+                    'user_id' =>  $enrolled_class->user_id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+            $enrollment->grade->internalgrades()->delete();
+            $enrollment->grade->internalgrades()->insert($internal_grades);
+        }
     }
 
-    public function recomputePayments()
+    public function updateStudentledgerAssessment($enrollment, $totalfee)
     {
-
+        $enrollment->studentledger_assessment()->update(['amount' => $totalfee]);
     }
 
-    public function reenterClassSubjectsToGrades()
+    public function reenterStudentLedgerDetails($enrollment)
     {
+        $studentledger_id = $enrollment->studentledger_assessment->id;
         
+        if($enrollment->assessment->details->isNotEmpty()) 
+        {
+            $studentledger_details = [];
+            foreach ($enrollment->assessment->details as $key => $assessment_detail) 
+            {
+                $studentledger_details[] = [
+                    'studentledger_id' => $studentledger_id,
+                    'fee_id' => $assessment_detail->fee_id,
+                    'amount' =>  $assessment_detail->amount,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+            $enrollment->studentledger_assessment->details()->delete();
+            $enrollment->studentledger_assessment->details()->insert($studentledger_details);
+        }
     }
 }

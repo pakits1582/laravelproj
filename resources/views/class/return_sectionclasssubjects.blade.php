@@ -56,7 +56,7 @@
             @endif
             <td>{{ $faculty }}</td>
             <td>{{ $section_subject->schedule->schedule }}</td>
-            <td class="mid">{{ $section_subject->slots }}</td>
+            <td class="editable tutorial mid text-uppercase" contenteditable="true" id="{{ $section_subject->id }}" data-value="{{ $section_subject->slots }}">{{ $section_subject->slots }}</td>
             <td>{{ $section_subject->curriculumsubject->curriculum->curriculum }}</td>
         </tr>
         @php

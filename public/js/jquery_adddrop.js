@@ -68,13 +68,13 @@ $(function(){
             $("#educational_level").val(response.data.student.program.level.code);
             $("#college").val(response.data.student.program.collegeinfo.code);
 
-            $("#new").prop("checked", (response.data.enrollment.new === 1) ? true : false);
-            $("#old").prop("checked", (response.data.enrollment.old === 1) ? true : false);
-            $("#returnee").prop("checked", (response.data.enrollment.returnee === 1) ? true : false);
-            $("#transferee").prop("checked", (response.data.enrollment.transferee === 1) ? true : false);      
-            $("#cross").prop("checked", (response.data.enrollment.cross_enrollee === 1) ? true : false);
-            $("#foreigner").prop("checked", (response.data.enrollment.foreigner === 1) ? true : false);      
-            $("#probationary").prop("checked", (response.data.enrollment.probationary === 1) ? true : false); 
+            $("#new").prop("checked", (response.data.enrollment.new == 1) ? true : false);
+            $("#old").prop("checked", (response.data.enrollment.old == 1) ? true : false);
+            $("#returnee").prop("checked", (response.data.enrollment.returnee == 1) ? true : false);
+            $("#transferee").prop("checked", (response.data.enrollment.transferee == 1) ? true : false);      
+            $("#cross").prop("checked", (response.data.enrollment.cross_enrollee == 1) ? true : false);
+            $("#foreigner").prop("checked", (response.data.enrollment.foreigner == 1) ? true : false);      
+            $("#probationary").prop("checked", (response.data.enrollment.probationary == 1) ? true : false); 
             
             $(".actions").prop("disabled", false);
         }else{
@@ -100,8 +100,8 @@ $(function(){
             error: function (data) {
                 console.log(data);
                 var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action, please refresh page!');
                     clearFormFields()
                 }
             }
@@ -125,7 +125,7 @@ $(function(){
                 var sections = '<option value="">- select section -</option>';
                 $.each(response.data, function(k, v){
                     sections += '<option value="'+v.id+'"';
-                    sections += (selected_value === v.id) ? 'selected' : ''; 
+                    sections += (selected_value == v.id) ? 'selected' : ''; 
                     sections += '>'+v.code+'</option>';       
                 });
 
@@ -134,8 +134,8 @@ $(function(){
             error: function (data) {
                 console.log(data);
                 var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action, please refresh page!');
                     clearFormFields()
                 }
             }
@@ -160,8 +160,8 @@ $(function(){
             error: function (data) {
                 console.log(data);
                 var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action, please refresh page!');
                 }
             }
         });
@@ -212,7 +212,7 @@ $(function(){
             data: ({ 'student_id' : student_id, 'studentinfo' : studentinfo }),
             success: function(response){
                 console.log(response);
-                if(response.data.success === false)
+                if(response.data.success == false)
                 {
                     showError(response.data.message);
                     clearFormFields()
@@ -235,8 +235,8 @@ $(function(){
             error: function (data) {
                 console.log(data);
                 var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action, please refresh page!');
                     clearFormFields()
                 }
             }
@@ -253,7 +253,7 @@ $(function(){
                 dataType: 'json',
                 success: function(response){
                     console.log(response);
-                    if(response.data.success === false)
+                    if(response.data.success == false)
                     {
                         showError(response.data.message);
                         clearFormFields()
@@ -265,8 +265,8 @@ $(function(){
                 error: function (data) {
                     console.log(data);
                     var errors = data.responseJSON;
-                    if ($.isEmptyObject(errors) === false) {
-                        showError('Something went wrong! Can not perform requested action!');
+                    if ($.isEmptyObject(errors) == false) {
+                        showError('Something went wrong! Can not perform requested action, please refresh page!');
                         clearFormFields()
                     }
                 }
@@ -303,8 +303,8 @@ $(function(){
                 error: function (data) {
                     console.log(data);
                     var errors = data.responseJSON;
-                    if ($.isEmptyObject(errors) === false) {
-                        showError('Something went wrong! Can not perform requested action!');
+                    if ($.isEmptyObject(errors) == false) {
+                        showError('Something went wrong! Can not perform requested action, please refresh page!');
                         clearForm()
                     }
                 }
@@ -349,7 +349,7 @@ $(function(){
                                 dataType: 'json',
                                 success: function(response)
                                 {
-                                    if(response.data.success === true)
+                                    if(response.data.success == true)
                                     {
                                         showSuccess(response.data.message);
                                     }
@@ -359,7 +359,7 @@ $(function(){
                                     console.log(data);
                                     var errors = data.responseJSON;
                                     if ($.isEmptyObject(errors) == false) {
-                                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                                        showError('Something went wrong! Can not perform requested action, please refresh page!');
                                     }
                                 }
                             });
@@ -389,7 +389,7 @@ $(function(){
     });
 
     $(document).keyup(function (event) {
-	    if (event.keyCode === 113) {
+	    if (event.keyCode == 113) {
 	        var section = $("#section").val();
 			if(section){
 				$.ajax({url: "/enrolments/searchandaddclasses",success: function(data){
@@ -512,35 +512,6 @@ $(function(){
 				});//end of dialogbox
 				$(".ui-dialog-titlebar").hide();
             }else{
-                // if(taken_units > allowed_units)
-                // {
-                //     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The maximum units allowed for the student already exceeded.<br>Continue selecting subject?</div>').dialog({
-                //         show: 'fade',
-                //         resizable: false,	
-                //         draggable: false,
-                //         width: 350,
-                //         height: 'auto',
-                //         modal: true,
-                //         buttons: {
-                //             'Cancel':function(){
-                //                 $(this).dialog('close');
-                //                 $(checkbox).closest('tr').removeClass('selected')
-                //                 $(checkbox).prop("checked", false);
-                //             },
-                //             'OK':function(){
-                //                 $(this).dialog('close');
-                //                 if(can_overloadunits == 0){
-                //                     showError('<p class="mid">ACCESS DENIED!</p>Your account does not have enough permission to override deficiency!')
-                //                     $(checkbox).closest('tr').removeClass('selected')
-                //                     $(checkbox).prop("checked", false);
-                //                 }else{
-                //                     $(checkbox).closest('tr').addClass('selected');
-                //                 }
-                //             }//end of ok button	
-                //         }//end of buttons
-                //     });//end of dialogbox
-                //     $(".ui-dialog-titlebar").hide();
-                // }
                 $(checkbox).closest('tr').addClass('selected');
             }
         }
@@ -552,7 +523,7 @@ $(function(){
         var selected_classes = $(".check_searched_class:checked");
 		var enrollment_id    = $("#enrollment_id").val();
 
-        if(selected_classes.length === 0)
+        if(selected_classes.length == 0)
         {
 			showError('Please select atleast one checkbox/class subject to add!');
 			$("#add_selected_classes").attr("disabled", false);	
@@ -578,7 +549,7 @@ $(function(){
 				success: function(response){
 					$("#confirmation").dialog('close');
                     console.log(response);
-                    if(response.data.success === true)
+                    if(response.data.success == true)
                     {
                         showSuccess(response.data.message);
                         $.each(class_ids, function(i, val){
@@ -596,8 +567,8 @@ $(function(){
                 error: function (data) {
                     console.log(data);
                     var errors = data.responseJSON;
-                    if ($.isEmptyObject(errors) === false) {
-                        showError('Something went wrong! Can not perform requested action!');
+                    if ($.isEmptyObject(errors) == false) {
+                        showError('Something went wrong! Can not perform requested action, please refresh page!');
                     }
                 }
 			});	
@@ -639,7 +610,7 @@ $(function(){
     });
 
     $(document).on("click", "#save_enrollment", function(e){
-        // var conflicts = $("#mayconflict").val();
+        // var conflicts = $("#has_conflict").val();
 
 		// if(conflicts > 0){
 		// 	showError('There are conflict subjects, please check before saving!');
@@ -652,24 +623,22 @@ $(function(){
 				showError('Please add at least one subject before saving enrolment!');
 			}else{
 				$("#save_enrollment").attr("disabled",true);
-				$("#form_enrollment").submit();
+				$("#form_adddrop").submit();
 			}
 			
 		//}		
         e.preventDefault();
     });
 
-    $(document).on("submit", "#form_enrollment", function(e){
+    $(document).on("submit", "#form_adddrop", function(e){
 
         var enrolledunits  = $("#enrolledunits").text();
 		var enrollment_id = $("#enrollment_id").val();
-		var postData      = $("#form_enrollment").serializeArray();
+		var postData      = $("#form_adddrop").serializeArray();
         postData.push({name: 'enrolled_units', value: enrolledunits });
 
         $.ajax({
-            //url: "/enrolments/"+enrollment_id+"/saveenrollment",
-            //type: 'POST',
-            url: "/enrolments/"+enrollment_id,
+            url: "/adddrop/"+enrollment_id,
             type: 'PUT',
             dataType: 'json',
             data: postData,
@@ -686,25 +655,12 @@ $(function(){
 			},
             success: function(response){
                 $("#confirmation").dialog('close');
-                console.log(response);
+                //console.log(response);
                 $.ajax({
                     url: "/assessments/"+response,
                     type: 'GET',
-                    // beforeSend: function() {
-                    //     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-                    //         show: 'fade',
-                    //         resizable: false,	
-                    //         width: 350,
-                    //         height: 'auto',
-                    //         modal: true,
-                    //         buttons: false
-                    //     });
-                    //     $(".ui-dialog-titlebar").hide();
-                    // },
                     success: function(data){
                         //console.log(response);
-        
-                        //$("#confirmation").dialog('close');
                         var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
                             header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
                             header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
@@ -716,7 +672,6 @@ $(function(){
                         $("#save_assessment").focus();
                     }
                 });
-                //displayAssessmentPreview(response);
             },
             error: function (data) {
                 console.log(data);
@@ -767,8 +722,8 @@ $(function(){
                 $("#confirmation").dialog('close');
                 console.log(data);
                 var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action, please refresh page!');
                     clearForm()
                 }
             }
@@ -799,10 +754,11 @@ $(function(){
 				$(".ui-dialog-titlebar").hide();
 			},
             success: function(response){
+                console.log(response);
                 $("#confirmation").dialog('close');
                 $("#save_assessment").prop("disabled", false);
                 $('#modalll').modal('hide');
-                if(response.data === true)
+                if(response.data == true)
                 {
                     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Assessment Saved</div><div class="message">Student was successfully assessed.<br>Print student assessment?</div>').dialog({
                         show: 'fade',
@@ -834,8 +790,8 @@ $(function(){
 
                 console.log(data);
                 var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false) {
-                    showError('Something went wrong! Can not perform requested action!');
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action, please refresh page!');
                 }
             }
         });
