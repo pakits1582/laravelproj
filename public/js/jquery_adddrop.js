@@ -655,7 +655,7 @@ $(function(){
 			},
             success: function(response){
                 $("#confirmation").dialog('close');
-                //console.log(response);
+                console.log(response);
                 $.ajax({
                     url: "/assessments/"+response,
                     type: 'GET',

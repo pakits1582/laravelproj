@@ -82,8 +82,7 @@ class AdddropController extends Controller
      */
     public function update(UpdateEnrollmentRequest $request)
     {
-        $enrollment = Enrollment::findOrFail($request->enrollment_id);
-        $assessment = Assessment::findOrFail($enrollment->id);
+        $enrollment = Enrollment::with('assessment')->findOrFail($request->enrollment_id);
 
         DB::beginTransaction();
 
@@ -97,7 +96,7 @@ class AdddropController extends Controller
 
         DB::commit();
 
-        return $assessment->id;
+        return $enrollment->assessment->id;
     }
 
     /**

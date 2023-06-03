@@ -43,7 +43,8 @@ class Classes extends Model
         return $this->belongsTo(Schedule::class, 'schedule_id', 'id')->withDefault(['schedule' => '']);
     }
 
-    public function classschedules(){
+    public function classschedules()
+    {
         return $this->hasMany(ClassesSchedule::class, 'class_id', 'id');
     }
 
@@ -57,7 +58,8 @@ class Classes extends Model
         return $this->belongsTo(Classes::class, 'merge', 'id');
     }
 
-    public function merged(){
+    public function merged()
+    {
         return $this->hasMany(Classes::class, 'merge', 'id');
     }
 

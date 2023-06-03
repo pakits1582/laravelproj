@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
+use App\Services\MasterlistService;
+use App\Services\PeriodService;
+use App\Services\ProgramService;
 
 class MasterlistController extends Controller
 {
+    protected $masterlistService;
 
-    public function __construct()
+    public function __construct(MasterlistService $masterlistService)
     {
+        $this->masterlistService = $masterlistService;
+
         Helpers::setLoad(['jquery_masterlist.js']);
     }
     /**
@@ -19,7 +25,11 @@ class MasterlistController extends Controller
      */
     public function index()
     {
-        return view('masterlist.index');
+        $periods = (new PeriodService())->returnAllPeriods(0, true, 1);
+        $programs = (new ProgramService())->returnAllPrograms(0, true, true);
+        $masterlist = $this->masterlistService->masterList(session('current_period'));
+
+        return view('masterlist.index', compact('periods', 'programs', 'masterlist'));
     }
 
     /**
