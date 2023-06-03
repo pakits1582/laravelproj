@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Program;
 use Illuminate\Http\Request;
-use App\Services\MasterlistService;
 use App\Services\PeriodService;
 use App\Services\ProgramService;
+use App\Services\MasterlistService;
 
 class MasterlistController extends Controller
 {
@@ -26,10 +27,17 @@ class MasterlistController extends Controller
     public function index()
     {
         $periods = (new PeriodService())->returnAllPeriods(0, true, 1);
-        $programs = (new ProgramService())->returnAllPrograms(0, true, true);
+        $programs = Program::orderBy('code')->get();
         $masterlist = $this->masterlistService->masterList(session('current_period'));
 
         return view('masterlist.index', compact('periods', 'programs', 'masterlist'));
+    }
+
+    public function filtermasterlist(Request $request)
+    {
+        $masterlist = $this->masterlistService->masterList($request->period_id, $request->educational_level, $request->college, $request->program_id, $request->year_level, $request->status);
+
+        return view('masterlist.return_masterlist', compact('masterlist'));
     }
 
     /**
