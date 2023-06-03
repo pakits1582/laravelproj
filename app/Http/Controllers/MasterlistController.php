@@ -27,7 +27,7 @@ class MasterlistController extends Controller
     public function index()
     {
         $periods = (new PeriodService())->returnAllPeriods(0, true, 1);
-        $programs = Program::orderBy('code')->get();
+        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
         $masterlist = $this->masterlistService->masterList(session('current_period'));
 
         return view('masterlist.index', compact('periods', 'programs', 'masterlist'));
