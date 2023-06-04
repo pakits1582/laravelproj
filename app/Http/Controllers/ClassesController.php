@@ -276,4 +276,11 @@ class ClassesController extends Controller
         return response()->json($update_slots);
 
     }
+
+    public function scheduletable(Request $request)
+    {
+        $class_schedules = $this->classesService->sectionClassSchedules($request->section, session('current_period'));
+
+        return $class_schedules;
+    }
 }

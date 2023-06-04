@@ -70,6 +70,24 @@ $(function(){
 			success: function(data){
 				console.log(data);
 				$("#return_classsubjects").html(data);
+
+                returnScheduleTable(section);
+			},
+			error: function (data) {
+				console.log(data);
+			}
+		});
+    }
+
+    function returnScheduleTable(section)
+    {
+        $.ajax({
+			url: "/classes/scheduletable",
+			type: 'POST',
+			data: ({ 'section' : section}),
+			success: function(data){
+				console.log(data);
+				$("#schedule_table").html(data);
 			},
 			error: function (data) {
 				console.log(data);

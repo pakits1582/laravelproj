@@ -684,4 +684,31 @@ class ClassesService
             'alert' => 'alert-success'
         ];
     }
+
+    public function sectionClassSchedules($section_id, $period_id)
+    {
+        $query = ClassesSchedule::with([
+            'classinfo' => [
+                'instructor',
+                'curriculumsubject.subjectinfo', 
+            ], 
+            'roominfo'
+        ]);
+
+        $query->when(isset($section_id) && !empty($section_id), function ($query) use($section_id) {
+            $query->whereHas('classinfo', function($query) use($section_id){
+                $query->where('section_id', $section_id);
+            });
+        });
+
+        $query->when(isset($period_id) && !empty($period_id), function ($query) use($period_id) {
+            $query->whereHas('classinfo', function($query) use($period_id){
+                $query->where('period_id', $period_id);
+            });
+        });
+
+        $class_schedules = $query->get();
+
+        return $class_schedules;
+    }
 }
