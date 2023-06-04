@@ -2,6 +2,7 @@
 
 namespace App\Libs;
 
+use Carbon\Carbon;
 use App\Models\Useraccess;
 
 class Helpers
@@ -411,5 +412,16 @@ class Helpers
         }
        
     }
+
+    public static function rangesNotOverlapOpen(Carbon $start_time1, Carbon $end_time1, Carbon $start_time2, Carbon $end_time2)
+    {
+        return ($end_time1 <= $start_time2) || ($end_time2 <= $start_time1);
+    }
+    
+    public static function rangesNotOverlapClosed(Carbon $start_time1, Carbon $end_time1, Carbon $start_time2, Carbon $end_time2)
+    {
+        return ($end_time1 < $start_time2) || ($end_time2 < $start_time1);
+    }
+    
 }
     

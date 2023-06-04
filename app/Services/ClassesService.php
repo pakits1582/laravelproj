@@ -691,6 +691,7 @@ class ClassesService
             'classinfo' => [
                 'instructor',
                 'curriculumsubject.subjectinfo', 
+                'sectioninfo'
             ], 
             'roominfo'
         ]);
@@ -709,6 +710,29 @@ class ClassesService
 
         $class_schedules = $query->get();
 
-        return $class_schedules;
+        $class_schedule_array = [];
+
+        if ($class_schedules->isNotEmpty()) {
+            foreach ($class_schedules as $key => $class_schedule) 
+            {
+                $class_schedule_array[] = [
+                    'class_id' => $class_schedule->classinfo->id,
+                    'class_code' => $class_schedule->classinfo->code,
+                    'from_time' => $class_schedule->from_time,
+                    'to_time' => $class_schedule->to_time,
+                    'day' => $class_schedule->day,
+                    'room' => $class_schedule->roominfo->code,
+                    'subject_code' => $class_schedule->classinfo->curriculumsubject->subjectinfo->code,
+                    'subject_code' => $class_schedule->classinfo->curriculumsubject->subjectinfo->name,
+                    'instructor_id' => $class_schedule->classinfo->instructor_id,
+                    'instructor_last_name' => $class_schedule->classinfo->instructor->last_name ?? '',
+                    'instructor_first_name' => $class_schedule->classinfo->instructor->first_name ?? '',
+                    'instructor_middle_name' => $class_schedule->classinfo->instructor->midle_name ?? '',
+                    'section_code' => $class_schedule->classinfo->sectioninfo->code,
+                ];
+            }
+        }
+
+        return $class_schedule_array;
     }
 }

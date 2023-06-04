@@ -281,6 +281,6 @@ class ClassesController extends Controller
     {
         $class_schedules = $this->classesService->sectionClassSchedules($request->section, session('current_period'));
 
-        return $class_schedules;
+        return view('class.schedule_table', compact('class_schedules'));
     }
 }
