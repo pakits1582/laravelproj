@@ -125,5 +125,13 @@ class AssessmentController extends Controller
         return $pdf->stream('assessment.pdf');
     }
 
+    public function scheduletable(Request $request)
+    {
+        $class_schedules = $this->assessmentService->enrolledClassSchedules($request->enrollment_id);
+        $with_faculty = false;
+
+        return view('class.schedule_table', compact('class_schedules', 'with_faculty'));
+    }
+
   
 }

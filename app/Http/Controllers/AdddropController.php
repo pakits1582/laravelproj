@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\Assessment;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Services\AdddropService;
+use App\Services\ClassesService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\UpdateEnrollmentRequest;
-use App\Models\Assessment;
 
 class AdddropController extends Controller
 {
@@ -82,7 +83,7 @@ class AdddropController extends Controller
      */
     public function update(UpdateEnrollmentRequest $request)
     {
-        $enrollment = Enrollment::with('assessment')->findOrFail($request->enrollment_id);
+        $enrollment = Enrollment::with(['assessment','enrolled_classes' => ['class.schedule']])->findOrFail($request->enrollment_id);
 
         DB::beginTransaction();
 
@@ -94,7 +95,37 @@ class AdddropController extends Controller
 
         $enrollment->update($request->validated());
 
-        DB::commit();
+        $enroll_class_schedules = [];
+
+        if ($enrollment->enrolled_classes->count() > 0) 
+        {
+            foreach ($enrollment->enrolled_classes as $key => $enrolled_class) 
+            {
+                if(!is_null($enrolled_class->class->schedule_id))
+                {
+                    $class_schedules = (new ClassesService())->processSchedule($enrolled_class->class->schedule->schedule);
+
+                    foreach ($class_schedules as $key => $class_schedule) 
+                    {
+                        foreach ($class_schedule['days'] as $key => $day) {
+                            $enroll_class_schedules[] = [
+                                'enrollment_id' => $request->enrollment_id,
+                                'class_id' => $enrolled_class->id,
+                                'from_time' => $class_schedule['timefrom'],
+                                'to_time' => $class_schedule['timeto'],
+                                'day' => $day,
+                                'room' => $class_schedule['room'],
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $enroll_class_schedules;
+        //DB::commit();
 
         return $enrollment->assessment->id;
     }

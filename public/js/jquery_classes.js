@@ -102,7 +102,8 @@ $(function(){
             returnClassSubjects(section);
         }else{
             $("#button_group").addClass('d-none');
-            $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+            $("#return_classsubjects").html('<tr><td colspan="14" class="mid">No records to be displayed</td></tr>');
+            $("#schedule_table").html('');
         }
         e.preventDefault();
     });

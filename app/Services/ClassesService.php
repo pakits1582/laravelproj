@@ -723,7 +723,7 @@ class ClassesService
                     'day' => $class_schedule->day,
                     'room' => $class_schedule->roominfo->code,
                     'subject_code' => $class_schedule->classinfo->curriculumsubject->subjectinfo->code,
-                    'subject_code' => $class_schedule->classinfo->curriculumsubject->subjectinfo->name,
+                    'subject_name' => $class_schedule->classinfo->curriculumsubject->subjectinfo->name,
                     'instructor_id' => $class_schedule->classinfo->instructor_id,
                     'instructor_last_name' => $class_schedule->classinfo->instructor->last_name ?? '',
                     'instructor_first_name' => $class_schedule->classinfo->instructor->first_name ?? '',

@@ -444,6 +444,59 @@ div.dataTables_wrapper {
 .modal-backdrop {
 	display: none;
 }
+
+#scheduletable{
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+	/* border:1px solid #999; */
+	margin-top: 10px;
+	table-layout: fixed;	
+	color: black;
+}
+#scheduletable th{
+	background-color:#4e73df;
+	color:#fff;
+	height:30px;
+	/*font-size: 13px;*/
+	border-left:1px solid #fff;		
+}
+
+#scheduletable td {
+	font-size: 13px;
+	border:1px solid #4e73df !important;
+	word-wrap: break-word !important;
+	padding:5px !important;
+}
+
+.smalltime{
+	font-size: 10px;
+	/*font-weight: bold;*/
+	color: #4e73df;
+}
+
+.bigtime{
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.tabschedfac{
+	font-size: 12px;
+	font-weight: bold;
+	color: #4e73df;
+}
+
+.tabschedsub{
+	font-size: 14px;
+	font-weight: bold;
+	padding: 3px;
+}
+
+.tabschedconf{
+	font-size: 12px;
+	font-weight: bold;
+	color: red;
+}
     
     
 

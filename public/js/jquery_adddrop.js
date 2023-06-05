@@ -660,16 +660,16 @@ $(function(){
                     url: "/assessments/"+response,
                     type: 'GET',
                     success: function(data){
-                        //console.log(response);
-                        var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
-                            header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
-                            header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
-                            header += '</div><div class="modal-body">';
+                        console.log(response);
+                        // var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
+                        //     header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
+                        //     header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
+                        //     header += '</div><div class="modal-body">';
                         
-                        var footer = '</div></div></div></div>';
-                        $('#ui_content').html(header+data+footer);
-                        $("#modalll").modal('show');
-                        $("#save_assessment").focus();
+                        // var footer = '</div></div></div></div>';
+                        // $('#ui_content').html(header+data+footer);
+                        // $("#modalll").modal('show');
+                        // $("#save_assessment").focus();
                     }
                 });
             },

@@ -5,6 +5,7 @@ namespace App\Services\Assessment;
 use App\Models\AssessmentDetail;
 use Illuminate\Support\Facades\DB;
 use App\Models\AssessmentBreakdown;
+use App\Models\EnrolledClassSchedule;
 use App\Models\Enrollment;
 use Illuminate\Support\Facades\Auth;
 
@@ -150,5 +151,43 @@ class AssessmentService
             $enrollment->studentledger_assessment->details()->delete();
             $enrollment->studentledger_assessment->details()->insert($studentledger_details);
         }
+    }
+
+    public function enrolledClassSchedules($enrollment_id)
+    {
+        $query = EnrolledClassSchedule::with([
+            'class' => [
+                'instructor',
+                'curriculumsubject.subjectinfo', 
+                'sectioninfo'
+            ]
+        ])->where('enrollment_id', $enrollment_id);
+
+        $enrolled_class_schedules = $query->get();
+
+        $class_schedule_array = [];
+
+        if ($enrolled_class_schedules->isNotEmpty()) {
+            foreach ($enrolled_class_schedules as $key => $class_schedule) 
+            {
+                $class_schedule_array[] = [
+                    'class_id' => $class_schedule->class->id,
+                    'class_code' => $class_schedule->class->code,
+                    'from_time' => $class_schedule->from_time,
+                    'to_time' => $class_schedule->to_time,
+                    'day' => $class_schedule->day,
+                    'room' => $class_schedule->room,
+                    'subject_code' => $class_schedule->class->curriculumsubject->subjectinfo->code,
+                    'subject_name' => $class_schedule->class->curriculumsubject->subjectinfo->name,
+                    'instructor_id' => $class_schedule->class->instructor_id,
+                    'instructor_last_name' => $class_schedule->class->instructor->last_name ?? '',
+                    'instructor_first_name' => $class_schedule->class->instructor->first_name ?? '',
+                    'instructor_middle_name' => $class_schedule->class->instructor->midle_name ?? '',
+                    'section_code' => $class_schedule->class->sectioninfo->code,
+                ];
+            }
+        }
+
+        return $class_schedule_array; 
     }
 }

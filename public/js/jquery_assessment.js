@@ -80,6 +80,22 @@ $(function(){
         });
     }
 
+    function returnScheduleTable(enrollment_id)
+    {
+        $.ajax({
+			url: "/assessments/scheduletable",
+			type: 'POST',
+			data: ({ 'enrollment_id' : enrollment_id}),
+			success: function(data){
+				console.log(data);
+				$("#schedule_table").html(data);
+			},
+			error: function (data) {
+				console.log(data);
+			}
+		});
+    }
+
     $(document).on("change","#student", function(){
         var student_id = $("#student").val();
 
@@ -122,6 +138,7 @@ $(function(){
                             $("#probationary").prop("checked", (response.data.probationary === 1) ? true : false); 
                             $(".actions").prop("disabled", false);
                             returnAssessmentPreview(response.data.assessment.id);
+                            returnScheduleTable(response.data.id);
                         }
                     }
                 },
@@ -213,4 +230,6 @@ $(function(){
         }
         e.preventDefault();
     });
+
+    
 });
