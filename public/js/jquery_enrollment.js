@@ -95,12 +95,23 @@ $(function(){
         }
 
         returnEnrolledClassSubjects(response.data.enrollment.id);
-        enrollmentScheduleTable(response.data.enrollment.id);
+        returnScheduleTable(response.data.enrollment.id);
     }
 
-    function enrollmentScheduleTable(enrollment_id)
+    function returnScheduleTable(enrollment_id)
     {
-        $("#schedule_table").html('display schedule table!');
+        $.ajax({
+			url: "/assessments/scheduletable",
+			type: 'POST',
+			data: ({ 'enrollment_id' : enrollment_id}),
+			success: function(data){
+				console.log(data);
+				$("#schedule_table").html(data);
+			},
+			error: function (data) {
+				console.log(data);
+			}
+		});
     }
 
     function enrollmentInfo(student_id, studentinfo)

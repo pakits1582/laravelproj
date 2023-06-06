@@ -10,6 +10,7 @@ use App\Models\Schedule;
 use App\Models\ClassesSchedule;
 use App\Models\SectionMonitoring;
 use App\Models\CurriculumSubjects;
+use App\Models\EnrolledClassSchedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -376,35 +377,65 @@ class ClassesService
 
     public function updateClassSubject($class, $request)
     {
+        $class->load(['classschedules', 'enrolledstudents']);
         $data = $request->validated();
+
+        DB::beginTransaction();
 
         if($request->filled('schedule'))
         {
             if($request->schedule !== $class->schedule->schedule)
-            {
-                $schedule_info = Schedule::firstOrCreate(['schedule' => $request->schedule], ['schedule' => $request->schedule]);
-
-                $this->deleteClassSchedules($class->id);
-
-                $schedule_array = $this->processSchedule($request->schedule);
+            { 
                 $rooms = Room::all();
+                $schedule_info = Schedule::firstOrCreate(['schedule' => $request->schedule], ['schedule' => $request->schedule]);
+                $class_schedules = $this->processSchedule($request->schedule);
+                
+                $classes_schedules = [];
 
-                foreach ($schedule_array as $key => $sched) 
+                foreach ($class_schedules as $key => $class_schedule) 
                 {
-                    $room_info = $rooms->firstWhere('code', $sched['room']);
+                    $room_info = $rooms->firstWhere('code', $class_schedule['room']);
                    
-                    $classesSchedules = [];
-                    foreach ($sched['days'] as $key => $day) {
-                        $classesSchedules[] =  new ClassesSchedule([
-                                        'from_time' => $sched['timefrom'],
-                                        'to_time' => $sched['timeto'],
-                                        'day' => $day,
-                                        'room_id' => ($room_info) ? $room_info->id : '',
-                                        'schedule_id' => $schedule_info->id
-                                    ]);
+                    foreach ($class_schedule['days'] as $key => $day) {
+                        $classes_schedules[] =  [
+                                        'class_id'      => $class->id,
+                                        'from_time'   => $class_schedule['timefrom'],
+                                        'to_time'     => $class_schedule['timeto'],
+                                        'day'         => $day,
+                                        'room_id'     => ($room_info) ? $room_info->id : '',
+                                        'schedule_id' => $schedule_info->id,
+                                        'created_at'  => now(),
+                                        'updated_at'  => now()
+                                    ];
                     }//end of days
                 }
-                $class->classschedules()->saveMany($classesSchedules);
+
+                if ($class->enrolledstudents->count() > 0 && !empty($class_schedules)) 
+                {
+                    $enrolled_class_schedules = [];
+
+                    foreach ($class->enrolledstudents as $key => $enrolled_class) 
+                    {
+                        foreach ($classes_schedules as $key => $sched) 
+                        {
+                            $enrolled_class_schedules[] = [
+                                'enrollment_id' => $enrolled_class->enrollment_id,
+                                'class_id'      => $class->id,
+                                'from_time'     => $sched['from_time'],
+                                'to_time'       => $sched['to_time'],
+                                'day'           => $sched['day'],
+                                'room'          => $rooms->firstWhere('id', $sched['room_id'])->code,
+                                'created_at'    => now(),
+                                'updated_at'    => now()
+                            ];
+                        }
+                    }
+                    EnrolledClassSchedule::where('class_id', $class->id)->delete();
+                    EnrolledClassSchedule::insert($enrolled_class_schedules);
+                }
+
+                $class->classschedules()->delete();
+                $class->classschedules()->insert($classes_schedules);
 
                 $data = $request->validated()+['schedule_id' => $schedule_info->id];
             } 
@@ -414,6 +445,13 @@ class ClassesService
 
         //IF DISSOVED IS EQUAL TO 1, REMOVE ALL STUDENTS ENROLLED IN THE SUBJECT THEN RE-ASSESS
 
+        DB::commit();
+        return [
+            'success' => true,
+            'message' => 'Class Subject Successfully Updated!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
     }
 
     public function storeCopyClass($request)

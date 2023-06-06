@@ -127,7 +127,7 @@ class ClassesController extends Controller
     {
         $return = $this->classesService->UpdateClassSubject($class, $request);
 
-        return response()->json(['data' => $return]);
+        return response()->json($return);
     }
 
     /**

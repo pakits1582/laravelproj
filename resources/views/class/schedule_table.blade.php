@@ -139,8 +139,7 @@
                 ];
 	    	}
 	    }
-        //echo '<pre>';
-        //print_r($processedSchedules);
+
         $data_table = '';
 		$has_conflict = 0;
         $i = 1;
@@ -153,11 +152,11 @@
                 $data_table .= '<tr>';
                 if($i==2)
                 {
-                    $data_table .= '<td class="w100 mid" rowspan="2">';
+                    $data_table .= '<td class="w100 mid fix_height" rowspan="2"><div class="time_container">';
                     $data_table .= '<div class="smalltime">'.date('h:i A', strtotime($sched['time'])).'</div>';
                     $data_table .= '<div class="bigtime">'.date('h:i A', strtotime('+30 minutes', strtotime($sched['time']))).'</div>';
                     $data_table .= '<div class="smalltime">'.date('h:i A', strtotime('+59 minutes', strtotime($sched['time']))).'</div>';
-                    $data_table .='</td>';
+                    $data_table .='</div></td>';
                     $i=0;
                 }
                 foreach ($sched['days'] as $key => $sched_days) 
@@ -212,7 +211,7 @@
                                     {
                                         $conflicttimes[] = [
                                             'class_code'   => $conflict['class_code'], 
-                                            'subject_code' => $day_sched['subject_code'], 
+                                            'subject_code' => $conflict['subject_code'], 
                                             'room'         => $conflict['room'], 
                                             'starttime'    => $conflict['from_time'], 
                                             'endtime'      => $conflict['to_time'], 
@@ -274,7 +273,7 @@
                                                 $subs .= '<div class="tabschedfac">'.$c['section_code'].'</div>';
                                                 if($with_faculty == true)
                                                 {
-                                                    $subs .= '<div class="tabschedfac">'.$day_sched['faculty'].'</div>';
+                                                    $subs .= '<div class="tabschedfac">'.$c['faculty'].'</div>';
                                                 }
                                             }
                                             $subs .= '<span class="tabschedconf">ARE CONFLICT</span>';
@@ -292,6 +291,7 @@
                         $data_table .= '<td>&nbsp;</td>';
                     }
                 }
+                $data_table .= '</tr>';
             }
         }
     @endphp
@@ -314,3 +314,4 @@
     </table>
     <input type="hidden" name="has_conflict" id="has_conflict" value="{{ $has_conflict}}" />
 @endif
+

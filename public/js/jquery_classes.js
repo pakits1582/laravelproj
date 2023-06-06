@@ -86,7 +86,7 @@ $(function(){
 			type: 'POST',
 			data: ({ 'section' : section}),
 			success: function(data){
-				console.log(data);
+				//console.log(data);
 				$("#schedule_table").html(data);
 			},
 			error: function (data) {
@@ -472,15 +472,19 @@ $(function(){
                 });
                 $(".ui-dialog-titlebar").hide();
             },
-            success: function(data){
-                showSuccess('Class Subject Successfully Updated!');
-                $('#cancel').trigger('click');
+            success: function(response){
+                console.log(response);
 
                 $("#confirmation").dialog('close');
-                var section = $("#section").val();
 
-                returnClassSubjects(section)
-                console.log(data);
+                if(response.success)
+                {
+                    showSuccess(response.message);
+                    returnClassSubjects(section);
+                
+                    var section = $("#section").val();
+                    returnClassSubjects(section);
+                }
             },
             error: function (data) {
                 $("#confirmation").dialog('close');

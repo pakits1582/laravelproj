@@ -83,7 +83,7 @@ $(function(){
         }
 
         returnEnrolledClassSubjects(response.data.enrollment.id);
-        enrollmentScheduleTable(response.data.enrollment.id);
+        returnScheduleTable(response.data.enrollment.id);
     }
 
     function returnEnrolledClassSubjects(enrollment_id)
@@ -108,9 +108,20 @@ $(function(){
         });
     }
 
-    function enrollmentScheduleTable(enrollment_id)
+    function returnScheduleTable(enrollment_id)
     {
-        $("#schedule_table").html('display schedule table!');
+        $.ajax({
+			url: "/assessments/scheduletable",
+			type: 'POST',
+			data: ({ 'enrollment_id' : enrollment_id}),
+			success: function(data){
+				console.log(data);
+				$("#schedule_table").html(data);
+			},
+			error: function (data) {
+				console.log(data);
+			}
+		});
     }
 
     function getSections(program_id, year_level, selected_value)
@@ -354,6 +365,7 @@ $(function(){
                                         showSuccess(response.data.message);
                                     }
                                     returnEnrolledClassSubjects(enrollment_id);
+                                    returnScheduleTable(enrollment_id);
                                 },
                                 error: function (data) {
                                     console.log(data);
@@ -552,11 +564,14 @@ $(function(){
                     if(response.data.success == true)
                     {
                         showSuccess(response.data.message);
+
                         $.each(class_ids, function(i, val){
                             $("#searched_class_"+val).remove();
                         });
+
                         returnEnrolledClassSubjects(enrollment_id);
-                        //scheduletable(enrollno);
+                        returnScheduleTable(enrollment_id);
+
                         var rowCount = $('#add_classsubjects_table > tbody tr').length;
 
                         if(rowCount == 0){
@@ -610,12 +625,12 @@ $(function(){
     });
 
     $(document).on("click", "#save_enrollment", function(e){
-        // var conflicts = $("#has_conflict").val();
+        var conflicts = $("#has_conflict").val();
 
-		// if(conflicts > 0){
-		// 	showError('There are conflict subjects, please check before saving!');
-		// }else{
-			//alert('saveenrollment');
+		if(conflicts > 0)
+        {
+			showError('There are conflict subjects, please check before saving!');
+		}else{
 			var checkboxes = $(".select_enrolled_class");
 
 			if(checkboxes.length == 0)
@@ -626,7 +641,7 @@ $(function(){
 				$("#form_adddrop").submit();
 			}
 			
-		//}		
+		}		
         e.preventDefault();
     });
 
@@ -660,16 +675,15 @@ $(function(){
                     url: "/assessments/"+response,
                     type: 'GET',
                     success: function(data){
-                        console.log(response);
-                        // var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
-                        //     header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
-                        //     header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
-                        //     header += '</div><div class="modal-body">';
+                        var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
+                            header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
+                            header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
+                            header += '</div><div class="modal-body">';
                         
-                        // var footer = '</div></div></div></div>';
-                        // $('#ui_content').html(header+data+footer);
-                        // $("#modalll").modal('show');
-                        // $("#save_assessment").focus();
+                        var footer = '</div></div></div></div>';
+                        $('#ui_content').html(header+data+footer);
+                        $("#modalll").modal('show');
+                        $("#save_assessment").focus();
                     }
                 });
             },

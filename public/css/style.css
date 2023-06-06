@@ -469,15 +469,33 @@ div.dataTables_wrapper {
 	padding:5px !important;
 }
 
+.fix_height {
+	height: 1px;
+}
+
+.time_container{
+	height: 100%;
+}
+
 .smalltime{
 	font-size: 10px;
 	/*font-weight: bold;*/
 	color: #4e73df;
+	height: 33.33%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .bigtime{
 	font-size: 16px;
 	font-weight: bold;
+	height: 33.33%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .tabschedfac{

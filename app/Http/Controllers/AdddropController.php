@@ -83,7 +83,7 @@ class AdddropController extends Controller
      */
     public function update(UpdateEnrollmentRequest $request)
     {
-        $enrollment = Enrollment::with(['assessment','enrolled_classes' => ['class.schedule']])->findOrFail($request->enrollment_id);
+        $enrollment = Enrollment::with(['assessment', 'enrolled_class_schedules', 'enrolled_classes' => ['class.schedule']])->findOrFail($request->enrollment_id);
 
         DB::beginTransaction();
 
@@ -95,10 +95,10 @@ class AdddropController extends Controller
 
         $enrollment->update($request->validated());
 
-        $enroll_class_schedules = [];
-
         if ($enrollment->enrolled_classes->count() > 0) 
         {
+            $enroll_class_schedules = [];
+
             foreach ($enrollment->enrolled_classes as $key => $enrolled_class) 
             {
                 if(!is_null($enrolled_class->class->schedule_id))
@@ -110,7 +110,7 @@ class AdddropController extends Controller
                         foreach ($class_schedule['days'] as $key => $day) {
                             $enroll_class_schedules[] = [
                                 'enrollment_id' => $request->enrollment_id,
-                                'class_id' => $enrolled_class->id,
+                                'class_id' => $enrolled_class->class_id,
                                 'from_time' => $class_schedule['timefrom'],
                                 'to_time' => $class_schedule['timeto'],
                                 'day' => $day,
@@ -122,10 +122,11 @@ class AdddropController extends Controller
                     }
                 }
             }
+            $enrollment->enrolled_class_schedules()->delete();
+            $enrollment->enrolled_class_schedules()->insert($enroll_class_schedules);
         }
 
-        return $enroll_class_schedules;
-        //DB::commit();
+        DB::commit();
 
         return $enrollment->assessment->id;
     }
