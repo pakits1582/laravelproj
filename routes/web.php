@@ -27,12 +27,15 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\MasterlistController;
 use App\Http\Controllers\PostchargeController;
 use App\Http\Controllers\ValidationController;
+use App\Http\Controllers\FacultyLoadController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\ExternalGradeController;
 use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\InternalGradeController;
 use App\Http\Controllers\StudentledgerController;
 use App\Http\Controllers\PaymentScheduleController;
+use App\Http\Controllers\StudentScheduleController;
+use App\Http\Controllers\EnrollmentSummaryController;
 use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
 
@@ -109,12 +112,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/periods/changeperiod', [PeriodController::class, 'changeperiod']);
     Route::post('/periods/saveperiod', [PeriodController::class, 'saveperiod'])->name('saveperiod');
+
     Route::view('/periods/addterm', 'period.addterm')->middleware(['inaccess:periods']);
     Route::post('/periods/saveterm', [PeriodController::class, 'storeterm'])->name('saveterm')->middleware(['inaccess:periods']);
     Route::resource('periods', PeriodController::class)->except(['show', 'destroy'])->middleware(['inaccess:periods'])
         ->missing(function (Request $request) {
-            return Redirect::route('periods.index');
-        });
+        return Redirect::route('periods.index');
+    });
 
     Route::group(['middleware' => ['inaccess:programs']], function () {
         Route::view('/programs/addnewlevel', 'program.addnewlevel');
@@ -497,6 +501,19 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('masterlist', MasterlistController::class)->missing(function (Request $request) {
             return Redirect::route('masterlist.index');
         }); 
+    });
+
+    Route::group(['middleware' => ['inaccess:studentschedules']], function () {
+        Route::get('/studentschedules', [StudentScheduleController::class, 'index']);
+    });
+
+    Route::group(['middleware' => ['inaccess:enrolmentsummary']], function () {
+        Route::get('/enrolmentsummary', [EnrollmentSummaryController::class, 'index']);
+        Route::post('/enrolmentsummary/filtersummary', [EnrollmentSummaryController::class, 'filtersummary']);
+    });
+
+    Route::group(['middleware' => ['inaccess:facultyloads']], function () {
+        Route::get('/facultyloads', [FacultyLoadController::class, 'index']);
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

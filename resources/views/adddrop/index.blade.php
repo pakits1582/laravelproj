@@ -187,7 +187,7 @@
                                         <th class="w35 mid">Lab</th>
                                         <th class="w300 mid">Schedule</th>
                                         <th class="">Section</th>
-                                        <th class="">Added By</th>
+                                        <th class="w100">Added By</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-black" id="return_enrolled_subjects">

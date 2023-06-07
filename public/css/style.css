@@ -515,6 +515,11 @@ div.dataTables_wrapper {
 	font-weight: bold;
 	color: red;
 }
+
+.primary-color{
+	background-color: #4e73df !important;
+	color: #fff !important;
+}
     
     
 

@@ -1,21 +1,21 @@
 @extends('layout')
-@section('title') {{ 'Validation' }} @endsection
+@section('title') {{ 'Student\'s Schedule' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Validation</h1>
-        <p class="mb-4">Validate student enrollment.</p>
+        <h1 class="h3 mb-2 text-gray-800">Student's Schedule</h1>
+        <p class="mb-4">Student's enrolled subjects and schedule table</p>
         
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <div class="row  align-items-center">
-                    <div class="col-md-6">
-                        <h1 class="h3 text-800 text-primary mb-0">Validation {{ session('periodname') }}</h1>
+                    <div class="col-md-8">
+                        <h1 class="h3 text-800 text-primary mb-0">Student's Schedule {{ session('periodname') }}</h1>
                     </div>
-                    <div class="col-md-6 right">
+                    <div class="col-md-4 right">
                         <div class="m-0 font-weight-bold" id="status"></div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action=""  role="form" id="form_validation">
+                                <form method="POST" action=""  role="form" id="form_studentschedule">
                                     @csrf
                                     <div class="row align-items-end">
                                         <div class="col-md-2">
@@ -119,21 +119,6 @@
                                                 <input type="text" id="section" class="form-control text-uppercase clearable" readonly value="" placeholder="">
 
                                             </div>                                 
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="col-md-9">
-                                            <label for="validated"  class="m-0 font-weight-bold text-primary checkbox-inline pr-3">
-                                            <input type="checkbox" class="checkbox" name="validated" value="1" id="validated"> Validated</label>
-                                            <span class="font-italic text-info">Note: To unvalidate student's enrollment you can uncheck the validated checkbox</span>
-                                        </div>
-                                        <div class="col-md-3 align-items-center right">
-                                            <button type="button" id="validate_enrollment" class="btn btn-success btn-icon-split actions mb-2" disabled>
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-save"></i>
-                                                </span>
-                                                <span class="text">Validate Enrollment</span>
-                                            </button>
                                         </div>
                                     </div>
                                 </form>
