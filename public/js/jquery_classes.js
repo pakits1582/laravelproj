@@ -484,6 +484,7 @@ $(function(){
                 
                     var section = $("#section").val();
                     returnClassSubjects(section);
+                    $("#cancel").trigger('click');
                 }
             },
             error: function (data) {

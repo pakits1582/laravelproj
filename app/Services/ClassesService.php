@@ -263,7 +263,7 @@ class ClassesService
                     {
                         $errors[] = 'Schedule '.$sched['raw_sched'].' TIME FROM is greater than TIME TO!</br>';
                     }else{
-                        if($room_info->excludechecking === 0)
+                        if($room_info->excludechecking == 0)
                         {
                             if($sched['days'])
                             {
