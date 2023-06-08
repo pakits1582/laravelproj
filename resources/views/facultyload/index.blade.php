@@ -44,19 +44,19 @@
                         <div class="col-md-3"></div>
                     </div>
                 </form>
-                <table id="scrollable_table" class="table table-sm table-striped table-bordered hover" style="width:100%;">
+                <table id="scrollable_table" class="table table-striped table-bordered hover" style="width:100%;">
                     <thead>
                         <tr>
                             <th class="">Name</th>
                             <th class="w50">Code</th>
-                            <th class="w150">Section</th>
-                            <th class="w150">Subject</th>
+                            <th class="w120">Section</th>
+                            <th class="w120">Subject</th>
                             <th class="">Description</th>
                             <th class="">Schedule</th>
-                            <th class="w50">Load</th>
-                            <th class="w50">Lec</th>
-                            <th class="w50">Lab</th>
-                            <th class="w50">Units</th>
+                            <th class="w40">Load</th>
+                            <th class="w40">Lec</th>
+                            <th class="w40">Lab</th>
+                            <th class="w40">Units</th>
                         </tr>
                     </thead>
                     <tbody id="return_masterlist">
@@ -65,10 +65,10 @@
                 </table>
                 <div class="row mt-3 d-flex align-items-center">
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">Total Units (<span id="totalunits"></span>)</h6>
+                        <h6 class="m-0 font-weight-bold text-primary mb-2">Total Units (<span id="totalunits"></span>)</h6>
                     </div>
                     <div class="col-md-3">
-                        <select class="form-control filter_item" name="faculty_id" id="faculty_id">
+                        <select class="form-control filter_item mb-2" name="faculty_id" id="faculty_id">
                             <option>All Faculty</option>
                         </select>
                     </div>
