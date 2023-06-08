@@ -5,20 +5,20 @@
                 $faculty = '';
                 if ($load->instructor_id != NULL)
                 {
-                    $fname = explode(" ", $load->instructor->first_name);
+                    $fname = explode(" ", $load->first_name);
                     $acronym = "";
                     foreach ($fname as $w) {
                         $acronym .= $w[0];
                     }
-                    $faculty = ($load->instructor->first_name == '(TBA)') ? 'TBA' : $acronym.'. '.$load->instructor->last_name;
+                    $faculty = ($load->first_name == '(TBA)') ? 'TBA' : $acronym.'. '.$load->last_name;
                 }
             @endphp
             <td class="">{{ $faculty }}</td>
             <td class="w50">{{ $load->code }}</td>
-            <td class="w120">{{ $load->sectioninfo->code }}</td>
-            <td class="w120">{{ $load->curriculumsubject->subjectinfo->code }}</td>
-            <td class="">{{ $load->curriculumsubject->subjectinfo->name }}</td>
-            <td class="">{{ $load->schedule->schedule }}</td>
+            <td class="w120">{{ $load->section_code }}</td>
+            <td class="w120">{{ $load->subject_code }}</td>
+            <td class="">{{ $load->subject_name }}</td>
+            <td class="">{{ $load->schedule }}</td>
             <td class="w40 mid">{{ $load->loadunits }}</td>
             <td class="w40 mid">{{ $load->lecunits }}</td>
             <td class="w40 mid">{{ $load->labunits }}</td>
