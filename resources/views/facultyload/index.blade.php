@@ -32,13 +32,13 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
-                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'filter_item'])
+                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level', 'fieldclass' => 'filter_item'])
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="college" class="m-0 font-weight-bold text-primary">College</label>
-                                @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'filter_item'])
+                                @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college', 'fieldclass' => 'filter_item'])
                             </div>
                         </div>
                         <div class="col-md-3"></div>
@@ -47,32 +47,37 @@
                 <table id="scrollable_table" class="table table-striped table-bordered hover" style="width:100%;">
                     <thead>
                         <tr>
-                            <th class="">Name</th>
+                            <th class="w150">Name</th>
                             <th class="w50">Code</th>
                             <th class="w120">Section</th>
                             <th class="w120">Subject</th>
                             <th class="">Description</th>
                             <th class="">Schedule</th>
-                            <th class="w40">Load</th>
-                            <th class="w40">Lec</th>
-                            <th class="w40">Lab</th>
-                            <th class="w40">Units</th>
+                            <th class="w30">Load</th>
+                            <th class="w30">Lec</th>
+                            <th class="w30">Lab</th>
+                            <th class="w30">Units</th>
                         </tr>
                     </thead>
-                    <tbody id="return_masterlist">
+                    <tbody id="return_facultyload">
                         @include('facultyload.return_facultyload')
                     </tbody>
                 </table>
                 <div class="row mt-3 d-flex align-items-center">
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary mb-2">Total Units (<span id="totalunits"></span>)</h6>
+                        <h6 class="m-0 font-weight-bold text-primary mb-2">Total Units (<span id="totalunits">{{ $faculty_loads->sum('loadunits') ?? 0 }}</span>)</h6>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <select class="form-control filter_item mb-2" name="faculty_id" id="faculty_id">
-                            <option>All Faculty</option>
+                            <option value="">All Faculty</option>
+                            @if (count($faculty) > 0)
+                                @foreach ($faculty as $fac)
+                                    <option value="{{ $fac->instructor_id ?? NULL }}">{{ $fac->full_name ?? 'No Faculty' }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <button type="submit" id="print_masterlist" class="btn btn-danger btn-icon-split actions mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-print"></i>
@@ -89,7 +94,7 @@
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus"></i>
                             </span>
-                            <span class="text">Faculty Other Assignment</span>
+                            <span class="text">Other Assignment</span>
                         </button>
                     </div>
                 </div>

@@ -14,19 +14,32 @@ $(function(){
         searching: false
     });
 
+    $("#faculty_id").select2({
+	    dropdownParent: $("#ui_content2")
+	});
 
-    function returnMasterlist(postData)
+    function returnFacultyload(postData)
     {
         $.ajax({
-            url: "/masterlist/filtermasterlist",
+            url: "/facultyloads/filterfacultyload",
             type: 'POST',
             data: postData,
             success: function(response){
                 console.log(response);
-                $("#return_masterlist").html(response);
+                $("#return_facultyload").html(response);
                 
-                var rowCount = $('#return_masterlist >tr.returned').length;
-				$("#totalcount").text(rowCount);
+                var columnSum = 0;
+
+                $('#return_facultyload td.loadunits').each(function() {
+                    var text = $(this).text();
+                    var value = parseFloat(text);
+
+                    if (!isNaN(value)) {
+                        columnSum += value;
+                    }
+                });
+
+				$("#totalunits").text(columnSum);
             },
             error: function (data) {
                 //console.log(data);
@@ -40,12 +53,12 @@ $(function(){
     }
 
     $(document).on("change", ".filter_item", function(){
-        var status = $('input[name="status"]:checked').val();
+        var faculty_id = $("#faculty_id").val();
 
-        var postData = $("#form_filtermasterlist").serializeArray();
-        postData.push({name:"status", value:status});
+        var postData = $("#form_filterfacultyload").serializeArray();
+        postData.push({name:"faculty_id", value:faculty_id});
         
         //console.log(postData);
-        returnMasterlist(postData);
+        returnFacultyload(postData);
     })
 });

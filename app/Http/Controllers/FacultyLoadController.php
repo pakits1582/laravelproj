@@ -6,6 +6,7 @@ use App\Libs\Helpers;
 use App\Models\Classes;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
+use Illuminate\Support\Facades\DB;
 
 class FacultyLoadController extends Controller
 {
@@ -24,48 +25,15 @@ class FacultyLoadController extends Controller
         return view('facultyload.index', compact('periods', 'faculty_loads', 'faculty'));
     }
 
-    public function facultyload($period_id, $instructor_id = '')
+    public function filterfacultyload(Request $request)
     {
-        // $query = Classes::with([
-        //     'instructor' => function ($query) {
-        //         $query->orderBy('last_name', 'ASC');
-        //     },
-        //     'schedule',
-        //     'curriculumsubject.subjectinfo',
-        //     'sectioninfo'
-        // ])
-        //     ->where('period_id', $period_id)
-        //     ->where('dissolved', '!=', 1)
-        //     ->whereNull('merge')
-        //     ->whereNotNull('slots');
+        $faculty_loads = $this->facultyload($request->period_id, $request->educational_level_id, $request->college_id, $request->faculty_id);
         
-        // $query->when(isset($instructor_id) && !empty($instructor_id), function ($query) use ($instructor_id) {
-        //     $query->whereHas('instructor', function ($query) use ($instructor_id) {
-        //         $query->where('instructor_id', $instructor_id);
-        //     });
-        // });
-        
-        // $classes = $query->get();
-        
-        // return $classes;
-        
-        // $classes = Classes::join('instructors', 'instructors.id', '=', 'classes.instructor_id')
-        //     ->leftJoin('schedules', 'schedules.id', '=', 'classes.schedule_id')
-        //     ->join('curriculumsubjects', 'curriculumsubjects.id', '=', 'classes.curriculumsubject_id')
-        //     ->join('subjectinfos', 'subjectinfos.id', '=', 'curriculumsubjects.subjectinfo_id')
-        //     ->join('sectioninfos', 'sectioninfos.id', '=', 'classes.sectioninfo_id')
-        //     ->where('classes.period_id', $period_id)
-        //     ->where('classes.dissolved', '!=', 1)
-        //     ->whereNull('classes.merge')
-        //     ->whereNotNull('classes.slots')
-        //     ->when(isset($instructor_id) && !empty($instructor_id), function ($query) use ($instructor_id) {
-        //         $query->where('instructors.instructor_id', $instructor_id);
-        //     })
-        //     ->orderBy('instructors.last_name', 'ASC')
-        //     ->get();
+        return view('facultyload.return_facultyload', compact('faculty_loads'));
+    }
 
-        // return $classes;
-
+    public function facultyload($period_id, $educational_level_id = '', $college_id = '', $instructor_id = '')
+    {
         $query = Classes::query();
         $query->select(
             'classes.*',
@@ -78,22 +46,34 @@ class FacultyLoadController extends Controller
             'schedules.schedule',
             'sections.code as section_code',
             'classes_schedules.day',
-            'classes_schedules.from_time'
+            'classes_schedules.from_time',
+            DB::raw("CONCAT(instructors.last_name, ', ', instructors.first_name, ' ', instructors.name_suffix, ' ', instructors.middle_name) AS full_name")
         );
         $query->join('curriculum_subjects', 'classes.curriculum_subject_id', '=', 'curriculum_subjects.id');
         $query->join('subjects', 'curriculum_subjects.subject_id', '=', 'subjects.id');
         $query->join('sections', 'classes.section_id', '=', 'sections.id');
+        $query->join('programs', 'sections.program_id', '=', 'programs.id');
         $query->leftJoin('instructors', 'classes.instructor_id', '=', 'instructors.id');
         $query->leftJoin('schedules', 'classes.schedule_id', '=', 'schedules.id');
         $query->leftJoin('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id');
         $query->where('classes.period_id', $period_id)
             ->where('classes.dissolved', '!=', 1)
             ->whereNull('classes.merge')
-            ->whereNotNull('classes.slots')
-            ->when(isset($instructor_id) && !empty($instructor_id), function ($query) use ($instructor_id) {
-                $query->where('classes.instructor_id', $instructor_id);
-            })
-            ->groupBy('classes.id')
+            ->whereNotNull('classes.slots');
+        
+        $query->when(isset($educational_level_id) && !empty($educational_level_id), function ($query) use ($educational_level_id) {
+            $query->where('programs.educational_level_id', $educational_level_id);
+        });
+
+        $query->when(isset($college_id) && !empty($college_id), function ($query) use ($college_id) {
+            $query->where('programs.college_id', $college_id);
+        });
+
+        $query->when(isset($instructor_id) && !empty($instructor_id), function ($query) use ($instructor_id) {
+            $query->where('classes.instructor_id', $instructor_id);
+        });
+
+        $query->groupBy('classes.id')
             ->orderBy('instructors.last_name')
             ->orderByRaw("FIELD(classes_schedules.day, 'M', 'T', 'W', 'TH', 'F', 'S', 'SU')")
             ->orderBy('classes_schedules.from_time');

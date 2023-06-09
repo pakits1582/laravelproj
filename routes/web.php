@@ -514,6 +514,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:facultyloads']], function () {
         Route::get('/facultyloads', [FacultyLoadController::class, 'index']);
+        Route::post('/facultyloads/filterfacultyload', [FacultyLoadController::class, 'filterfacultyload']);
+
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
