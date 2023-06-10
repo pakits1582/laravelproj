@@ -69,10 +69,12 @@
                     </div>
                     <div class="col-md-4">
                         <select class="form-control filter_item mb-2" name="faculty_id" id="faculty_id">
-                            <option value="">All Faculty</option>
+                            <option value="">ALL FACULTY</option>
                             @if (count($faculty) > 0)
                                 @foreach ($faculty as $fac)
-                                    <option value="{{ $fac->instructor_id ?? NULL }}">{{ $fac->full_name ?? 'No Faculty' }}</option>
+                                    @if ($fac->instructor_id != NULL)
+                                        <option value="{{ $fac->instructor_id }}">{{ $fac->full_name }}</option>
+                                    @endif
                                 @endforeach
                             @endif
                         </select>
@@ -90,11 +92,11 @@
                             </span>
                             <span class="text">Download Excel</span>
                         </button>
-                        <button type="submit" id="download_masterlist" class="btn btn-primary btn-icon-split actions mb-2">
+                        <button type="submit" id="other_assignments" class="btn btn-primary btn-icon-split actions mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus"></i>
                             </span>
-                            <span class="text">Other Assignment</span>
+                            <span class="text">Other Assignments</span>
                         </button>
                     </div>
                 </div>
