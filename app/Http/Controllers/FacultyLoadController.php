@@ -7,6 +7,10 @@ use App\Models\Classes;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use Illuminate\Support\Facades\DB;
+use App\Services\InstructorService;
+use App\Http\Requests\StoreOtherAssignmentRequest;
+use App\Models\OtherAssignment;
+use Illuminate\Support\Facades\Auth;
 
 class FacultyLoadController extends Controller
 {
@@ -81,6 +85,35 @@ class FacultyLoadController extends Controller
         $classes = $query->get();
 
         return $classes;
+    }
 
+    public function otherassignments()
+    {
+        $instructors = (new InstructorService())->getInstructor();
+
+        return view('facultyload.other_assignments', compact('instructors'));
+    }
+
+    public function saveotherassignment(StoreOtherAssignmentRequest $request)
+    {
+        $insert = OtherAssignment::firstOrCreate([
+            'period_id' => $request->term, 
+            'instructor_id' => $request->type, 
+            'assignment' => $request->assignment, 
+            'units' => $request->units
+            ],
+             $request->validated()+['user_id' => Auth::id()]
+        );
+
+        if ($insert->wasRecentlyCreated) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Other assignment successfully added!',
+                'alert' => 'alert-success',
+            ], 200);
+        }
+
+        return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, other assignment already exists!']);
+    
     }
 }

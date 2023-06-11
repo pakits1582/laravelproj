@@ -50,9 +50,7 @@
                                             <label for="term_external"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="source" value="2" id="term_external"> External </label>    
                                         </div>
                                     </div>
-                                    @error('source')
-                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                    @enderror
+                                    <div id="error_source"></div>
                                 </div>
                                 <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Term</button>
                                 </form>
