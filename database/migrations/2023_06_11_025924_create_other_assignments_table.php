@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('period_id')->references('id')->on('periods')->onDelete('cascade');
             $table->unsignedBigInteger('instructor_id')->index();
             $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('cascade');
-            $table->string('assignment')->unique()->nullable();
+            $table->string('assignment')->nullable();
             $table->float('units')->nullable();
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users');

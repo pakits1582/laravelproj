@@ -29,8 +29,8 @@
                                                 <label for="fee_code" class="m-0 font-weight-bold text-primary">&nbsp;&nbsp;Period</label>
                                             </div>
                                             <div class="col-md-10">
-                                                <h6 class="m-0 font-weight-bold text-black">{{ session('periodname') }}</h6>
-                                                <input type="hidden" name="period_id" value="{{ session('current_period') }}" />
+                                                <h6 class="m-0 font-weight-bold text-black">{{ $period->name }}</h6>
+                                                <input type="hidden" name="period_id" id="period_id" value="{{ $period->id }}" />
                                             </div>
                                         </div>
                                     </div>

@@ -105,4 +105,9 @@ class Instructor extends Model
     {
         return $this->belongsTo(Educationallevel::class, 'educational_level_id', 'id')->withDefault(['code' => '', 'name' => '']);
     }
+
+    public function other_assignments()
+    {
+        return $this->hasMany(OtherAssignment::class, 'instructor_id', 'id');
+    }
 }

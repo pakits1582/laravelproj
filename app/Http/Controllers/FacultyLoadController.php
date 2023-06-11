@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\InstructorService;
 use App\Http\Requests\StoreOtherAssignmentRequest;
 use App\Models\OtherAssignment;
+use App\Models\Period;
 use Illuminate\Support\Facades\Auth;
 
 class FacultyLoadController extends Controller
@@ -87,11 +88,11 @@ class FacultyLoadController extends Controller
         return $classes;
     }
 
-    public function otherassignments()
+    public function otherassignments(Period $period)
     {
         $instructors = (new InstructorService())->getInstructor();
-
-        return view('facultyload.other_assignments', compact('instructors'));
+        
+        return view('facultyload.other_assignments', compact('instructors', 'period'));
     }
 
     public function saveotherassignment(StoreOtherAssignmentRequest $request)
@@ -114,6 +115,24 @@ class FacultyLoadController extends Controller
         }
 
         return response()->json(['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, other assignment already exists!']);
-    
+    }
+
+    public function returnotherassignments(Request $request)
+    {
+        $other_assignments = OtherAssignment::where('period_id', $request->period_id)->where('instructor_id', $request->instructor_id)->get();
+        
+        return view('facultyload.return_otherassignments', compact('other_assignments'));
+    }
+
+    public function deleteotherassignment(OtherAssignment $otherassignment)
+    {
+        $otherassignment->delete();
+
+        return response()->json(['data' =>[
+                'success' => true,
+                'message' => 'Other assignment sucessfully deleted!',
+                'alert' => 'alert-success'
+            ]
+        ]);
     }
 }

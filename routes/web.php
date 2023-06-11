@@ -514,10 +514,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:facultyloads']], function () {
         Route::get('/facultyloads', [FacultyLoadController::class, 'index']);
-        Route::get('/facultyloads/otherassignments', [FacultyLoadController::class, 'otherassignments']);
+        Route::get('/facultyloads/otherassignments/{period}', [FacultyLoadController::class, 'otherassignments']);
         Route::post('/facultyloads/filterfacultyload', [FacultyLoadController::class, 'filterfacultyload']);
         Route::post('/facultyloads/saveotherassignment', [FacultyLoadController::class, 'saveotherassignment']);
-
+        Route::post('/facultyloads/returnotherassignments', [FacultyLoadController::class, 'returnotherassignments']);
+        Route::delete('/facultyloads/{otherassignment}/deleteotherassignment', [FacultyLoadController::class, 'deleteotherassignment']);
 
     });
 

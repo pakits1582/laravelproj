@@ -63,9 +63,11 @@ $(function(){
     });
 
     $(document).on("click", "#other_assignments", function(){
+        var period = $("#period").val();
+
         $.ajax({
             type: "GET",
-            url: "/facultyloads/otherassignments",
+            url: "/facultyloads/otherassignments/"+period,
             success: function(data){
                 console.log(data);
                 $('#ui_content').html(data);
@@ -84,22 +86,12 @@ $(function(){
         {
             $.ajax({
                 type: "POST",
-                url:  "/facultyloads/saveotherassignment",
-                dataType: 'json',
-                data:  postData,
+                url:  "/facultyloads/returnotherassignments",
+                data:  ({ 'period_id':period_id, 'instructor_id':instructor_id }),
                 cache: false, 
                 success: function(response){
                     console.log(response);
-                    $("#confirmation").dialog('close');
-                    $(".errors").html('');
-    
-                    if(response.success == false)
-                    {
-                        showError(response.message);
-                    }else{
-                        showSuccess(response.message);
-                        //return other assignments
-                    }
+                    $("#return_otherassignments").html(response);
                 },
                 error: function (data) {
                     console.log(data);
@@ -107,6 +99,16 @@ $(function(){
             });
         }
     }
+
+    $(document).on("change", "#instructor_id", function(){
+        var instructor_id = $("#instructor_id").val();
+        var period_id = $("#period_id").val();
+
+        if(instructor_id)
+        {
+            returnOtherAssignments(period_id, instructor_id);
+        }
+    });
 
     $(document).on("submit", "#form_otherassignments", function(e){
         var postData = $("#form_otherassignments").serializeArray();
@@ -138,7 +140,13 @@ $(function(){
                     showError(response.message);
                 }else{
                     showSuccess(response.message);
-                    //return other assignments
+
+                    $("#assignment, #units").val('');
+
+                    var instructor_id = $("#instructor_id").val();
+                    var period_id = $("#period_id").val();
+
+                    returnOtherAssignments(period_id, instructor_id)
                 }
             },
             error: function (data) {
@@ -153,6 +161,57 @@ $(function(){
                 }
             }
         });
+        e.preventDefault();
+    });
+
+    $(document).on("click", ".delete_other_assignment", function(e){
+        var id = $(this).attr("id");
+        var instructor_id = $("#instructor_id").val();
+        var period_id = $("#period_id").val();
+
+        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to delete other assignment?</div>').dialog({
+			show: 'fade',
+			resizable: false,	
+			draggable: false,
+			width: 350,
+			height: 'auto',
+			modal: true,
+			buttons: {
+					'Cancel':function(){
+						$(this).dialog('close');
+					},
+					'OK':function(){
+						$(this).dialog('close');
+						$.ajax({
+							url: '/facultyloads/'+id+'/deleteotherassignment',
+							type: 'DELETE',
+							dataType: 'json',
+							success: function(response){
+								console.log(response);
+								if(response.data.success === true)
+                                {
+                                    showSuccess(response.data.message);
+                        
+                                }else{
+                                    showerror(response.data.message);
+                                }
+
+                                returnOtherAssignments(period_id, instructor_id)
+							},
+							error: function (data) {
+								//console.log(data);
+								var errors = data.responseJSON;
+								if ($.isEmptyObject(errors) === false) {
+									showError('Something went wrong! Can not perform requested action! '+errors.message);
+								}
+							}
+						});
+					}//end of ok button	
+				}//end of buttons
+			});//end of dialogbox
+			$(".ui-dialog-titlebar").hide();
+		//end of dialogbox
+
         e.preventDefault();
     });
 });
