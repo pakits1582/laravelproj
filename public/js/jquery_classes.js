@@ -262,6 +262,8 @@ $(function(){
                         if (response.data.dissolved === 1){ $('#dissolved').prop('checked', true) }
                         if (response.data.f2f === 1){ $('#f2f').prop('checked', true) }
                         if (response.data.isprof === 1){ $('#isprof').prop('checked', true) }
+
+                        $("#schedule").focus();
                     }else{
                         showError('Oppss! Something went wrong! Can not fetch class subject data!');
                     }
