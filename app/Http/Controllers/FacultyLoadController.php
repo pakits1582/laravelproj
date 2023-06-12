@@ -11,6 +11,7 @@ use App\Services\InstructorService;
 use App\Http\Requests\StoreOtherAssignmentRequest;
 use App\Models\OtherAssignment;
 use App\Models\Period;
+use App\Services\ClassesService;
 use Illuminate\Support\Facades\Auth;
 
 class FacultyLoadController extends Controller
@@ -33,8 +34,9 @@ class FacultyLoadController extends Controller
     public function filterfacultyload(Request $request)
     {
         $faculty_loads = $this->facultyload($request->period_id, $request->educational_level_id, $request->college_id, $request->faculty_id);
-        
-        return view('facultyload.return_facultyload', compact('faculty_loads'));
+        $other_assignments = OtherAssignment::where('period_id', $request->period_id)->where('instructor_id', $request->faculty_id)->get() ?? [];
+
+        return view('facultyload.return_facultyload', compact('faculty_loads', 'other_assignments'));
     }
 
     public function facultyload($period_id, $educational_level_id = '', $college_id = '', $instructor_id = '')
@@ -134,5 +136,13 @@ class FacultyLoadController extends Controller
                 'alert' => 'alert-success'
             ]
         ]);
+    }
+
+    public function scheduletable(Request $request)
+    {
+        $class_schedules = (new ClassesService())->sectionClassSchedules('', $request->period_id, $request->instructor_id);
+        $with_faculty = false;
+
+        return view('class.schedule_table', compact('class_schedules', 'with_faculty'));
     }
 }

@@ -44,25 +44,13 @@
                         <div class="col-md-3"></div>
                     </div>
                 </form>
-                <table id="scrollable_table" class="table table-striped table-bordered hover" style="width:100%;">
-                    <thead>
-                        <tr>
-                            <th class="w150">Name</th>
-                            <th class="w50">Code</th>
-                            <th class="w120">Section</th>
-                            <th class="w120">Subject</th>
-                            <th class="">Description</th>
-                            <th class="">Schedule</th>
-                            <th class="w30">Load</th>
-                            <th class="w30">Lec</th>
-                            <th class="w30">Lab</th>
-                            <th class="w30">Units</th>
-                        </tr>
-                    </thead>
-                    <tbody id="return_facultyload">
-                        @include('facultyload.return_facultyload')
-                    </tbody>
-                </table>
+                <div class="row px-2">
+                    <div class="col-md-12 p-0">
+                        <div class="form-group"  id="return_facultyload">
+                            @include('facultyload.return_facultyload')
+                        </div>
+                    </div>
+                </div>
                 <div class="row mt-3 d-flex align-items-center">
                     <div class="col-md-2">
                         <h6 class="m-0 font-weight-bold text-primary mb-2">Total Units (<span id="totalunits">{{ $faculty_loads->sum('loadunits') ?? 0 }}</span>)</h6>
@@ -98,6 +86,19 @@
                             </span>
                             <span class="text">Other Assignments</span>
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 mx-auto">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Schedule Table</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="schedule_table">
+                        </div>
                     </div>
                 </div>
             </div>

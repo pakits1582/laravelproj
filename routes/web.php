@@ -519,6 +519,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/facultyloads/saveotherassignment', [FacultyLoadController::class, 'saveotherassignment']);
         Route::post('/facultyloads/returnotherassignments', [FacultyLoadController::class, 'returnotherassignments']);
         Route::delete('/facultyloads/{otherassignment}/deleteotherassignment', [FacultyLoadController::class, 'deleteotherassignment']);
+        Route::post('/facultyloads/scheduletable', [FacultyLoadController::class, 'scheduletable']);
 
     });
 

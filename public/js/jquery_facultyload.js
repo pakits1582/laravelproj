@@ -5,15 +5,16 @@ $(function(){
 		}
 	});
 
-    $('#scrollable_table').DataTable({
-        scrollY: '65vh',
+    var dataTable = $('#scrollable_table').DataTable({
+        scrollY: 400,
+        scrollX: true,
         scrollCollapse: true,
         paging: false,
         ordering: false,
         info: false,
         searching: false
     });
-
+    
     $("#faculty_id").select2({
 	    dropdownParent: $("#ui_content2")
 	});
@@ -27,7 +28,6 @@ $(function(){
             success: function(response){
                 console.log(response);
                 $("#return_facultyload").html(response);
-                
                 var columnSum = 0;
 
                 $('#return_facultyload td.loadunits').each(function() {
@@ -40,6 +40,17 @@ $(function(){
                 });
 
 				$("#totalunits").text(columnSum);
+                
+                $('#scrollable_table').DataTable({
+                    scrollY: 400,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    ordering: false,
+                    info: false,
+                    searching: false
+                });
+
             },
             error: function (data) {
                 //console.log(data);
@@ -58,8 +69,30 @@ $(function(){
         var postData = $("#form_filterfacultyload").serializeArray();
         postData.push({name:"faculty_id", value:faculty_id});
         
-        //console.log(postData);
         returnFacultyload(postData);
+    });
+
+    $(document).on("change", "#faculty_id", function(e){
+        var faculty_id = $("#faculty_id").val();
+        var period_id = $("#period").val();
+
+        if(faculty_id)
+        {
+            $.ajax({
+                url: "/facultyloads/scheduletable",
+                type: 'POST',
+                data: ({ 'period_id' : period_id, 'instructor_id' : faculty_id }),
+                success: function(data){
+                    //console.log(data);
+                    $("#schedule_table").html(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }else{
+            $("#schedule_table").html('');
+        }
     });
 
     $(document).on("click", "#other_assignments", function(){
