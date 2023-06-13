@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Libs\Helpers;
 use Illuminate\Http\Request;
+use App\Services\PeriodService;
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
 
 class RoomController extends Controller
 {
+    public function __construct()
+    {
+        Helpers::setLoad(['jquery_room.js', 'select2.full.min.js']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -96,14 +103,21 @@ class RoomController extends Controller
         return back()->with(['alert-class' => 'alert-success', 'message' => 'Room sucessfully updated!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Room  $room
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Room $room)
+
+    public function roomassignment()
     {
-        //
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+        // $faculty_loads = $this->facultyload(session('current_period'));
+        // $faculty = $faculty_loads->unique('instructor_id');
+
+
+        return view('room.assignment.index', compact('periods'));
     }
+
+    public function roomassignments($period, $room = '')
+    {
+        
+    }
+
+    
 }

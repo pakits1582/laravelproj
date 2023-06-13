@@ -133,10 +133,13 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
-    Route::resource('rooms', RoomController::class)->except(['show', 'destroy'])->middleware(['inaccess:rooms'])
-            ->missing(function (Request $request) {
+    Route::group(['middleware' => ['inaccess:rooms']], function () {
+        Route::get('/rooms/assignment', [RoomController::class, 'roomassignment']);
+        Route::resource('rooms', RoomController::class)->missing(function (Request $request) {
                 return Redirect::route('rooms.index');
             });
+
+    });
 
     Route::resource('sections', SectionController::class)->except(['destroy'])->middleware(['inaccess:sections'])
             ->missing(function (Request $request) {
@@ -328,13 +331,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:scholarshipdiscounts']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-        
-
-        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
-        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
-        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
-        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
-
+            // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
+            // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
+            // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
+            // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
         // // });
        
         // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
@@ -367,8 +367,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:postcharges']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-        
-        
         // Route::get('/studentadjusments/grant', [StudentadjustmentController::class, 'grant']);
         Route::post('/postcharges/removecharged', [PostchargeController::class, 'destroy']);
         Route::post('/postcharges/filterstudents', [PostchargeController::class, 'filterstudents']);
@@ -520,7 +518,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/facultyloads/returnotherassignments', [FacultyLoadController::class, 'returnotherassignments']);
         Route::delete('/facultyloads/{otherassignment}/deleteotherassignment', [FacultyLoadController::class, 'deleteotherassignment']);
         Route::post('/facultyloads/scheduletable', [FacultyLoadController::class, 'scheduletable']);
-
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

@@ -72,6 +72,11 @@ $(function(){
         returnFacultyload(postData);
     });
 
+    $(document).on("change", "#period", function(){
+        var period_name = $("#period option:selected").text();
+        $("#period_name").text(period_name);
+    });
+
     $(document).on("change", "#faculty_id", function(e){
         var faculty_id = $("#faculty_id").val();
         var period_id = $("#period").val();
