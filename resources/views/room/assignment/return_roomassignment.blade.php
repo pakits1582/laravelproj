@@ -1,0 +1,1 @@
+<h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>

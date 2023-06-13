@@ -15,7 +15,7 @@
             </div>
             <div class="card-body">
                 <div class="row align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Period</label>
                                 <select name="period_id" class="form-control filter_item" id="period">
@@ -32,15 +32,15 @@
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Room</label>
                                 <select name="period_id" class="form-control filter_item" id="period">
                                     <option value="">- select room -</option>
-                                    {{-- @if ($periods)
-                                        @foreach ($periods as $period)
-                                            <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
+                                    @if ($rooms)
+                                        @foreach ($rooms as $room)
+                                            <option value="{{ $room->room_id }}">{{ $room->room_code }}</option>
                                         @endforeach
-                                    @endif --}}
+                                    @endif
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3"></div>
+                        <div class="col-md-2"></div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <button type="submit" id="print_roomassignment" class="btn btn-danger btn-icon-split actions mb-2">
@@ -55,7 +55,7 @@
             </div>
         </div>
         <div id="return_roomassignment">
-            <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
+            @include('room.assignment.return_roomassignment')
         </div>
     </div>
     <!-- /.container-fluid -->
