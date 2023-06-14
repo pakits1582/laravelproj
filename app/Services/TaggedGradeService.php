@@ -121,7 +121,7 @@ class TaggedGradeService
 
                 if($istagged == 1)
                 {
-                    if($origin === 'internal')
+                    if($origin == 'internal')
                     {
                         $already_tagged_grades = $allTaggedGradesInternal->where('id', $selected_grade)->where('curriculum_subject_id', '!=', $request->curriculum_subject_id);
                     }else{

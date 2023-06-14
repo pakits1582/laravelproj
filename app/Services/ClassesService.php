@@ -726,7 +726,7 @@ class ClassesService
         ];
     }
 
-    public function sectionClassSchedules($section_id = '', $period_id = '', $instructor_id = '')
+    public function sectionClassSchedules($section_id = '', $period_id = '', $instructor_id = '', $room_id = '')
     {
         $query = ClassesSchedule::with([
             'classinfo' => [
@@ -752,6 +752,13 @@ class ClassesService
         $query->when(isset($instructor_id) && !empty($instructor_id), function ($query) use($instructor_id) {
             $query->whereHas('classinfo', function($query) use($instructor_id){
                 $query->where('instructor_id', $instructor_id);
+            });
+        });
+
+        $query->when(isset($room_id) && !empty($room_id), function ($query) use($room_id) {
+            $query->where('classes_schedules.room_id', $room_id);
+            $query->whereHas('roominfo', function($query){
+                $query->where('rooms.excludechecking', '=', 0);
             });
         });
 

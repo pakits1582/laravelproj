@@ -135,6 +135,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:rooms']], function () {
         Route::get('/rooms/assignment', [RoomController::class, 'roomassignment']);
+        Route::post('/rooms/filterroomassignment', [RoomController::class, 'filterroomassignment']);
+        Route::post('/rooms/scheduletable', [RoomController::class, 'scheduletable']);
+
         Route::resource('rooms', RoomController::class)->missing(function (Request $request) {
                 return Redirect::route('rooms.index');
             });

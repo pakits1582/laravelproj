@@ -10,6 +10,8 @@ use App\Services\PeriodService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
+use App\Services\Assessment\AssessmentService;
+use App\Services\ClassesService;
 
 class RoomController extends Controller
 {
@@ -164,18 +166,20 @@ class RoomController extends Controller
     public function groupRooms($room_assignments)
     {
         $rooms = [];
-			foreach ($room_assignments as $room) 
+        foreach ($room_assignments as $room) 
+        {
+            if($room->room_code)
             {
-			    $room_code = $room->room_code;
-			    if (!isset($rooms[$room_code])) 
+                $room_code = $room->room_code;
+                if (!isset($rooms[$room_code])) 
                 {
-			        $rooms[$room_code] =[
-			            'room' => $room_code,
+                    $rooms[$room_code] =[
+                        'room' => $room_code,
                         'room_id' => $room->room_id,
-			            'classes' => array()
-			        ];
-			    }
-			    $rooms[$room_code]['classes'][] = 
+                        'classes' => array()
+                    ];
+                }
+                $rooms[$room_code]['classes'][] = 
                     [
                         'schedule' => $room->schedule,
                         'subject_code' => $room->subject_code,
@@ -184,12 +188,30 @@ class RoomController extends Controller
                         'section_code' => $room->section_code,
                         'class_code' => $room->code,
                         'units' => $room->units,
+                        'last_name' => $room->last_name,
+                        'first_name' => $room->first_name,
+                        'middle_name' => $room->middle_name,
+                        'name_suffix' => $room->name_suffix,
                         'instructor_id' => $room->instructor_id,
-                        
                     ];
-			}
+            }
+        }
         return array_values($rooms);
     }
 
+    public function filterroomassignment(Request $request)
+    {
+        $room_assignments = $this->roomassignments($request->period_id, $request->room_id);
+        $grouped_rooms = $this->groupRooms($room_assignments);
+
+        return view('room.assignment.return_roomassignment', compact('grouped_rooms'));
+    }
     
+    public function scheduletable(Request $request)
+    {
+        $class_schedules = (new ClassesService())->sectionClassSchedules('','','',$request->room_id);
+        $with_faculty = true;
+
+        return view('class.schedule_table', compact('class_schedules', 'with_faculty'));
+    }
 }
