@@ -279,7 +279,7 @@ class ClassesController extends Controller
 
     public function scheduletable(Request $request)
     {
-        $class_schedules = $this->classesService->sectionClassSchedules($request->section, session('current_period'));
+        $class_schedules = $this->classesService->scheduletableClassSchedules($request->section, session('current_period'));
         $with_faculty = true;
 
         return view('class.schedule_table', compact('class_schedules', 'with_faculty'));

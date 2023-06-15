@@ -52,7 +52,7 @@ class Helpers
                 'title' => 'Scheduling',
                 'access' => [
                     ['header' => 'Classes', 'link' => 'classes', 'id' => 'classes'],
-                    ['header' => 'Slot Monitoring', 'link' => 'classes/monitoring', 'id' => 'classes_monitoring'],
+                    ['header' => 'Slot Monitoring', 'link' => 'slotmonitoring', 'id' => 'slot_monitoring'],
                     ['header' => 'Section Monitoring', 'link' => 'sections/monitoring', 'id' => 'section_monitoring'],
                     ['header' => 'General Schedules', 'link' => 'generalschedules', 'id' => 'generalschedule'],
                     ['header' => 'Room Assignments', 'link' => 'rooms/assignment', 'id' => 'roomassignment'],

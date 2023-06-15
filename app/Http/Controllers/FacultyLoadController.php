@@ -140,7 +140,7 @@ class FacultyLoadController extends Controller
 
     public function scheduletable(Request $request)
     {
-        $class_schedules = (new ClassesService())->sectionClassSchedules('', $request->period_id, $request->instructor_id);
+        $class_schedules = (new ClassesService())->scheduletableClassSchedules('', $request->period_id, $request->instructor_id);
         $with_faculty = false;
 
         return view('class.schedule_table', compact('class_schedules', 'with_faculty'));

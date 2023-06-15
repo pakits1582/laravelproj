@@ -19,6 +19,7 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\AssessmentController;
+use App\Http\Controllers\ClassesSlotsMonitoringController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
@@ -216,8 +217,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('classes', ClassesController::class)->missing(function (Request $request) {
             return Redirect::route('classes.index');
         });
+    });
 
-        
+    Route::group(['middleware' => ['inaccess:slotmonitoring']], function () {
+        Route::get('/slotmonitoring', [ClassesSlotsMonitoringController::class, 'index']);
     });
 
     Route::group(['middleware' => ['inaccess:enrolments']], function () {

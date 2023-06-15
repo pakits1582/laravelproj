@@ -726,7 +726,7 @@ class ClassesService
         ];
     }
 
-    public function sectionClassSchedules($section_id = '', $period_id = '', $instructor_id = '', $room_id = '')
+    public function scheduletableClassSchedules($section_id = '', $period_id = '', $instructor_id = '', $room_id = '')
     {
         $query = ClassesSchedule::with([
             'classinfo' => [

@@ -209,7 +209,7 @@ class RoomController extends Controller
     
     public function scheduletable(Request $request)
     {
-        $class_schedules = (new ClassesService())->sectionClassSchedules('','','',$request->room_id);
+        $class_schedules = (new ClassesService())->scheduletableClassSchedules('','','',$request->room_id);
         $with_faculty = true;
 
         return view('class.schedule_table', compact('class_schedules', 'with_faculty'));
