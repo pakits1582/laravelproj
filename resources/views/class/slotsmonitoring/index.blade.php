@@ -32,41 +32,55 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="program_id" class="m-0 font-weight-bold text-primary">Section</label>
-                                <select name="program_id" class="form-control filter_item" id="program">
+                                <select name="section_id" class="form-control filter_item" id="section_id">
                                     <option value="">- select program -</option>
                                     
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="year_level" class="m-0 font-weight-bold text-primary">Keyword</label>
-                               
+                                <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
                             </div>
                         </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="year_level" class="m-0 font-weight-bold text-primary">Dissolved</label>
+                                <div class="legend dissolved"></div>   
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="year_level" class="m-0 font-weight-bold text-primary">Tutorial</label>
+                                <div class="legend tutorial"></div>   
+                            </div>
+                        </div>
+                        
+
                     </div>
                 </form>
-                <table id="scrollable_table" class="table table-striped table-bordered hover" style="width:100%;">
+                <table id="scrollable_table" class="table table-sm table-striped table-bordered hover compact" style="width:100%; font-size:14px !important;">
                     <thead>
                         <tr>
                             <th class="w50">Code</th>
-                            <th class="w150">Section</th>
-                            <th class="">Subject Code</th>
-                            <th class="">Subject Name</th>
-                            <th class="w40">Units</th>
+                            <th class="w120">Section</th>
+                            <th class="w120">Subject Code</th>
+                            <th class="w300">Subject Name</th>
+                            <th class="w30">Units</th>
                             <th class="w200">Schedule</th>
-                            <th class="w150">Instructor</th>
-                            <th class="w40">Total<br>Seats</th>
-                            <th class="w40">Seats<br>Taken</th>
-                            <th class="w40">Rem.<br>Seats</th>
-                            <th class="w40">Conf.<br>Seats</th>
+                            <th class="w120">Instructor</th>
+                            <th class="w30">Total<br>Seats</th>
+                            <th class="w30">Seats<br>Taken</th>
+                            <th class="w30">Rem.<br>Seats</th>
+                            <th class="w30">Conf.<br>Seats</th>
                         </tr>
                     </thead>
-                    <tbody id="return_masterlist">
+                    <tbody id="return_slotmonitoring">
                         @include('class.slotsmonitoring.return_slotmonitoring')
                     </tbody>
                 </table>
-                <div class="row mt-3 d-flex align-items-center">
+                {{-- <div class="row mt-3 d-flex align-items-center">
                     <div class="col-md-1">
                         <div class="form-group">
                             <h6 class="m-0 font-weight-bold text-primary mid">Display</h6>
@@ -99,7 +113,7 @@
                             <span class="text">Download Excel</span>
                         </button>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

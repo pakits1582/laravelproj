@@ -221,6 +221,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:slotmonitoring']], function () {
         Route::get('/slotmonitoring', [ClassesSlotsMonitoringController::class, 'index']);
+        Route::post('/slotmonitoring/filterslotmonitoring', [ClassesSlotsMonitoringController::class, 'filterslotmonitoring']);
+
     });
 
     Route::group(['middleware' => ['inaccess:enrolments']], function () {
