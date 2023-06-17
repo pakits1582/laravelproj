@@ -39,6 +39,7 @@ use App\Http\Controllers\StudentScheduleController;
 use App\Http\Controllers\EnrollmentSummaryController;
 use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
+use App\Http\Controllers\SectionMonitoringController;
 
 /*
 |--------------------------------------------------------------------------
@@ -222,6 +223,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:slotmonitoring']], function () {
         Route::get('/slotmonitoring', [ClassesSlotsMonitoringController::class, 'index']);
         Route::post('/slotmonitoring/filterslotmonitoring', [ClassesSlotsMonitoringController::class, 'filterslotmonitoring']);
+
+    });
+
+    Route::group(['middleware' => ['inaccess:sectionmonitoring']], function () {
+        Route::get('/sectionmonitoring', [SectionMonitoringController::class, 'index']);
+       // Route::post('/slotmonitoring/filterslotmonitoring', [ClassesSlotsMonitoringController::class, 'filterslotmonitoring']);
 
     });
 

@@ -47,12 +47,27 @@ $(function(){
         });
     }
 
+    $("#form_filterslotmonitoring").submit(function(e){
+        e.preventDefault();
+    });
+
     $(document).on("change", ".filter_item", function(){
-        var keyword = $("#keyword").val();
+        var keyword = $("#search_keyword").val();
 
         var postData = $("#form_filterslotmonitoring").serializeArray();
         postData.push({name:"keyword", value:keyword});
         
         returnSlotMonitoring(postData);
     });
+
+    $(document).on('keyup','#search_keyword',function(e){  
+		if (e.keyCode == '13')  
+        {
+			var keyword = $(this).val();
+            var postData = $("#form_filterslotmonitoring").serializeArray();
+            postData.push({name:"keyword", value:keyword});
+            
+            returnSlotMonitoring(postData);
+		}
+	});  	
 });

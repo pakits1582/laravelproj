@@ -6,6 +6,7 @@ use App\Libs\Helpers;
 use App\Models\Classes;
 use Illuminate\Http\Request;
 use App\Services\ClassesService;
+use App\Models\SectionMonitoring;
 use Illuminate\Support\Facades\DB;
 
 class ClassesSlotsMonitoringController extends Controller
@@ -22,8 +23,9 @@ class ClassesSlotsMonitoringController extends Controller
     {
         $classes = $this->slotmonitoring(session('current_period'));
         $classeswithslots = $this->getClassesSlots($classes);
+        $sections_offered = SectionMonitoring::with(['section'])->where('period_id', session('current_period'))->get();
 
-        return view('class.slotsmonitoring.index', compact('classeswithslots'));
+        return view('class.slotsmonitoring.index', compact('classeswithslots', 'sections_offered'));
     }
 
     public function slotmonitoring($period_id, $educational_level_id = '', $college_id = '', $section_id = '', $keyword = '')
@@ -70,6 +72,11 @@ class ClassesSlotsMonitoringController extends Controller
 
         $query->when(isset($section_id) && !empty($section_id), function ($query) use ($section_id) {
             $query->where('classes.section_id', $section_id);
+        });
+
+        $query->when(isset($keyword) && !empty($keyword), function ($query) use ($keyword) {
+            $query->where('subjects.code', 'like', $keyword.'%')
+                ->orWhere('subjects.name', 'like', $keyword.'%');
         });
 
         $query->groupBy('classes.id')

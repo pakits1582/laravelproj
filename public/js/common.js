@@ -257,6 +257,10 @@ $(function(){
         e.preventDefault();
     });
 
+    $("#filter_form").on("submit", function(e){
+        e.preventDefault();
+    })
+
     function filterRecords(finalURL)
     {
         //console.log(finalURL);

@@ -88,7 +88,7 @@ class ClassesService
                 ]
             ])->where('section_id', $section)->where('period_id', $period);
         
-        $query->when($with_dissolved === false, function ($q) {
+        $query->when($with_dissolved == false, function ($q) {
             return $q->where('dissolved', '!=', 1);
         });
 
@@ -459,7 +459,7 @@ class ClassesService
 
     public function storeCopyClass($request)
     {
-        if($request->section_copyfrom === $request->section_copyto  && $request->period_copyfrom === $request->period_copyto)
+        if($request->section_copyfrom == $request->section_copyto  && $request->period_copyfrom == $request->period_copyto)
         {
             return [
                 'success' => false,
@@ -523,7 +523,16 @@ class ClassesService
                 'period_id' => session('current_period')
             ];
 
-            SectionMonitoring::firstOrCreate($arr, $arr);
+            $program_id = $section->program_id;
+            $year_level = $section->year;
+
+            $first_record = SectionMonitoring::with('section')->whereHas('section', function($query) use($program_id, $year_level){
+                $query->where('sections.program_id', $program_id)->where('sections.year', $year_level);
+            })->first();
+
+            $status = ($first_record) ? 0 : 1;
+
+            SectionMonitoring::firstOrCreate($arr, $arr+['status' => $status]);
         }
     }
 
@@ -551,6 +560,14 @@ class ClassesService
 
         $class->delete();
 
+        //check if last class in the section, if true delete in section_monitorings
+
+        $section_classes = Classes::where('section_id', $class->section_id)->where('period_id', session('current_period'))->where('dissolved', '!=', 1)->get();
+
+        if ($section_classes->count() == 0) {
+            SectionMonitoring::where('section_id', $class->section_id)->delete();
+        } 
+        
         return [
             'success' => true,
             'message' => 'Selected class subject successfully deleted!',
@@ -562,9 +579,7 @@ class ClassesService
 		//delete from classes_schedules
 		//delete from enrolled_classes
 		//delete from enrolled_classes_schedules
-		//check if last class in the section, if true delete in section_monitorings
-
-
+		
     }
 
     public function searchClassSubjectsToMerge($searchcodes)
@@ -619,7 +634,7 @@ class ClassesService
 
         $enrolled_students = new Collection();
 
-        if($class->ismother === 1)
+        if($class->ismother == 1)
         {
             $class->load([
                     'merged' => [
