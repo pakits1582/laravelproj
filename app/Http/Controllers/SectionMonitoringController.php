@@ -2,18 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Models\SectionMonitoring;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class SectionMonitoringController extends Controller
 {
+
+    public function __construct()
+    {
+        Helpers::setLoad(['jquery_slotmonitoring.js', 'select2.full.min.js', 'jquery-dateformat.min.js']);
+    }
+    
     public function index()
     {
         $section_monitorings = $this->sectionmonitoring(session('current_period'));
+        $programs = $section_monitorings->unique('program_id');
         $grouped_sectiomonitorings = $this->groupsectionmonitoringbyprogram($section_monitorings);
         
-        return view('section.monitoring.index', compact('grouped_sectiomonitorings'));
+        return view('section.monitoring.index', compact('grouped_sectiomonitorings', 'programs'));
     }
 
     public function sectionmonitoring($period_id, $program_id = '')
@@ -84,5 +93,39 @@ class SectionMonitoringController extends Controller
         }
 
         return array_values($grouped_sectiomonitoring);
+    }
+
+    public function filtersectionmonitoring(Request $request)
+    {
+        $section_monitorings = $this->sectionmonitoring(session('current_period'), $request->program_id);
+        $grouped_sectiomonitorings = $this->groupsectionmonitoringbyprogram($section_monitorings);
+        
+        return view('section.monitoring.return_sectionmonitoring', compact('grouped_sectiomonitorings'));
+    }
+
+    public function update(Request $request, SectionMonitoring $sectionmonitoring)
+    {
+        $validator =  Validator::make($request->all(), [
+            'minimum_enrollees' => 'required|integer',
+        ]);
+    
+        if ($validator->fails()) 
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Field should be integer value!',
+                'alert' => 'alert-danger'
+            ]);
+        }
+        
+        $validatedData = $validator->validated();
+        $sectionmonitoring->update($validatedData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Field successfully updated!',
+            'alert' => 'alert-success'
+        ]);
+
     }
 }

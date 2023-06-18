@@ -17,24 +17,20 @@
                 <form method="POST" id="form_filterslotmonitoring" action="">
                     @csrf
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label for="educational_level" class="m-0 font-weight-bold text-primary">Programs</label>
-                                <select name="room_id" class="form-control filter_item" id="room_id">
+                                <select name="program" class="form-control filter_item" id="program">
                                     <option value="">- select program -</option>
-                                    {{-- @if ($rooms)
-                                        @foreach ($rooms as $room)
-                                            @if ($room->room_id != NULL)
-                                                <option value="{{ $room->room_id }}">{{ $room->room_code }}</option>
-                                            @endif
+                                    @if ($programs)
+                                        @foreach ($programs as $program)
+                                            <option value="{{ $program->program_id }}">({{ $program->program_code }}) {{ $program->program_name }}</option>
                                         @endforeach
-                                    @endif --}}
+                                    @endif
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            
-                        </div>
+                        <div class="col-md-4"></div>
                     </div>
                 </form>
                 <div id="return_slotmonitoring">

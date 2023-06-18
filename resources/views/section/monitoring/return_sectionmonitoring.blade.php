@@ -25,8 +25,8 @@
                                 <td class="">{{ $section['section_name'] }}</td>
                                 <td class="w100 mid">{{ $section['section_year'] }}</td>
                                 <td class="w120 mid">{{ $section['enrolled_count'] }}</td>
-                                <td class="w120 mid">{{ $section['minimum_enrollees'] }}</td>
-                                <td class="w120 mid">{{ $section['sectionmonitoring_allowed_units'] }}</td>
+                                <td class="w120 mid tutorial minimum_enrollee" contenteditable="true" id="{{ $section['sectionmonitoring_id'] }}" data-value="{{ $section['minimum_enrollees'] }}">{{ $section['minimum_enrollees'] }}</td>
+                                <td class="w120 mid tutorial allowed_units" contenteditable="true" id="{{ $section['sectionmonitoring_id'] }}" data-value="{{ $section['sectionmonitoring_allowed_units'] }}">{{ $section['sectionmonitoring_allowed_units'] }}</td>
                                 <td class="w150 mid">{{ ($section['sectionmonitoring_status'] == 1) ? 'OPEN' : 'CLOSED' }}</td>
                                 <td class="w150 mid">
                                     @if ($section['sectionmonitoring_status'] == 1)

@@ -228,6 +228,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:sectionmonitoring']], function () {
         Route::get('/sectionmonitoring', [SectionMonitoringController::class, 'index']);
+        Route::post('/sectionmonitoring/filtersectionmonitoring', [SectionMonitoringController::class, 'filtersectionmonitoring']);
+        Route::put('/sectionmonitoring/{sectionmonitoring}', [SectionMonitoringController::class, 'update']);
+
        // Route::post('/slotmonitoring/filterslotmonitoring', [ClassesSlotsMonitoringController::class, 'filterslotmonitoring']);
 
     });
