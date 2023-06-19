@@ -16,7 +16,7 @@ class ClassesSlotsMonitoringController extends Controller
     public function __construct(ClassesService $classesService)
     {
         $this->classesService = $classesService;
-        Helpers::setLoad(['jquery_classesslotsmonitoring.js', 'select2.full.min.js']);
+        Helpers::setLoad(['jquery_slotsmonitoring.js', 'select2.full.min.js']);
     }
 
     public function index()
