@@ -54,9 +54,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="m-3" id="return_roomassignment">
-                @include('room.assignment.return_roomassignment')
+                <div id="return_roomassignment">
+                    @include('room.assignment.return_roomassignment')
+                </div>
             </div>
         </div>
         <div class="row">

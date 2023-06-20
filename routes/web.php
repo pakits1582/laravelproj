@@ -37,6 +37,7 @@ use App\Http\Controllers\StudentledgerController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\StudentScheduleController;
 use App\Http\Controllers\EnrollmentSummaryController;
+use App\Http\Controllers\GeneralScheduleController;
 use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
 use App\Http\Controllers\SectionMonitoringController;
@@ -413,8 +414,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::view('/fees/addnewtype', 'fee.addnewtype');
         Route::get('/fees/compoundfee', [FeeController::class, 'compoundfee']);
         Route::post('/fees/savetype', [FeeController::class, 'storetype'])->name('savetype');
+        Route::get('/fees/setup', [FeeController::class, 'setupfees']);
         Route::resource('fees', FeeController::class)->missing(function (Request $request) {
-            return Redirect::route('fees.index');
+            //return Redirect::route('fees.index');
         });
     });
 
@@ -432,7 +434,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/fees/savesetupfee', [FeeController::class, 'storesetupfee'])->name('storesetupfee');
         Route::post('/fees/savecopyfees', [FeeController::class, 'savecopyfees'])->name('savecopyfees');
         Route::get('/fees/{period}/copysetup', [FeeController::class, 'copysetup']);
-        Route::get('/fees/setup', [FeeController::class, 'setupfees']);
         
     });
 
@@ -534,6 +535,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/facultyloads/returnotherassignments', [FacultyLoadController::class, 'returnotherassignments']);
         Route::delete('/facultyloads/{otherassignment}/deleteotherassignment', [FacultyLoadController::class, 'deleteotherassignment']);
         Route::post('/facultyloads/scheduletable', [FacultyLoadController::class, 'scheduletable']);
+    });
+
+    Route::group(['middleware' => ['inaccess:generalschedules']], function () {
+        Route::get('/generalschedules', [GeneralScheduleController::class, 'index']);
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

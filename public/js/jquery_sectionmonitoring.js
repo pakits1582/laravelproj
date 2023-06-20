@@ -215,6 +215,23 @@ $(function(){
                 //console.log(data);
                 $('#ui_content').html(data);
                 $("#enrolledinsection_modal").modal('show');
+
+				$('#scrollable_table').DataTable({
+                    scrollY: 400,
+                    scrollX: true,
+                    scrollCollapse: true,
+					"bAutoWidth": false,
+                    paging: false,
+                    ordering: false,
+                    info: false,
+                    searching: false
+                });
+				
+				$('#enrolledinsection_modal').on('shown.bs.modal', function (e) {
+					setTimeout(function () {
+						$.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+					},200);
+				});
             }
         });
 
