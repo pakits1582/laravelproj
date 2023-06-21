@@ -539,6 +539,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:generalschedules']], function () {
         Route::get('/generalschedules', [GeneralScheduleController::class, 'index']);
+        Route::post('/generalschedules/filtergeneralschedule', [GeneralScheduleController::class, 'filtergeneralschedule']);
+
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

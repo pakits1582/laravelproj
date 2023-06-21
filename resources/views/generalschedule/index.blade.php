@@ -14,7 +14,7 @@
                 <h1 class="h3 text-800 text-primary mb-0">General Schedule <span id="period_name">{{ session('periodname') }}</span></h1>
             </div>
             <div class="card-body">
-                <form method="POST" id="form_filterslotmonitoring" action="">
+                <form method="POST" id="form_filtergeneralschedule" action="">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -62,7 +62,7 @@
                     </div>
                 </form>
                 <div id="return_generalschedule">
-                    {{-- @include('generalschedule.return_generalschedule') --}}
+                    @include('generalschedule.return_generalschedule')
                 </div>
                 <div class="row mt-3 d-flex align-items-center">
                     <div class="col-md-1">
@@ -72,7 +72,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            <select name="program_id" class="form-control filter_item" id="program">
+                            <select name="display" class="form-control filter_item" id="display">
                                 <option value="1">ALL</option>
                                 <option value="open">OPEN</option>
                                 <option value="closed">CLOSED</option>

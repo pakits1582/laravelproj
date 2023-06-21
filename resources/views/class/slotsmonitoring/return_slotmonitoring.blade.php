@@ -10,8 +10,8 @@
             <th class="w120">Instructor</th>
             <th class="w30">Total<br>Seats</th>
             <th class="w30">Seats<br>Taken</th>
-            <th class="w30">Rem.<br>Seats</th>
             <th class="w30">Conf.<br>Seats</th>
+            <th class="w30">Rem.<br>Seats</th>
         </tr>
     </thead>
     <tbody>
@@ -46,7 +46,7 @@
                     <td class="w30 mid">{{ $class['slots'] }}</td>
                     <td class="w30 mid">{{ $class['totalenrolled'] }}</td>
                     <td class="w30 mid">{{ $class['totalvalidated'] }}</td>
-                    <td class="w30 mid">{{ $class['remainingslot'] }}</td>
+                    <td class="w30 mid font-weight-bold">{{ $class['remainingslot'] }}</td>
                 </tr>
             @endforeach
         @else

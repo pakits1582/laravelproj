@@ -33,9 +33,9 @@ class ClassesSlotsMonitoringController extends Controller
         $query = Classes::query();
         $query->select(
             'classes.*',
-            DB::raw("SUM(CASE WHEN enrollments.acctok = '1' AND enrollments.assessed = '1' THEN enrollments.assessed ELSE 0 END) AS assessedinclass"),
-            DB::raw("SUM(enrollments.validated = '1') AS validatedinclass"),
-            DB::raw("SUM(enrolled_classes.class_id = classes.id) AS enrolledinclass"),
+            DB::raw("COALESCE(SUM(CASE WHEN enrollments.acctok = '1' AND enrollments.assessed = '1' THEN enrollments.assessed ELSE 0 END), 0) AS assessedinclass"),
+            DB::raw("COALESCE(SUM(CASE WHEN enrollments.validated = '1' THEN 1 ELSE 0 END), 0) AS validatedinclass"),
+            DB::raw("COALESCE(SUM(enrolled_classes.class_id = classes.id), 0) AS enrolledinclass"),
             'subjects.code as subject_code',
             'subjects.name as subject_name',
             'instructors.last_name',
