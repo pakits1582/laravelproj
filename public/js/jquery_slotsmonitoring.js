@@ -69,5 +69,27 @@ $(function(){
             
             returnSlotMonitoring(postData);
 		}
-	});  	
+	}); 
+    
+    $(document).on("change", "#section_id", function(e){
+        var section = $("#section_id").val();
+
+        if(section)
+        {
+            $.ajax({
+                url: "/classes/scheduletable",
+                type: 'POST',
+                data: ({ 'section' : section}),
+                success: function(data){
+                    //console.log(data);
+                    $("#schedule_table").html(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }else{
+            $("#schedule_table").html('');
+        }
+    });
 });

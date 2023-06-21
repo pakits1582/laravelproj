@@ -67,40 +67,19 @@
                 <div id="return_slotmonitoring">
                     @include('class.slotsmonitoring.return_slotmonitoring')
                 </div>
-                {{-- <div class="row mt-3 d-flex align-items-center">
-                    <div class="col-md-1">
-                        <div class="form-group">
-                            <h6 class="m-0 font-weight-bold text-primary mid">Display</h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 mx-auto">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Schedule Table</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="schedule_table">
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <select name="program_id" class="form-control filter_item" id="program">
-                                <option value="1">ALL</option>
-                                <option value="open">OPEN</option>
-                                <option value="closed">CLOSED</option>
-                                <option value="dissolved">DISSOLVED</option>
-                                <option value="tutorial">TUTORIAL</option>
-                                <option value="f2f">F2F</option>
-                                <option value="merged">MERGED</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="submit" id="print_masterlist" class="btn btn-danger btn-icon-split actions mb-3">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-print"></i>
-                            </span>
-                            <span class="text">Print PDF</span>
-                        </button>
-                        <button type="submit" id="download_masterlist" class="btn btn-success btn-icon-split actions mb-3">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-download"></i>
-                            </span>
-                            <span class="text">Download Excel</span>
-                        </button>
-                    </div>
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>

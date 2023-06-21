@@ -215,7 +215,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/classes/inlineupdateslots', [ClassesController::class, 'inlineupdateslots']);
         Route::post('/classes/scheduletable', [ClassesController::class, 'scheduletable']);
 
-
         Route::resource('classes', ClassesController::class)->missing(function (Request $request) {
             return Redirect::route('classes.index');
         });
@@ -236,8 +235,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:enrolments']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-        
-
         Route::post('/enrolments/studentenrollmentunitsallowed', [EnrollmentController::class, 'studentenrollmentunitsallowed']);
         Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
         Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
