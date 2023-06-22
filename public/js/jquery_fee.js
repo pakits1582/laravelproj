@@ -5,6 +5,16 @@ $(function(){
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+
+    var dataTable = $('#scrollable_table').DataTable({
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        paging: false,
+        ordering: false,
+        info: false,
+        searching: false
+    });
     
     $('.datepicker').datepicker(pickerOpts);  
 
@@ -173,6 +183,15 @@ $(function(){
 		}
 	});
 
+    $(document).on("change", "#period", function(){
+        var period = $("#period").val();
+        var period_name = $("#period option:selected").text();
+        $("#period_name").text(period_name);
+
+        returnSetupFees(period, 0);
+    });
+
+
     function returnSetupFees(period, selectall)
     {
         $.ajax({
@@ -180,6 +199,16 @@ $(function(){
             data: ({ 'selectall' : selectall}),
             success: function(data){
                 $("#return_setup_fees").html(data);
+
+                var dataTable = $('#scrollable_table').DataTable({
+                    scrollY: 400,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    ordering: false,
+                    info: false,
+                    searching: false
+                });
             },
             error: function (data) {
                 console.log(data);

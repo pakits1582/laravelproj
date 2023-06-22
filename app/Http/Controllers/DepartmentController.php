@@ -21,8 +21,8 @@ class DepartmentController extends Controller
 
         if($request->has('keyword') && !empty($request->keyword)) {
             $query->where(function($query) use($request){
-                $query->where('code', 'like', '%'.$request->keyword.'%')
-                ->orWhere('name', 'like', '%'.$request->keyword.'%');
+                $query->where('code', 'like', $request->keyword.'%')
+                ->orWhere('name', 'like', $request->keyword.'%');
             });
         }
 

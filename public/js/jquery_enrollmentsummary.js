@@ -32,4 +32,14 @@ $(function(){
         //console.log(postData);
         returnEnrollmentSummary(postData);
     })
+
+    $("#period_id").select2({
+        dropdownParent: $("#ui_content4")
+    });
+    
+    $(document).on("change", "#period_id", function(){
+        var period_name = $("#period_id option:selected").text();
+        $("#period_name").text(period_name);
+
+    });
 });

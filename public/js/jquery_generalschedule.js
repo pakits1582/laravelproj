@@ -5,6 +5,11 @@ $(function(){
 		}
 	});
 
+    
+    $("#period_id").select2({
+	    dropdownParent: $("#ui_content4")
+	});
+
     var dataTable = $('#scrollable_table').DataTable({
         scrollY: 400,
         scrollX: true,
@@ -14,7 +19,7 @@ $(function(){
         info: false,
         searching: false
     });
-    
+
     function returnGeneralSchedule(postData)
     {
         $.ajax({
@@ -59,5 +64,12 @@ $(function(){
         
         returnGeneralSchedule(postData);
     });
+
+    $(document).on("change", "#period_id", function(){
+        var period_name = $("#period_id option:selected").text();
+        $("#period_name").text(period_name);
+
+    });
+
 
 });

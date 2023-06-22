@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Libs\Helpers;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use App\Services\PeriodService;
 use App\Models\SectionMonitoring;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,11 +20,13 @@ class SectionMonitoringController extends Controller
     
     public function index()
     {
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+
         $section_monitorings = $this->sectionmonitoring(session('current_period'));
         $programs = $section_monitorings->unique('program_id');
         $grouped_sectiomonitorings = $this->groupsectionmonitoringbyprogram($section_monitorings);
         
-        return view('section.monitoring.index', compact('grouped_sectiomonitorings', 'programs'));
+        return view('section.monitoring.index', compact('grouped_sectiomonitorings', 'programs', 'periods'));
     }
 
     public function sectionmonitoring($period_id, $program_id = '')
@@ -101,7 +104,7 @@ class SectionMonitoringController extends Controller
 
     public function filtersectionmonitoring(Request $request)
     {
-        $section_monitorings = $this->sectionmonitoring(session('current_period'), $request->program_id);
+        $section_monitorings = $this->sectionmonitoring($request->period_id, $request->program_id);
         $grouped_sectiomonitorings = $this->groupsectionmonitoringbyprogram($section_monitorings);
         
         return view('section.monitoring.return_sectionmonitoring', compact('grouped_sectiomonitorings'));

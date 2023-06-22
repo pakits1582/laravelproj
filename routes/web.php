@@ -20,6 +20,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ClassesSlotsMonitoringController;
+use App\Http\Controllers\ClassListController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
@@ -537,6 +538,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:generalschedules']], function () {
         Route::get('/generalschedules', [GeneralScheduleController::class, 'index']);
         Route::post('/generalschedules/filtergeneralschedule', [GeneralScheduleController::class, 'filtergeneralschedule']);
+
+    });
+
+    Route::group(['middleware' => ['inaccess:classlists']], function () {
+        Route::get('/classlists', [ClassListController::class, 'index']);
 
     });
 

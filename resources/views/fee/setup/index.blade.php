@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">{{ session('periodname') }}</h1>
+                <h1 class="h3 text-800 text-primary mb-0">Assessment Fees Setup <span id="period_name">{{ session('periodname') }}</span></h1>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -30,7 +30,6 @@
                                             <div class="form-group">
                                                 <label for="period"  class="m-0 font-weight-bold text-primary">* Period</label>
                                                 <select name="period_id" class="form-control" id="period" required>
-                                                    <option value="">- select period -</option>
                                                     @if ($periods)
                                                         @foreach ($periods as $period)
                                                             <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
@@ -229,34 +228,8 @@
                         <h6 class="m-0 font-weight-bold text-primary">Assessment Fees</h6>
                     </div>
                     <div class="card-body">
-                        {{-- <div class="table-responsive-sm">
-                            <table class="table table-sm table-striped table-bordered" style="font-size: 14px;"> --}}
-                        <div class="table-responsive-sm col-xs-8 col-xs-offset-2 well">
-                            <table class="table table-sm table-scroll table-striped table-bordered" style="font-size: 14px;">
-                                <thead class="">
-                                    <tr>
-                                        <th class="w30"></th>
-                                        <th class="w100">Level</th>
-                                        <th class="w100">College</th>
-                                        <th class="w100">Program</th>
-                                        <th class="w40">Yr.</th>
-                                        <th class="w40">Nw</th>
-                                        <th class="w40">Old</th>
-                                        <th class="w40">Sex</th>
-                                        <th class="w40">Crs</th>
-                                        <th class="w40">Trns</th>
-                                        <th class="w40">PS</th>
-                                        <th class="w150">Subject</th>
-                                        <th class="">Fee</th>
-                                        <th class="">Fee Type</th>
-                                        <th class="w70">Rate</th>
-                                        <th class="w70">Schm</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-black" id="return_setup_fees">
-                                    @include('fee.setup.return_setupfees')
-                                </tbody>
-                            </table>
+                        <div id="return_setup_fees">
+                            @include('fee.setup.return_setupfees')
                         </div>
                     </div>
                 </div>

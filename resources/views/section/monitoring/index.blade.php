@@ -17,6 +17,18 @@
                 <form method="POST" id="form_filterslotmonitoring" action="">
                     @csrf
                     <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="period_id" class="m-0 font-weight-bold text-primary">Period</label>
+                                <select name="period_id" class="form-control filter_item" id="period_id">
+                                    @if ($periods)
+                                        @foreach ($periods as $period)
+                                            <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label for="educational_level" class="m-0 font-weight-bold text-primary">Programs</label>
@@ -30,7 +42,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4"></div>
                     </div>
                 </form>
                 <div id="return_slotmonitoring">

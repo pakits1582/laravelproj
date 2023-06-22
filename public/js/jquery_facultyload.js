@@ -19,6 +19,10 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
+    $("#period").select2({
+	    dropdownParent: $("#ui_content2")
+	});
+
     function returnFacultyload(postData)
     {
         $.ajax({

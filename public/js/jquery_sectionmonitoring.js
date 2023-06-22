@@ -10,14 +10,28 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
-    function returnSectionMonitoring(program_id)
+	$("#period_id").select2({
+	    dropdownParent: $("#ui_content2")
+	});
+
+	$(document).on("change", "#period_id", function(){
+		var program_id  = $("#program").val();
+        var period_id   = $("#period_id").val();
+        var period_name = $("#period_id option:selected").text();
+        $("#period_name").text(period_name);
+
+        returnSectionMonitoring(period_id, program_id);
+    });
+
+
+    function returnSectionMonitoring(period_id, program_id)
     {
         $.ajax({
             url: "/sectionmonitoring/filtersectionmonitoring",
             type: 'POST',
-            data: ({ "program_id": program_id}),
+            data: ({ "period_id": period_id, "program_id": program_id }),
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 $("#return_slotmonitoring").html(response);
             },
             error: function (data) {
@@ -33,8 +47,9 @@ $(function(){
 
     $(document).on("change", "#program", function(){
         var program_id = $("#program").val();
-        
-        returnSectionMonitoring(program_id);
+        var period_id  =  $('#period_id').val();
+
+        returnSectionMonitoring(period_id, program_id);
     });
 
 	$(document).on("keypress",".minimum_enrollee", function(e){
@@ -61,7 +76,8 @@ $(function(){
 						}
 
 						var program_id = $("#program").val();
-						returnSectionMonitoring(program_id);
+						var period_id  =  $('#period_id').val();
+						returnSectionMonitoring(period_id, program_id);
 		
 					},
 					error: function (data) {
@@ -102,7 +118,8 @@ $(function(){
 						}
 
 						var program_id = $("#program").val();
-						returnSectionMonitoring(program_id);
+						var period_id  =  $('#period_id').val();
+						returnSectionMonitoring(period_id, program_id);
 		
 					},
 					error: function (data) {
@@ -151,7 +168,8 @@ $(function(){
 							}
 	
 							var program_id = $("#program").val();
-							returnSectionMonitoring(program_id);
+							var period_id  =  $('#period_id').val();
+							returnSectionMonitoring(period_id, program_id);
 						},
 					});	
 					}	
@@ -194,7 +212,8 @@ $(function(){
 							}
 	
 							var program_id = $("#program").val();
-							returnSectionMonitoring(program_id);
+							var period_id  =  $('#period_id').val();
+							returnSectionMonitoring(period_id, program_id);
 						},
 					});	
 					}	

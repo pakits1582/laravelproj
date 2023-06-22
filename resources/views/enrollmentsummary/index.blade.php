@@ -17,10 +17,10 @@
                 <form method="POST" id="form_filtersummary" action="">
                     @csrf
                     <div class="row align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Period</label>
-                                <select name="period_id" class="form-control filter_item" id="period">
+                                <select name="period_id" class="form-control filter_item" id="period_id">
                                     @if ($periods)
                                         @foreach ($periods as $period)
                                             <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
@@ -29,13 +29,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="college" class="m-0 font-weight-bold text-primary">College</label>
                                 @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'filter_item'])
                             </div>
                         </div>
-                        <div class="col-md-7 right">
+                        <div class="col-md-5 right">
                             <div class="form-group">
                                 <button type="button" id="print_permit" class="btn btn-primary btn-icon-split actions">
                                     <span class="icon text-white-50">

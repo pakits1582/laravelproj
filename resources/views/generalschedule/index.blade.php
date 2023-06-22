@@ -17,7 +17,7 @@
                 <form method="POST" id="form_filtergeneralschedule" action="">
                     @csrf
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Period</label>
                                 <select name="period_id" class="form-control filter_item" id="period_id">
@@ -53,12 +53,7 @@
                                 <div class="legend tutorial"></div>   
                             </div>
                         </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label for="year_level" class="m-0 font-weight-bold text-primary">F2F</label>
-                                <div class="legend f2f"></div>   
-                            </div>
-                        </div>
+                        
                     </div>
                 </form>
                 <div id="return_generalschedule">

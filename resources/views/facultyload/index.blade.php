@@ -17,7 +17,7 @@
                 <form method="POST" id="form_filterfacultyload" action="">
                     @csrf
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Period</label>
                                 <select name="period_id" class="form-control filter_item" id="period">
@@ -41,7 +41,7 @@
                                 @include('partials.colleges.dropdown', ['fieldname' => 'college_id', 'fieldid' => 'college', 'fieldclass' => 'filter_item'])
                             </div>
                         </div>
-                        <div class="col-md-3"></div>
+                        <div class="col-md-2"></div>
                     </div>
                 </form>
                 <div class="row px-2">
