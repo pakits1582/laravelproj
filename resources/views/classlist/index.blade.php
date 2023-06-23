@@ -42,7 +42,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="college" class="m-0 font-weight-bold text-primary">Keyword</label>
-                                <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="search_keyword">
+                                <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control text-uppercase" id="search_keyword">
                             </div>
                         </div>
                         <div class="col-md-1">
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                 </form>
-                <div id="return_generalschedule">
+                <div id="return_classlist">
                     @include('classlist.return_classlist')
                 </div>
             </div>

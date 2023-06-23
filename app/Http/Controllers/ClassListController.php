@@ -18,8 +18,9 @@ class ClassListController extends Controller
     public function index()
     {
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+        $classlist = $this->classlist(session('current_period'), '', '', 100);
 
-        return view('classlist.index', compact('periods'));
+        return view('classlist.index', compact('periods', 'classlist'));
     }
 
     public function classlist($period_id, $criteria = '', $keyword = '', $limit = 0)
@@ -53,7 +54,7 @@ class ClassListController extends Controller
                     $query->where('classes.code', $keyword);
                     break;
                 case 'instructor':
-                    $query->where('instructors.last_name', $keyword)->orWhere('instructors.first_name', $keyword);
+                    $query->where('instructors.last_name', 'like', $keyword.'%')->orWhere('instructors.first_name', 'like', $keyword.'%');
                     break;
                 case 'subject':
                     $query->where('subjects.code', 'like', $keyword.'%');
@@ -64,8 +65,20 @@ class ClassListController extends Controller
         $query->orderBy('subjects.code')
             ->orderBy('classes.id');
 
+        $query->when(isset($limit) && $limit != 0 , function ($query) use ($limit) 
+        {
+            $query->limit($limit);
+        });
+    
         $classes = $query->get();
 
         return $classes;
+    }
+
+    public function filterclasslist(Request $request)
+    {
+        $classlist = $this->classlist($request->period_id, $request->criteria, $request->keyword);
+
+        return view('classlist.return_classlist', compact('classlist'));
     }
 }

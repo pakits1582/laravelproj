@@ -543,6 +543,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:classlists']], function () {
         Route::get('/classlists', [ClassListController::class, 'index']);
+        Route::post('/classlists/filterclasslist', [ClassListController::class, 'filterclasslist']);
+
 
     });
 
