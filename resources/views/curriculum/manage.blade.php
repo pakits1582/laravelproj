@@ -92,7 +92,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-5">
                                                 <label for="name" class="m-0 font-weight-bold text-primary">Search Subject</label>
                                                 <input type="text" id="search_subject" class="form-control text-uppercase" value="" placeholder="Type here to search subject">
                                             </div>

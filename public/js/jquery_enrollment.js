@@ -95,7 +95,6 @@ $(function(){
         }
 
         returnEnrolledClassSubjects(response.data.enrollment.id);
-        returnScheduleTable(response.data.enrollment.id);
     }
 
     function returnScheduleTable(enrollment_id)
@@ -105,7 +104,7 @@ $(function(){
 			type: 'POST',
 			data: ({ 'enrollment_id' : enrollment_id}),
 			success: function(data){
-				console.log(data);
+				//console.log(data);
 				$("#schedule_table").html(data);
 			},
 			error: function (data) {
@@ -130,12 +129,12 @@ $(function(){
                 }else{
                     if(response.data.enrollment)
                     {
-                        if(response.data.enrollment.acctok === 0)
+                        if(response.data.enrollment.acctok === 1 && response.data.enrollment.assessed === 1)
                         {
-                            displayEnrollment(response);
-                        }else{
                             showError('Student is already enrolled!');
                             clearForm()
+                        }else{
+                            displayEnrollment(response);
                         }
                     }else{
                         //INSERT ENROLLMENT
@@ -391,6 +390,8 @@ $(function(){
                 }
             }
         });
+
+        returnScheduleTable(enrollment_id);
     }
 
     function enrollClassSubjects(enrollment_id, section_id, class_subjects)
@@ -539,7 +540,7 @@ $(function(){
             dataType: 'json',
             success: function(response){
                 console.log(response);
-                $("#schedule_table").html(response);
+
                 if(response.data.success === false){
                     showError(response.data.message);
                     $("#section").val('');
@@ -552,7 +553,7 @@ $(function(){
             },
             error: function (data) {
                 console.log(data);
-                $("#schedule_table").html(data.responseJSON);
+
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');
@@ -919,7 +920,7 @@ $(function(){
             dataType: 'json',
             data: postData,
             beforeSend: function() {
-				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Saving Enrollment</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
 					show: 'fade',
 					resizable: false,	
 					width: 350,
@@ -931,36 +932,47 @@ $(function(){
 			},
             success: function(response){
                 $("#confirmation").dialog('close');
-                console.log(response);
-                $.ajax({
-                    url: "/assessments/"+response,
-                    type: 'GET',
-                    // beforeSend: function() {
-                    //     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-                    //         show: 'fade',
-                    //         resizable: false,	
-                    //         width: 350,
-                    //         height: 'auto',
-                    //         modal: true,
-                    //         buttons: false
-                    //     });
-                    //     $(".ui-dialog-titlebar").hide();
-                    // },
-                    success: function(data){
-                        //console.log(response);
-        
-                        //$("#confirmation").dialog('close');
-                        var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
-                            header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
-                            header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
-                            header += '</div><div class="modal-body">';
-                        
-                        var footer = '</div></div></div></div>';
-                        $('#ui_content').html(header+data+footer);
-                        $("#modalll").modal('show');
-                        $("#save_assessment").focus();
-                    }
-                });
+                //console.log(response);
+                if(response.success === true)
+                {
+                    $.ajax({
+                        url: "/assessments/"+response.assessment_id,
+                        type: 'GET',
+                        beforeSend: function() {
+                            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Assessment Preview</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                                show: 'fade',
+                                resizable: false,	
+                                width: 350,
+                                height: 'auto',
+                                modal: true,
+                                buttons: false
+                            });
+                            $(".ui-dialog-titlebar").hide();
+                        },
+                        success: function(data){   
+                            $("#confirmation").dialog('close');
+         
+                            var header = '<div class="modal fade" id="assessment_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
+                                header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
+                                header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
+                                header += '</div><div class="modal-body">';
+                            
+                            var footer = '</div></div></div></div>';
+
+                            $('#ui_content4').html(header+data+footer);
+                            $("#assessment_modal").modal('show');
+
+                            $('#assessment_modal').on('shown.bs.modal', function (e) {
+                                $("#save_assessment").focus();
+                            });
+                                                
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                }
+                
                 //displayAssessmentPreview(response);
             },
             error: function (data) {

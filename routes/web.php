@@ -18,9 +18,8 @@ use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\AssessmentController;
-use App\Http\Controllers\ClassesSlotsMonitoringController;
 use App\Http\Controllers\ClassListController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EnrollmentController;
@@ -35,13 +34,15 @@ use App\Http\Controllers\ExternalGradeController;
 use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\InternalGradeController;
 use App\Http\Controllers\StudentledgerController;
+use App\Http\Controllers\ClassesMergingController;
+use App\Http\Controllers\GeneralScheduleController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\StudentScheduleController;
 use App\Http\Controllers\EnrollmentSummaryController;
-use App\Http\Controllers\GeneralScheduleController;
+use App\Http\Controllers\SectionMonitoringController;
 use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
-use App\Http\Controllers\SectionMonitoringController;
+use App\Http\Controllers\ClassesSlotsMonitoringController;
 
 /*
 |--------------------------------------------------------------------------
@@ -219,6 +220,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('classes', ClassesController::class)->missing(function (Request $request) {
             return Redirect::route('classes.index');
         });
+    });
+
+    Route::group(['middleware' => ['inaccess:classes']], function () {
+        Route::post('/classes/merge', [ClassesMergingController::class, 'merge']);
+        Route::post('/classes/searchcodetomerge', [ClassesMergingController::class, 'searchcodetomerge']);
+        Route::post('/classes/savemerge', [ClassesMergingController::class, 'savemerge'])->name('classes.savemerge');
+        Route::post('/classes/unmergesubject', [ClassesMergingController::class, 'unmergesubject']);
+        Route::get('/classes/{class}/viewmergedclasses', [ClassesMergingController::class, 'viewmergedclasses']);
+
     });
 
     Route::group(['middleware' => ['inaccess:slotmonitoring']], function () {

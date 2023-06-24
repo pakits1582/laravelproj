@@ -247,9 +247,9 @@ $(function(){
                 });
 				
 				$('#enrolledinsection_modal').on('shown.bs.modal', function (e) {
-					setTimeout(function () {
+					//setTimeout(function () {
 						$.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
-					},200);
+					//},200);
 				});
             }
         });

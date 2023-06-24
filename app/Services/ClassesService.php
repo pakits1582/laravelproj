@@ -615,22 +615,17 @@ class ClassesService
     {
         $class->load([
             'sectioninfo',
-            'curriculumsubject.subjectinfo', 
-            'instructor', 
-            'schedule',
-            'enrolledstudents'=> [
-                'class',
-                'enrollment' => [
-                    'section',
-                    'student' => [
-                        'user',
-                        'program'
-                    ]
-                ]
-            ]
+            'curriculumsubject.subjectinfo',
+            // 'instructor',
+            // 'schedule',
+            'enrolledstudents.class',
+            'enrolledstudents.enrollment.section',
+            'enrolledstudents.enrollment.student.user',
+            'enrolledstudents.enrollment.student.program',
         ]);
 
-        //return $class;
+       
+        return $class;
 
         $enrolled_students = new Collection();
 
@@ -698,6 +693,7 @@ class ClassesService
        
         return ['class' => $class, 'enrolled_students' => $enrolled_students];
     }
+
 
     public function offeredClassesOfPeriod($period_id)
     {

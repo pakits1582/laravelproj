@@ -1,5 +1,5 @@
  <!-- Logout Modal-->
- <div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+ <div class="modal fade" id="merge_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
  aria-hidden="true">
  <div class="modal-dialog modal-xl" role="document" style="max-width: 80% !important">
      <div class="modal-content">
@@ -26,38 +26,11 @@
                         </div>
                         <p class="font-italic text-info">Note: You can search multiple subject code by separating it by comma (,) code 1, code 2..</p>
                         <form action="{{ route('classes.savemerge') }}" method="post" id="form_merge_class">
-                            <div class="col-xs-8 col-xs-offset-2 well">
-                                <table class="table table-sm table-scroll table-striped table-bordered" style="">
-                                    <thead>
-                                        <tr>
-                                            <th class="w50">#</th>
-                                            <th class="w80">Code</th>
-                                            <th class="w150">Section</th>
-                                            <th class="w150">Subject</th>
-                                            <th class="">Schedule</th>
-                                            <th class="w150">Instructor</th>
-                                            <th class="w100">Enrolled</th>
-                                            <th class="w100">Slots</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="return_search_classtomerge">
-                                        @for ($x=1;$x<=7;$x++)
-                                            <tr class="">
-                                                <td class="w50">&nbsp;</td>
-                                                <td class="w80">&nbsp;</td>
-                                                <td class="w150">&nbsp;</td>
-                                                <td class="w150">&nbsp;</td>
-                                                <td class="">&nbsp;</td>
-                                                <td class="w150">&nbsp;</td>
-                                                <td class="w100">&nbsp;</td>
-                                                <td class="w100">&nbsp;</td>
-                                            </tr>
-                                        @endfor
-                                    </tbody>
-                                </table>
+                            <div id="return_search_classtomerge">
+                                @include('class.return_search_code_results')
                             </div>
                             <input type="hidden" name="class_id" id="class_id" value="{{ $class['id'] }}"  />
-                            <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Merge Classes</button>
+                            <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3">Merge Classes</button>
                         </form>
                     </div>
                 </div>
@@ -68,25 +41,9 @@
                         <h6 class="m-0 font-weight-bold text-primary">Merged Class Subjects</h6>
                     </div>
                     <div class="card-body">
-                        {{-- <div class="col-xs-8 col-xs-offset-2 well"> --}}
-                            <table class="table table-sm table-striped table-bordered" style="">
-                                <thead>
-                                    <tr>
-                                        <th class="w20">#</th>
-                                        <th class="w80">Code</th>
-                                        <th class="w150">Section</th>
-                                        <th class="w150">Subject</th>
-                                        <th class="">Schedule</th>
-                                        <th class="w150">Instructor</th>
-                                        <th class="w100">Enrolled</th>
-                                        <th class="w100">Slots</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="return_merged_classes">
-                                    @include('class.merged_classes')
-                                </tbody>
-                            </table>
-                        {{-- </div> --}}
+                        <div id="return_merged_classes">
+                            @include('class.merged_classes')
+                        </div>
                     </div>
                 </div>
             </div>

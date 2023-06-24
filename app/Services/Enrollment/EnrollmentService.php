@@ -313,7 +313,7 @@ class EnrollmentService
                     if($equivalent_subjects_internal_grades)
                     {
                         $grade_info = (new EvaluationService())->getMaxValueOfGrades($equivalent_subjects_internal_grades);
-                        $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
+                        $ispassed = ($grade_info && ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota)) ? 1 : 0;
                     }
 
                     if($ispassed === 0)
@@ -321,7 +321,7 @@ class EnrollmentService
                         if($equivalent_subjects_external_grades)
                         {
                             $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($equivalent_subjects_external_grades, $internal_grades, $external_grades);
-                            $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
+                            $ispassed = ($grade_info && ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota)) ? 1 : 0;
                         }
                     }
                 }//end of foreach equivalents
@@ -334,7 +334,7 @@ class EnrollmentService
                 if($curriculum_subject_tagged_grades)
                 {
                     $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($curriculum_subject_tagged_grades, $internal_grades, $external_grades);
-                    $ispassed = ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota) ? 1 : 0;
+                    $ispassed = ($grade_info && ($grade_info['grade'] >= $section_subject->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $section_subject->curriculumsubject->quota)) ? 1 : 0;
                 }//end of if has tagged subject
             }
 
@@ -383,7 +383,7 @@ class EnrollmentService
                 if($grades)
                 {
                     $grade_info = (new EvaluationService())->getMaxValueOfGrades($grades);
-                    $ispassed = ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota) ? 1 : 0;   
+                    $ispassed = ($grade_info && ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota)) ? 1 : 0;   
                 }else{
                     //CHECK EQUIVALENTS SUBJECTS IF PASSED
                     if($prerequisite->curriculumsubject->equivalents->count())
@@ -402,7 +402,7 @@ class EnrollmentService
                         if($equivalent_subjects_internal_grades)
                         {
                             $grade_info = (new EvaluationService())->getMaxValueOfGrades($equivalent_subjects_internal_grades);
-                            $ispassed = ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota) ? 1 : 0;
+                            $ispassed = ($grade_info && ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota)) ? 1 : 0;
                         }
     
                         if($ispassed === 0)
@@ -410,7 +410,7 @@ class EnrollmentService
                             if($equivalent_subjects_external_grades)
                             {
                                 $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($equivalent_subjects_external_grades, $internal_grades, $external_grades);
-                                $ispassed = ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota) ? 1 : 0;
+                                $ispassed = ($grade_info && ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota)) ? 1 : 0;
                             }
                         }
                     }//end of foreach equivalents
@@ -423,7 +423,7 @@ class EnrollmentService
                     if($curriculum_subject_tagged_grades)
                     {
                         $grade_info = (new TaggedGradeService())->checkTaggedGradeInfo($curriculum_subject_tagged_grades, $internal_grades, $external_grades);
-                        $ispassed = ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota) ? 1 : 0;
+                        $ispassed =($grade_info && ($grade_info['grade'] >= $prerequisite->curriculumsubject->quota || !is_null($grade_info['completion_grade']) >= $prerequisite->curriculumsubject->quota)) ? 1 : 0;
                     }//end of if has tagged subject
                 }
 
@@ -784,7 +784,13 @@ class EnrollmentService
 
         DB::commit();
 
-        return $assessment->id;
+        return [
+            'success' => true,
+            'message' => 'Enrollment successfully saved!',
+            'alert' => 'alert-success',
+            'status' => 200,
+            'assessment_id' => $assessment->id
+        ];
     }
 
     public function filterEnrolledStudents($period_id, $program_id = NULL, $year_level = NULL, $class_id = NULL, $idno = NULL, $enrollment_ids = NULL)

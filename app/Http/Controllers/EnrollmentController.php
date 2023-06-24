@@ -99,7 +99,9 @@ class EnrollmentController extends Controller
     // }
     public function update(UpdateEnrollmentRequest $request, Enrollment $enrolment)
     {
-        return $this->enrollmentService->saveEnrollment($request, $enrolment);
+        $data = $this->enrollmentService->saveEnrollment($request, $enrolment);
+
+        return response()->json($data);
     }
 
     /**
