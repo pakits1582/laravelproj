@@ -146,6 +146,7 @@
     <div id="ui_content2"></div>
     <div id="ui_content3"></div>
     <div id="ui_content4"></div>
+    <div id="modal_container"></div>
     <!-- Bootstrap core JavaScript-->
     {{-- <script src="{{ asset('js/jquery-3.5.1.js') }}"></script> --}}
     <script src="{{ asset('sbadmin/vendor/jquery/jquery.min.js') }}"></script>

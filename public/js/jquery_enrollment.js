@@ -492,7 +492,7 @@ $(function(){
                     var message = '<div class="ui_title_confirm">The following subjects will not be included</div><div class="message">';
                     message += (!$.isEmptyObject(full_subjects)) ? '<div>Closed Subjects </div>'+ full_subjects.join(", ") : "" ;
 				    message += (!$.isEmptyObject(unfinished_prerequisites)) ? '<div>Pre-Requisites not finished</div>'+ unfinished_prerequisites.join(", ") : "" ;
-                    $("#ui_content").html('<div class="confirmation"></div>'+message+'<div>Continue student enrollment?</div></div>').dialog({
+                    $("#confirmation").html('<div class="confirmation"></div>'+message+'<div>Continue student enrollment?</div></div>').dialog({
                         show: 'fade',
                         resizable: false,	
                         draggable: true,
@@ -624,7 +624,7 @@ $(function(){
         if(section){
             $.ajax({url: "/enrolments/searchandaddclasses",success: function(data){
                     console.log(data);
-                    $('#ui_content').html(data);
+                    $('#modal_container').html(data);
                     $("#modalll").modal('show');
                 }
             });	
@@ -640,7 +640,7 @@ $(function(){
 			if(section){
 				$.ajax({url: "/enrolments/searchandaddclasses",success: function(data){
                     console.log(data);
-                    $('#ui_content').html(data);
+                    $('#modal_container').html(data);
                     $("#modalll").modal('show');
                 }
             });	
@@ -1016,7 +1016,7 @@ $(function(){
                     header += '</div><div class="modal-body">';
                 
                 var footer = '</div></div></div></div>';
-                $('#ui_content').html(header+response+footer);
+                $('#ui_content4').html(header+response+footer);
                 $("#modalll").modal('show');
                 $("#save_assessment").focus();
             },
