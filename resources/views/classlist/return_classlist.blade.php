@@ -8,7 +8,7 @@
             <th class="">Subject Name</th>
             <th class="">Units</th>
             <th class="">Schedule</th>
-            <th class="">Instructor</th>
+            <th class="w120">Instructor</th>
         </tr>
     </thead>
     <tbody>
@@ -47,7 +47,7 @@
                     <td class="">{{ $class['subject_name'] }}</td>
                     <td class="mid">{{ $class['units'] }}</td>
                     <td class="">{{ $class['schedule'] }}</td>
-                    <td class="">{{ $faculty }}</td>
+                    <td class="w120">{{ $faculty }}</td>
                 </tr>
             @endforeach
         @else

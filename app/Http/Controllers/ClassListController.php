@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Classes;
+use App\Services\ClassesService;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use Illuminate\Support\Facades\DB;
@@ -80,5 +81,12 @@ class ClassListController extends Controller
         $classlist = $this->classlist($request->period_id, $request->criteria, $request->keyword);
 
         return view('classlist.return_classlist', compact('classlist'));
+    }
+
+    public function show(Classes $class)
+    {
+        $class_info = (new ClassesService())->displayEnrolledToClassSubject($class);
+
+        return $class_info;
     }
 }

@@ -28,7 +28,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @if (count($enrolled_students))
+                                @if (count($enrolled_students))
                                     @foreach ($enrolled_students as $enrolled_student)
                                         <tr>
                                             <td class="">{{ $loop->iteration }}</td>
@@ -50,7 +50,7 @@
                                         <td class="">&nbsp;</td>
                                         <td class="">&nbsp;</td>
                                     </tr>
-                                @endif --}}
+                                @endif
                             </tbody>
                         </table>
                     </div>

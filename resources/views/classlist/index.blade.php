@@ -71,7 +71,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">Student List and Subject Information</h6>
                     </div>
                     <div class="card-body">
-                        <div id="schedule_table">
+                        <div id="return_class_info">
                         </div>
                     </div>
                 </div>
