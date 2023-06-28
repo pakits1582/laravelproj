@@ -87,6 +87,7 @@ class ClassListController extends Controller
     {
         $class_info = (new ClassesService())->displayEnrolledToClassSubject($class);
 
-        return $class_info;
+        return view('classlist.return_classlist_info', $class_info);
+        
     }
 }

@@ -20,6 +20,14 @@ $(function(){
         searching: false
     });
 
+    $(document).on("change",".checkedtransfer", function(){
+		if($(this).is(':checked')){
+			$(this).closest('tr').addClass('selected');
+		}else{	
+			$(this).closest('tr').removeClass('selected');
+		}
+	});
+
     function returnClassList(postData)
     {
         $.ajax({
@@ -89,7 +97,7 @@ $(function(){
         {
             $.ajax({
                 url: "/classlists/"+class_id,
-                dataType: 'json',
+                //dataType: 'json',
                 beforeSend: function() {
                     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
                         show: 'fade',
@@ -101,10 +109,20 @@ $(function(){
                     });
                     $(".ui-dialog-titlebar").hide();
                 },
-                success: function(response){
-                    console.log(response);
+                success: function(data){
+                    //console.log(response);
                     $("#confirmation").dialog('close');
-                    
+                    $('#return_class_info').html(data);
+
+                    $('#scrollable_table_classinfo').DataTable({
+                        scrollY: 400,
+                        scrollX: true,
+                        scrollCollapse: true,
+                        paging: false,
+                        ordering: false,
+                        info: false,
+                        searching: false
+                    });
                 },
                 error: function (data) {
                     console.log(data);
