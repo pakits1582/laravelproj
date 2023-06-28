@@ -60,7 +60,7 @@
         @else
             <tr>
                 <td class="">&nbsp;</td>
-                <td class="">&nbsp;r</td>
+                <td class="">&nbsp;</td>
                 <td class="">&nbsp;</td>
                 <td class="">&nbsp;</td>
                 <td class="">&nbsp;</td>
@@ -93,7 +93,7 @@
                 </span>
                 <span class="text">Download Excel</span>
             </button>
-            <button type="submit" id="download_classlist" class="btn btn-primary btn-icon-split actions mb-2">
+            <button type="submit" id="transfer_student" class="btn btn-primary btn-icon-split actions mb-2">
                 <span class="icon text-white-50">
                     <i class="fas fa-arrow-up"></i>
                 </span>

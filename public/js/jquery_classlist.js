@@ -138,5 +138,44 @@ $(function(){
         }
     });
 
+    $(document).on("click", "#transfer_student", function(e){
+        var class_id = $(".viewclasslist:checked").attr("value");
 
+        if(!class_id)
+        {
+            showError('Please select class!');
+            return fal
+            se;
+        }
+		if($(".checkedtransfer:checked").length == 0)
+        {
+			showError('Please select atleast one checkbox/student to transfer!');	
+		}else{
+			var enrollment_ids = $(".checkedtransfer:checked").map(function() {
+						return $(this).attr("value");
+				}).get();
+
+			if(!enrollment_ids)
+            {
+				showError('Something went wrong! Please refresh page!');
+			}else{
+				console.log(enrollment_ids);
+
+                $.ajax({
+                    url: "/classlists/transferstudents",
+                    type: 'POST',
+                    data: ({ 'class_id' : class_id, 'enrollment_ids' : enrollment_ids}),
+                    dataType: 'json',
+                    success: function(response){
+                        console.log(response);
+                       
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+			}
+		}
+		e.preventDefault();
+	});
 });

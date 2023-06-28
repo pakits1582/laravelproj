@@ -555,6 +555,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/classlists', [ClassListController::class, 'index']);
         Route::post('/classlists/filterclasslist', [ClassListController::class, 'filterclasslist']);
         Route::get('/classlists/{class}', [ClassListController::class, 'show']);
+
+        Route::post('/classlists/transferstudents', [ClassListController::class, 'transferstudents']);
+
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
