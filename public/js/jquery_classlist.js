@@ -99,7 +99,7 @@ $(function(){
                 url: "/classlists/"+class_id,
                 //dataType: 'json',
                 beforeSend: function() {
-                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
                         show: 'fade',
                         resizable: false,	
                         width: 350,
@@ -166,6 +166,23 @@ $(function(){
                     success: function(data){
                         $('#modal_container').html(data);
                         $("#transfer_students").modal('show');
+
+                        $('#scrollable_table_transfer').DataTable({
+                            scrollY: 200,
+                            scrollX: true,
+                            scrollCollapse: true,
+                            paging: false,
+                            "bAutoWidth": false,
+                            ordering: false,
+                            info: false,
+                            searching: false
+                        });
+    
+                        $('#transfer_students').on('shown.bs.modal', function (e) {
+                            //setTimeout(function () {
+                                $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+                            //},200);
+                        });
                     },
                     error: function (data) {
                         console.log(data);
