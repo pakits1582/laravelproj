@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Classes;
+use App\Models\Enrollment;
 use App\Services\ClassesService;
 use App\Services\ClassListService;
 use Illuminate\Http\Request;
@@ -45,6 +46,17 @@ class ClassListController extends Controller
 
     public function transferstudents(Request $request)
     {
+        $class = Classes::with([
+            'sectioninfo',
+            'curriculumsubject.subjectinfo',
+        ])->findOrfail($request->class_id);
 
+        $students = Enrollment::with([
+            'student',
+            'student.user:id,idno',
+            'program:id,code'
+        ])->whereIn("id", $request->enrollment_ids)->get();
+        
+        return view('classlist.transfer', compact('class', 'students'));
     }
 }

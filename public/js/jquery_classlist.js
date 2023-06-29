@@ -144,8 +144,7 @@ $(function(){
         if(!class_id)
         {
             showError('Please select class!');
-            return fal
-            se;
+            return false;
         }
 		if($(".checkedtransfer:checked").length == 0)
         {
@@ -159,16 +158,14 @@ $(function(){
             {
 				showError('Something went wrong! Please refresh page!');
 			}else{
-				console.log(enrollment_ids);
-
                 $.ajax({
                     url: "/classlists/transferstudents",
                     type: 'POST',
                     data: ({ 'class_id' : class_id, 'enrollment_ids' : enrollment_ids}),
-                    dataType: 'json',
-                    success: function(response){
-                        console.log(response);
-                       
+                    //dataType: 'json',
+                    success: function(data){
+                        $('#modal_container').html(data);
+                        $("#transfer_students").modal('show');
                     },
                     error: function (data) {
                         console.log(data);
