@@ -4,7 +4,7 @@
             <th></th>
             <th class="">Code</th>
             <th class="">Section</th>
-            <th class="">Subject Code</th>
+            <th class="w150">Subject Code</th>
             <th class="">Subject Name</th>
             <th class="">Units</th>
             <th class="">Schedule</th>

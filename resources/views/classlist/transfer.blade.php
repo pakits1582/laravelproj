@@ -55,15 +55,15 @@
                     </div>
                     <div class="card-body">
                         <p class="font-italic text-info">Note: (*) Type class code to search class to transfer to.</p>
-                        <div class="row mb-1">
+                        <div class="row mb-1 align-items-center">
                             <div class="col-md-3">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Class Code</label>
                             </div>
                             <div class="col-md-5">
-                                <input type="text" name="keyword" placeholder="Type to search..." class="form-control" id="class_code_keyword">
+                                <input type="text" name="class_code_keyword" placeholder="Type to search..." class="form-control" id="class_code_keyword">
                             </div>
                         </div>
-                        <div class="row mb-1">
+                        <div class="row mb-1 align-items-center">
                             <div class="col-md-3">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Subject Code</label>
                             </div>
@@ -71,7 +71,7 @@
                                 <input type="text" name="subject_code" readonly class="form-control" id="subject_code">
                             </div>
                         </div>
-                        <div class="row mb-1">
+                        <div class="row mb-1 align-items-center">
                             <div class="col-md-3">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Description</label>
                             </div>
@@ -79,7 +79,7 @@
                                 <input type="text" name="description"  readonly class="form-control" id="description">
                             </div>
                         </div>
-                        <div class="row mb-1">
+                        <div class="row mb-1 align-items-center">
                             <div class="col-md-3">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Schedule</label>
                             </div>
@@ -87,7 +87,7 @@
                                 <input type="text" name="schedule" readonly class="form-control" id="schedule">
                             </div>
                         </div>
-                        <div class="row mb-1">
+                        <div class="row mb-1 align-items-center">
                             <div class="col-md-3">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Instructor</label>
                             </div>

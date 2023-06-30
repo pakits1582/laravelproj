@@ -729,25 +729,25 @@ $(function(){
                 success: function(data){
                     console.log(data);
                     
-                    $('#ui_content').html(data);
-                    $("#display_enrolled_students_in_class").modal('show');
+                    // $('#ui_content').html(data);
+                    // $("#display_enrolled_students_in_class").modal('show');
 
-                    $('#scrollable_table').DataTable({
-                        scrollY: 400,
-                        scrollX: true,
-                        scrollCollapse: true,
-                        paging: false,
-                        "bAutoWidth": false,
-                        ordering: false,
-                        info: false,
-                        searching: false
-                    });
+                    // $('#scrollable_table').DataTable({
+                    //     scrollY: 400,
+                    //     scrollX: true,
+                    //     scrollCollapse: true,
+                    //     paging: false,
+                    //     "bAutoWidth": false,
+                    //     ordering: false,
+                    //     info: false,
+                    //     searching: false
+                    // });
 
-                    $('#display_enrolled_students_in_class').on('shown.bs.modal', function (e) {
-                        //setTimeout(function () {
-                            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
-                        //},200);
-                    });
+                    // $('#display_enrolled_students_in_class').on('shown.bs.modal', function (e) {
+                    //     //setTimeout(function () {
+                    //         $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+                    //     //},200);
+                    // });
                 },
                 error: function (data) {
                     console.log(data);

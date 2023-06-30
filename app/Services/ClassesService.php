@@ -10,6 +10,7 @@ use App\Models\Schedule;
 use App\Models\ClassesSchedule;
 use App\Models\SectionMonitoring;
 use App\Models\CurriculumSubjects;
+use App\Models\EnrolledClass;
 use App\Models\EnrolledClassSchedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
@@ -614,49 +615,89 @@ class ClassesService
     public function displayEnrolledToClassSubject($class)
     {
         $class->load([
-            'sectioninfo',
+            'sectioninfo:id,code',
             'instructor',
-            'schedule',
-            'curriculumsubject.subjectinfo',
-            'enrolledstudents.enrollment.section',
-            'enrolledstudents.enrollment.student.user',
-            'enrolledstudents.enrollment.student.program',
+            'schedule:id,schedule',
+            'merged:id,merge',
+            'mergetomotherclass:id,code',
+            'curriculumsubject.subjectinfo:id,code,name',
         ]);
 
-        $merged_enrolled_students = $class->enrolledstudents;
+        $class_ids = [];
 
-        if ($class->ismother == 1) {
-            $class->load([
-                'merged.curriculumsubject.subjectinfo',
-                'merged.enrolledstudents.enrollment.section',
-                'merged.enrolledstudents.enrollment.student.user',
-                'merged.enrolledstudents.enrollment.student.program',
-            ]);
+        if ($class->ismother == 1) 
+        {
+            $class_ids = $class->merged->pluck('id')->toArray();
+            $class_ids[] = $class->id;
 
-            foreach ($class->merged as $merged) {
-                $merged_enrolled_students = $merged_enrolled_students->merge($merged->enrolledstudents);
-            }
-        } elseif ($class->merge !== null) {
-            $class->load([
-                'mergetomotherclass.curriculumsubject.subjectinfo',
-                'mergetomotherclass.enrolledstudents.enrollment.section',
-                'mergetomotherclass.enrolledstudents.enrollment.student.user',
-                'mergetomotherclass.enrolledstudents.enrollment.student.program',
-                'mergetomotherclass.merged.curriculumsubject.subjectinfo',
-                'mergetomotherclass.merged.enrolledstudents.enrollment.section',
-                'mergetomotherclass.merged.enrolledstudents.enrollment.student.user',
-                'mergetomotherclass.merged.enrolledstudents.enrollment.student.program',
-            ]);
+        }else if($class->merge !== null){
 
-            $merged_enrolled_students = $merged_enrolled_students->merge($class->mergetomotherclass->enrolledstudents);
+            $class_ids_of_all_merged = Classes::select('id','code')->where("merge", $class->mergetomotherclass->id)->get();
+            $class_ids = $class_ids_of_all_merged->pluck('id')->toArray();
+            $class_ids[] = $class->mergetomotherclass->id;
 
-            foreach ($class->mergetomotherclass->merged as $mother_merged) {
-                $merged_enrolled_students = $merged_enrolled_students->merge($mother_merged->enrolledstudents);
-            }
+        }else{
+            $class_ids[] = $class->id;
         }
 
-        return ['class' => $class, 'enrolled_students' => $merged_enrolled_students];
+        $enrolled_students = EnrolledClass::with([
+            'class:id,code',
+            'enrollment.student',
+            'enrollment.student.user:id,idno',
+            'enrollment.section:id,code',
+            'enrollment.student.program:id,code',
+        ])->wherein("class_id", $class_ids)->get();
+
+        return $enrolled_students;
     }
+
+    // public function displayEnrolledToClassSubject($class)
+    // {
+    //     $class->load([
+    //         'sectioninfo',
+    //         'instructor',
+    //         'schedule',
+    //         'curriculumsubject.subjectinfo',
+    //         'enrolledstudents.class',
+    //         'enrolledstudents.enrollment.section',
+    //         'enrolledstudents.enrollment.student.user',
+    //         'enrolledstudents.enrollment.student.program',
+    //     ]);
+
+    //     $merged_enrolled_students = $class->enrolledstudents;
+
+    //     if ($class->ismother == 1) {
+    //         $class->load([
+    //             'merged.curriculumsubject.subjectinfo',
+    //             'merged.enrolledstudents.enrollment.section',
+    //             'merged.enrolledstudents.enrollment.student.user',
+    //             'merged.enrolledstudents.enrollment.student.program',
+    //         ]);
+
+    //         foreach ($class->merged as $merged) {
+    //             $merged_enrolled_students = $merged_enrolled_students->merge($merged->enrolledstudents);
+    //         }
+    //     } elseif ($class->merge !== null) {
+    //         $class->load([
+    //             'mergetomotherclass.curriculumsubject.subjectinfo',
+    //             'mergetomotherclass.enrolledstudents.enrollment.section',
+    //             'mergetomotherclass.enrolledstudents.enrollment.student.user',
+    //             'mergetomotherclass.enrolledstudents.enrollment.student.program',
+    //             'mergetomotherclass.merged.curriculumsubject.subjectinfo',
+    //             'mergetomotherclass.merged.enrolledstudents.enrollment.section',
+    //             'mergetomotherclass.merged.enrolledstudents.enrollment.student.user',
+    //             'mergetomotherclass.merged.enrolledstudents.enrollment.student.program',
+    //         ]);
+
+    //         $merged_enrolled_students = $merged_enrolled_students->merge($class->mergetomotherclass->enrolledstudents);
+
+    //         foreach ($class->mergetomotherclass->merged as $mother_merged) {
+    //             $merged_enrolled_students = $merged_enrolled_students->merge($mother_merged->enrolledstudents);
+    //         }
+    //     }
+
+    //     return ['class' => $class, 'enrolled_students' => $merged_enrolled_students];
+    // }
 
     public function offeredClassesOfPeriod($period_id)
     {
