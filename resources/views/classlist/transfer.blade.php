@@ -1,6 +1,6 @@
 <div class="modal fade" id="transfer_students" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
  aria-hidden="true">
- <div class="modal-dialog modal-lg" role="document" style="">
+ <div class="modal-dialog modal-xl" role="document" style="">
      <div class="modal-content">
          <div class="modal-header">
             <h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Transfer Students</h1>
@@ -56,45 +56,50 @@
                     <div class="card-body">
                         <p class="font-italic text-info">Note: (*) Type class code to search class to transfer to.</p>
                         <div class="row mb-1 align-items-center">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Class Code</label>
                             </div>
-                            <div class="col-md-5">
-                                <input type="text" name="class_code_keyword" placeholder="Type to search..." class="form-control" id="class_code_keyword">
+                            <div class="col-md-2">
+                                <input type="text" name="class_code_keyword" placeholder="Type to search" class="form-control text-uppercase" id="class_code_keyword">
                             </div>
-                        </div>
-                        <div class="row mb-1 align-items-center">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Subject Code</label>
                             </div>
-                            <div class="col-md-5">
-                                <input type="text" name="subject_code" readonly class="form-control" id="subject_code">
+                            <div class="col-md-3">
+                                <input type="text" name="subject_code" readonly class="form-control clearable" id="subject_code">
+                            </div>
+                            <div class="col-md-1">
+                                <label for="period_id" class="m-0 font-weight-bold text-primary">Units</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" name="units" readonly class="form-control clearable" id="units">
                             </div>
                         </div>
                         <div class="row mb-1 align-items-center">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Description</label>
                             </div>
-                            <div class="col-md-9">
-                                <input type="text" name="description"  readonly class="form-control" id="description">
+                            <div class="col-md-10">
+                                <input type="text" name="description"  readonly class="form-control clearable" id="description">
                             </div>
                         </div>
                         <div class="row mb-1 align-items-center">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Schedule</label>
                             </div>
-                            <div class="col-md-9">
-                                <input type="text" name="schedule" readonly class="form-control" id="schedule">
+                            <div class="col-md-10">
+                                <input type="text" name="schedule" readonly class="form-control clearable" id="schedule">
                             </div>
                         </div>
                         <div class="row mb-1 align-items-center">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Instructor</label>
                             </div>
-                            <div class="col-md-9">
-                                <input type="text" name="instructor" readonly class="form-control" id="instructor">
+                            <div class="col-md-10">
+                                <input type="text" name="instructor" readonly class="form-control clearable" id="instructor">
                             </div>
                         </div>
+                        <input type="hidden" id="transferto_class_id" class="clearable" value="" />
                         <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Transfer Selected Students</button>
                     </div>
                 </div>

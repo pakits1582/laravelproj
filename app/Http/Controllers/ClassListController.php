@@ -59,4 +59,28 @@ class ClassListController extends Controller
         
         return view('classlist.transfer', compact('class', 'students'));
     }
+
+    public function searchtransfertoclass(Request $request)
+    {
+        try {
+            $class = Classes::with([
+                'instructor:id,last_name,first_name,name_suffix,middle_name', 
+                'schedule:id,schedule',
+                'curriculumsubject.subjectinfo:id,code,name'
+            ])->where('code', $request->keyword)->where('period_id', session('current_period'))->firstOrFail();
+                
+            return response()->json($class);
+
+        } catch (\Exception $e) {
+        
+            return [
+                'success' => false,
+                'message' => 'No class subject found!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
+        }
+
+
+    }
 }

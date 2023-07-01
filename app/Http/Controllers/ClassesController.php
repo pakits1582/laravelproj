@@ -187,8 +187,8 @@ class ClassesController extends Controller
     {
         $enrolled_students = $this->classesService->displayEnrolledToClassSubject($class);
 
-        return $enrolled_students;
-        //return view('class.display_enrolled_students', $enrolled_students);
+        //return $enrolled_students;
+        return view('class.display_enrolled_students', $enrolled_students);
     }
 
     public function inlineupdateslots(Request $request)

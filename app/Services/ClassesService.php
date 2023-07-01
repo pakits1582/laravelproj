@@ -648,8 +648,10 @@ class ClassesService
             'enrollment.student.program:id,code',
         ])->wherein("class_id", $class_ids)->get();
 
-        return $enrolled_students;
-    }
+        $enrolled_students = $enrolled_students->sortBy("enrollment.student.last_name")->sortBy("enrollment.student.first_name");;
+
+    return ['class' => $class, 'enrolled_students' => $enrolled_students];
+}
 
     // public function displayEnrolledToClassSubject($class)
     // {

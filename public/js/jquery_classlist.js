@@ -192,4 +192,48 @@ $(function(){
 		}
 		e.preventDefault();
 	});
+
+    $(document).on("keyup", "#class_code_keyword", function(e){
+		if (e.keyCode == '13')  
+        {
+			var keyword = $(this).val();
+
+			$.ajax({
+				url: "/classlists/searchtransfertoclass/",
+				type: 'post',
+				data: ({"keyword":keyword}),
+				dataType: 'json',
+				cache: false,
+				beforeSend: function() {
+					$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+						show: 'fade',
+						resizable: false,	
+						width: 'auto',
+						height: 'auto',
+						modal: true,
+						buttons: false
+					});
+					$(".ui-dialog-titlebar").hide();
+				},
+				success: function(data){
+					$('#confirmation').dialog('close'); 
+                    console.log(data);
+
+                    if(data.success == false)
+                    {
+                        showError(data.message);
+                        $(".clearable").val('');
+                    }else{
+                        $("#subject_code").val(data.curriculumsubject.subjectinfo.code ?? '');
+                        $("#units").val(data.units);
+                        $("#description").val(data.curriculumsubject.subjectinfo.name ?? '');
+                        $("#schedule").val(data.schedule.schedule ?? '');
+                        $("#instructor").val((data.instructor_id) ? data.instructor.last_name+', '+data.instructor.first_name+' '+data.instructor.name_suffix+' '+data.instructor.middle_name : '');
+                        $("#transferto_class_id").val(data.id);
+                    }
+				}
+			});	
+		}
+	});
+
 });
