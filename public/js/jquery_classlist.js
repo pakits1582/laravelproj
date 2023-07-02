@@ -236,4 +236,12 @@ $(function(){
 		}
 	});
 
+    $(document).on("submit", "#form_transferstudents", function(e){
+        var postData = $(this).serializeArray();
+
+        console.log(postData);
+        
+        e.preventDefault();
+    });
+
 });
