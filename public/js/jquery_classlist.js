@@ -150,20 +150,26 @@ $(function(){
         {
 			showError('Please select atleast one checkbox/student to transfer!');	
 		}else{
-			var enrollment_ids = $(".checkedtransfer:checked").map(function() {
-						return $(this).attr("value");
+			var students_to_transfer = $(".checkedtransfer:checked").map(function() {
+                    var obj = {};
+						obj['class_id'] = $(this).attr("data-classid");
+						obj['enrollment_id'] = $(this).attr("value");
+
+						return obj;
 				}).get();
 
-			if(!enrollment_ids)
+			if(!students_to_transfer)
             {
 				showError('Something went wrong! Please refresh page!');
 			}else{
+                //console.log(students_to_transfer);
                 $.ajax({
-                    url: "/classlists/transferstudents",
+                    url: "/classlists/transfer",
                     type: 'POST',
-                    data: ({ 'class_id' : class_id, 'enrollment_ids' : enrollment_ids}),
+                    data: ({ 'class_id' : class_id, 'students_to_transfer' : students_to_transfer}),
                     //dataType: 'json',
                     success: function(data){
+                        //console.log(data);
                         $('#modal_container').html(data);
                         $("#transfer_students").modal('show');
 
@@ -239,7 +245,36 @@ $(function(){
     $(document).on("submit", "#form_transferstudents", function(e){
         var postData = $(this).serializeArray();
 
-        console.log(postData);
+        $.ajax({
+            url: "/classlists/savetransferstudents",
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons:false
+                });
+                $(".ui-dialog-titlebar").hide();
+            },
+            success: function(response){
+                $('#confirmation').dialog('close'); 
+
+                console.log(response)
+            },
+            error: function (data) {
+                //console.log(data);
+                $("#confirmation").dialog('close');
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action! '+errors.message);
+                }
+            }
+        });
         
         e.preventDefault();
     });

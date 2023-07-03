@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Classes;
+use App\Models\Enrollment;
+use App\Models\EnrolledClass;
 
 class ClassListService
 {
@@ -57,5 +59,32 @@ class ClassListService
         $classes = $query->get();
 
         return $classes;
+    }
+
+    public function transferstudents($validatedData)
+    {
+        try {
+            $transferto_class_id = $validatedData['transferto_class_id'];
+            $transferfrom_class_id = $validatedData['transferfrom_class_id'];
+
+            $transferto_class = Classes::with('schedule:id,schedule')->findOrFail($transferto_class_id);
+            $transferfrom_class = Classes::with('schedule:id,schedule')->findOrFail($transferfrom_class_id);
+
+            $enrollments = Enrollment::whereIn("id", $validatedData['enrollment_ids'])->get();
+
+            //DELETE FROM CLASS
+            $enrolledclasses = EnrolledClass::where('class_id', $transferfrom_class_id)->whereIn('enrollment_id', $validatedData['enrollment_ids'])->get();
+
+            return $enrolledclasses;
+        
+        } catch (\Exception $e) {
+
+           return [
+                'success' => false,
+                'message' => 'Something went wrong! Can not perform requested action!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
+        }
     }
 }

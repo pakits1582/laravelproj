@@ -28,17 +28,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($students))
-                                        @foreach ($students as $student)
+                                    @if (count($enrollments))
+                                        @foreach ($enrollments as $enrollment)
                                             <tr>
                                                 <td class="">
                                                     {{ $loop->iteration }}
-                                                    <input type="hidden" name="enrollment_ids[]" value="{{ $student->id }}">
+                                                    <input type="hidden" name="enrollment_ids[]" value="{{ $enrollment->id }}">
+                                                    <input type="hidden" name="class_ids[]" value="{{ $enrollment->class_id }}">
                                                 </td>
-                                                <td class="">{{ $student->student->user->idno }}</td>
-                                                <td class="">{{ $student->student->name }}</td>
-                                                <td class="">{{ $student->program->code }}</td>
-                                                <td class="mid">{{ $student->year_level }}</td>
+                                                <td class="">{{ $enrollment->student->user->idno }}</td>
+                                                <td class="">{{ $enrollment->student->name }}</td>
+                                                <td class="">{{ $enrollment->program->code }}</td>
+                                                <td class="mid">{{ $enrollment->year_level }}</td>
                                             </tr>
                                         @endforeach
                                     @else

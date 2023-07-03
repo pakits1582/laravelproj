@@ -53,7 +53,7 @@
                     <td class="mid">{{ $enrolled_student->enrollment->year_level }}</td>
                     <td class="mid">{{ $enrolled_student->class->code }}</td>
                     <td class="mid w50">
-                        <input type="checkbox" name="enrollment_ids[]" value="{{ $enrolled_student->enrollment->id }}" class="checkedtransfer" />
+                        <input type="checkbox" name="enrollment_ids[]" value="{{ $enrolled_student->enrollment->id }}" data-classid="{{ $enrolled_student->class->id }}" class="checkedtransfer" />
                     </td>
                 </tr>
             @endforeach
