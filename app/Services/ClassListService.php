@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Classes;
 use App\Models\Enrollment;
 use App\Models\EnrolledClass;
+use Illuminate\Support\Facades\Auth;
 
 class ClassListService
 {
@@ -70,12 +71,48 @@ class ClassListService
             $transferto_class = Classes::with('schedule:id,schedule')->findOrFail($transferto_class_id);
             $transferfrom_class = Classes::with('schedule:id,schedule')->findOrFail($transferfrom_class_id);
 
-            $enrollments = Enrollment::whereIn("id", $validatedData['enrollment_ids'])->get();
+            //$enrollments = Enrollment::whereIn("id", $validatedData['enrollment_ids'])->get();
 
             //DELETE FROM CLASS
-            $enrolledclasses = EnrolledClass::where('class_id', $transferfrom_class_id)->whereIn('enrollment_id', $validatedData['enrollment_ids'])->get();
+            $enrolledclasses = EnrolledClass::whereIn('class_id', $validatedData['class_ids'])->whereIn('enrollment_id', $validatedData['enrollment_ids'])->get();
 
-            return $enrolledclasses;
+            $enroll_classes = [];
+            $enroll_class_schedules = [];
+
+            foreach ($validatedData['enrollment_ids'] as $key => $enrollment_id)
+            {
+                $enroll_classes[] = [
+                    'enrollment_id' => $enrollment_id,
+                    'class_id'      => $transferto_class->id,
+                    'user_id'       => Auth::id(),
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ];
+
+                if(!is_null($transferto_class->schedule->schedule))
+                {
+                    $class_schedules = (new ClassesService())->processSchedule($transferto_class->schedule->schedule);
+
+                    foreach ($class_schedules as $key => $class_schedule) 
+                    {
+                        foreach ($class_schedule['days'] as $key => $day) 
+                        {
+                            $enroll_class_schedules[] = [
+                                'enrollment_id' => $enrollment_id,
+                                'class_id'      => $transferto_class->id,
+                                'from_time'     => $class_schedule['timefrom'],
+                                'to_time'       => $class_schedule['timeto'],
+                                'day'           => $day,
+                                'room'          => $class_schedule['room'],
+                                'created_at'    => now(),
+                                'updated_at'    => now()
+                            ];
+                        }
+                    }
+                }
+            }
+
+            return $enroll_class_schedules;
         
         } catch (\Exception $e) {
 

@@ -98,6 +98,7 @@ class ClassListController extends Controller
     {
         $validator =  Validator::make($request->all(), [
             'enrollment_ids' => 'required',
+            'class_ids' => 'required',
             'transferto_class_id' => 'required',
             'transferfrom_class_id' => 'required',
         ]);
