@@ -17,6 +17,13 @@ class UpdateScholarshipdiscountRequest extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'required_without_all' => 'Please fill at least one of the following field (Tuition, Miscellaneous, Other Miscellaneous, Laboratory Fees, Total Assessment).'
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,15 +35,15 @@ class UpdateScholarshipdiscountRequest extends FormRequest
             'code' => ['required', 'max:50',  Rule::unique('scholarshipdiscounts')->where(fn ($query) => $query->where('description', $this->description))->ignore($this->scholarshipdiscount->id)],
             'description' => ['required', 'max:255',  Rule::unique('scholarshipdiscounts')->where(fn ($query) => $query->where('code', $this->code))->ignore($this->scholarshipdiscount->id)],
             'tuition_type' => [],
-            'tuition' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
+            'tuition' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|required_without_all:miscellaneous,othermisc,laboratory,totalassessment',
             'miscellaneous_type' => [],
-            'miscellaneous' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
+            'miscellaneous' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|required_without_all:tuition,othermisc,laboratory,totalassessment',
             'othermisc_type' => [],
-            'othermisc' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
+            'othermisc' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|required_without_all:tuition,miscellaneous,laboratory,totalassessment',
             'laboratory_type' => [],
-            'laboratory' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
+            'laboratory' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|required_without_all:tuition,miscellaneous,othermisc,totalassessment',
             'totalassessment_type' => [],
-            'totalassessment' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|',
+            'totalassessment' => 'sometimes|nullable|regex:/^\d*(\.\d{1,2})?$/|required_without_all:tuition,miscellaneous,othermisc,laboratory',
             'type' => 'required'
         ];
 

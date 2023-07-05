@@ -215,12 +215,12 @@ $(function(){
 							dataType: 'json',
 							success: function(response){
 								console.log(response);
-								if(response.data.success === true)
+								if(response.success === true)
                                 {
-                                    showSuccess(response.data.message);
+                                    showSuccess(response.message);
                         
                                 }else{
-                                    showerror(response.data.message);
+                                    showerror(response.message);
                                 }
 
                                 returnScholarshipdiscountGrants(enrollment_id, period_id);

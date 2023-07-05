@@ -7,14 +7,11 @@ use App\Models\User;
 use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\Studentledger;
-use App\Models\AssessmentExam;
 use App\Models\PaymentSchedule;
 use App\Models\Studentadjustment;
 use Illuminate\Support\Facades\DB;
 use App\Models\StudentledgerDetail;
-use Database\Seeders\StudentSeeder;
 use Illuminate\Support\Facades\Auth;
-use App\Services\Enrollment\EnrollmentService;
 
 class StudentledgerService
 {

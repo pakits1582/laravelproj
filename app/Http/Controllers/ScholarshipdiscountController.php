@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
+use App\Models\Studentledger;
 use App\Services\PeriodService;
+use Illuminate\Support\Facades\DB;
 use App\Models\Scholarshipdiscount;
 use App\Models\ScholarshipdiscountGrant;
 use App\Services\ScholarshipdiscountService;
 use App\Http\Requests\StoreScholarshipdiscount;
 use App\Http\Requests\StoreScholarshipdiscountRequest;
 use App\Http\Requests\UpdateScholarshipdiscountRequest;
-use App\Models\Studentledger;
 
 class ScholarshipdiscountController extends Controller
 {
@@ -139,19 +140,35 @@ class ScholarshipdiscountController extends Controller
 
     public function deletegrant(ScholarshipdiscountGrant $scholarshipdiscountgrant)
     {
-        $grant_type = ($scholarshipdiscountgrant->type == 1) ? 'S' : 'D';
+        try {
+            DB::beginTransaction();
 
-        $studentledger = Studentledger::where('enrollment_id', $scholarshipdiscountgrant->enrollment_id)
-                        ->where('source_id', $scholarshipdiscountgrant->id)->where('type', $grant_type)->firstOrFail();
+            $scholarshipdiscountgrant->load('scholarshipdiscount');
+            $grant_type = ($scholarshipdiscountgrant->scholarshipdiscount->type == 1) ? 'S' : 'D';
 
-        $studentledger->delete();
-        $scholarshipdiscountgrant->delete();
+            $studentledger = Studentledger::where('enrollment_id', $scholarshipdiscountgrant->enrollment_id)
+                            ->where('source_id', $scholarshipdiscountgrant->id)->where('type', $grant_type)->firstOrFail();
 
-        return response()->json(['data' =>[
+            $studentledger->delete();
+            $scholarshipdiscountgrant->delete();
+
+            DB::commit();
+
+            return response()->json([
                 'success' => true,
                 'message' => 'Scholarship/Discount sucessfully deleted!.',
                 'alert' => 'alert-success'
-            ]
-        ]);
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong! Can not perform requested action!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ]);
+        }
+        
     }
 }
