@@ -81,19 +81,19 @@
             </p>            
         </div>
         <div class="col-md-6 right">       
-            <button type="submit" id="print_classlist" class="btn btn-danger btn-icon-split actions mb-2">
+            <button type="button" id="print_classlist" class="btn btn-danger btn-icon-split actions mb-2">
                 <span class="icon text-white-50">
                     <i class="fas fa-print"></i>
                 </span>
                 <span class="text">Print PDF</span>
             </button>
-            <button type="submit" id="download_classlist" class="btn btn-success btn-icon-split actions mb-2">
+            <button type="button" id="download_classlist" class="btn btn-success btn-icon-split actions mb-2">
                 <span class="icon text-white-50">
                     <i class="fas fa-download"></i>
                 </span>
                 <span class="text">Download Excel</span>
             </button>
-            <button type="submit" id="transfer_student" class="btn btn-primary btn-icon-split actions mb-2">
+            <button type="button" id="transfer_student" class="btn btn-primary btn-icon-split actions mb-2">
                 <span class="icon text-white-50">
                     <i class="fas fa-arrow-up"></i>
                 </span>

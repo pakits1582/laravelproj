@@ -5,6 +5,9 @@ namespace App\Services;
 use App\Models\Classes;
 use App\Models\Enrollment;
 use App\Models\EnrolledClass;
+use App\Models\EnrolledClassSchedule;
+use App\Models\InternalGrade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class ClassListService
@@ -65,19 +68,28 @@ class ClassListService
     public function transferstudents($validatedData)
     {
         try {
+            DB::beginTransaction();
+            
             $transferto_class_id = $validatedData['transferto_class_id'];
             $transferfrom_class_id = $validatedData['transferfrom_class_id'];
 
             $transferto_class = Classes::with('schedule:id,schedule')->findOrFail($transferto_class_id);
             $transferfrom_class = Classes::with('schedule:id,schedule')->findOrFail($transferfrom_class_id);
 
-            //$enrollments = Enrollment::whereIn("id", $validatedData['enrollment_ids'])->get();
+            $enrollments = Enrollment::with('grade')->whereIn("id", $validatedData['enrollment_ids'])->get();
+            $grade_ids = $enrollments->pluck('grade.id')->filter(function ($gradeId) {
+                return $gradeId !== null;
+            })->toArray();
+            
 
             //DELETE FROM CLASS
-            $enrolledclasses = EnrolledClass::whereIn('class_id', $validatedData['class_ids'])->whereIn('enrollment_id', $validatedData['enrollment_ids'])->get();
-
+            EnrolledClass::whereIn('class_id', $validatedData['class_ids'])->whereIn('enrollment_id', $validatedData['enrollment_ids'])->delete();
+            //DELETE FROM GRADE INTERNAL
+            InternalGrade::where('class_id', $transferfrom_class_id)->whereIn('grade_id', $grade_ids)->delete();
+            
             $enroll_classes = [];
             $enroll_class_schedules = [];
+            $internal_grades = [];
 
             foreach ($validatedData['enrollment_ids'] as $key => $enrollment_id)
             {
@@ -112,7 +124,35 @@ class ClassListService
                 }
             }
 
-            return $enroll_class_schedules;
+            foreach ($grade_ids as $key => $grade_id) 
+            {
+                $internal_grades[] = [
+                    'grade_id' => $grade_id,
+                    'class_id' => $transferto_class->id,
+                    'units' => $transferto_class->units,
+                    'grading_system_id' => NULL,
+                    'completion_grade' => NULL,
+                    'final' => 0,
+                    'user_id' =>  Auth::id(),
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+
+            EnrolledClass::insert($enroll_classes);
+            EnrolledClassSchedule::insert($enroll_class_schedules);
+            InternalGrade::insert($internal_grades);
+
+            //REASSESSMENTS OF ENROLLMENT IDS
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => 'Selected students successfully transfered!',
+                'alert' => 'alert-success',
+                'status' => 200
+            ];
         
         } catch (\Exception $e) {
 

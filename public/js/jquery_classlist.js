@@ -90,9 +90,8 @@ $(function(){
 
     });
 
-    $(document).on("change", ".viewclasslist", function(){
-        var class_id = $(".viewclasslist:checked").attr("value");
-
+    function returnClassListStudents(class_id)
+    {
         if($(".viewclasslist:checked").length == 1)
         {
             $.ajax({
@@ -136,6 +135,12 @@ $(function(){
 		}else{
             $('#return_class_info').html('');
         }
+    }
+
+    $(document).on("change", ".viewclasslist", function(){
+        var class_id = $(".viewclasslist:checked").attr("value");
+
+        returnClassListStudents(class_id);
     });
 
     $(document).on("click", "#transfer_student", function(e){
@@ -146,6 +151,7 @@ $(function(){
             showError('Please select class!');
             return false;
         }
+
 		if($(".checkedtransfer:checked").length == 0)
         {
 			showError('Please select atleast one checkbox/student to transfer!');	
@@ -171,7 +177,7 @@ $(function(){
                     success: function(data){
                         //console.log(data);
                         $('#modal_container').html(data);
-                        $("#transfer_students").modal('show');
+                        $("#transfer_students_modal").modal('show');
 
                         $('#scrollable_table_transfer').DataTable({
                             scrollY: 200,
@@ -184,7 +190,7 @@ $(function(){
                             searching: false
                         });
     
-                        $('#transfer_students').on('shown.bs.modal', function (e) {
+                        $('#transfer_students_modal').on('shown.bs.modal', function (e) {
                             //setTimeout(function () {
                                 $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
                             //},200);
@@ -200,6 +206,7 @@ $(function(){
 	});
 
     $(document).on("keyup", "#class_code_keyword", function(e){
+        e.preventDefault();
 		if (e.keyCode == '13')  
         {
 			var keyword = $(this).val();
@@ -242,6 +249,27 @@ $(function(){
 		}
 	});
 
+    $(document).on("click", "#transfer_button", function(e){
+        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">Are you sure you want to transfer selected students?</div>').dialog({
+            show: 'fade',
+            resizable: false,	
+            draggable: false,
+            width: 350,
+            height: 'auto',
+            modal: true,
+            buttons: {
+                    'Cancel':function(){
+                        $("#confirmation").dialog('close');			
+                    },
+                    'OK':function(){
+                        $("#confirmation").dialog('close');
+                        $("#form_transferstudents").submit();			
+                    }//end of ok button	
+                }//end of buttons
+        });//end of dialogbox
+        $(".ui-dialog-titlebar").hide();
+    });
+
     $(document).on("submit", "#form_transferstudents", function(e){
         var postData = $(this).serializeArray();
 
@@ -263,8 +291,20 @@ $(function(){
             },
             success: function(response){
                 $('#confirmation').dialog('close'); 
+                console.log(response);
 
-                console.log(response)
+                if(response.success == false)
+                {
+                    showError(response.message);
+                }else{
+                    showSuccess(response.message);
+                }
+
+                $("#transfer_students_modal").modal('toggle');
+                var class_id = $(".viewclasslist:checked").attr("value");
+
+                returnClassListStudents(class_id);
+
             },
             error: function (data) {
                 //console.log(data);

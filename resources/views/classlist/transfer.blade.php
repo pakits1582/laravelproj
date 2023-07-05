@@ -1,4 +1,4 @@
-<div class="modal fade" id="transfer_students" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="transfer_students_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
  aria-hidden="true">
  <div class="modal-dialog modal-xl" role="document" style="">
      <div class="modal-content">
@@ -60,7 +60,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">Transfer selected students to class</h6>
                         </div>
                         <div class="card-body">
-                            <p class="font-italic text-info">Note: (*) Type class code to search class to transfer to.</p>
+                            <p class="font-italic text-info">Note: (*) Type class code and hit enter to search class to transfer to.</p>
                             <div class="row mb-1 align-items-center">
                                 <div class="col-md-2">
                                     <label for="period_id" class="m-0 font-weight-bold text-primary">Class Code</label>
@@ -107,7 +107,7 @@
                             </div>
                             <input type="hidden" name="transferto_class_id" id="transferto_class_id" class="clearable" value="" />
                             <input type="hidden" name="transferfrom_class_id" id="transferfrom_class_id" class="clearable" value="{{ $class->id }}" />
-                            <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Transfer Selected Students</button>
+                            <button type="button" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm" id="transfer_button">Transfer Selected Students</button>
                         </div>
                     </div>
                 </div>
