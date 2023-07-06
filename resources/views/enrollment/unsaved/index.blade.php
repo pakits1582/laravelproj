@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" id="delete_selected_unsaved" class="btn btn-danger btn-icon-split mb-2">
+                        <button type="button" id="delete_selected_unsaved" class="btn btn-danger btn-icon-split mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-trash"></i>
                             </span>

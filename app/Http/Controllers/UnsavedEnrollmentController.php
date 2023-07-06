@@ -34,7 +34,7 @@ class UnsavedEnrollmentController extends Controller
             'program.level',
             'section:id,code',
             'enrolledby:id,idno'
-        ])->where('period_id', $period_id)->where('acctok', 0);
+        ])->where('period_id', $period_id)->where('acctok', 0)->withCount('enrolled_classes');
 
         $query->when(isset($program_id) && !empty($program_id), function ($query) use($program_id) {
             $query->where('program_id', $program_id);
@@ -64,5 +64,10 @@ class UnsavedEnrollmentController extends Controller
         $unsaved_enrollments =$this->unsavedenrollments($request->period_id, $request->educational_level, $request->college, $request->program_id, $request->year_level);
         
         return view('enrollment.unsaved.return_unsaved', compact('unsaved_enrollments'));
+    }
+
+    public function deleteunsavedenrollments(Request $request)
+    {
+        return $request;
     }
 }

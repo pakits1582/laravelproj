@@ -8,7 +8,7 @@
             <th class="">Program</th>
             <th class="w50">Year</th>
             <th class="">Section</th>
-            <th class="w50">Units</th>
+            <th class="w50">Subjects</th>
             <th class="">Enrolled By</th>
             <th class="">Date</th>
             <th class="">View</th>
@@ -27,9 +27,9 @@
                     <td class="">{{ $enrollment->program->code }}</td>
                     <td class="mid">{{ $enrollment->year_level }}</td>
                     <td class="">{{ $enrollment->section->code }}</td>
-                    <td class="mid">{{ $enrollment->enrolled_units }}</td>
+                    <td class="mid">{{ $enrollment->enrolled_classes_count }}</td>
                     <td class="mid">{{ $enrollment->enrolledby->idno }}</td>
-                    <td class="mid">{{ $enrollment->enrolledby->idno }}</td>
+                    <td class="mid">{{ \Carbon\Carbon::parse($enrollment->created_at)->format('F d, Y') }}</td>
                     <td></td>
                 </tr>
             @endforeach

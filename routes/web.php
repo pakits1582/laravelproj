@@ -249,6 +249,8 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/enrolments/unsaved', [UnsavedEnrollmentController::class, 'index']);
         Route::post('/enrolments/filterunsavedenrollments', [UnsavedEnrollmentController::class, 'filterunsavedenrollments']);
+        Route::delete('/enrolments/deleteunsavedenrollments', [UnsavedEnrollmentController::class, 'deleteunsavedenrollments']);
+
 
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
         Route::post('/enrolments/studentenrollmentunitsallowed', [EnrollmentController::class, 'studentenrollmentunitsallowed']);

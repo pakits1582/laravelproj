@@ -95,4 +95,65 @@ $(function(){
 		}
 	});
 
+    $(document).on("click", "#delete_selected_unsaved", function(){
+        var enrollments = $(".checkedunsaved:checked").length;
+
+		if(enrollments != 0)
+        {
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">Are you sure you want to delete selected enrollments?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: false,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $("#confirmation").dialog('close');			
+                        },
+                        'OK':function(){
+                            $("#confirmation").dialog('close');
+
+                            var enrollment_ids = [];
+                            $(".checkedunsaved:checked").each(function() {
+                                enrollment_id = $(this).attr('value');
+                                enrollment_ids.push(enrollment_id);
+                            });
+
+                            $.ajax({
+                                url: "/enrolments/deleteunsavedenrollments",
+                                type: 'DELETE',
+                                data: ({"enrollment_ids": enrollment_ids}),
+                                success: function(response){
+                                    console.log(response);
+                                    // $("#return_unsaved_enrollment").html(response);
+                                    
+                                    // $('#scrollable_table').DataTable({
+                                    //     scrollY: 400,
+                                    //     scrollX: true,
+                                    //     scrollCollapse: true,
+                                    //     paging: false,
+                                    //     ordering: false,
+                                    //     info: false,
+                                    //     searching: false
+                                    // });
+                    
+                                },
+                                error: function (data) {
+                                    //console.log(data);
+                                    var errors = data.responseJSON;
+                                    if ($.isEmptyObject(errors) === false) {
+                                        showError('Something went wrong! Can not perform requested action!');
+                                        clearForm()
+                                    }
+                                }
+                            });
+                        }//end of ok button	
+                    }//end of buttons
+            });//end of dialogbox
+            $(".ui-dialog-titlebar").hide();
+		}else{
+			showError('Please select at least one enrollment to be deleted!');
+		}
+    });
 });
