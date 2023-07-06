@@ -43,6 +43,7 @@ use App\Http\Controllers\SectionMonitoringController;
 use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
 use App\Http\Controllers\ClassesSlotsMonitoringController;
+use App\Http\Controllers\UnsavedEnrollmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -245,6 +246,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:enrolments']], function () {
+
+        Route::get('/enrolments/unsaved', [UnsavedEnrollmentController::class, 'index']);
+        Route::post('/enrolments/filterunsavedenrollments', [UnsavedEnrollmentController::class, 'filterunsavedenrollments']);
+
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
         Route::post('/enrolments/studentenrollmentunitsallowed', [EnrollmentController::class, 'studentenrollmentunitsallowed']);
         Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
@@ -261,40 +266,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
         Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
         Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);
-        //Route::post('/enrolments/{enrollment}/saveenrollment', [EnrollmentController::class, 'saveenrollment']);
 
         Route::get('/enrolments/{student}/{period?}', [EnrollmentController::class, 'show']);
-
-
         Route::resource('enrolments', EnrollmentController::class)->missing(function (Request $request) {
             return Redirect::route('enrolments.index');
         });
+
+        
     });
 
     Route::group(['middleware' => ['inaccess:adddrop']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-        
-
-        // Route::post('/enrolments/studentenrollmentunitsallowed', [EnrollmentController::class, 'studentenrollmentunitsallowed']);
-        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
-        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
-        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
-        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
-
-        // // });
-       
-        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
-        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
-        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
-        // Route::get('/enrolments/searchandaddclasses', [EnrollmentController::class, 'searchandaddclasses']);
-        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
-        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
-        // Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);
-        // //Route::post('/enrolments/{enrollment}/saveenrollment', [EnrollmentController::class, 'saveenrollment']);
-
-        // Route::get('/enrolments/{student}/{period?}', [EnrollmentController::class, 'show']);
-
-
         Route::resource('adddrop', AdddropController::class)->missing(function (Request $request) {
             return Redirect::route('adddrop.index');
         });
@@ -302,23 +284,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:assessments']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-        
-
-        // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
-        // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
-        // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
-        // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
-
-        // // });
-       
-        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
-        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
-        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
-        
-        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
-        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
-        // Route::post('/enrolments/addselectedclasses', [EnrollmentController::class, 'addselectedclasses']);
-        // Route::post('/enrolments/{enrollment}/saveenrollment', [EnrollmentController::class, 'saveenrollment']);
 
         Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
         Route::post('/assessments/scheduletable', [AssessmentController::class, 'scheduletable']);
@@ -356,19 +321,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:scholarshipdiscounts']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-            // Route::post('/enrolments/checksectionslot', [EnrollmentController::class, 'checksectionslot']);
-            // Route::post('/enrolments/enrollsection', [EnrollmentController::class, 'enrollsection']);
-            // Route::post('/enrolments/enrollclasssubjects', [EnrollmentController::class, 'enrollclasssubjects']);
-            // Route::post('/enrolments/enrolledclasssubjects', [EnrollmentController::class, 'enrolledclasssubjects']);
+
         // // });
-       
-        // Route::post('/enrolments/getstudent', [EnrollmentController::class, 'getstudent']);
-        // Route::post('/enrolments/enrolmentinfo', [EnrollmentController::class, 'enrolmentinfo']);
-        // Route::delete('/enrolments/deleteenrolledsubjects', [EnrollmentController::class, 'deleteenrolledsubjects']);
-        //Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
-        // Route::post('/enrolments/searchclasssubject', [EnrollmentController::class, 'searchclasssubject']);
-        // Route::post('/enrolments/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
-        //Route::post('/studentledgers/statementofaccounts', [StudentledgerController::class, 'statementofaccounts']);
+
         Route::delete('/scholarshipdiscounts/{scholarshipdiscountgrant}/deletegrant', [ScholarshipdiscountController::class, 'deletegrant']);
         Route::get('/scholarshipdiscounts/grant', [ScholarshipdiscountController::class, 'grant']);
         Route::post('/scholarshipdiscounts/scholarshipdiscountgrants', [ScholarshipdiscountController::class, 'scholarshipdiscountgrants']);

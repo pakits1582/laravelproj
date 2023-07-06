@@ -5,22 +5,22 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Masterlist</h1>
-        <p class="mb-4">List of all students enrolled in the period.</p>
+        <h1 class="h3 mb-2 text-gray-800">Unsaved Enrollment</h1>
+        <p class="mb-4">List of all enrolment that are not saved or assessed.</p>
         
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Masterlist <span id="period_name">{{ session('periodname') }}</span></h1>
+                <h1 class="h3 text-800 text-primary mb-0">Unsaved Enrollment <span id="period_name">{{ session('periodname') }}</span></h1>
             </div>
             <div class="card-body">
-                <form method="POST" id="form_filtermasterlist" action="">
+                <form method="POST" id="form_filterunsavedenrollment" action="">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Period</label>
-                                <select name="period_id" class="form-control filter_item" id="period">
+                                <select name="period_id" class="form-control filter_item" id="period_id">
                                     @if ($periods)
                                         @foreach ($periods as $period)
                                             <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
@@ -64,52 +64,26 @@
                                     <option value="3">Third Year</option>
                                     <option value="4">Fourth Year</option>
                                     <option value="5">Fifth Year</option>
-                                    <option value="6">Sixth Year</option>
                                 </select>                        
                             </div>
                         </div>
                     </div>
                 </form>
-                <table id="scrollable_table" class="table table-sm table-striped table-bordered hover compact" style="width:100%; font-size:14px !important;">
-                    <thead>
-                        <tr>
-                            <th class="w70">#</th>
-                            <th class="w150">ID No.</th>
-                            <th class="w500">Name</th>
-                            <th class="w150">Program</th>
-                            <th class="w100">Year</th>
-                            <th class="w100">Units</th>
-                        </tr>
-                    </thead>
-                    <tbody id="return_masterlist">
-                        @include('masterlist.return_masterlist')
-                    </tbody>
-                </table>
+                <div id="return_unsaved_enrollment">
+                    @include('enrollment.unsaved.return_unsaved')
+                </div>
                 <div class="row mt-3 d-flex align-items-center">
                     <div class="col-md-2">
                         <div class="form-group">
-                            <h6 class="m-0 font-weight-bold text-primary">Total Students (<span id="totalcount">{{ count($masterlist) }}</span>)</h6>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="all"  class="m-0 font-weight-bold text-primary"><input type="radio" class="filter_item" name="status" value="2" id="all" checked> All </label>
-                            <label for="validated"  class="m-0 font-weight-bold text-primary"><input type="radio" class="filter_item" name="status" value="1" id="validated"> Validated </label>    
-                            <label for="unpaid"  class="m-0 font-weight-bold text-primary"><input type="radio" class="filter_item" name="status" value="0" id="unpaid"> Unpaid </label>    
+                            <h6 class="m-0 font-weight-bold text-primary">Total Students (<span id="totalcount">{{ count($unsaved_enrollments) }}</span>)</h6>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" id="print_masterlist" class="btn btn-danger btn-icon-split actions mb-2">
+                        <button type="submit" id="delete_selected_unsaved" class="btn btn-danger btn-icon-split mb-2">
                             <span class="icon text-white-50">
-                                <i class="fas fa-print"></i>
+                                <i class="fas fa-trash"></i>
                             </span>
-                            <span class="text">Print PDF</span>
-                        </button>
-                        <button type="submit" id="download_masterlist" class="btn btn-success btn-icon-split actions mb-2">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-download"></i>
-                            </span>
-                            <span class="text">Download Excel</span>
+                            <span class="text">Delete Selected</span>
                         </button>
                     </div>
                 </div>

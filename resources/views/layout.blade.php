@@ -33,11 +33,12 @@
                         @isset($configuration)
                             {{ asset('images/'.$configuration->logo) }}
                         @endisset" 
-                        height="40" alt="Logo">
+                        height="60" alt="Logo">
                 </div>
                 <div class="col-xs-6 pl-2">  
                     <h3 class="mb-0 text-gray-800">{{ ($configuration) ? $configuration->name : '' }}</h3>
-                    <h6 class="text-primary font-italic">{{ ($configuration) ? $configuration->address : '' }}</h6>
+                    <h6 class="text-primary font-italic mb-0">{{ ($configuration) ? $configuration->address : '' }}</h6>
+                    <h6 class="text-black font-bold mb-0" style="font-size: 12px;">{{ config('app.name') }}</h6>
                 </div>
             </div>
         </div>

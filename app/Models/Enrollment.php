@@ -41,6 +41,11 @@ class Enrollment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function enrolledby()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
     public function scopeAssessed($query)
     {
         return $query->where('assessed', 1);
