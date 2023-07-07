@@ -5,8 +5,12 @@ $(function(){
 		}
 	});
 
+    $("#period, #program").select2({
+	    dropdownParent: $("#ui_content4")
+	});
+
     $('#scrollable_table').DataTable({
-        scrollY: '65vh',
+        scrollY: 400,
         scrollCollapse: true,
         paging: false,
         ordering: false,
@@ -22,8 +26,17 @@ $(function(){
             type: 'POST',
             data: postData,
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 $("#return_masterlist").html(response);
+
+                $('#scrollable_table').DataTable({
+                    scrollY: 400,
+                    scrollCollapse: true,
+                    paging: false,
+                    ordering: false,
+                    info: false,
+                    searching: false
+                });
                 
                 var rowCount = $('#return_masterlist >tr.returned').length;
 				$("#totalcount").text(rowCount);

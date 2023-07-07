@@ -70,21 +70,9 @@
                         </div>
                     </div>
                 </form>
-                <table id="scrollable_table" class="table table-sm table-striped table-bordered hover compact" style="width:100%; font-size:14px !important;">
-                    <thead>
-                        <tr>
-                            <th class="w70">#</th>
-                            <th class="w150">ID No.</th>
-                            <th class="w500">Name</th>
-                            <th class="w150">Program</th>
-                            <th class="w100">Year</th>
-                            <th class="w100">Units</th>
-                        </tr>
-                    </thead>
-                    <tbody id="return_masterlist">
-                        @include('masterlist.return_masterlist')
-                    </tbody>
-                </table>
+                <div id="return_masterlist">
+                    @include('masterlist.return_masterlist')
+                </div>
                 <div class="row mt-3 d-flex align-items-center">
                     <div class="col-md-2">
                         <div class="form-group">
