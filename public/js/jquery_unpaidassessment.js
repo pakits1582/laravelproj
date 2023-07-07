@@ -20,15 +20,15 @@ $(function(){
         searching: false
     });
 
-    function returnUnsavedEnrollments(postData)
+    function returnUnpaidAssessments(postData)
     {
         $.ajax({
-            url: "/enrolments/filterunsavedenrollments",
+            url: "/assessments/filterunpaidassessments",
             type: 'POST',
             data: postData,
             success: function(response){
                 console.log(response);
-                $("#return_unsaved_enrollment").html(response);
+                $("#return_unpaid_assessments").html(response);
                 
                 $('#scrollable_table').DataTable({
                     scrollY: 400,
@@ -52,14 +52,14 @@ $(function(){
         });
     }
 
-    $("#form_filterunsavedenrollment").submit(function(e){
+    $("#form_filterunpaidassessment").submit(function(e){
         e.preventDefault();
     });
 
     $(document).on("change", ".filter_item", function(){
-        var postData = $("#form_filterunsavedenrollment").serializeArray();
+        var postData = $("#form_filterunpaidassessment").serializeArray();
         
-        returnUnsavedEnrollments(postData);
+        returnUnpaidAssessments(postData);
     });
 
     $(document).on("change", "#period_id", function(){
@@ -67,7 +67,7 @@ $(function(){
         $("#period_name").text(period_name);
     });
 
-    $(document).on("change",".checkedunsaved", function(){
+    $(document).on("change",".checkedunpaid", function(){
 		if($(this).is(':checked')){
 			$(this).closest('tr').addClass('selected');
 		}else{	
@@ -76,16 +76,16 @@ $(function(){
 	});
 
     $(document).on("click", "#check_all", function(){
-		var enrollments = $(".checkedunsaved").length;
+		var enrollments = $(".checkedunpaid").length;
 
 		if(enrollments != 0){
 			if($(this).is(':checked')){
-				$('.checkedunsaved').each(function(i, obj) {
+				$('.checkedunpaid').each(function(i, obj) {
 					$(this).prop('checked',true);
 					$(this).closest('tr').addClass('selected');
 				});
 			}else{
-				$('.checkedunsaved').each(function(i, obj) {
+				$('.checkedunpaid').each(function(i, obj) {
 					$(this).prop('checked',false);
 					$(this).closest('tr').removeClass('selected');
 				});
@@ -96,8 +96,8 @@ $(function(){
 		}
 	});
 
-    $(document).on("click", "#delete_selected_unsaved", function(){
-        var enrollments = $(".checkedunsaved:checked").length;
+    $(document).on("click", "#delete_selected_unpaid", function(){
+        var enrollments = $(".checkedunpaid:checked").length;
 
 		if(enrollments != 0)
         {
@@ -116,13 +116,13 @@ $(function(){
                             $("#confirmation").dialog('close');
 
                             var enrollment_ids = [];
-                            $(".checkedunsaved:checked").each(function() {
+                            $(".checkedunpaid:checked").each(function() {
                                 enrollment_id = $(this).attr('value');
                                 enrollment_ids.push(enrollment_id);
                             });
 
                             $.ajax({
-                                url: "/enrolments/deleteunsavedenrollments",
+                                url: "/assessments/deleteunpaidassessments",
                                 type: 'DELETE',
                                 data: ({"enrollment_ids": enrollment_ids}),
                                 success: function(response){
@@ -130,15 +130,15 @@ $(function(){
                                     if(response.success == false)
                                     {
                                         showError(response.message);
-                                        $('.checkedunsaved').each(function(i, obj) {
+                                        $('.checkedunpaid').each(function(i, obj) {
                                             $(this).prop('checked',false);
                                             $(this).closest('tr').removeClass('selected');
                                         });
                                     }else{
                                         showSuccess(response.message);
-                                        var postData = $("#form_filterunsavedenrollment").serializeArray();
+                                        var postData = $("#form_filterunpaidassessment").serializeArray();
         
-                                        returnUnsavedEnrollments(postData);
+                                        returnUnpaidAssessments(postData);
                                     }
                                 },
                                 error: function (data) {
@@ -159,7 +159,7 @@ $(function(){
 		}
     });
 
-    $(document).on("click", ".view_classes_unsaved", function(e){
+    $(document).on("click", ".view_classes_unpaid", function(e){
         e.stopPropagation();
         var enrollment_id = $(this).attr("id");
 

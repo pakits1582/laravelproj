@@ -1,20 +1,20 @@
 @extends('layout')
-@section('title') {{ 'Unsaved Enrollment' }} @endsection
+@section('title') {{ 'Unpaid Assessment' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Unsaved Enrollment</h1>
-        <p class="mb-4">List of all enrolment that are not saved or assessed.</p>
+        <h1 class="h3 mb-2 text-gray-800">Unpaid Assessment</h1>
+        <p class="mb-4">List of all enrolment that are assessed but not validated.</p>
         
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Unsaved Enrollment <span id="period_name">{{ session('periodname') }}</span></h1>
+                <h1 class="h3 text-800 text-primary mb-0">Unpaid Assessment <span id="period_name">{{ session('periodname') }}</span></h1>
             </div>
             <div class="card-body">
-                <form method="POST" id="form_filterunsavedenrollment" action="">
+                <form method="POST" id="form_filterunpaidassessment" action="">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -69,17 +69,17 @@
                         </div>
                     </div>
                 </form>
-                <div id="return_unsaved_enrollment">
-                    @include('enrollment.unsaved.return_unsaved')
+                <div id="return_unpaid_assessments">
+                    @include('assessment.unpaid.return_unpaid')
                 </div>
                 <div class="row mt-3 d-flex align-items-center">
                     <div class="col-md-2">
                         <div class="form-group">
-                            <h6 class="m-0 font-weight-bold text-primary">Total Students (<span id="totalcount">{{ count($unsaved_enrollments) }}</span>)</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Total Students (<span id="totalcount">{{ count($unpaid_assessments) ?? 0 }}</span>)</h6>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <button type="button" id="delete_selected_unsaved" class="btn btn-danger btn-icon-split mb-2">
+                        <button type="button" id="delete_selected_unpaid" class="btn btn-danger btn-icon-split mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-trash"></i>
                             </span>

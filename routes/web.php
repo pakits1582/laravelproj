@@ -38,12 +38,13 @@ use App\Http\Controllers\ClassesMergingController;
 use App\Http\Controllers\GeneralScheduleController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\StudentScheduleController;
+use App\Http\Controllers\UnpaidAssessmentController;
 use App\Http\Controllers\EnrollmentSummaryController;
 use App\Http\Controllers\SectionMonitoringController;
 use App\Http\Controllers\StudentadjustmentController;
+use App\Http\Controllers\UnsavedEnrollmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
 use App\Http\Controllers\ClassesSlotsMonitoringController;
-use App\Http\Controllers\UnsavedEnrollmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -250,7 +251,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/enrolments/unsaved', [UnsavedEnrollmentController::class, 'index']);
         Route::post('/enrolments/filterunsavedenrollments', [UnsavedEnrollmentController::class, 'filterunsavedenrollments']);
         Route::delete('/enrolments/deleteunsavedenrollments', [UnsavedEnrollmentController::class, 'deleteunsavedenrollments']);
-        Route::get('/enrolments/{enrollment}/viewclassesunsaved', [UnsavedEnrollmentController::class, 'viewclassesunsaved']);
+        Route::get('/enrolments/{enrollment}/viewclassesenrolled', [UnsavedEnrollmentController::class, 'viewclassesenrolled']);
 
 
 
@@ -288,6 +289,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:assessments']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
+        Route::get('/assessments/unpaid', [UnpaidAssessmentController::class, 'index']);
+        Route::post('/assessments/filterunpaidassessments', [UnpaidAssessmentController::class, 'filterunpaidassessments']);
+        Route::delete('/assessments/deleteunpaidassessments', [UnpaidAssessmentController::class, 'deleteunpaidassessments']);
+
 
         Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
         Route::post('/assessments/scheduletable', [AssessmentController::class, 'scheduletable']);
