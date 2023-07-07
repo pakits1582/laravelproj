@@ -226,8 +226,20 @@ $(function(){
                 url: "/students/"+student_id,
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
                 success: function(response){
                     console.log(response);
+                    $("#confirmation").dialog('close');
                     if(response.data.success === false)
                     {
                         showError(response.data.message);
@@ -239,6 +251,7 @@ $(function(){
                 },
                 error: function (data) {
                     console.log(data);
+                    $("#confirmation").dialog('close');
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) === false) {
                         showError('Something went wrong! Can not perform requested action!');
@@ -885,12 +898,11 @@ $(function(){
     });
 
     $(document).on("click", "#save_enrollment", function(e){
-        // var conflicts = $("#mayconflict").val();
+        var conflicts = $("#has_conflict").val();
 
-		// if(conflicts > 0){
-		// 	showError('There are conflict subjects, please check before saving!');
-		// }else{
-			//alert('saveenrollment');
+		if(conflicts > 0){
+			showError('There are conflict subjects, please check before saving!');
+		}else{
 			var checkboxes = $(".select_enrolled_class");
 
 			if(checkboxes.length == 0)
@@ -901,7 +913,7 @@ $(function(){
 				$("#form_enrollment").submit();
 			}
 			
-		//}		
+		}		
         e.preventDefault();
     });
 

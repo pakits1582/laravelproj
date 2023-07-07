@@ -19,7 +19,7 @@
             @foreach ($unsaved_enrollments as $enrollment)
                 <tr class="label">
                     <td class="mid">
-                        <input type="checkbox" name="enrollment_ids[]" value="{{  $enrollment->id }}" class="checkedunsaved" id="" />
+                        <input type="checkbox" name="enrollment_ids[]" value="{{ $enrollment->id }}" class="checkedunsaved" id="" />
                     </td>
                     <td class="">{{ $loop->iteration }}</td>
                     <td class="">{{ $enrollment->student->user->idno }}</td>
@@ -30,7 +30,11 @@
                     <td class="mid">{{ $enrollment->enrolled_classes_count }}</td>
                     <td class="mid">{{ $enrollment->enrolledby->idno }}</td>
                     <td class="mid">{{ \Carbon\Carbon::parse($enrollment->created_at)->format('F d, Y') }}</td>
-                    <td></td>
+                    <td class="mid">
+                        <a href="#" id="{{ $enrollment->id }}" class="btn btn-success btn-circle btn-sm view_classes_unsaved" title="View Enrolled Classes">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </td>
                 </tr>
             @endforeach
         @else

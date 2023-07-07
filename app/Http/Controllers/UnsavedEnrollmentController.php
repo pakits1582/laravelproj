@@ -68,6 +68,49 @@ class UnsavedEnrollmentController extends Controller
 
     public function deleteunsavedenrollments(Request $request)
     {
-        return $request;
+        try {
+          
+            $enrollments = Enrollment::whereIn("id", $request->enrollment_ids)->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Selected unsaved enrollments successfully deleted!',
+                'alert' => 'alert-success',
+                'status' => 200
+            ]);
+
+        } catch (\Exception $e) {
+        
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Can not perform requested action!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
+        }
+    }
+
+    public function viewclassesunsaved(Enrollment $enrollment)
+    {
+        try {
+            $enrollment->load([
+                'enrolled_classes',
+                'enrolled_classes.class.curriculumsubject.subjectinfo',
+                'enrolled_classes.class.sectioninfo',
+                'enrolled_classes.class.schedule',
+            ]);
+
+            return view('enrollment.unsaved.viewclasses', compact('enrollment'));
+
+        } catch (\Exception $e) {
+        
+            return [
+                'success' => false,
+                'message' => 'Something went wrong! Can not perform requested action!',
+                'alert' => 'alert-danger',
+                'status' => 401
+            ];
+        }
+
     }
 }

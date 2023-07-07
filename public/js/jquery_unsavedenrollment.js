@@ -77,6 +77,7 @@ $(function(){
 
     $(document).on("click", "#check_all", function(){
 		var enrollments = $(".checkedunsaved").length;
+
 		if(enrollments != 0){
 			if($(this).is(':checked')){
 				$('.checkedunsaved').each(function(i, obj) {
@@ -126,18 +127,19 @@ $(function(){
                                 data: ({"enrollment_ids": enrollment_ids}),
                                 success: function(response){
                                     console.log(response);
-                                    // $("#return_unsaved_enrollment").html(response);
-                                    
-                                    // $('#scrollable_table').DataTable({
-                                    //     scrollY: 400,
-                                    //     scrollX: true,
-                                    //     scrollCollapse: true,
-                                    //     paging: false,
-                                    //     ordering: false,
-                                    //     info: false,
-                                    //     searching: false
-                                    // });
-                    
+                                    if(response.success == false)
+                                    {
+                                        showError(response.message);
+                                        $('.checkedunsaved').each(function(i, obj) {
+                                            $(this).prop('checked',false);
+                                            $(this).closest('tr').removeClass('selected');
+                                        });
+                                    }else{
+                                        showSuccess(response.message);
+                                        var postData = $("#form_filterunsavedenrollment").serializeArray();
+        
+                                        returnUnsavedEnrollments(postData);
+                                    }
                                 },
                                 error: function (data) {
                                     //console.log(data);
@@ -155,5 +157,30 @@ $(function(){
 		}else{
 			showError('Please select at least one enrollment to be deleted!');
 		}
+    });
+
+    $(document).on("click", ".view_classes_unsaved", function(e){
+        e.stopPropagation();
+        var enrollment_id = $(this).attr("id");
+
+        $.ajax({
+            url: "/enrolments/"+enrollment_id+"/viewclassesunsaved",
+            type: 'GET',
+            success: function(data){   
+                console.log(data);  
+                if(data.success == false)
+                {
+                    showError(data.message);
+                }else{
+                    $('#modal_container').html(data);
+                    $("#view_classes_modal").modal('show');
+                }          
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+
+        e.preventDefault();
     });
 });
