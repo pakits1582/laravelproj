@@ -20,7 +20,7 @@ class UnsavedEnrollmentController extends Controller
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
 
-        $unsaved_enrollments =$this->unsavedenrollments(session('current_period'));
+        $unsaved_enrollments = $this->unsavedenrollments(session('current_period'));
         
         return view('enrollment.unsaved.index', compact('periods', 'programs', 'unsaved_enrollments'));
     }
@@ -61,7 +61,7 @@ class UnsavedEnrollmentController extends Controller
 
     public function filterunsavedenrollments(Request $request)
     {
-        $unsaved_enrollments =$this->unsavedenrollments($request->period_id, $request->educational_level, $request->college, $request->program_id, $request->year_level);
+        $unsaved_enrollments = $this->unsavedenrollments($request->period_id, $request->educational_level, $request->college, $request->program_id, $request->year_level);
         
         return view('enrollment.unsaved.return_unsaved', compact('unsaved_enrollments'));
     }

@@ -45,6 +45,7 @@ use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\UnsavedEnrollmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
 use App\Http\Controllers\ClassesSlotsMonitoringController;
+use App\Http\Controllers\ReassessmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -523,6 +524,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/classlists/transfer', [ClassListController::class, 'transfer']);
         Route::post('/classlists/searchtransfertoclass', [ClassListController::class, 'searchtransfertoclass']);
         Route::post('/classlists/savetransferstudents', [ClassListController::class, 'savetransferstudents']);
+
+    });
+
+    Route::group(['middleware' => ['inaccess:reassessments']], function () {
+        Route::get('/reassessments', [ReassessmentController::class, 'index']);
+       
 
     });
 
