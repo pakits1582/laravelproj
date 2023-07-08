@@ -15,6 +15,9 @@ $(function(){
         return {
             extend: 'pdfHtml5',
             download: 'open',
+            filename: 'masterlist_pdf',
+            orientation: 'landscape', //portrait
+            pageSize: 'A4', //A3 , A5 , A6 , legal , letter
             exportOptions: {
             columns: ':visible',
             rows: ':visible'
@@ -27,6 +30,10 @@ $(function(){
       
     function customizePDFAlignment(doc) {
         doc.content[1].table.widths = ['5%', '15%', '48%', '20%', '5%', '7%'];
+        doc.content[1].table.body[0].forEach(function(h) 
+        {
+            h.fillColor = 'gray';
+        });
 
         var tableBody = doc.content[1].table.body;
 
