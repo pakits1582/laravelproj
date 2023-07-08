@@ -17,7 +17,16 @@ class MasterlistController extends Controller
     {
         $this->masterlistService = $masterlistService;
 
-        Helpers::setLoad(['jquery_masterlist.js', 'select2.full.min.js']);
+        Helpers::setLoad([
+            'jquery_masterlist.js', 
+            'select2.full.min.js',
+            'datatables/dataTables.buttons.min.js',
+            'datatables/pdfmake.min.js',
+            'datatables/buttons.html5.min.js',
+            'datatables/buttons.print.min.js',
+            'datatables/jszip.min.js',
+            'datatables/vfs_fonts.js',
+        ]);
     }
     /**
      * Display a listing of the resource.

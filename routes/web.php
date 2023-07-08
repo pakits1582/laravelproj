@@ -529,7 +529,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:reassessments']], function () {
         Route::get('/reassessments', [ReassessmentController::class, 'index']);
-       
+        Route::post('/reassessments/filterenrolled', [ReassessmentController::class, 'filterenrolled']);
+
 
     });
 

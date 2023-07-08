@@ -28,4 +28,13 @@ class ReassessmentController extends Controller
         
         return view('reassessment.index', compact('periods', 'programs', 'enrolled_students'));
     }
+
+    public function filterenrolled(Request $request)
+    {
+        $enrolled_students = $this->reassessmentService->enrolledstudents($request->period_id, $request->educational_level, $request->college, $request->program_id, $request->year_level);
+
+        return response()->json(['enrolled_count' => count($enrolled_students) ?? 0]); 
+    }
+
+
 }

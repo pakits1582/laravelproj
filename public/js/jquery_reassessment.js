@@ -20,26 +20,17 @@ $(function(){
         searching: false
     });
 
-    function returnUnpaidAssessments(postData)
+    function returnEnrolledStudents(postData)
     {
         $.ajax({
-            url: "/assessments/filterunpaidassessments",
+            url: "/reassessments/filterenrolled",
             type: 'POST',
             data: postData,
+            dataType: 'json',
             success: function(response){
                 console.log(response);
-                $("#return_unpaid_assessments").html(response);
-                
-                $('#scrollable_table').DataTable({
-                    scrollY: 400,
-                    scrollX: true,
-                    scrollCollapse: true,
-                    paging: false,
-                    ordering: false,
-                    info: false,
-                    searching: false
-                });
-
+                //$("#return_unpaid_assessments").html(response);
+                $("#enrolled_students").html(response.enrolled_count);
             },
             error: function (data) {
                 //console.log(data);
@@ -52,14 +43,14 @@ $(function(){
         });
     }
 
-    $("#form_filterunpaidassessment").submit(function(e){
+    $("#form_filterenrolledstudents").submit(function(e){
         e.preventDefault();
     });
 
     $(document).on("change", ".filter_item", function(){
-        var postData = $("#form_filterunpaidassessment").serializeArray();
+        var postData = $("#form_filterenrolledstudents").serializeArray();
         
-        returnUnpaidAssessments(postData);
+        returnEnrolledStudents(postData);
     });
 
     $(document).on("change", "#period_id", function(){

@@ -14,7 +14,7 @@
                 <h1 class="h3 text-800 text-primary mb-0">Reassessment <span id="period_name">{{ session('periodname') }}</span></h1>
             </div>
             <div class="card-body">
-                <form method="POST" id="form_filtereassessment" action="">
+                <form method="POST" id="form_filterenrolledstudents" action="">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -69,6 +69,34 @@
                         </div>
                     </div>
                 </form>
+                <div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="m-0 font-weight-bold text-black mb-3">Total Enrolled Students (<span id="enrolled_students">{{ count($enrolled_students) }}</span>)</h3>
+                            <label for="withsubjects" class="m-0 font-weight-bold text-primary mb-3">
+                                <input type="checkbox" name="withsubjects" id="withsubjects" value="1">
+                                Reassessment include subjects enrolled
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" id="reassess_students" class="btn btn-success btn-icon-split mb-2">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-share"></i>
+                                </span>
+                                <span class="text">Reassess Students</span>
+                            </button>
+                    
+                            <button type="button" id="reassess_students" class="btn btn-primary btn-icon-split mb-2">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-recycle"></i>
+                                </span>
+                                <span class="text">Recompute Payments</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
