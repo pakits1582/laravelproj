@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use FPDF;
 use App\Libs\Helpers;
+use App\Models\Period;
 use App\Models\Program;
 use Illuminate\Http\Request;
+use App\Models\Configuration;
 use App\Services\PeriodService;
 use App\Services\ProgramService;
 use App\Services\MasterlistService;
+
 
 class MasterlistController extends Controller
 {
@@ -49,69 +53,24 @@ class MasterlistController extends Controller
         return view('masterlist.return_masterlist', compact('masterlist'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function printmasterlist(Request $request)
     {
-        //
-    }
+        $masterlist = $this->masterlistService->masterList($request->period_id, $request->educational_level, $request->college, $request->program_id, $request->year_level, $request->status);
+        $configuration = Configuration::take(1)->first();
+        $period = Period::select('name')->find($request->period_id);
+       
+        switch ($request->status) {
+			case '2':
+				$display = 'All Students';
+				break;
+			case '1':
+				$display = 'Validated/Paid';
+				break;
+			case '0':
+				$display = 'Unpaid';
+				break;
+		}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('masterlist.print_masterlist', compact('masterlist', 'configuration', 'period', 'display'));
     }
 }

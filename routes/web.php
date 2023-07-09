@@ -485,6 +485,8 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:masterlist']], function () {
+        Route::post('/masterlist/printmasterlist', [MasterlistController::class, 'printmasterlist']);
+
         Route::post('/masterlist/filtermasterlist', [MasterlistController::class, 'filtermasterlist']);
         Route::resource('masterlist', MasterlistController::class)->missing(function (Request $request) {
             return Redirect::route('masterlist.index');

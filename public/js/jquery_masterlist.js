@@ -97,12 +97,18 @@ $(function(){
     }
 
     $(document).on("change", ".filter_item", function(){
-        var status = $('input[name="status"]:checked').val();
-
         var postData = $("#form_filtermasterlist").serializeArray();
-        postData.push({name:"status", value:status});
-        
-        //console.log(postData);
+       
         returnMasterlist(postData);
     })
+
+    $(document).on("click","#print_masterlist", function(){
+		$("#form_filtermasterlist").attr("action", "/masterlist/printmasterlist");
+		$("#form_filtermasterlist").submit();
+	});
+
+	// $(document).on("click", "#downloadexcel", function(e){
+	// 	$("#form_masterlist").attr("action",baseUrl+"/masterlist/downloadexcel");
+	// 	$("#form_masterlist").submit();
+	// });
 });
