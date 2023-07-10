@@ -8,7 +8,7 @@ class PDFHelpers
         // Calculate MultiCell with automatic or explicit line breaks height
         // $border is un-used, but I kept it in the parameters to keep the call
         //   to this function consistent with MultiCell()
-        $cw = &$pdf->CurrentFont['cw'];
+        $cw = $pdf->CurrentFont['cw'];
         if($w==0)
             $w = $pdf->w-$pdf->rMargin-$pdf->x;
         $wmax = ($w-2*$pdf->cMargin)*1000/$pdf->FontSize;

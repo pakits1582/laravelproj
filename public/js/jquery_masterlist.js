@@ -53,10 +53,10 @@ $(function(){
         ordering: false,
         info: false,
         searching: false,
-        dom: 'Bfrtip',
-        buttons: [
-            getPDFButtonConfig(),
-        ]
+        // dom: 'Bfrtip',
+        // buttons: [
+        //     getPDFButtonConfig(),
+        // ]
     });
 
     function returnMasterlist(postData)
@@ -76,10 +76,10 @@ $(function(){
                     ordering: false,
                     info: false,
                     searching: false,
-                    dom: 'Bfrtip',
-                    buttons: [
-                        getPDFButtonConfig(),
-                    ]
+                    // dom: 'Bfrtip',
+                    // buttons: [
+                    //     getPDFButtonConfig(),
+                    // ]
                 });
                 
                 var rowCount = $('#return_masterlist >tr.returned').length;
