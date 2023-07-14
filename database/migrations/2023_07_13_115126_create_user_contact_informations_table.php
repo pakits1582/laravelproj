@@ -13,17 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('student_profiles', function (Blueprint $table) {
+        Schema::create('user_contact_informations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('student_id')->index();
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->string('picture', 150)->nullable();
-            $table->string('civil_status', 30)->nullable();
-            $table->date('birth_date')->nullable();
-            $table->string('birth_place')->nullable();
-            $table->string('nationality', 150)->nullable();
-            $table->string('religion', 100)->nullable();
-            $table->string('religion_specify', 150)->nullable();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+           
             $table->string('current_region', 100)->nullable();
             $table->string('current_province', 100)->nullable();
             $table->string('current_municipality', 100)->nullable();
@@ -42,9 +36,9 @@ return new class extends Migration
             $table->string('mobileno', 20)->nullable();
             $table->string('telno', 20)->nullable();
 
-
-
-
+            $table->string('notify_person')->nullable();
+            $table->string('notify_contactno', 20)->nullable();
+            $table->string('notify_address')->nullable();
 
             $table->timestamps();
         });
