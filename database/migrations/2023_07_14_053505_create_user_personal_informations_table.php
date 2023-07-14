@@ -25,6 +25,10 @@ return new class extends Migration
             $table->string('religion', 100)->nullable();
             $table->string('religion_specify', 150)->nullable();
 
+            $table->boolean('baptism')->default(0);
+            $table->boolean('communion')->default(0);
+            $table->boolean('confirmation')->default(0);
+
             $table->boolean('father_alive')->default(0);
             $table->string('father_name')->nullable();
             $table->string('father_address')->nullable();

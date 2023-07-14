@@ -18,6 +18,30 @@ return new class extends Migration
             $table->unsignedBigInteger('student_id')->index();
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             
+            $table->boolean('is_alsfinisher')->default(0);
+            $table->string('elem_school')->nullable();
+            $table->string('elem_address')->nullable();
+            $table->string('elem_period', 50)->nullable();
+
+            $table->string('jhs_school')->nullable();
+            $table->string('jhs_address')->nullable();
+            $table->string('jhs_period', 50)->nullable();
+
+            $table->string('shs_school')->nullable();
+            $table->string('shs_address')->nullable();
+            $table->string('shs_period', 50)->nullable();
+            $table->string('shs_strand')->nullable();
+            $table->string('shs_techvoc_specify')->nullable();
+
+            $table->string('college_school')->nullable();
+            $table->string('college_address')->nullable();
+            $table->string('college_period', 50)->nullable();
+
+            $table->string('graduate_school')->nullable();
+            $table->string('graduate_program')->nullable();
+            $table->string('graduate_address')->nullable();
+            $table->string('graduate_period', 50)->nullable();
+
             $table->timestamps();
         });
     }

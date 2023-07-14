@@ -24,8 +24,8 @@ return new class extends Migration
             $table->date('admission_date')->nullable();
             $table->date('entry_date')->nullable();
             $table->string('entry_data')->nullable();
-            $table->unsignedBigInteger('entry_period')->index();
-            $table->foreign('entry_period')->references('id')->on('periods')->nullOnDelete();
+            $table->unsignedBigInteger('entry_period')->index()->nullable();
+            $table->foreign('entry_period')->references('id')->on('periods');
 
             $table->unsignedBigInteger('assessed_by')->index()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
