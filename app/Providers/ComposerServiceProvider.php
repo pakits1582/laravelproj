@@ -35,6 +35,6 @@ class ComposerServiceProvider extends ServiceProvider
         View::composer('partials.departments.*', DepartmentComposer::class);
         View::composer('partials.programs.*', ProgramComposer::class);
         View::composer('partials.periods.*', PeriodComposer::class);
-        View::composer('layout', ConfigurationComposer::class);
+        View::composer(['layout', 'auth.*'], ConfigurationComposer::class);
     }
 }

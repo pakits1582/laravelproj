@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
+use App\Models\Configuration;
 use App\Services\PeriodService;
 use App\Services\ProgramService;
 use App\Services\ApplicationService;
@@ -26,5 +27,13 @@ class ApplicationController extends Controller
         $applicants = $this->applicationService->applicants(session('current_period'));
         
         return view('application.index', compact('periods', 'programs', 'applicants'));
+    }
+
+    public function onlineapplication()
+    {
+        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
+        $configuration = Configuration::take(1)->first();
+
+        return view('application.online_application', compact('programs', 'configuration'));
     }
 }

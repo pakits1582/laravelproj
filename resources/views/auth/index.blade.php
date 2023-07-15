@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="utf-8">
@@ -23,23 +22,40 @@
 </head>
 
 <body class="bg-gradient-primary">
-
+    <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
+        <!-- Topbar Search -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-6 my-auto p-2">
+                    <img src="
+                        @isset($configuration)
+                            {{ asset('images/'.$configuration->logo) }}
+                        @endisset" 
+                        height="60" alt="Logo">
+                </div>
+                <div class="col-xs-6 pl-2">  
+                    <h3 class="mb-0 text-gray-800">{{ ($configuration) ? $configuration->name : '' }}</h3>
+                    <h6 class="text-primary font-italic mb-0">{{ ($configuration) ? $configuration->address : '' }}</h6>
+                    <h6 class="text-black font-bold mb-0" style="font-size: 12px;">{{ config('app.name') }}</h6>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="container">
 
         <!-- Outer Row -->
         <div class="row justify-content-center">
 
-            <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="col-xl-12 col-lg-12 col-md-9">
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block"></div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-5">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Login SIAMS Account</h1>
+                                        <h1 class="h3 text-800 text-primary mb-4">Login Account</h1>
                                     </div>
                                     @if(Session::has('message'))
                                         <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
@@ -64,6 +80,30 @@
                                         </div>
                                         <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block" value="Login Account">
                                     </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 border-left-primary">
+                                <div class="card shadow m-4">
+                                    <div class="card-header py-3">
+                                        <h1 class="h3 text-800 text-primary mb-0">Online Application</h1>
+                                    </div>
+                                    <div class="card-body">
+                                        <h1 class="h3 text-900 text-primary mb-4 text-center">{{ $configuration->applicationperiod->name }}</h1>
+
+                                        @if ($configuration->status == 1)
+                                            <h4 class="text-900 text-danger mb-4 text-center">Application is closed!</h4>
+                                        @else
+                                            <div class="d-flex justify-content-center">
+                                                <a href="{{ url('/applications/onlineapplication') }}" class="btn btn-success btn-icon-split" id="">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-edit"></i>
+                                                    </span>
+                                                    <span class="text">Click here to apply</span>
+                                                </a>
+                                            </div>
+                                        @endif
+
+                                    </div>
                                 </div>
                             </div>
                         </div>

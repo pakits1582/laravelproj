@@ -63,6 +63,9 @@ use App\Http\Controllers\ReassessmentController;
 //     return view('auth.index');
 // });
 
+Route::get('/applications/onlineapplication', [ApplicationController::class, 'onlineapplication'])->name('onlineapplication');
+
+
 Route::get('/', [LoginController::class, 'index'])->name('loginindex');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
