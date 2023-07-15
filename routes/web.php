@@ -11,6 +11,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\AdddropController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\ProgramController;
@@ -532,8 +533,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['inaccess:reassessments']], function () {
         Route::get('/reassessments', [ReassessmentController::class, 'index']);
         Route::post('/reassessments/filterenrolled', [ReassessmentController::class, 'filterenrolled']);
+    });
 
-
+    Route::group(['middleware' => ['inaccess:applications']], function () {
+        Route::get('/applications', [ApplicationController::class, 'index']);
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
