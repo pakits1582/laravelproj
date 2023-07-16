@@ -107,6 +107,11 @@
                                     @include('application.partials.contact_information')
                                 </div>
                             </div>
+                            <div class="row m-0">
+                                <div class="col-lg-12">
+                                    @include('application.partials.academic_information')
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

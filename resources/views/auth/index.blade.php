@@ -82,8 +82,8 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-lg-7 border-left-primary">
-                                <div class="card shadow m-4">
+                            <div class="col-lg-7">
+                                <div class="card shadow m-4 border-left-primary">
                                     <div class="card-header py-3">
                                         <h1 class="h3 text-800 text-primary mb-0">Online Application</h1>
                                     </div>
