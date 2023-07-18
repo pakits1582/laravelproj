@@ -3,7 +3,7 @@
         <h4 class="m-0 font-weight-bold text-primary">Academic Information</h4>
     </div>
     <div class="card-body" id="">
-        <div class="form-group" id="postcharge_fees">
+        <div class="form-group" id="">
             <div class="row align-items-center mb-1">
                 <div class="col-md-1 d-none d-lg-block">
                     <h5 class="m-0 font-weight-bold text-success text-center">Level</h5>                
