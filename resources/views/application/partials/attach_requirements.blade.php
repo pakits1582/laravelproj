@@ -5,7 +5,7 @@
     <div class="card-body" id="">
         <div class="form-group" id="">
             <div class="row">
-                <div class="col-sm-4 mb-3">
+                <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2">
                             <h4 class="mb-2 font-weight-bold text-success">ID Picture Upload</h4>
@@ -35,9 +35,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 mb-3">
+                <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
-                        <div class="card-body p-2">
+                        <div class="card-body p-2 align-items-end">
                             <h4 class="mb-2 font-weight-bold text-success">Card/OTR Upload</h4>
                             <p class="m-0 font-italic text-info">
                                 Note: 
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 mb-3">
+                <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2">
                             <h4 class="mb-2 font-weight-bold text-success">Contact Details</h4>
@@ -77,6 +77,20 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="card m-3 border-left-info">
+                    <div class="card-body">
+                        <p class="font-italic font-weight-bold text-info" style="text-indent: 50px;">
+                            <input class="form-check-input" type="checkbox" id="agree">   
+                            I hereby certify that I have read and fully understood all instructions regarding my application for admission at Saint Louis College, and the information supplied in this application and the documents supporting it are correct and complete. I understand that incomplete or inaccurate information could be prejudicial to my admission and retention. If accepted as a student of Saint Louis College, I agree to abide by all policies and regulations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block" value="Submit Application">
+
         </div>
     </div>
 </div>

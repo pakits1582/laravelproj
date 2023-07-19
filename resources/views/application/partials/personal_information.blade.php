@@ -4,7 +4,7 @@
     </div>
     <div class="card-body" id="">
         <div class="form-group" id="postcharge_fees">
-            <p class="font-italic text-info text-small">Note: LEGAL NAME (Name on Birth Certificate)</p>
+            <p class="font-italic text-info">Note: LEGAL NAME (Name on Birth Certificate)</p>
             <div class="row align-items-center mb-1">
                 <div class="col-md-3 col-sm-3">
                     <label for="term" class="m-0 font-weight-bold text-primary">* Last Name</label>
@@ -92,7 +92,7 @@
                 </div>
             </div>
 
-            <p class="font-italic text-info text-small">Please mark whether you have received the following sacraments: (Mark N/A if no applicable)</p>
+            <p class="font-italic text-info">Please mark whether you have received the following sacraments: (Mark N/A if no applicable)</p>
 
             <div class="row align-items-center mb-2">
                 <div class="col-md-3 col-sm-3">

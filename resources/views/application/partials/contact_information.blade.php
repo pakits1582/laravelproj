@@ -4,7 +4,7 @@
     </div>
     <div class="card-body" id="">
         <div class="form-group" id="postcharge_fees">
-            <p class="font-italic text-info text-small mb-0">Note: Please provide your correct contact information and addresses.</p>
+            <p class="font-italic text-info mb-0">Note: Please provide your correct contact information and addresses.</p>
             <div class="row align-items-center mb-3">
                 <div class="col-md-12">
                     <h5 class="m-0 font-weight-bold text-success">Current Address</h5>
@@ -67,7 +67,7 @@
             <div class="row align-items-center mb-3">
                 <div class="col-md-12">
                     <h5 class="m-0 font-weight-bold text-success">Permanent Address</h5>
-                    <p class="font-italic text-info text-small mb-0">Note: (If not the same as current address)
+                    <p class="font-italic text-info mb-0">Note: (If not the same as current address)
                 </div>
             </div>
             <div class="row align-items-center mb-1">
