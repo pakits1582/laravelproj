@@ -18,7 +18,11 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('sbadmin/css/sb-admin-2.min.css') }}" rel="stylesheet">
-
+    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/buttons.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/ui-lightness/jquery-ui-1.10.4.custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
 
 <body class="bg-gradient-primary">
@@ -48,7 +52,8 @@
             <div class="col-xl-12 col-lg-12 col-md-9">
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-header py-3">
-                        <h1 class="h3 text-800 text-primary mb-0">Online Application for {{ $configuration->applicationperiod->name ?? '' }}</h1>
+                        <h4 class="m-0 font-weight-bold text-primary">Online Application for {{ $configuration->applicationperiod->name ?? '' }}</h4>
+
                     </div>
                     <div class="card-body p-0">
                         <form method="POST" id="form_application" action="">
@@ -117,6 +122,11 @@
                                     @include('application.partials.family_information')
                                 </div>
                             </div>
+                            <div class="row m-0">
+                                <div class="col-lg-12">
+                                    @include('application.partials.attach_requirements')
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -136,7 +146,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script>
-
+    <script src="{{ asset('js/jquery_application.js') }}"></script>
 </body>
 
 </html>
