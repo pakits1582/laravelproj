@@ -8,6 +8,7 @@ use App\Models\Configuration;
 use App\Services\PeriodService;
 use App\Services\ProgramService;
 use App\Services\ApplicationService;
+use Illuminate\Support\Facades\File;
 
 class ApplicationController extends Controller
 {
@@ -33,7 +34,8 @@ class ApplicationController extends Controller
     {
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
         $configuration = Configuration::take(1)->first();
+        $regions = json_decode(File::get(storage_path('app/region.json')), true);
 
-        return view('application.online_application', compact('programs', 'configuration'));
+        return view('application.online_application', compact('programs', 'configuration', 'regions'));
     }
 }

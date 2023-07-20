@@ -46,7 +46,6 @@
         </div>
     </nav>
     <div class="my-auto mx-auto" style="width: 95% !important;">
-
         <!-- Outer Row -->
         <div class="row justify-content-center">
             <div class="col-xl-12 col-lg-12 col-md-9">
@@ -136,16 +135,22 @@
         </div>
 
     </div>
-
+    <script>
+        var baseUrl = '{{ asset("") }}';
+    </script>
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('sbadmin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('sbadmin/js/jquery-ui.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="{{ asset('sbadmin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('js/moment.js') }}"></script>
+
+    <script src="{{ asset('js/common.js') }}"></script>
     <script src="{{ asset('js/jquery_application.js') }}"></script>
 </body>
 

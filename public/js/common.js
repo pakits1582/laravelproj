@@ -134,6 +134,7 @@ function ucwords(str,force){
 
 //DOCUMENT READY
 $(function(){
+
 /************************************
 *** FUNCTION CLOSE UI DIALOG BOX  ***
 ************************************/
@@ -381,5 +382,75 @@ $(function(){
         e.preventDefault();
     });
 
-    
+    $(document).on("change", ".region", function()
+    {
+        var idtag = $(this).attr("id").split('_')[0];
+        var region_code = $(this).val();
+
+        $("#"+idtag+"_province, #"+idtag+"_city, #"+idtag +"_barangay").find("option:gt(0)").remove();
+
+        var jsonUrl = baseUrl+'json/province.json';
+
+        $.getJSON(jsonUrl, function(data) {
+            var result = data.filter(function(value) {
+                return value.region_code == region_code;
+            });
+
+            result.sort(function(a, b) {
+                return a.province_name.localeCompare(b.province_name);
+            });
+
+            $.each(result, function(key, entry) {
+                $('#'+idtag+'_province').append($('<option></option>').attr('value', entry.province_code).text(entry.province_name));
+            })
+        });
+    });
+
+    $(document).on("change", ".province", function()
+    {
+        var idtag = $(this).attr("id").split('_')[0];
+        var province_code = $(this).val();
+
+        $("#"+idtag+"_municipality, #"+idtag +"_barangay").find("option:gt(0)").remove();
+
+        var jsonUrl = baseUrl+'json/city.json';
+
+        $.getJSON(jsonUrl, function(data) {
+            var result = data.filter(function(value) {
+                return value.province_code == province_code;
+            });
+
+            result.sort(function(a, b) {
+                return a.city_name.localeCompare(b.city_name);
+            });
+
+            $.each(result, function(key, entry) {
+                $('#'+idtag+'_municipality').append($('<option></option>').attr('value', entry.city_code).text(entry.city_name));
+            })
+        });
+    });
+
+    $(document).on("change", ".municipality", function()
+    {
+        var idtag = $(this).attr("id").split('_')[0];
+        var city_code = $(this).val();
+
+        $(" #"+idtag +"_barangay").find("option:gt(0)").remove();
+
+        var jsonUrl = baseUrl+'json/barangay.json';
+
+        $.getJSON(jsonUrl, function(data) {
+            var result = data.filter(function(value) {
+                return value.city_code  == city_code ;
+            });
+
+            result.sort(function(a, b) {
+                return a.brgy_name.localeCompare(b.brgy_name);
+            });
+
+            $.each(result, function(key, entry) {
+                $('#'+idtag+'_barangay').append($('<option></option>').attr('value', entry.brgy_code).text(entry.brgy_name));
+            })
+        });
+    });
 });

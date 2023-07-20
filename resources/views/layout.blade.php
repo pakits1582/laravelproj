@@ -169,6 +169,9 @@
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('sbadmin/js/demo/datatables-demo.js') }}"></script> --}}
+    <script>
+        var baseUrl = '{{ asset("") }}';
+    </script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/common.js') }}"></script>
     <script src="{{ asset('js/moment.js') }}"></script>

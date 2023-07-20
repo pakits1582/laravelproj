@@ -83,13 +83,13 @@
                     <div class="card-body">
                         <p class="font-italic font-weight-bold text-info" style="text-indent: 50px;">
                             <input class="form-check-input" type="checkbox" id="agree">   
-                            I hereby certify that I have read and fully understood all instructions regarding my application for admission at Saint Louis College, and the information supplied in this application and the documents supporting it are correct and complete. I understand that incomplete or inaccurate information could be prejudicial to my admission and retention. If accepted as a student of Saint Louis College, I agree to abide by all policies and regulations.
+                            I hereby certify that I have read and fully understood all instructions regarding my application for admission at {{ ($configuration) ? $configuration->name : '' }}, and the information supplied in this application and the documents supporting it are correct and complete. I understand that incomplete or inaccurate information could be prejudicial to my admission and retention. If accepted as a student of {{ ($configuration) ? $configuration->name : '' }}, I agree to abide by all policies and regulations.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block" value="Submit Application">
+            <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Submit Application">
 
         </div>
     </div>
