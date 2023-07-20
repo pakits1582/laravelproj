@@ -34,7 +34,7 @@ class ApplicationController extends Controller
     {
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
         $configuration = Configuration::take(1)->first();
-        $regions = json_decode(File::get(storage_path('app/region.json')), true);
+        $regions = json_decode(File::get(public_path('json/region.json')), true);
 
         return view('application.online_application', compact('programs', 'configuration', 'regions'));
     }
