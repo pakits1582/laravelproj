@@ -4,13 +4,16 @@
     </div>
     <div class="card-body" id="">
         <div class="form-group" id="postcharge_fees">
-            <p class="font-italic text-info">Note: LEGAL NAME (Name on Birth Certificate)</p>
+            <p class="font-italic font-weight-bold text-info">Note: LEGAL NAME (Name on Birth Certificate)</p>
             <div class="row align-items-center mb-1">
                 <div class="col-md-3 col-sm-3">
                     <label for="last_name" class="m-0 font-weight-bold text-primary">* Last Name</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="last_name" required placeholder="" class="form-control text-uppercase" id="last_name">
+                    <input type="text" name="last_name" required placeholder="" class="form-control text-uppercase" id="last_name" minlength="2" maxlength="255">
+                    @error('last_name')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -18,7 +21,10 @@
                     <label for="first_name" class="m-0 font-weight-bold text-primary">* First Name</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="first_name" required placeholder="" class="form-control text-uppercase" id="first_name">
+                    <input type="text" name="first_name" required placeholder="" class="form-control text-uppercase" id="first_name" minlength="2" maxlength="255">
+                    @error('first_name')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -26,7 +32,10 @@
                     <label for="middle_name" class="m-0 font-weight-bold text-primary">Middle Name</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="middle_name" placeholder="" class="form-control text-uppercase" id="middle_name">
+                    <input type="text" name="middle_name" placeholder="" class="form-control text-uppercase" id="middle_name" minlength="2" maxlength="255">
+                    @error('middle_name')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -42,6 +51,9 @@
                             <option value="{{ Helpers::romanic_number($x) }}">{{ Helpers::romanic_number($x) }}</option>
                         @endfor 
                     </select>
+                    @error('name_suffix')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -53,6 +65,9 @@
                         <option value="1">MALE</option>
                         <option value="2">FEMALE</option>                               
                     </select>
+                    @error('sex')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -69,6 +84,9 @@
                         <option value="DIVORCED">DIVORCED</option>
                         <option value="ANNULED">ANNULED</option>                  
                     </select>
+                    @error('civil_status')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -77,6 +95,9 @@
                 </div>
                 <div class="col-md-9 col-sm-9">
                     <input type="text" name="birth_date" required placeholder="" class="form-control" id="birth_date">
+                    @error('birth_date')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -85,6 +106,9 @@
                 </div>
                 <div class="col-md-9 col-sm-9">
                     <input type="text" name="birth_place" placeholder="(Municipality, Province)" class="form-control text-uppercase" id="birth_place">
+                    @error('birth_place')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -97,6 +121,9 @@
                          <option value="{{ $nationality }}">{{ $nationality }}</option>
                         @endforeach
                     </select>
+                    @error('nationality')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -127,17 +154,22 @@
                         <option value = "20">UCCP</option>
                         <option value = "14">Others</option>                                                                
                     </select>
+                    @error('religion')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
             <div class="row align-items-center mb-5">
                 <div class="col-md-3 col-sm-3"></div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="religion_specify" disabled placeholder="IF OTHERS, PLEASE SPECIFY" class="form-control text-uppercase" id="religion_specify">
+                    <input type="text" name="religion_specify" disabled placeholder="IF OTHERS, PLEASE SPECIFY" class="form-control text-uppercase" id="religion_specify"  minlength="2" maxlength="150">
+                    @error('religion_specify')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
                 </div>
             </div>
 
-            <p class="font-italic text-info">Please mark whether you have received the following sacraments: (Mark N/A if no applicable)</p>
-
+            <p class="font-italic font-weight-bold text-info">Please mark whether you have received the following sacraments: (Mark N/A if no applicable)</p>
             <div class="row align-items-center mb-2">
                 <div class="col-md-3 col-sm-3">
                     <label for="term" class="m-0 font-weight-bold text-primary">Baptism</label>

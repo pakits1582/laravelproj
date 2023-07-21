@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('shs_techvoc_specify')->nullable();
 
             $table->string('college_school')->nullable();
+            $table->string('college_program')->nullable();
             $table->string('college_address')->nullable();
             $table->string('college_period', 50)->nullable();
 

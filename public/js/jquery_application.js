@@ -5,6 +5,10 @@ $(function(){
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $("#period, #program_id, .region, .province, .municipality, .barangay").select2({
+	    dropdownParent: $("#ui_content4")
+	});
   
       //   var dataTable = $('#scrollable_table').DataTable({
       //       scrollY: 400,
@@ -29,9 +33,9 @@ $(function(){
 		var selected = $(this).val();
 
 		if(selected == 'TECH-VOC'){
-			$('#techvocspecify').attr("disabled",false).prop('required',true);
+			$('#techvoc_specify').attr("disabled",false).prop('required',true);
 		}else{
-			$('#techvocspecify').attr("disabled",true).val("").prop('required',false);
+			$('#techvoc_specify').attr("disabled",true).val("").prop('required',false);
 		}
 	});
 
@@ -45,7 +49,4 @@ $(function(){
 		}
 	});
 
-
-
 });
-  

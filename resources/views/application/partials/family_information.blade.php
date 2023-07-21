@@ -13,14 +13,14 @@
                                     <h4 class="mb-2 font-weight-bold text-success">Father</h4>
                                 </div>
                                 <div class="col-lg-7 col-sm-7">
-                                    <label for="confirmation_yes"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="confirmation" value="1" id="confirmation_yes" checked> Living </label>
-                                    <label for="confirmation_no"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="confirmation" value="2" id="confirmation_no"> Deceased </label>
+                                    <label for="fatheralive"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="father_alive" value="1" id="fatheralive" checked> Living </label>
+                                    <label for="fatherdeceased"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="father_alive" value="2" id="fatherdeceased"> Deceased </label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label for="period_id" class="m-0 font-weight-bold text-primary">Name</label>
-                                    <input type="text" name="keyword" placeholder="" class="form-control" id="keyword">
+                                    <input type="text" name="keyword" placeholder="" class="form-control text-uppercase" id="keyword">
                                 </div>
                                 <div class="col-lg-12">
                                     <label for="period_id" class="m-0 font-weight-bold text-primary">Contact Number</label>
