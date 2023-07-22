@@ -27,9 +27,12 @@
                             <div class="row align-items-center mt-2">
                                 <div class="col-md-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="imageInput" accept="image/*">
-                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                        <input type="file" name="picture" class="custom-file-input" id="picture" required accept="image/*">
+                                        <label class="custom-file-label" for="picture">Choose file</label>
                                     </div>
+                                    @error('picture')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -50,9 +53,12 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile">
-                                        <label class="custom-file-label" for="customFile">Multiple selection user ctrl+click </label>
+                                        <input type="file" class="custom-file-input" multiple name="report_card[]" id="report_card" required accept="image/*,application/pdf">
+                                        <label class="custom-file-label" for="report_card">Multiple selection user ctrl+click </label>
                                     </div>
+                                    @error('report_card')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -65,12 +71,18 @@
                             <p class="font-italic text-info">Note: Please provide a working email address where we will send your status of Application and a mobile/landline number for us to reach you.</p>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="period_id" class="m-0 font-weight-bold text-primary">E-mail Address</label>
-                                    <input type="text" name="keyword" placeholder="" class="form-control" id="keyword">
+                                    <label for="contact_email" class="m-0 font-weight-bold text-primary">E-mail Address</label>
+                                    <input type="email" name="contact_email" placeholder="" class="form-control" required id="contact_email">
+                                    @error('contact_email')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="period_id" class="m-0 font-weight-bold text-primary">Contact Number</label>
-                                    <input type="text" name="keyword" placeholder="" class="form-control" id="keyword">
+                                    <label for="contact_no" class="m-0 font-weight-bold text-primary">Contact Number</label>
+                                    <input type="text" name="contact_no" placeholder="" class="form-control" required id="contact_no" minlength="2" maxlength="30">
+                                    @error('contact_no')
+                                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -88,9 +100,7 @@
                     </div>
                 </div>
             </div>
-
             <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Submit Application">
-
         </div>
     </div>
 </div>

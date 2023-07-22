@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreApplicationRequest;
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Models\Configuration;
@@ -37,5 +38,10 @@ class ApplicationController extends Controller
         $regions = json_decode(File::get(public_path('json/region.json')), true);
 
         return view('application.online_application', compact('programs', 'configuration', 'regions'));
+    }
+
+    public function store(StoreApplicationRequest $request)
+    {
+        dd($request);
     }
 }

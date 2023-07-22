@@ -98,7 +98,7 @@
                     <label for="permanent_region" class="m-0 font-weight-bold text-primary">Region</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <select name="permanent_region" required class="form-control text-uppercase region" id="permanent_region">
+                    <select name="permanent_region" class="form-control text-uppercase region" id="permanent_region">
                         <option value="">- select region -</option>
                         @foreach ($regions as $region)
                             <option value="{{ $region['region_code'] }}" data-code="{{ $region['psgc_code'] }}">{{ $region['region_name'] }}</option>
@@ -127,7 +127,7 @@
                     <label for="permanent_municipality" class="m-0 font-weight-bold text-primary">City/Municipality</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <select name="permanent_municipality" required class="form-control text-uppercase municipality" id="permanent_municipality">
+                    <select name="permanent_municipality" class="form-control text-uppercase municipality" id="permanent_municipality">
                         <option value="">- select municipality -</option>                               
                     </select>
                     @error('permanent_municipality')
@@ -140,7 +140,7 @@
                     <label for="permanent_barangay" class="m-0 font-weight-bold text-primary">Barangay</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <select name="permanent_barangay" required class="form-control text-uppercase barangay" id="permanent_barangay">
+                    <select name="permanent_barangay" class="form-control text-uppercase barangay" id="permanent_barangay">
                         <option value="">- select barangay -</option>                               
                     </select>
                     @error('permanent_barangay')
@@ -153,7 +153,7 @@
                     <label for="permanent_address" class="m-0 font-weight-bold text-primary">House #, Street</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="permanent_address" placeholder="(House#, Street, Subd./Village)" required placeholder="" class="form-control text-uppercase" id="current_address" minlength="2" maxlength="255">
+                    <input type="text" name="permanent_address" placeholder="(House#, Street, Subd./Village)" placeholder="" class="form-control text-uppercase" id="current_address" minlength="2" maxlength="255">
                     @error('permanent_address')
                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                     @enderror
@@ -187,7 +187,7 @@
                     <label for="mobileno" class="m-0 font-weight-bold text-primary">* Mobile No.</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="mobileno" placeholder="" class="form-control" id="mobileno" minlength="11" maxlength="20">
+                    <input type="text" name="mobileno" required placeholder="" class="form-control" id="mobileno" minlength="11" maxlength="20">
                     @error('mobileno')
                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                     @enderror
@@ -198,7 +198,7 @@
                     <label for="email" class="m-0 font-weight-bold text-primary">* E-mail Address</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="email" placeholder="" class="form-control" id="email" maxlength="150">
+                    <input type="email" name="email" required placeholder="" class="form-control" id="email" maxlength="150">
                     @error('email')
                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                     @enderror

@@ -15,7 +15,7 @@
                         <h4 class="m-0 font-weight-bold text-primary">Online Application for {{ $configuration->applicationperiod->name ?? '' }}</h4>
                     </div>
                     <div class="card-body p-0">
-                        <form method="POST" id="form_application" action="">
+                        <form method="POST" id="form_application" action="{{ route('saveonlineapplication') }}">
                             @csrf
                             @include('application.partials.instruction_classification')
 
