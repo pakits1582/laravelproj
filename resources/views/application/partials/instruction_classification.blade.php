@@ -16,10 +16,11 @@
                 <div class="row pt-3">
                     <div class="col-md-9 col-sm-12">
                         <label for="idno" class="m-0 font-weight-bold text-primary">ID Number</label>
-                        <input type="text" name="idno" placeholder="" class="form-control" id="idno" minlength="8" maxlength="10">
+                        <input type="text" name="idno" value="{{ old('idno') }}" placeholder="" class="form-control" id="idno">
                         @error('idno')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                         @enderror
+                        <div id="error_idno" class="errors"></div>
                     </div>
                     <div class="col-md-3 d-none d-lg-block"></div>
                 </div>
@@ -28,14 +29,15 @@
                         <label for="classification" class="m-0 font-weight-bold text-primary">* Classification</label>
                         <select name="classification" required class="form-control text-uppercase" id="classification">
                             <option value="">- SELECT CLASSIFICATION -</option>
-                            <option value="1">NEW STUDENT</option>
-                            <option value="2">TRANSFEREE</option>
-                            <option value="3">READMIT</option>
-                            <option value="4">GRADUATED (New Program)</option>
+                            <option value="1" @if(old('classification') == 1) selected @endif>NEW STUDENT</option>
+                            <option value="2" @if(old('classification') == 2) selected @endif>TRANSFEREE</option>
+                            <option value="3" @if(old('classification') == 3) selected @endif>READMIT</option>
+                            <option value="4" @if(old('classification') == 4) selected @endif>GRADUATED (New Program)</option>
                         </select>
                         @error('classification')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                         @enderror
+                        <div id="error_classification" class="errors"></div>
                     </div>
                     <div class="col-md-3 d-none d-lg-block"></div>
                 </div>
@@ -64,7 +66,9 @@
                                         @endif
                                         <optgroup label="{{ $groupName }}">
                                     @endif
-                                    <option value="{{ $program->id }}">
+                                    <option value="{{ $program->id }}"
+                                        @if(old('program_id') == $program->id) selected @endif
+                                    >
                                         ({{ $program->code }}) - {{ $program->name }}
                                     </option>
                                 @endforeach
@@ -76,6 +80,7 @@
                         @error('program_id')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                         @enderror
+                        <div id="error_program_id" class="errors"></div>
                     </div>
                 </div>
             </div>

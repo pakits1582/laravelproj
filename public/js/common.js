@@ -385,72 +385,140 @@ $(function(){
     $(document).on("change", ".region", function()
     {
         var idtag = $(this).attr("id").split('_')[0];
-        var region_code = $(this).val();
+        var region_code = $(this).find(':selected').attr('data-code');
 
         $("#"+idtag+"_province, #"+idtag+"_city, #"+idtag +"_barangay").find("option:gt(0)").remove();
 
         var jsonUrl = baseUrl+'json/province.json';
 
-        $.getJSON(jsonUrl, function(data) {
-            var result = data.filter(function(value) {
-                return value.region_code == region_code;
-            });
-
-            result.sort(function(a, b) {
-                return a.province_name.localeCompare(b.province_name);
-            });
-
-            $.each(result, function(key, entry) {
-                $('#'+idtag+'_province').append($('<option></option>').attr('value', entry.province_code).text(entry.province_name));
-            })
+        $.getJSON({
+            url: jsonUrl,
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+            },
+            success: function(data) {
+                var result = data.filter(function(value) {
+                    return value.region_code == region_code;
+                });
+        
+                result.sort(function(a, b) {
+                    return a.province_name.localeCompare(b.province_name);
+                });
+        
+                $.each(result, function(key, entry) {
+                    $('#' + idtag + '_province').append($('<option></option>').attr('data-code', entry.province_code).attr('value', entry.province_name).text(entry.province_name));
+                });
+            },
+            complete: function() {
+                $("#confirmation").dialog('close');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle error here if the request fails.
+                console.error(textStatus, errorThrown);
+            }
         });
+        
     });
 
     $(document).on("change", ".province", function()
     {
         var idtag = $(this).attr("id").split('_')[0];
-        var province_code = $(this).val();
+        //var province_code = $(this).val();
+        var province_code = $(this).find(':selected').attr('data-code');
+
 
         $("#"+idtag+"_municipality, #"+idtag +"_barangay").find("option:gt(0)").remove();
 
         var jsonUrl = baseUrl+'json/city.json';
 
-        $.getJSON(jsonUrl, function(data) {
-            var result = data.filter(function(value) {
-                return value.province_code == province_code;
-            });
-
-            result.sort(function(a, b) {
-                return a.city_name.localeCompare(b.city_name);
-            });
-
-            $.each(result, function(key, entry) {
-                $('#'+idtag+'_municipality').append($('<option></option>').attr('value', entry.city_code).text(entry.city_name));
-            })
+        $.getJSON({
+            url: jsonUrl,
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+            },
+            success: function(data) {
+                var result = data.filter(function(value) {
+                    return value.province_code == province_code;
+                });
+    
+                result.sort(function(a, b) {
+                    return a.city_name.localeCompare(b.city_name);
+                });
+    
+                $.each(result, function(key, entry) {
+                    $('#'+idtag+'_municipality').append($('<option></option>').attr('data-code', entry.city_code).attr('value', entry.city_name).text(entry.city_name));
+                })
+            },
+            complete: function() {
+                $("#confirmation").dialog('close');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle error here if the request fails.
+                console.error(textStatus, errorThrown);
+            }
         });
     });
 
     $(document).on("change", ".municipality", function()
     {
         var idtag = $(this).attr("id").split('_')[0];
-        var city_code = $(this).val();
+        //var city_code = $(this).val();
+        var city_code = $(this).find(':selected').attr('data-code');
+
 
         $(" #"+idtag +"_barangay").find("option:gt(0)").remove();
 
         var jsonUrl = baseUrl+'json/barangay.json';
 
-        $.getJSON(jsonUrl, function(data) {
-            var result = data.filter(function(value) {
-                return value.city_code  == city_code ;
-            });
-
-            result.sort(function(a, b) {
-                return a.brgy_name.localeCompare(b.brgy_name);
-            });
-
-            $.each(result, function(key, entry) {
-                $('#'+idtag+'_barangay').append($('<option></option>').attr('value', entry.brgy_code).text(entry.brgy_name));
-            })
+        $.getJSON({
+            url: jsonUrl,
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+            },
+            success: function(data) {
+                var result = data.filter(function(value) {
+                    return value.city_code  == city_code ;
+                });
+    
+                result.sort(function(a, b) {
+                    return a.brgy_name.localeCompare(b.brgy_name);
+                });
+    
+                $.each(result, function(key, entry) {
+                    $('#'+idtag+'_barangay').append($('<option></option>').attr('value', entry.brgy_name).attr('data-code', entry.brgy_code).text(entry.brgy_name));
+                })
+            },
+            complete: function() {
+                $("#confirmation").dialog('close');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle error here if the request fails.
+                console.error(textStatus, errorThrown);
+            }
         });
     });
 });

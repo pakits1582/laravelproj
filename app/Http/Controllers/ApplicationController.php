@@ -42,6 +42,6 @@ class ApplicationController extends Controller
 
     public function store(StoreApplicationRequest $request)
     {
-        dd($request);
+        return response()->json($request);
     }
 }
