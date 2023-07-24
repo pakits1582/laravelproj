@@ -120,10 +120,13 @@ class StoreApplicationRequest extends FormRequest
             'employer_contact' => 'bail|nullable|string|min:2|max:30',
             'occupation_years' => 'bail|nullable|integer|min:1|max:2',
 
-            // 'picture' => 'certificate_jm_badua.jpg',
-            // 'report_card' => '',
-            // 'contact_email' => 'sample@email.com',
-            // 'contact_no' => '12345678',
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'report_card' => 'required|array|max:5', // Max 5 files can be uploaded (you can adjust this number as needed)
+            'report_card.*' => 'file|mimes:jpeg,png,jpg,gif,pdf|max:1024', // Each file should be an image (jpeg, png, jpg, gif) or PDF, max size 1024 KB (1MB)
+
+            'contact_no' => 'bail|required|string|min:11|max:20',
+            'contact_email' => 'bail|required|email|max:150',
+            'agree_terms' => 'required|accepted'
         ];
     }
 }

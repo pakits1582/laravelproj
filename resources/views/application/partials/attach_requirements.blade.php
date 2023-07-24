@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="contact_no" class="m-0 font-weight-bold text-primary">Contact Number</label>
-                                    <input type="text" name="contact_no" placeholder="" class="form-control" required id="contact_no" minlength="2" maxlength="30">
+                                    <input type="text" name="contact_no" placeholder="09XXXXXXXXX" class="form-control" required id="contact_no" minlength="1" maxlength="20">
                                     @error('contact_no')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
@@ -98,7 +98,7 @@
                 <div class="card m-3 border-left-info">
                     <div class="card-body">
                         <p class="font-italic font-weight-bold text-info" style="text-indent: 50px;">
-                            <input class="form-check-input" name="agree_terms" type="checkbox" id="agree_terms">   
+                            <input class="form-check-input" name="agree_terms" type="checkbox" value="1" id="agree_terms">   
                             I hereby certify that I have read and fully understood all instructions regarding my application for admission at {{ ($configuration) ? $configuration->name : '' }}, and the information supplied in this application and the documents supporting it are correct and complete. I understand that incomplete or inaccurate information could be prejudicial to my admission and retention. If accepted as a student of {{ ($configuration) ? $configuration->name : '' }}, I agree to abide by all policies and regulations.
                         </p>
                         @error('agree_terms')
