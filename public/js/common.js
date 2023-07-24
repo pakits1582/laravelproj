@@ -387,7 +387,7 @@ $(function(){
         var idtag = $(this).attr("id").split('_')[0];
         var region_code = $(this).find(':selected').attr('data-code');
 
-        $("#"+idtag+"_province, #"+idtag+"_city, #"+idtag +"_barangay").find("option:gt(0)").remove();
+        $("#"+idtag+"_province, #"+idtag+"_municipality, #"+idtag +"_barangay").find("option:gt(0)").remove();
 
         var jsonUrl = baseUrl+'json/province.json';
 

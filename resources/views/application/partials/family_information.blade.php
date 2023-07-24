@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <label for="guardian_contactno" class="m-0 font-weight-bold text-primary">Contact Number</label>
-                                    <input type="text" name="guardian_contactno" value="{{ old('guardian_contactno') }}" placeholder="" class="form-control text-uppercase" id="guardian_contactno" minlength="2" maxlength="30">
+                                    <input type="text" name="guardian_contactno" value="{{ old('guardian_contactno') }}" placeholder="" class="form-control text-uppercase" id="guardian_contactno" minlength="4" maxlength="30">
                                     @error('guardian_contactno')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
@@ -118,7 +118,7 @@
                                     @error('guardian_address')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
-                                    <div id="error_guardian_addressl" class="errors"></div>
+                                    <div id="error_guardian_address" class="errors"></div>
                                 </div>
                                 <div class="col-lg-12">
                                     <label for="guardian_occupation" class="m-0 font-weight-bold text-primary">Occupation</label>

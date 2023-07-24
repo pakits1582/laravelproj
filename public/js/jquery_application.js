@@ -52,6 +52,7 @@ $(function(){
     $(document).on("submit", "#form_application", function(e){
 
         var postData = $("#form_application").serializeArray();
+        console.log(postData);
 
         $.ajax({
             url: "/applications/saveonlineapplication",
@@ -71,8 +72,11 @@ $(function(){
             },
             success: function(response)
             {
+                $('.errors').html('');
+
+                $("#confirmation").dialog('close');
                 console.log(response);
-                // $("#confirmation").dialog('close');
+                
                 // console.log(response);
                 // if(response.data.success == true)
                 // {
@@ -85,6 +89,9 @@ $(function(){
                 // returnStatementofaccount(student_id, period_id);
             },
             error: function (data) {
+                $("#confirmation").dialog('close');
+                $('.errors').html('');
+                showError('Can not process form request, please check entries then submit again!');
                 console.log(data);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) == false) {
