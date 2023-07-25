@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_contact_informations', function (Blueprint $table) {
+        Schema::create('student_contact_informations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('student_id')->index();
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
            
             $table->string('current_region', 100)->nullable();
             $table->string('current_province', 100)->nullable();
