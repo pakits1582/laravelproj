@@ -42,6 +42,10 @@ class ApplicationController extends Controller
 
     public function store(StoreApplicationRequest $request)
     {
+        $application = $this->applicationService->saveApplication($request);
+        
         return response()->json($request);
     }
+
+
 }

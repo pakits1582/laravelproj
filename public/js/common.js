@@ -132,8 +132,26 @@ function ucwords(str,force){
     });
 }
 
+
 //DOCUMENT READY
 $(function(){
+/*************************************
+*** FUNCTION CHANGE PROFILE IMAGE  ***
+*************************************/
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#picture_preview').attr('style', 'background-image:url('+e.target.result+')');
+            //console.log(e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$(document).on("change", "#picture", function(){
+    readURL(this);
+});
 
 /************************************
 *** FUNCTION CLOSE UI DIALOG BOX  ***

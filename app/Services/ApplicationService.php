@@ -10,4 +10,36 @@ class ApplicationService
         return [];
 
     }
+
+    public function saveApplication($request)
+    {
+        
+    }
+
+    public function insertUser($data)
+    {
+
+    }
+
+    public function insertStudent($data)
+    {
+        
+    }
+
+    public function studentAcademicInformation()
+    {
+
+    }
+
+    public function userContactInformation()
+    {
+
+    }
+
+    public function userPersonalInformation()
+    {
+        
+    }
+
+
 }

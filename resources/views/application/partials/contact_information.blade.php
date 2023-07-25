@@ -200,7 +200,7 @@
                     <label for="mobileno" class="m-0 font-weight-bold text-primary">* Mobile No.</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="mobileno" value="{{ old('mobileno') }}" required placeholder="" class="form-control" id="mobileno" minlength="11" maxlength="20">
+                    <input type="text" name="mobileno" value="{{ old('mobileno') }}" required placeholder="09XXXXXXXXX" class="form-control" id="mobileno" minlength="11" maxlength="20">
                     @error('mobileno')
                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                     @enderror

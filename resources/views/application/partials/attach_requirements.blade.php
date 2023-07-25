@@ -12,7 +12,7 @@
                     
                             <div class="row align-items-center">
                                 <div class="col-md-4 col-sm-4">
-                                    <div id="application_image_preview" class="image-upload-preview"></div>
+                                    <div id="picture_preview" class="image-upload-preview"></div>
                                 </div>
                                 <div class="col-md-8 col-sm-8">
                                     <p class="m-0 font-italic text-info">

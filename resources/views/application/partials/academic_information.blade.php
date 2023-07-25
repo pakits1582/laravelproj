@@ -100,11 +100,11 @@
                         <div class="col-lg-5 col-lg pl-lg-0">
                             <input type="text" name="shs_techvoc_specify" value="{{ old('shs_techvoc_specify') }}" placeholder="TV-SPECIFY" class="form-control col-sm mb-1 text-uppercase" id="shs_techvoc_specify" minlength="2" maxlength="255">             
                         </div>
-                        @error('shs_strand')
-                            <p class="text-danger text-xs mt-1">{{$message}}</p>
-                        @enderror
-                        <div id="error_shs_strand" class="errors"></div>
-                    </div>                    
+                    </div>  
+                    @error('shs_strand')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
+                    <div id="error_shs_strand" class="errors"></div>                  
                 </div>
                 <div class="col-lg-3">
                     <input type="text" name="shs_school" value="{{ old('shs_school') }}" placeholder="" class="form-control col-sm mb-1 text-uppercase" id="shs_school" minlength="2" maxlength="255">

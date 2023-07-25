@@ -20,10 +20,23 @@ class StoreApplicationRequest extends FormRequest
     public function messages()
     {
         return [
-            'guardian_name.required_without_all' => 'The guardian name field is required when none of father nor mother fields are present.',
-            'guardian_relationship.required_without_all' => 'The guardian relationship field is required when none of father nor mother fields are present.',
-            'guardian_contactno.required_without_all' => 'The guardian contact no. field is required when none of father nor mother fields are present.',
-            'guardian_address.required_without_all' => 'The guardian address field is required when none of father nor mother fields are present.',
+            'guardian_name.required_without_all' => 'This field is required when none of father nor mother fields are present.',
+            'guardian_relationship.required_without_all' => 'This field is required when none of father nor mother fields are present.',
+            'guardian_contactno.required_without_all' => 'This field is required when none of father nor mother fields are present.',
+            'guardian_address.required_without_all' => 'This field is required when none of father nor mother fields are present.',
+            
+            'elem_address.required_with' => 'This field is required when school name field is present.',
+            'elem_period.required_with' => 'This field is required when school name field is present.',
+            
+            'jhs_address.required_with' => 'This field is required when school name field is present.',
+            'jhs_period.required_with' => 'This field is required when school name field is present.',
+
+            'shs_strand.required_with' => 'This field is required when school name field is present.',
+            'shs_period.required_with' => 'This field is required when school name field is present.',
+            'shs_address.required_with' => 'This field is required when school name field is present.',
+
+            'agree_terms.accepted' => 'Please accept terms and agreement by clicking the checkbox.',
+            'picture.max' => 'The picture must not be greater than 1mb.'
         ];
     }
 
@@ -83,7 +96,7 @@ class StoreApplicationRequest extends FormRequest
             'shs_school' => 'bail|nullable|string|min:2|max:255',
             'shs_address' => 'bail|required_with:shs_school|nullable|string|min:2|max:255',
             'shs_period' => 'bail|required_with:shs_school|nullable|string|min:4|max:50',
-            'shs_strand' => 'bail|required_with:jhs_school|nullable',
+            'shs_strand' => 'bail|required_with:shs_school|nullable',
             'shs_techvoc_specify' => 'bail|required_with:shs_strand|nullable|string|min:2|max:50',
 
             'college_program' => 'bail|nullable|string|min:2|max:255',
@@ -126,7 +139,7 @@ class StoreApplicationRequest extends FormRequest
 
             'contact_no' => 'bail|required|string|min:11|max:20',
             'contact_email' => 'bail|required|email|max:150',
-            'agree_terms' => 'required|accepted'
+            'agree_terms' => 'accepted'
         ];
     }
 }

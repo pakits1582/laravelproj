@@ -50,17 +50,16 @@ $(function(){
 	});
 
     $(document).on("submit", "#form_application", function(e){
-
-        var postData = $("#form_application").serializeArray();
-        console.log(postData);
-
         $.ajax({
             url: "/applications/saveonlineapplication",
             type: 'POST',
-            data: postData,
+            data: new FormData(this),
             dataType: 'json',
+            processData: false,
+            contentType: false,
+            cache: false,
             beforeSend: function() {
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Submitting Application, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
                     show: 'fade',
                     resizable: false,	
                     width: 350,
@@ -76,6 +75,8 @@ $(function(){
 
                 $("#confirmation").dialog('close');
                 console.log(response);
+
+                alert('xxx'); 
                 
                 // console.log(response);
                 // if(response.data.success == true)
