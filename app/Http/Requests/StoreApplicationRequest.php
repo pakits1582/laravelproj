@@ -48,6 +48,7 @@ class StoreApplicationRequest extends FormRequest
     public function rules()
     {
         return [
+            'entry_period' => 'required|integer',
             'idno' => ['nullable', 'numeric',  new IdnoRule],
             'classification' => 'required',
             'program_id' => 'required',

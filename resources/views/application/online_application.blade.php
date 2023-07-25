@@ -17,8 +17,9 @@
                     <div class="card-body p-0">
                         <form method="POST" id="form_application" action="" enctype="multipart/form-data">
                             @csrf
-                            @include('application.partials.instruction_classification')
 
+                            @include('application.partials.instruction_classification')
+                            
                             <div class="row m-0">
                                 <div class="col-lg-6">
                                     @include('application.partials.personal_information')

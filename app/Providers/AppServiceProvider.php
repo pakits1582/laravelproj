@@ -2,16 +2,16 @@
 
 namespace App\Providers;
 
-use App\Models\StudentAcademicInformationModel;
 use App\Models\User;
-use App\Models\UserContactInformationModel;
-use App\Models\UserPersonalInformationModel;
-use App\Observers\UppercaseAttributesObserver;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Models\StudentContactInformationModel;
+use App\Observers\UppercaseAttributesObserver;
+use App\Models\StudentAcademicInformationModel;
+use App\Models\StudentPersonalInformationModel;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -60,8 +60,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Paginator::useBootstrap();
-        UserPersonalInformationModel::observe(UppercaseAttributesObserver::class);
-        UserContactInformationModel::observe(UppercaseAttributesObserver::class);
+        StudentPersonalInformationModel::observe(UppercaseAttributesObserver::class);
+        StudentContactInformationModel::observe(UppercaseAttributesObserver::class);
         StudentAcademicInformationModel::observe(UppercaseAttributesObserver::class);
         
     }

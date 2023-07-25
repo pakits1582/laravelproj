@@ -13,9 +13,11 @@ class ApplicationService
 
     }
 
-    public function saveApplication($request)
+    public function saveApplication($validatedData)
     {
-        
+        $student = $this->insertStudent($validatedData);
+
+        return $student;
     }
 
     public function insertUser($data)
@@ -25,7 +27,23 @@ class ApplicationService
 
     public function insertStudent($data)
     {
-        
+        $studentData = [
+            'last_name' => $data['last_name'], 
+            'first_name' => $data['first_name'], 
+            'middle_name' => $data['middle_name'], 
+            'name_suffix' => $data['name_suffix'],  
+            'sex' => $data['sex'],  
+            'program_id' => $data['program_id'], 
+            'year_level' => 1,
+            'classification' => $data['classification'], 
+            'application_status' => 1,
+            'entry_period' => $data['entry_period'], 
+            'entry_date' => now(), 
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        return $studentData;
     }
 
     public function studentAcademicInformation()
@@ -33,14 +51,24 @@ class ApplicationService
 
     }
 
-    public function userContactInformation()
+    public function studentContactInformation()
     {
 
     }
 
-    public function userPersonalInformation()
+    public function studentPersonalInformation()
     {
         
+    }
+
+    public function processPicture($file)
+    {
+
+    }
+
+    public function processReportCard($file)
+    {
+
     }
 
     

@@ -16,6 +16,7 @@
                 <div class="row pt-3">
                     <div class="col-md-9 col-sm-12">
                         <label for="idno" class="m-0 font-weight-bold text-primary">ID Number</label>
+                        <input type="hidden" name="entry_period" required value="{{ $configuration->applicationperiod->id ?? session('current_period') }}" />
                         <input type="text" name="idno" value="{{ old('idno') }}" placeholder="" class="form-control" id="idno">
                         @error('idno')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
