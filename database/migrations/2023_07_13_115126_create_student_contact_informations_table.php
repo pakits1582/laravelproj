@@ -40,6 +40,9 @@ return new class extends Migration
             $table->string('notify_contactno', 20)->nullable();
             $table->string('notify_address')->nullable();
 
+            $table->string('contact_email', 150)->nullable();
+            $table->string('contact_no', 20)->nullable();
+
             $table->timestamps();
         });
     }

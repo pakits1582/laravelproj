@@ -44,6 +44,7 @@ class ApplicationController extends Controller
     {
         $application = $this->applicationService->saveApplication($request->validated());
         
+        //$validated = $request->validated();
         return response()->json($application);
     }
 

@@ -98,7 +98,7 @@
                             </select>   
                         </div>
                         <div class="col-lg-5 col-lg pl-lg-0">
-                            <input type="text" name="shs_techvoc_specify" value="{{ old('shs_techvoc_specify') }}" placeholder="TV-SPECIFY" class="form-control col-sm mb-1 text-uppercase" id="shs_techvoc_specify" minlength="2" maxlength="255">             
+                            <input type="text" name="shs_techvoc_specify" readonly value="{{ old('shs_techvoc_specify') }}" placeholder="TV-SPECIFY" class="form-control col-sm mb-1 text-uppercase" id="shs_techvoc_specify" minlength="2" maxlength="255">             
                         </div>
                     </div>  
                     @error('shs_strand')

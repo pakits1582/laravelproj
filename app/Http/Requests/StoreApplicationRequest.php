@@ -105,7 +105,7 @@ class StoreApplicationRequest extends FormRequest
             'college_address' => 'bail|required_with:college_program|nullable|string|min:2|max:255',
             'college_period' => 'bail|required_with:college_program|nullable|string|min:4|max:50',
 
-            'gradute_program' => 'bail|nullable|string|min:2|max:255',
+            'graduate_program' => 'bail|nullable|string|min:2|max:255',
             'graduate_school' => 'bail|required_with:gradute_program|nullable|string|min:2|max:255',
             'graduate_address' => 'bail|required_with:gradute_program|nullable|string|min:2|max:255',
             'graduate_period' => 'bail|required_with:gradute_program|nullable|string|min:4|max:50',

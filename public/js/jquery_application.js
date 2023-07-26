@@ -29,13 +29,13 @@ $(function(){
         $(this).siblings(".custom-file-label").removeClass("selected").html(fileName);
     });
 
-    $(document).on("change","#strand",function(e){
+    $(document).on("change","#shs_strand",function(e){
 		var selected = $(this).val();
 
 		if(selected == 'TECH-VOC'){
-			$('#techvoc_specify').attr("disabled",false).prop('required',true);
+			$('#shs_techvoc_specify').attr("readonly",false).prop('required',true);
 		}else{
-			$('#techvoc_specify').attr("disabled",true).val("").prop('required',false);
+			$('#shs_techvoc_specify').attr("readonly",true).val("").prop('required',false);
 		}
 	});
 
@@ -43,9 +43,9 @@ $(function(){
 		var selected = $(this).val();
 
 		if(selected == '14'){
-			$('#religion_specify').attr("disabled",false);
+			$('#religion_specify').attr("readonly",false);
 		}else{
-			$('#religion_specify').attr("disabled",true).val("");
+			$('#religion_specify').attr("readonly",true).val("");
 		}
 	});
 

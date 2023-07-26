@@ -176,7 +176,7 @@
             <div class="row align-items-center mb-5">
                 <div class="col-md-3 col-sm-3"></div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="religion_specify" value="{{ old('religion_specify') }}" disabled placeholder="IF OTHERS, PLEASE SPECIFY" class="form-control text-uppercase" id="religion_specify"  minlength="2" maxlength="150">
+                    <input type="text" name="religion_specify" readonly value="{{ old('religion_specify') }}" placeholder="IF OTHERS, PLEASE SPECIFY" class="form-control text-uppercase" id="religion_specify"  minlength="2" maxlength="150">
                     @error('religion_specify')
                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                     @enderror

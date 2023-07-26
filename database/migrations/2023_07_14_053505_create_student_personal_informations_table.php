@@ -55,7 +55,7 @@ return new class extends Migration
             $table->string('guardian_employer_address')->nullable();
 
             $table->string('occupation')->nullable();
-            $table->tinyInteger('occupation_years')->default();
+            $table->tinyInteger('occupation_years')->default(0);
             $table->string('employer')->nullable();
             $table->string('employer_address')->nullable();
             $table->string('employer_contact')->nullable();

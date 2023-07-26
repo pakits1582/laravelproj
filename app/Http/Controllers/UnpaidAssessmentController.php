@@ -81,12 +81,12 @@ class UnpaidAssessmentController extends Controller
 
         } catch (\Exception $e) {
         
-            return [
+            return response()->json([
                 'success' => false,
                 'message' => 'Something went wrong! Can not perform requested action!',
                 'alert' => 'alert-danger',
                 'status' => 401
-            ];
+            ]);
         }
     }
 }
