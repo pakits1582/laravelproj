@@ -96,9 +96,17 @@ $(function(){
                 console.log(data);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) == false) {
+                    var reportCardErrors = '';
                     $.each(errors.errors, function (key, value) {
-                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                        if (key.includes('report_card.')) {
+                            reportCardErrors += value[0] + '<br>';
+                        } else {
+                            $('#error_' + key).html('<p class="text-danger text-xs mt-1">' + value[0] + '</p>');
+                        }
                     });
+
+                    // Display the collated report_card errors in the error_report_card div
+                    $('#error_report_card').html('<p class="text-danger text-xs mt-1">' + reportCardErrors + '</p>');
                 }
             }
         });

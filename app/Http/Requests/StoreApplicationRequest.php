@@ -36,7 +36,17 @@ class StoreApplicationRequest extends FormRequest
             'shs_address.required_with' => 'This field is required when school name field is present.',
 
             'agree_terms.accepted' => 'Please accept terms and agreement by clicking the checkbox.',
-            'picture.max' => 'The picture must not be greater than 1mb.'
+            'picture.max' => 'The picture must not be greater than 1mb.',
+            'report_card.*.max' => 'One of the :attribute uploaded is greater than 1mb.',
+
+        ];
+    }
+
+    public function attributes()
+    {
+        // Customize the attribute names here
+        return [
+            'report_card.*' => 'Report Card File',
         ];
     }
 

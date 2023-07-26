@@ -18,15 +18,21 @@ class ApplicationService
 
     }
 
-    public function saveApplication($validatedData)
+    public function saveApplication($request)
     {
-        DB::beginTransaction();
+        $validatedData = $request->validated();
+        //return $validatedData;
+
         try {
-          
+            DB::beginTransaction();
             $student = $this->insertStudent($validatedData);
                        $this->studentPersonalInformation($student,$validatedData);
                        $this->studentContactInformation($student,$validatedData);
                        $this->studentAcademicInformation($student,$validatedData);
+
+            $this->processPicture($student, $request);
+
+            DB::commit();
 
             return [
                 'success' => true,
@@ -34,6 +40,8 @@ class ApplicationService
                 'alert' => 'alert-success',
                 'status' => 200
             ];
+
+
 
         } catch (\Exception $e) {
         
@@ -45,8 +53,7 @@ class ApplicationService
             ];
         }
                   
-        //DB::commit();
-
+        
     }
 
     public function insertUser($data)
@@ -177,7 +184,7 @@ class ApplicationService
             'mobileno' => $data['mobileno'], 
             'email'    => $data['email'], 
 
-            'contact_no' => $data['contact_no'], 
+            'contact_no'    => $data['contact_no'], 
             'contact_email' => $data['contact_email'], 
         ];
 
@@ -187,9 +194,13 @@ class ApplicationService
 
     
 
-    public function processPicture($file)
+    public function processPicture($student, $request)
     {
+        $imageName = time().'.'.$request->picture->extension();
+        $request->picture->move(public_path('uploads'), $imageName);
 
+        $student->picture = 'uploads/'.$imageName;
+        $student->save();
     }
 
     public function processReportCard($file)

@@ -42,7 +42,7 @@ class ApplicationController extends Controller
 
     public function store(StoreApplicationRequest $request)
     {
-        $application = $this->applicationService->saveApplication($request->validated());
+        $application = $this->applicationService->saveApplication($request);
         
         //$validated = $request->validated();
         return response()->json($application);
