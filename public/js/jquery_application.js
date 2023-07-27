@@ -59,7 +59,7 @@ $(function(){
             contentType: false,
             cache: false,
             beforeSend: function() {
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Submitting Application, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Submitting application, please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
                     show: 'fade',
                     resizable: false,	
                     width: 350,
@@ -111,6 +111,43 @@ $(function(){
             }
         });
 
+        e.preventDefault();
+    });
+
+    $(document).on("blur", "#idno", function(e){
+        var idno = $(this).val();
+
+        if(idno)
+        {
+            $.ajax({
+                url: "/applications/saveonlineapplication",
+                type: 'POST',
+                data: {'idno':idno},
+                dataType: 'json',
+                cache: false,
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Fetching record, please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons:false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
+                success: function(response)
+                {
+                    $("#confirmation").dialog('close');
+                    console.log(response);
+                },
+                error: function (data) {
+                    $("#confirmation").dialog('close');
+                    console.log(data);
+                }
+            });
+        }
+        
         e.preventDefault();
     });
 

@@ -22,9 +22,9 @@ class ApplicationService
     {
         $validatedData = $request->validated();
         //return $validatedData;
-
         try {
             DB::beginTransaction();
+
             $student = $this->insertStudent($validatedData);
                        $this->studentPersonalInformation($student,$validatedData);
                        $this->studentContactInformation($student,$validatedData);
@@ -45,8 +45,6 @@ class ApplicationService
                 'status' => 200
             ];
 
-
-
         } catch (\Exception $e) {
         
             return [
@@ -58,11 +56,6 @@ class ApplicationService
         }
                   
         
-    }
-
-    public function insertUser($data)
-    {
-
     }
 
     public function insertStudent($data)
@@ -195,8 +188,6 @@ class ApplicationService
         StudentContactInformationModel::updateOrCreate(['student_id' => $student->id], $contactInformations);
 
     }
-
-    
 
     public function processPicture($request)
     {
