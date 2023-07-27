@@ -16,15 +16,21 @@ class Student extends Model
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['first_name']),
-            set: fn ($value) => strtoupper($value)
-        );
+            set: function ($value) {
+                // Check if the value is not NULL before converting to uppercase
+                return $value !== null ? strtoupper($value) : null;
+            }       
+         );
     }
 
     public function middleName(): Attribute
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['middle_name']),
-            set: fn ($value) => strtoupper($value)
+            set: function ($value) {
+                // Check if the value is not NULL before converting to uppercase
+                return $value !== null ? strtoupper($value) : null;
+            }        
         );
     }
 
@@ -32,7 +38,10 @@ class Student extends Model
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['last_name']),
-            set: fn ($value) => strtoupper($value)
+            set: function ($value) {
+                // Check if the value is not NULL before converting to uppercase
+                return $value !== null ? strtoupper($value) : null;
+            }        
         );
     }
 
@@ -40,7 +49,10 @@ class Student extends Model
     {
         return new Attribute(
             get: fn ($value, $attributes) => strtoupper($attributes['name_suffix']),
-            set: fn ($value) => strtoupper($value)
+            set: function ($value) {
+                // Check if the value is not NULL before converting to uppercase
+                return $value !== null ? strtoupper($value) : null;
+            }        
         );
     }
 

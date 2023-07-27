@@ -66,7 +66,7 @@ class StoreApplicationRequest extends FormRequest
             'last_name' => 'bail|required|string|min:2|max:255',
             'first_name' => 'bail|required|string|min:2|max:255',
             'middle_name' => 'bail|nullable|string|min:3|max:255',
-            'name_suffix' => 'nullable',
+            'name_suffix' => 'bail|nullable|string',
             'sex' => 'required',
             'civil_status' => 'required',
             'birth_date' => 'bail|required|date|date_format:Y-m-d',

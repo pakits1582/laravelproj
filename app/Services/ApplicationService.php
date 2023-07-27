@@ -30,7 +30,11 @@ class ApplicationService
                        $this->studentContactInformation($student,$validatedData);
                        $this->studentAcademicInformation($student,$validatedData);
 
-            $this->processPicture($student, $request);
+            $picture = $this->processPicture($request);
+            $report_card = $this->processReportCard($request);
+            $student->picture = $picture;
+            $student->report_card = $report_card;
+            $student->save();
 
             DB::commit();
 
@@ -194,18 +198,28 @@ class ApplicationService
 
     
 
-    public function processPicture($student, $request)
+    public function processPicture($request)
     {
         $imageName = time().'.'.$request->picture->extension();
         $request->picture->move(public_path('uploads'), $imageName);
 
-        $student->picture = 'uploads/'.$imageName;
-        $student->save();
+        return $imageName;
     }
 
-    public function processReportCard($file)
+    public function processReportCard($request)
     {
+        $files = [];
+        if($request->hasfile('report_card'))
+        {
+            foreach($request->file('report_card') as $file)
+            {
+                $name = time().rand(1,50).'.'.$file->extension();
+                $file->move(public_path('report_cards'), $name);  
+                $files[] = $name;  
+            }
+        }
 
+        return implode(',', $files);
     }
 
     
