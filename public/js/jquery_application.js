@@ -114,13 +114,24 @@ $(function(){
         e.preventDefault();
     });
 
+    function setCheckedByValue(inputName, dataValue) 
+    {
+        $('input[name="'+inputName+'"]').each(function() {
+          const value = parseInt($(this).val()); // Get the value of the current input and convert to an integer
+          const isChecked = value === dataValue; // Check if the value matches the dataValue
+                              
+          // Set the "checked" property based on the comparison result
+          $(this).prop("checked", isChecked);
+        });
+    }
+
     $(document).on("blur", "#idno", function(e){
         var idno = $(this).val();
 
         if(idno)
         {
             $.ajax({
-                url: "/applications/saveonlineapplication",
+                url: "/students/studentfullinfo",
                 type: 'POST',
                 data: {'idno':idno},
                 dataType: 'json',
@@ -136,10 +147,85 @@ $(function(){
                     });
                     $(".ui-dialog-titlebar").hide();
                 },
-                success: function(response)
+                success: function(data)
                 {
                     $("#confirmation").dialog('close');
-                    console.log(response);
+                    console.log(data);
+
+                    if(!jQuery.isEmptyObject(data)){
+                        $("#last_name").val(data.last_name);
+                        $("#first_name").val(data.first_name);
+                        $("#middle_name").val(data.middle_name);
+                        $("#name_suffix").val(data.name_suffix).trigger('change');
+                        $("#sex").val(data.sex).trigger('change');
+
+                        if(data.pesonal_info)
+                        {
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#birth_date").val(data.personal_info.birth_date);
+                            $("#birth_place").val(data.personal_info.birth_place);
+                            $("#nationality").val(data.personal_info.nationality).trigger('change');
+                            $("#religion").val(data.personal_info.religion).trigger('change');
+                            $("#religion_specify").val(data.personal_info.religion_specify);
+
+                            setCheckedByValue('baptism', data.personal_info.baptism);
+                            setCheckedByValue('communion', data.personal_info.communion);
+                            setCheckedByValue('confirmation', data.personal_info.confirmation);
+                        }
+
+                        if(data.contact_info)
+                        {
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#current_address").val(data.personal_info.birth_date);
+                            $("#current_zipcode").val(data.personal_info.birth_date);
+
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
+                            $("#permanent_address").val(data.personal_info.permanent_address);
+                            $("#permanent_zipcode").val(data.personal_info.permanent_zipcode);
+
+                            $("#telno").val(data.personal_info.telno);
+                            $("#email").val(data.personal_info.email);
+                            $("#mobileno").val(data.personal_info.mobileno);
+
+                            $("#contact_email").val(data.personal_info.contact_email);
+                            $("#contact_no").val(data.personal_info.contact_no);
+                        }
+                       
+                        if(data.academic_info)
+                        {
+                            $("#elem_school").val(data.academic_info.elem_school);
+                            $("#elem_address").val(data.academic_info.elem_address);
+                            $("#elem_period").val(data.academic_info.elem_period);
+
+                            $("#jhs_school").val(data.academic_info.jhs_school);
+                            $("#jhs_address").val(data.academic_info.jhs_address);
+                            $("#jhs_period").val(data.academic_info.jhs_period);
+
+                            $("#shs_strand").val(data.academic_info.shs_strand).trigger('change');
+                            $("#shs_techvoc_specify").val(data.academic_info.shs_techvoc_specify);
+                            $("#shs_school").val(data.academic_info.shs_school);
+                            $("#shs_address").val(data.academic_info.shs_address);
+                            $("#shs_period").val(data.academic_info.shs_period);
+
+                            $("#college_program").val(data.academic_info.college_program);
+                            $("#college_school").val(data.academic_info.college_school);
+                            $("#college_address").val(data.academic_info.college_address);
+                            $("#college_period").val(data.academic_info.college_period);
+
+                            $("#graduate_program").val(data.academic_info.graduate_program);
+                            $("#graduate_school").val(data.academic_info.graduate_school);
+                            $("#graduate_address").val(data.academic_info.graduate_address);
+                            $("#graduate_period").val(data.academic_info.graduate_period);
+                        }
+                        
+                    }
+                    
                 },
                 error: function (data) {
                     $("#confirmation").dialog('close');

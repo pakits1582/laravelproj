@@ -84,5 +84,20 @@ class Student extends Model
         return $this->hasMany(Enrollment::class);
     }
 
+    public function academic_info()
+    {
+        return $this->hasOne(StudentAcademicInformationModel::class, 'student_id', 'id');
+    }
+
+    public function contact_info()
+    {
+        return $this->hasOne(StudentContactInformationModel::class, 'student_id', 'id');
+    }
+
+    public function personal_info()
+    {
+        return $this->hasOne(StudentPersonalInformationModel::class, 'student_id', 'id');
+    }
+
     
 }

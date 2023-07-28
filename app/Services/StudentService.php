@@ -119,4 +119,19 @@ class StudentService
 
         return $student;
     }
+
+    public function studentFullInformation($request)
+    {
+        $query = Student::with(['user', 'academic_info', 'contact_info', 'personal_info']);
+
+        $query->when($request->has('idno') , function ($query) use ($request) 
+        {
+            $idno = $request->idno;
+            $query->whereHas('user', function($query) use($idno){
+                $query->where('idno', $idno);
+            });
+        });
+
+        return $query->first();
+    }
 }

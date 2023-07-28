@@ -152,48 +152,12 @@ class StudentController extends Controller
         return response()->json($data);
     }
 
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  \App\Models\Instructor  $instructor
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy(Instructor $instructor)
-    // {
-    //     //
-    // }
+    public function studentfullinfo(Request $request)
+    {
+        $student = $this->studentService->studentFullInformation($request);
 
-    // public function import(Request $request)
-    // {
-    //     if ($request->hasFile('file')) {
-    //         $file = $request->file('file');
+        return response()->json($student);
+    }
 
-    //         try {
-    //             $import = new InstructorsImport;
-    //             $import->import($file);
-
-    //             $errors = $import->failures();
-    //             return back()->with(['alert-class' => 'alert-success', 'message' => 'Sucessfully imported!', 'errors' => $errors]);
-    
-    //         } catch (\Exception $e) {
-    //             return back()->with(['alert-class' => 'alert-danger', 'message' => 'Something went wrong! Import unsuccessful!']);
-    //         }
-    //     }
-    // }
-
-    // public function export(Request $request)
-    // {
-    //     $import = new InstructorsExport();
-        
-    //     return $import->download('instructors.xlsx');
-    // }
-
-    // public function generatepdf(Request $request)
-    // {
-    //     $instructors = $this->instructorService->returnInstructors($request, true);
-
-    //     $pdf = PDF::loadView('instructor.generatepdf', ['instructors' => $instructors]);
-    //     return $pdf->stream('instructors.pdf');
-    // }
 
 }

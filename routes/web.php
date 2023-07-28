@@ -65,6 +65,8 @@ use App\Http\Controllers\ReassessmentController;
 
 Route::get('/applications/onlineapplication', [ApplicationController::class, 'onlineapplication'])->name('onlineapplication');
 Route::post('/applications/saveonlineapplication', [ApplicationController::class, 'store'])->name('saveonlineapplication');
+Route::post('/students/studentfullinfo', [StudentController::class, 'studentfullinfo'])->name('studentfullinfo');
+
 
 
 Route::get('/', [LoginController::class, 'index'])->name('loginindex');
