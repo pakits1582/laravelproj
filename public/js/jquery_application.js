@@ -159,7 +159,7 @@ $(function(){
                         $("#name_suffix").val(data.name_suffix).trigger('change');
                         $("#sex").val(data.sex).trigger('change');
 
-                        if(data.pesonal_info)
+                        if(data.personal_info)
                         {
                             $("#civil_status").val(data.personal_info.civil_status).trigger('change');
                             $("#birth_date").val(data.personal_info.birth_date);
@@ -175,26 +175,26 @@ $(function(){
 
                         if(data.contact_info)
                         {
-                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
-                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
-                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
-                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
-                            $("#current_address").val(data.personal_info.birth_date);
-                            $("#current_zipcode").val(data.personal_info.birth_date);
+                            $("#current_region").val(data.contact_info.current_region).trigger('change');
+                            $("#current_province").val(data.contact_info.current_province).trigger('change');
+                            $("#current_municipality").val(data.contact_info.current_municipality).trigger('change');
+                            $("#current_barangay").val(data.contact_info.current_barangay).trigger('change');
+                            $("#current_address").val(data.contact_info.current_address);
+                            $("#current_zipcode").val(data.contact_info.current_zipcode);
 
-                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
-                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
-                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
-                            $("#civil_status").val(data.personal_info.civil_status).trigger('change');
-                            $("#permanent_address").val(data.personal_info.permanent_address);
-                            $("#permanent_zipcode").val(data.personal_info.permanent_zipcode);
+                            $("#permanent_region").val(data.contact_info.permanent_region).trigger('change');
+                            $("#permanent_province").val(data.contact_info.permanent_province).trigger('change');
+                            $("#permanent_municipality").val(data.contact_info.permanent_municipality).trigger('change');
+                            $("#permanent_barangay").val(data.contact_info.permanent_barangay).trigger('change');
+                            $("#permanent_address").val(data.contact_info.permanent_address);
+                            $("#permanent_zipcode").val(data.contact_info.permanent_zipcode);
 
-                            $("#telno").val(data.personal_info.telno);
-                            $("#email").val(data.personal_info.email);
-                            $("#mobileno").val(data.personal_info.mobileno);
+                            $("#telno").val(data.contact_info.telno);
+                            $("#email").val(data.contact_info.email);
+                            $("#mobileno").val(data.contact_info.mobileno);
 
-                            $("#contact_email").val(data.personal_info.contact_email);
-                            $("#contact_no").val(data.personal_info.contact_no);
+                            $("#contact_email").val(data.contact_info.contact_email);
+                            $("#contact_no").val(data.contact_info.contact_no);
                         }
                        
                         if(data.academic_info)

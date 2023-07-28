@@ -73,7 +73,7 @@
                             <p class="font-italic text-info">Note: Please provide a working email address where we will send your status of Application and a mobile/landline number for us to reach you.</p>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="contact_email" class="m-0 font-weight-bold text-primary">E-mail Address</label>
+                                    <label for="contact_email" class="m-0 font-weight-bold text-primary">Contact E-mail</label>
                                     <input type="email" name="contact_email" placeholder="" class="form-control" required id="contact_email">
                                     @error('contact_email')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
