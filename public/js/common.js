@@ -411,17 +411,17 @@ $(document).on("change", "#picture", function(){
 
         $.getJSON({
             url: jsonUrl,
-            beforeSend: function() {
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-					show: 'fade',
-					resizable: false,	
-					width: 350,
-					height: 'auto',
-					modal: true,
-					buttons: false
-				});
-				$(".ui-dialog-titlebar").hide();
-            },
+            // beforeSend: function() {
+            //     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+			// 		show: 'fade',
+			// 		resizable: false,	
+			// 		width: 350,
+			// 		height: 'auto',
+			// 		modal: true,
+			// 		buttons: false
+			// 	});
+			// 	$(".ui-dialog-titlebar").hide();
+            // },
             success: function(data) {
                 var result = data.filter(function(value) {
                     return value.region_code == region_code;
@@ -459,17 +459,17 @@ $(document).on("change", "#picture", function(){
 
         $.getJSON({
             url: jsonUrl,
-            beforeSend: function() {
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-					show: 'fade',
-					resizable: false,	
-					width: 350,
-					height: 'auto',
-					modal: true,
-					buttons: false
-				});
-				$(".ui-dialog-titlebar").hide();
-            },
+            // beforeSend: function() {
+            //     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+			// 		show: 'fade',
+			// 		resizable: false,	
+			// 		width: 350,
+			// 		height: 'auto',
+			// 		modal: true,
+			// 		buttons: false
+			// 	});
+			// 	$(".ui-dialog-titlebar").hide();
+            // },
             success: function(data) {
                 var result = data.filter(function(value) {
                     return value.province_code == province_code;
@@ -499,24 +499,23 @@ $(document).on("change", "#picture", function(){
         //var city_code = $(this).val();
         var city_code = $(this).find(':selected').attr('data-code');
 
-
         $(" #"+idtag +"_barangay").find("option:gt(0)").remove();
 
         var jsonUrl = baseUrl+'json/barangay.json';
 
         $.getJSON({
             url: jsonUrl,
-            beforeSend: function() {
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-					show: 'fade',
-					resizable: false,	
-					width: 350,
-					height: 'auto',
-					modal: true,
-					buttons: false
-				});
-				$(".ui-dialog-titlebar").hide();
-            },
+            // beforeSend: function() {
+            //     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+			// 		show: 'fade',
+			// 		resizable: false,	
+			// 		width: 350,
+			// 		height: 'auto',
+			// 		modal: true,
+			// 		buttons: false
+			// 	});
+			// 	$(".ui-dialog-titlebar").hide();
+            // },
             success: function(data) {
                 var result = data.filter(function(value) {
                     return value.city_code  == city_code ;
@@ -539,4 +538,99 @@ $(document).on("change", "#picture", function(){
             }
         });
     });
+
+    
+    // function populateDropdownAddress(idtag, dataType, jsonUrl)
+    // {
+    //     console.log(idtag, dataType, jsonUrl);
+    //     switch (dataType) 
+    //     {
+    //         case "region":
+    //             codeKey = "region_code";
+    //             target = "province";
+    //             selectedCode = $("#"+idtag+"_region").find(":selected").attr("data-code");
+    //             targetDropdown = $("#"+idtag+"_province");
+    //             break;
+    //         case "province":
+    //             codeKey = "province_code";
+    //             target = "city";
+    //             selectedCode = $("#"+idtag+"_province").find(":selected").attr("data-code");
+    //             targetDropdown = $("#" + idtag + "_municipality");
+    //             break;
+    //         case "municipality":
+    //             codeKey = "city_code";
+    //             target = "brgy";
+    //             selectedCode = $("#"+idtag+"_municipality").find(":selected").attr("data-code");
+    //             targetDropdown = $("#" + idtag + "_barangay");
+    //             break;
+    //     }
+
+    //     console.log(codeKey,target,selectedCode);
+        
+    //     $.getJSON({
+    //         url: jsonUrl,
+    //         // beforeSend: function() {
+    //         //     $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+	// 		// 		show: 'fade',
+	// 		// 		resizable: false,	
+	// 		// 		width: 350,
+	// 		// 		height: 'auto',
+	// 		// 		modal: true,
+	// 		// 		buttons: false
+	// 		// 	});
+	// 		// 	$(".ui-dialog-titlebar").hide();
+    //         // },
+    //         success: function(data) {
+    //             var result = data.filter(function(value) {
+    //                 return value[codeKey] == selectedCode;
+    //             });
+
+    //             console.log(result);
+                        
+    //             result.sort(function (a, b) {
+    //                 return a[target + "_name"].localeCompare(b[target + "_name"]);
+    //             });
+        
+    //             $.each(result, function(key, entry) {
+    //                 targetDropdown.append($('<option></option>').attr('data-code', entry[target + "_code"]).attr('value', entry[target + "_name"]).text(entry[target + "_name"]));
+    //             });
+    //         },
+    //         complete: function() {
+    //             //$("#confirmation").dialog('close');
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             // Handle error here if the request fails.
+    //             console.error(textStatus, errorThrown);
+    //         }
+    //     });
+    // }  
+      
+    // $(document).on("change", ".region", function () {
+    //     var idtag = $(this).attr("id").split("_")[0];
+    //     var jsonUrl = baseUrl + "json/province.json";
+    
+    //     alert('xxxxsss');
+    //     populateDropdownAddress(idtag, 'region', jsonUrl);
+    // });
+  
+    // $(document).on("change", ".province", function () {
+    //     var idtag = $(this).attr("id").split("_")[0];
+    //     var jsonUrl = baseUrl + "json/city.json";
+        
+    //     alert('xxxx');
+    //     populateDropdownAddress(idtag, 'province', jsonUrl);
+
+    // });
+
+    // $(document).on("change", ".municipality", function () {
+    //     var idtag = $(this).attr("id").split("_")[0];
+    //     var jsonUrl = baseUrl+'json/barangay.json';
+
+    //     populateDropdownAddress(idtag, 'municipality', jsonUrl);
+
+    // });
+  
+
+  
+  
 });

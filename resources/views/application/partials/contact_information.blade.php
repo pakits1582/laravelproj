@@ -163,7 +163,7 @@
                     <label for="permanent_address" class="m-0 font-weight-bold text-primary">House #, Street</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
-                    <input type="text" name="permanent_address" value="{{ old('permanent_address') }}" placeholder="(House#, Street, Subd./Village)" placeholder="" class="form-control text-uppercase" id="current_address" minlength="2" maxlength="255">
+                    <input type="text" name="permanent_address" value="{{ old('permanent_address') }}" placeholder="(House#, Street, Subd./Village)" placeholder="" class="form-control text-uppercase" id="permanent_address" minlength="2" maxlength="255">
                     @error('permanent_address')
                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                     @enderror

@@ -171,21 +171,59 @@ $(function(){
                             setCheckedByValue('baptism', data.personal_info.baptism);
                             setCheckedByValue('communion', data.personal_info.communion);
                             setCheckedByValue('confirmation', data.personal_info.confirmation);
+
+                            $("#father_name").val(data.personal_info.father_name);
+                            $("#father_address").val(data.personal_info.father_address);
+                            $("#father_contactno").val(data.personal_info.father_contactno);
+
+                            $("#mother_name").val(data.personal_info.mother_name);
+                            $("#mother_address").val(data.personal_info.mother_address);
+                            $("#mother_contactno").val(data.personal_info.mother_contactno);
+
+                            $("#guardian_name").val(data.personal_info.guardian_name);
+                            $("#guardian_relationship").val(data.personal_info.guardian_relationship);
+                            $("#guardian_address").val(data.personal_info.guardian_address);
+                            $("#guardian_contactno").val(data.personal_info.guardian_contactno);
+                            $("#guardian_occupation").val(data.personal_info.guardian_occupation);
+                            $("#guardian_employer").val(data.personal_info.guardian_employer);
+                            $("#guardian_employer_address").val(data.personal_info.guardian_employer_address);
+
+                            $("#occupation").val(data.personal_info.occupation);
+                            $("#employer").val(data.personal_info.employer);
+                            $("#employer_address").val(data.personal_info.employer_address);
+                            $("#employer_contact").val(data.personal_info.employer_contact);
+                            $("#occupation_years").val(data.personal_info.occupation_years);
+
                         }
 
                         if(data.contact_info)
                         {
                             $("#current_region").val(data.contact_info.current_region).trigger('change');
-                            $("#current_province").val(data.contact_info.current_province).trigger('change');
-                            $("#current_municipality").val(data.contact_info.current_municipality).trigger('change');
-                            $("#current_barangay").val(data.contact_info.current_barangay).trigger('change');
+                            setTimeout(function() {
+                                $("#current_province").val(data.contact_info.current_province).trigger('change');
+                            }, 200);
+                            setTimeout(function() {
+                                $("#current_municipality").val(data.contact_info.current_municipality).trigger('change');
+                            }, 300);
+                            setTimeout(function() {
+                                $("#current_barangay").val(data.contact_info.current_barangay).trigger('change');
+                            }, 400);
                             $("#current_address").val(data.contact_info.current_address);
                             $("#current_zipcode").val(data.contact_info.current_zipcode);
 
-                            $("#permanent_region").val(data.contact_info.permanent_region).trigger('change');
-                            $("#permanent_province").val(data.contact_info.permanent_province).trigger('change');
-                            $("#permanent_municipality").val(data.contact_info.permanent_municipality).trigger('change');
-                            $("#permanent_barangay").val(data.contact_info.permanent_barangay).trigger('change');
+                            setTimeout(function() {
+                                $("#permanent_region").val(data.contact_info.permanent_region).trigger('change');
+                            }, 500);
+                            setTimeout(function() {
+                                $("#permanent_province").val(data.contact_info.permanent_province).trigger('change');
+                            }, 600);
+                            setTimeout(function() {
+                                $("#permanent_municipality").val(data.contact_info.permanent_municipality).trigger('change');
+                            }, 700);
+                            setTimeout(function() {
+                                $("#permanent_barangay").val(data.contact_info.permanent_barangay).trigger('change');
+                            }, 800);
+                            
                             $("#permanent_address").val(data.contact_info.permanent_address);
                             $("#permanent_zipcode").val(data.contact_info.permanent_zipcode);
 
