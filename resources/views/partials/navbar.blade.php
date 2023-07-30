@@ -1,19 +1,19 @@
 <!-- Topbar -->
-<nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
+<nav class="navbar navbar-expand navbar-light bg-white static-top shadow">
     <!-- Topbar Search -->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-6 my-auto p-2">
+            <div class="col-sx-3 my-auto p-2">
                 <img src="
                     @isset($configuration)
                         {{ asset('images/'.$configuration->logo) }}
                     @endisset" 
                     height="60" alt="Logo">
             </div>
-            <div class="col-xs-6 pl-2">  
-                <h3 class="mb-0 text-gray-800">{{ ($configuration) ? $configuration->name : '' }}</h3>
+            <div class="col-xs-9">  
+                <h3 class="m-0 text-gray-800 col-xs h4">{{ ($configuration) ? $configuration->name : '' }}</h3>
                 <h6 class="text-primary font-italic mb-0">{{ ($configuration) ? $configuration->address : '' }}</h6>
-                <h6 class="text-black font-bold mb-0" style="font-size: 12px;">{{ config('app.name') }}</h6>
+                <h6 class="text-black font-bold mb-0 text-sm" id="app_name">{{ config('app.name') }}</h6>
             </div>
         </div>
     </div>

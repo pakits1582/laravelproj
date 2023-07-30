@@ -135,23 +135,42 @@ function ucwords(str,force){
 
 //DOCUMENT READY
 $(function(){
+    function checkScreenSize() {
+        if ($(window).width() < 768) {
+          // Screen size is too small (less than 768 pixels)
+          // Do something here, like add a class or perform some action
+          $('#app_name').css('font-size', '11px'); // Set the desired font size for small screens
+        } else {
+          // Screen size is not too small (greater than or equal to 768 pixels)
+          // Do something else if needed
+          $('#app_name').removeAttr('style'); // Remove the style attribute for larger screens
+        }
+      }
+  
+      // Check screen size on document ready (initial load)
+      checkScreenSize();
+  
+      // Check screen size on window resize
+      $(window).on('resize', function() {
+        checkScreenSize();
+      });
 /*************************************
 *** FUNCTION CHANGE PROFILE IMAGE  ***
 *************************************/
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('#picture_preview').attr('style', 'background-image:url('+e.target.result+')');
-            //console.log(e.target.result);
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#picture_preview').attr('style', 'background-image:url('+e.target.result+')');
+                //console.log(e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
         }
-        reader.readAsDataURL(input.files[0]);
     }
-}
 
-$(document).on("change", "#picture", function(){
-    readURL(this);
-});
+    $(document).on("change", "#picture", function(){
+        readURL(this);
+    });
 
 /************************************
 *** FUNCTION CLOSE UI DIALOG BOX  ***
