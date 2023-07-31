@@ -15,7 +15,7 @@
                             <div class="col-lg-5">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h3 text-800 text-primary mb-4">Login Account</h1>
+                                        <h4 class="text-800 text-primary mb-4">Login Account</h4>
                                     </div>
                                     @if(Session::has('message'))
                                         <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
@@ -45,7 +45,7 @@
                             <div class="col-lg-7">
                                 <div class="card shadow m-4 border-left-primary">
                                     <div class="card-header py-3">
-                                        <h1 class="h3 text-800 text-primary mb-0">Online Application</h1>
+                                        <h4 class="text-800 text-primary mb-0">Online Application</h4>
                                     </div>
                                     <div class="card-body">
                                         <h1 class="h3 text-900 text-primary mb-4 text-center">{{ $configuration->applicationperiod->name }}</h1>
