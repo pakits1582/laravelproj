@@ -1,5 +1,5 @@
 <!-- Topbar -->
-<nav class="navbar navbar-expand navbar-light bg-white static-top shadow">
+<nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
     <!-- Topbar Search -->
     <div class="container-fluid">
         <div class="row">
