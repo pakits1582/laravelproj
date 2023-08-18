@@ -85,12 +85,12 @@ class ClassListController extends Controller
 
         } catch (\Exception $e) {
         
-            return [
+            return response()->json([
                 'success' => false,
                 'message' => 'No class subject found!',
                 'alert' => 'alert-danger',
                 'status' => 401
-            ];
+            ]);
         }
     }
 
