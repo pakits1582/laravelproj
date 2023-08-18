@@ -21,7 +21,7 @@ class ApplicationService
     public function saveApplication($request)
     {
         $validatedData = $request->validated();
-        //return $validatedData;
+
         try {
             DB::beginTransaction();
 
@@ -138,7 +138,6 @@ class ApplicationService
             'jhs_address' => $data['jhs_address'],
             'jhs_period'  => $data['jhs_period'],
 
-          
             'shs_school'          => $data['shs_school'],
             'shs_address'         => $data['shs_address'],
             'shs_period'          => $data['shs_period'],

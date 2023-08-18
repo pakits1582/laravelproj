@@ -14,7 +14,7 @@
             <div class="card-body p-2 align-items-end">
                 <p class="mb-0 font-italic font-weight-bold text-info">Please submit your old ID number if you are a graduate or returnee from this institution and you are applying to a new program.</p>
                 <div class="row pt-3">
-                    <div class="col-md-9 col-sm-12">
+                    <div class="col-md-12">
                         <label for="idno" class="m-0 font-weight-bold text-primary">ID Number</label>
                         <input type="hidden" name="entry_period" required value="{{ $configuration->applicationperiod->id ?? session('current_period') }}" />
                         <input type="text" name="idno" value="{{ old('idno') }}" placeholder="" class="form-control" id="idno">
@@ -26,7 +26,7 @@
                     <div class="col-md-3 d-none d-lg-block"></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-9 col-sm-12">
+                    <div class="col-md-12">
                         <label for="classification" class="m-0 font-weight-bold text-primary">* Classification</label>
                         <select name="classification" required class="form-control text-uppercase" id="classification">
                             <option value="">- SELECT CLASSIFICATION -</option>

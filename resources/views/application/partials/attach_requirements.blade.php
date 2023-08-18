@@ -8,7 +8,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2">
-                            <h4 class="mb-2 font-weight-bold text-success">ID Picture Upload</h4>
+                            <h4 class="mb-2 font-weight-bold text-black">ID Picture Upload</h4>
                     
                             <div class="row align-items-center">
                                 <div class="col-md-4 col-sm-4">
@@ -42,7 +42,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2 align-items-end">
-                            <h4 class="mb-2 font-weight-bold text-success">Card/OTR Upload</h4>
+                            <h4 class="mb-2 font-weight-bold text-black">Card/OTR Upload</h4>
                             <p class="m-0 font-italic text-info">
                                 Note: 
                                 <ul class="m-0 font-italic text-info">
@@ -69,7 +69,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2">
-                            <h4 class="mb-2 font-weight-bold text-success">Contact Details</h4>
+                            <h4 class="mb-2 font-weight-bold text-black">Contact Details</h4>
                             <p class="font-italic text-info">Note: Please provide a working email address where we will send your status of Application and a mobile/landline number for us to reach you.</p>
                             <div class="row">
                                 <div class="col-md-12">

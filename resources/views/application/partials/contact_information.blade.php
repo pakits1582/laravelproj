@@ -7,7 +7,7 @@
             <p class="font-italic font-weight-bold text-info mb-0">Note: Please provide your correct contact information and addresses.</p>
             <div class="row align-items-center mb-3">
                 <div class="col-md-12">
-                    <h5 class="m-0 font-weight-bold text-success">Current Address</h5>
+                    <h5 class="m-0 font-weight-bold text-black">Current Address</h5>
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -95,7 +95,7 @@
             </div>
             <div class="row align-items-center mb-3">
                 <div class="col-md-12">
-                    <h5 class="m-0 font-weight-bold text-success">Permanent Address</h5>
+                    <h5 class="m-0 font-weight-bold text-black">Permanent Address</h5>
                     <p class="font-italic font-weight-bold text-info mb-0">Note: (If not the same as current address)
                 </div>
             </div>
