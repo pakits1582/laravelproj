@@ -9,6 +9,20 @@ $(function(){
     $("#period, #program_id, .region, .province, .municipality, .barangay").select2({
 	    dropdownParent: $("#ui_content4")
 	});
+
+    var confirmationDialog = $("#confirmation").dialog({
+        autoOpen: false,
+        show: 'fade',
+        resizable: false,
+        width: 350,
+        height: 'auto',
+        modal: true,
+        buttons: false,
+        closeOnEscape: false, // Prevent dialog from closing on Esc key
+        open: function(event, ui) {
+            $(".ui-dialog-titlebar", ui.dialog).hide();
+        }
+    });
   
       //   var dataTable = $('#scrollable_table').DataTable({
       //       scrollY: 400,
@@ -59,38 +73,39 @@ $(function(){
             contentType: false,
             cache: false,
             beforeSend: function() {
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Submitting application, please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-                    show: 'fade',
-                    resizable: false,	
-                    width: 350,
-                    height: 'auto',
-                    modal: true,
-                    buttons:false
-                });
-                $(".ui-dialog-titlebar").hide();
+                // Open the confirmation dialog
+                confirmationDialog.dialog("open");
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Submitting application, please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>');
             },
             success: function(response)
             {
                 $('.errors').html('');
-
-                $("#confirmation").dialog('close');
+                confirmationDialog.dialog('close');
                 console.log(response);
-
-                alert('xxx'); 
-                
-                // console.log(response);
-                // if(response.data.success == true)
-                // {
-                //     showSuccess(response.data.message);
-        
-                // }else{
-                //     showError(response.data.message);
-                // }
-
-                // returnStatementofaccount(student_id, period_id);
+                if(response.success == true)
+                {
+                    $("#ui_content").html('<div class="confirmation"></div><div class="ui_title_confirm">Online Application</div><div class="message">'+response.message+'</div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        draggable: false,
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: {
+                                'OK':function(){
+                                    $(this).dialog('close');
+                                    window.location.reload();
+                                }//end of ok button	
+                            }//end of buttons
+                    });//end of dialogbox
+                    $(".ui-dialog-titlebar").hide();
+                }else{
+                    showError(response.message);
+                }
             },
             error: function (data) {
-                $("#confirmation").dialog('close');
+                confirmationDialog.dialog('close');
+
                 $('.errors').html('');
                 showError('Can not process form request, please check entries then submit again!');
                 console.log(data);
@@ -137,19 +152,12 @@ $(function(){
                 dataType: 'json',
                 cache: false,
                 beforeSend: function() {
-                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Fetching record, please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-                        show: 'fade',
-                        resizable: false,	
-                        width: 350,
-                        height: 'auto',
-                        modal: true,
-                        buttons:false
-                    });
-                    $(".ui-dialog-titlebar").hide();
+                    confirmationDialog.dialog("open");
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Fetching record, please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>');
                 },
                 success: function(data)
                 {
-                    $("#confirmation").dialog('close');
+                    confirmationDialog.dialog("close");
                     console.log(data);
 
                     if(!jQuery.isEmptyObject(data)){
@@ -260,13 +268,11 @@ $(function(){
                             $("#graduate_school").val(data.academic_info.graduate_school);
                             $("#graduate_address").val(data.academic_info.graduate_address);
                             $("#graduate_period").val(data.academic_info.graduate_period);
-                        }
-                        
+                        }  
                     }
-                    
                 },
                 error: function (data) {
-                    $("#confirmation").dialog('close');
+                    confirmationDialog.dialog("close");                    
                     console.log(data);
                 }
             });

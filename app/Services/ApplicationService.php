@@ -3,14 +3,16 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Traits\Upload;
 use App\Models\Student;
-use App\Models\StudentAcademicInformationModel;
-use App\Models\StudentContactInformationModel;
-use App\Models\StudentPersonalInformationModel;
 use Illuminate\Support\Facades\DB;
+use App\Models\StudentContactInformationModel;
+use App\Models\StudentAcademicInformationModel;
+use App\Models\StudentPersonalInformationModel;
 
 class ApplicationService
 {
+    use Upload;//add this trait
    
     public function applicants()
     {
@@ -24,6 +26,38 @@ class ApplicationService
 
         try {
             DB::beginTransaction();
+
+            if(!$request->filled('idno'))
+            {
+                $applicant = Student::where('last_name', $validatedData['last_name'])
+                        ->where('first_name', $validatedData['first_name'])
+                        ->where('middle_name', $validatedData['middle_name'])
+                        ->where('name_suffix', $validatedData['name_suffix'])
+                        ->first();
+                if($applicant)
+                {
+                    switch ($applicant->application_status) {
+                        case '1':
+                            $status = 'on process.';
+                            break;
+                        case '2':
+                            $status = 'accepted.';
+                            break;
+                        case '3':
+                            $status = 'rejected';
+                            break;
+                        default:
+                            $status = '';
+                            break;
+                    }
+                    return [
+                        'success' => true,
+                        'message' => 'Application with the same name already exists and already '.$status,
+                        'alert' => 'alert-warning',
+                        'status' => 401
+                    ];
+                }
+            }
 
             $student = $this->insertStudent($validatedData);
                        $this->studentPersonalInformation($student,$validatedData);
@@ -40,7 +74,7 @@ class ApplicationService
 
             return [
                 'success' => true,
-                'message' => 'Selected unpaid enrollments successfully deleted!',
+                'message' => 'Thank you for applying to Saint Louis College. Your information and credentials will be evaluated and you will receive a notice of your status of application from the School\'s Guidance Center within three(3) working days.',
                 'alert' => 'alert-success',
                 'status' => 200
             ];
@@ -49,13 +83,11 @@ class ApplicationService
         
             return [
                 'success' => false,
-                'message' => 'Something went wrong! Can not perform requested action!'.$e->getMessage(),
+                'message' => 'Something went wrong! Can not perform requested action!',
                 'alert' => 'alert-danger',
                 'status' => 401
             ];
-        }
-                  
-        
+        }  
     }
 
     public function insertStudent($data)
@@ -190,10 +222,10 @@ class ApplicationService
 
     public function processPicture($request)
     {
-        $imageName = time().'.'.$request->picture->extension();
-        $request->picture->move(public_path('uploads'), $imageName);
+        $filename = time().rand(1,50).'.'.$request->picture->extension();
+        $path = $this->UploadFile($request->file('picture'), 'image_uploads', 'public', $filename);//use the method in the trait
 
-        return $imageName;
+        return $path;
     }
 
     public function processReportCard($request)
@@ -203,15 +235,34 @@ class ApplicationService
         {
             foreach($request->file('report_card') as $file)
             {
-                $name = time().rand(1,50).'.'.$file->extension();
-                $file->move(public_path('report_cards'), $name);  
-                $files[] = $name;  
+                $filename = time().rand(1,50).'.'.$file->extension();
+                $path = $this->UploadFile($file, 'report_cards', 'public', $filename);
+                $files[] = $path;  
             }
         }
 
         return implode(',', $files);
     }
 
-    
+    // public function update_file(Request $request) //POST
+    // {
+    //     //get the file id and retrieve the file record from the database
+    //     $file_id = $request->input('file_id');
+    //     $file = Files::where('id', $file_id)->first();
+    //     //check if the request has a file
+    //     if ($request->hasFile('file')) {
+    //         //check if the existing file is present and delete it from the storage
+    //         if (!is_null($file->path)) {
+    //             $this->deleteFile($file->path);
+    //         }
+    //         //upload the new file
+    //         $path = $this->UploadFile($request->file('file'), 'Products');
+    //     }
+    //     //upadate the file path in the database
+    //     $file->update(['path' => $path]);
+
+    //     //redirect with the success message
+    //     return redirect()->back()->with('success', 'File Updated Successfully');
+    // }
 
 }

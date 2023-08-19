@@ -187,7 +187,7 @@
             <p class="font-italic font-weight-bold text-info">Please mark whether you have received the following sacraments: (Mark N/A if no applicable)</p>
             <div class="row align-items-center mb-2">
                 <div class="col-md-3 col-sm-3">
-                    <label for="term" class="m-0 font-weight-bold text-primary">Baptism</label>
+                    <label  class="m-0 font-weight-bold text-primary">Baptism</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
                     <label for="baptism_yes"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="baptism" value="1" id="baptism_yes" checked> YES </label>
@@ -197,7 +197,7 @@
             </div>
             <div class="row align-items-center mb-2">
                 <div class="col-md-3 col-sm-3">
-                    <label for="term" class="m-0 font-weight-bold text-primary">First Communion</label>
+                    <label  class="m-0 font-weight-bold text-primary">First Communion</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
                     <label for="communion_yes"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="communion" value="1" id="communion_yes" checked> YES </label>
@@ -207,7 +207,7 @@
             </div>
             <div class="row align-items-center mb-2">
                 <div class="col-md-3 col-sm-3">
-                    <label for="term" class="m-0 font-weight-bold text-primary">Confirmation</label>
+                    <label  class="m-0 font-weight-bold text-primary">Confirmation</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
                     <label for="confirmation_yes"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="confirmation" value="1" id="confirmation_yes" checked> YES </label>

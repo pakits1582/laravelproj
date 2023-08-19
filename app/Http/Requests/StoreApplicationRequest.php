@@ -108,7 +108,7 @@ class StoreApplicationRequest extends FormRequest
             'shs_address' => 'bail|required_with:shs_school|nullable|string|min:2|max:255',
             'shs_period' => 'bail|required_with:shs_school|nullable|string|min:4|max:50',
             'shs_strand' => 'bail|required_with:shs_school|nullable',
-            'shs_techvoc_specify' => 'bail|required_with:shs_strand|nullable|string|min:2|max:50',
+            'shs_techvoc_specify' => 'bail|required_if:shs_strand,TECH-VOC|string|min:2|max:50|nullable',
 
             'college_program' => 'bail|nullable|string|min:2|max:255',
             'college_school' => 'bail|required_with:college_program|nullable|string|min:2|max:255',

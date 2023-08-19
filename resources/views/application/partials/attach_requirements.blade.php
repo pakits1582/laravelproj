@@ -42,7 +42,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2 align-items-end">
-                            <h4 class="mb-2 font-weight-bold text-black">Card/OTR Upload</h4>
+                            <h4 class="mb-2 font-weight-bold text-black">Report Card/OTR Upload</h4>
                             <p class="m-0 font-italic text-info">
                                 Note: 
                                 <ul class="m-0 font-italic text-info">
@@ -73,7 +73,7 @@
                             <p class="font-italic text-info">Note: Please provide a working email address where we will send your status of Application and a mobile/landline number for us to reach you.</p>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="contact_email" class="m-0 font-weight-bold text-primary">Contact E-mail</label>
+                                    <label for="contact_email" class="m-0 font-weight-bold text-primary">* Contact E-mail</label>
                                     <input type="email" name="contact_email" placeholder="" class="form-control" required id="contact_email">
                                     @error('contact_email')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -81,7 +81,7 @@
                                     <div id="error_contact_email" class="errors"></div>
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="contact_no" class="m-0 font-weight-bold text-primary">Contact Number</label>
+                                    <label for="contact_no" class="m-0 font-weight-bold text-primary">* Contact Number</label>
                                     <input type="text" name="contact_no" placeholder="09XXXXXXXXX" class="form-control" required id="contact_no" minlength="1" maxlength="20">
                                     @error('contact_no')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>

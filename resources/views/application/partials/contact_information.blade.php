@@ -83,7 +83,7 @@
             </div>
             <div class="row align-items-center mb-3">
                 <div class="col-md-3 col-sm-3">
-                    <label for="term" class="m-0 font-weight-bold text-primary">* Zip Code</label>
+                    <label for="current_zipcode" class="m-0 font-weight-bold text-primary">* Zip Code</label>
                 </div>
                 <div class="col-md-9 col-sm-9">
                     <input type="text" name="current_zipcode" value="{{ old('current_zipcode') }}" placeholder="" class="form-control" id="current_zipcode" minlength="2" maxlength="20">
