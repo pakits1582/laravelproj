@@ -20,7 +20,7 @@
                         <td>{{ $gradingsystem->remark->remark }}</td>
                         <td>{{ $gradingsystem->level->level }}</td>
                         <td class="mid">
-                            <a href="{{ route('gradingsystems.edit', ['gradingsystem' => $gradingsystem->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('gradingsystems.edit', ['gradingsystem' => $gradingsystem->id ]) }}" class="btn btn-primary btn-icon-split btn-sm">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

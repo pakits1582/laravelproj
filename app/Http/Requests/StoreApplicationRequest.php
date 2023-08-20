@@ -61,7 +61,7 @@ class StoreApplicationRequest extends FormRequest
             'entry_period' => 'required|integer',
             'idno' => ['nullable', 'numeric',  new IdnoRule],
             'classification' => 'required',
-            'program_id' => 'required',
+            'program_id' => ['required','exists:programs,id'],
 
             'last_name' => 'bail|required|string|min:2|max:255',
             'first_name' => 'bail|required|string|min:2|max:255',
@@ -95,7 +95,7 @@ class StoreApplicationRequest extends FormRequest
             'mobileno' => 'bail|required|string|min:11|max:20',
             'email' => 'bail|required|email|max:150',
 
-            'elem_school' => 'bail|nullable|string|min:2|max:255',
+            'elem_school' => 'bail|nullable|string|min:2|max:255|',
             'elem_address' => 'bail|required_with:elem_school|nullable|string|min:2|max:255',
             'elem_period' => 'bail|required_with:elem_school|nullable|string|min:4|max:50',
 

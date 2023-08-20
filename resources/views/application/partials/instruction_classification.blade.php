@@ -32,8 +32,8 @@
                             <option value="">- SELECT CLASSIFICATION -</option>
                             <option value="1" @if(old('classification') == 1) selected @endif>NEW STUDENT</option>
                             <option value="2" @if(old('classification') == 2) selected @endif>TRANSFEREE</option>
-                            <option value="3" @if(old('classification') == 3) selected @endif>READMIT</option>
-                            <option value="4" @if(old('classification') == 4) selected @endif>GRADUATED (New Program)</option>
+                            <option value="3" @if(old('classification') == 4) selected @endif>GRADUATED (New Program)</option>
+                            {{-- <option value="4" @if(old('classification') == 3) selected @endif>READMIT</option> --}}
                         </select>
                         @error('classification')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>

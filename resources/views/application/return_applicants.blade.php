@@ -3,42 +3,52 @@
         <tr>
             <th class="w30 mid"><input type="checkbox" name="check_all" value="1" id="check_all" /></th>
             <th class="w50">#</th>
-            <th class="">Application No.</th>
             <th class="">Name</th>
             <th class="">Program</th>
             <th class="">Classification</th>
             <th class="">Date</th>
-            <th class="">Period Applied</th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @if (count($applicants) > 0)
             @foreach ($applicants as $applicant)
-                {{-- <tr class="label">
+                <tr class="label">
                     <td class="mid">
-                        <input type="checkbox" name="student_ids[]" value="{{ $enrollment->id }}" class="checkedapplicants" id="" />
+                        <input type="checkbox" name="student_ids[]" value="{{ $applicant->id }}" class="checked_applicants" id="" />
                     </td>
                     <td class="">{{ $loop->iteration }}</td>
-                    <td class="">{{ $enrollment->student->user->idno }}</td>
-                    <td class="">{{ $enrollment->student->name }}</td>
-                    <td class="">{{ $enrollment->program->code }}</td>
-                    <td class="mid">{{ $enrollment->year_level }}</td>
-                    <td class="">{{ $enrollment->section->code }}</td>
-                    <td class="mid">{{ $enrollment->enrolled_classes_count }}</td>
-                    <td class="mid">{{ $enrollment->enrolledby->idno }}</td>
-                    <td class="mid">{{ \Carbon\Carbon::parse($enrollment->created_at)->format('F d, Y') }}</td>
+                    <td class="">{{ $applicant->name }}</td>
+                    <td class="">{{ $applicant->program->code }}</td>
+                    @php
+                        switch ($applicant->classification) {
+                            case 1:
+                                $classification = 'NEW STUDENT';
+                                break;
+                            case 2:
+                                $classification = 'TRANSFEREE';
+                                break;
+                            case 3:
+                                $classification = 'GRADUATED (NEW PROGRAM)';
+                                break;
+                            default:
+                                $classification = '';
+                        }
+                    @endphp
+                    <td class="">{{ $classification   }}</td>
+                    <td class="mid">{{ \Carbon\Carbon::parse($applicant->entry_date)->format('F d, Y') }}</td>
                     <td class="mid">
-                        <a href="#" id="{{ $enrollment->id }}" class="btn btn-success btn-circle btn-sm view_classes_unpaid" title="Edit Applicant">
+                        <a href="#" id="{{ $applicant->id }}" class="btn btn-primary btn-circle btn-sm view_application" target="_blank" title="View Applicant">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ route('applications.edit', ['student' => $applicant->id ]) }}" id="{{ $applicant->id }}" target="_blank" class="btn btn-success btn-circle btn-sm edit_application" title="Edit Applicant">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>
-                </tr> --}}
+                </tr>
             @endforeach
         @else
             <tr>
-                <th class="">&nbsp;</th>
-                <th class="">&nbsp;</th>
                 <th class="">&nbsp;</th>
                 <th class="">&nbsp;</th>
                 <th class="">&nbsp;</th>

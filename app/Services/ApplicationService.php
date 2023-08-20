@@ -14,10 +14,31 @@ class ApplicationService
 {
     use Upload;//add this trait
    
-    public function applicants()
+    public function applicantList($period, $level = '', $college = '', $program_id = '', $limit = 500)
     {
-        return [];
+        $query = Student::with(['program' => ['level', 'collegeinfo']])->orderBy('entry_date', 'DESC')->orderBy('last_name')->limit($limit);
 
+        $query->where('entry_period', $period)->where('application_status', 1);
+        
+        $query->when(isset($program_id) && !empty($program_id), function ($query) use($program_id) {
+            $query->where('program_id', $program_id);
+        });
+
+        $query->when(isset($level) && !empty($level), function ($query) use($level) {
+            $query->whereHas('program.level', function($query) use($level){
+                $query->where('educational_levels.id', $level);
+            });
+        });
+
+        $query->when(isset($college) && !empty($college), function ($query) use($college) {
+            $query->whereHas('program.collegeinfo', function($query) use($college){
+                $query->where('colleges.id', $college);
+            });
+        });
+
+        $results = $query->get();
+
+        return $results;
     }
 
     public function saveApplication($request)
@@ -27,42 +48,39 @@ class ApplicationService
         try {
             DB::beginTransaction();
 
-            if(!$request->filled('idno'))
+            $idno = $validatedData['idno'];
+
+            $query = Student::with(['user']);
+
+            $query->when($idno , function ($query) use ($idno) 
             {
-                $applicant = Student::where('last_name', $validatedData['last_name'])
-                        ->where('first_name', $validatedData['first_name'])
-                        ->where('middle_name', $validatedData['middle_name'])
-                        ->where('name_suffix', $validatedData['name_suffix'])
-                        ->first();
-                if($applicant)
+                $query->whereHas('user', function($query) use($idno){
+                    $query->where('idno', $idno);
+                });
+            });
+
+            $studentinfo =  $query->first();
+            
+            if(!$request->filled('idno')) 
+            {
+                $checkResult = $this->checkIfNameExists($validatedData);
+                if($checkResult)
                 {
-                    switch ($applicant->application_status) {
-                        case '1':
-                            $status = 'on process.';
-                            break;
-                        case '2':
-                            $status = 'accepted.';
-                            break;
-                        case '3':
-                            $status = 'rejected';
-                            break;
-                        default:
-                            $status = '';
-                            break;
-                    }
-                    return [
-                        'success' => true,
-                        'message' => 'Application with the same name already exists and already '.$status,
-                        'alert' => 'alert-warning',
-                        'status' => 401
-                    ];
+                    return $checkResult;
                 }
+                $student = $this->insertStudent($validatedData);
+            }else{
+                $checkResult = $this->checkIfNameAndIdnoMatch($studentinfo, $validatedData);
+                if($checkResult) 
+                {
+                    return $checkResult;
+                }
+                $student = $this->updateStudent($studentinfo, $validatedData);
             }
 
-            $student = $this->insertStudent($validatedData);
-                       $this->studentPersonalInformation($student,$validatedData);
-                       $this->studentContactInformation($student,$validatedData);
-                       $this->studentAcademicInformation($student,$validatedData);
+            $this->studentPersonalInformation($student,$validatedData);
+            $this->studentContactInformation($student,$validatedData);
+            $this->studentAcademicInformation($student,$validatedData);
 
             $picture = $this->processPicture($request);
             $report_card = $this->processReportCard($request);
@@ -90,6 +108,63 @@ class ApplicationService
         }  
     }
 
+    private function  checkIfNameExists($validatedData)
+    {
+        $applicant = Student::where('last_name', $validatedData['last_name'])
+                        ->where('first_name', $validatedData['first_name'])
+                        ->where('middle_name', $validatedData['middle_name'])
+                        ->where('name_suffix', $validatedData['name_suffix'])
+                        ->first();
+        if($applicant)
+        {
+            switch ($applicant->application_status) {
+                case '1':
+                    $status = 'on process.';
+                    break;
+                case '2':
+                    $status = 'accepted.';
+                    break;
+                case '3':
+                    $status = 'rejected';
+                    break;
+                default:
+                    $status = '';
+                    break;
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Application with the same name already exists and already '.$status,
+                'alert' => 'alert-warning',
+                'status' => 401
+            ];
+        }
+
+        return false;
+    }
+
+    private function checkIfNameAndIdnoMatch($student, $validatedData)
+    {
+        if($student)
+        {
+           if($student->last_name !== $validatedData['last_name'] 
+            && $student->first_name !== $validatedData['first_name'] 
+            && $student->middle_name !== $validatedData['middle_name']
+            && $student->name_suffix !== $validatedData['name_suffix']
+            && $student->sex == Student::SEX_MALE
+            ){
+                return [
+                    'success' => false,
+                    'message' => 'The name under the ID number provided does not match the name in the application form!',
+                    'alert' => 'alert-danger',
+                    'status' => 401
+                ];
+           }
+        }
+
+        return false;
+    }
+
     public function insertStudent($data)
     {
         $studentData = [
@@ -106,12 +181,26 @@ class ApplicationService
             'entry_date' => now(), 
         ];
 
-        $student = Student::updateOrCreate([
+        return Student::Create($studentData);
+    }
+
+    public function updateStudent($student, $data)
+    {
+        $studentData = [
             'last_name' => $data['last_name'], 
             'first_name' => $data['first_name'], 
             'middle_name' => $data['middle_name'], 
-            'name_suffix' => $data['name_suffix']  
-        ], $studentData);
+            'name_suffix' => $data['name_suffix'],  
+            'sex' => $data['sex'],  
+            'program_id' => $data['program_id'], 
+            'year_level' => 1,
+            'classification' => $data['classification'], 
+            'application_status' => 1,
+            'entry_period' => $data['entry_period'], 
+            'entry_date' => now(), 
+        ];
+
+        $student->update($studentData);
 
         return $student;
     }

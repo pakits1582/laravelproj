@@ -543,6 +543,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:applications']], function () {
         Route::get('/applications', [ApplicationController::class, 'index']);
+        Route::get('/applications/{student}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
+
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

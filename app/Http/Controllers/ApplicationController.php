@@ -6,6 +6,7 @@ use App\Http\Requests\StoreApplicationRequest;
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Models\Configuration;
+use App\Models\Student;
 use App\Services\PeriodService;
 use App\Services\ProgramService;
 use App\Services\ApplicationService;
@@ -26,8 +27,8 @@ class ApplicationController extends Controller
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
 
-        $applicants = $this->applicationService->applicants(session('current_period'));
-        
+        $applicants = $this->applicationService->applicantList(session('current_period'));
+
         return view('application.index', compact('periods', 'programs', 'applicants'));
     }
 
@@ -45,6 +46,18 @@ class ApplicationController extends Controller
         $application = $this->applicationService->saveApplication($request);
         
         return response()->json($application);
+    }
+
+    public function edit(Student $student)
+    {
+        $applicant = $student->load(['academic_info', 'contact_info', 'personal_info']);
+
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
+        $configuration = Configuration::take(1)->first();
+        $regions = json_decode(File::get(public_path('json/region.json')), true);
+
+        return view('application.edit', compact('periods', 'programs', 'configuration', 'regions', 'applicant'));
     }
 
 

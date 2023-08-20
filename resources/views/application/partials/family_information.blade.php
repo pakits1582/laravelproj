@@ -20,7 +20,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label for="father_name" class="m-0 font-weight-bold text-primary">Name</label>
-                                    <input type="text" name="father_name" value="{{ old('father_name') }}" placeholder="" class="form-control text-uppercase" id="father_name" maxlength="255" minlength="2">
+                                    <input type="text" name="father_name" value="{{ old('father_name', $applicant->father_name ?? '') }}" placeholder="" class="form-control text-uppercase" id="father_name" maxlength="255" minlength="2">
                                     @error('father_name')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <label for="employer_contact" class="m-0 font-weight-bold text-primary">Company Contact No.</label>
-                                    <input type="text" name="employer_contact" value="{{ old('employer_contact') }}" placeholder="" class="form-control text-uppercase" id="employer_contact" minlength="2" maxlength="30">
+                                    <input type="text" name="employer_contact" value="{{ old('employer_contact', $applicant->employer_contact ?? '') }}" placeholder="" class="form-control text-uppercase" id="employer_contact" minlength="2" maxlength="30">
                                     @error('employer_contact')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror

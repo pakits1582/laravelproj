@@ -37,12 +37,6 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="college" class="m-0 font-weight-bold text-primary">College</label>
-                                @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'filter_item'])
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
                                 <label for="program_id" class="m-0 font-weight-bold text-primary">Program</label>
                                 <select name="program_id" class="form-control filter_item" id="program">
                                     <option value="">- select program -</option>
@@ -52,6 +46,12 @@
                                         @endforeach
                                     @endif
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="college" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                <input type="text" name="keyword" placeholder="Type keyword to search..." class="filter_item form-control" id="keyword">
                             </div>
                         </div>
                     </div>
