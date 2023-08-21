@@ -427,6 +427,32 @@ class Helpers
     {
         return ($end_time1 < $start_time2) || ($end_time2 < $start_time1);
     }
+
+    public static function findCode($dataArray, $nameKey, $nameValue, $codeKey, $parentCodeValue = null, $parentCodeKey = null)
+    {
+        foreach ($dataArray as $data) 
+        {
+            if ($data[$nameKey] === $nameValue && (!$parentCodeValue || $data[$parentCodeKey] === $parentCodeValue)) 
+            {
+                $code = $data[$codeKey];
+                return $code;
+            }
+        }
+        return null;
+    }
     
+    public static function findItemsByCode($dataArray, $codeKey, $codeValue)
+    {
+        $filteredItems = [];
+
+        foreach ($dataArray as $item) {
+            if ($item[$codeKey] === $codeValue) {
+                $filteredItems[] = $item;
+            }
+        }
+
+        return $filteredItems;
+    }
+
 }
     

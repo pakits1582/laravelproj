@@ -108,5 +108,10 @@ class Student extends Model
         return $this->hasOne(StudentPersonalInformationModel::class, 'student_id', 'id');
     }
 
+    public function entryperiod()
+    {
+        return $this->hasOne(Period::class, 'id', 'entry_period');
+    }
+
     
 }

@@ -50,14 +50,16 @@ class ApplicationController extends Controller
 
     public function edit(Student $student)
     {
-        $applicant = $student->load(['academic_info', 'contact_info', 'personal_info']);
+        $applicant = $student->load(['entryperiod','academic_info', 'contact_info', 'personal_info']);
 
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
-        $configuration = Configuration::take(1)->first();
         $regions = json_decode(File::get(public_path('json/region.json')), true);
+        $provinces = json_decode(File::get(public_path('json/province.json')), true);
+        $cities = json_decode(File::get(public_path('json/city.json')), true);
+        $barangays = json_decode(File::get(public_path('json/barangay.json')), true);
 
-        return view('application.edit', compact('periods', 'programs', 'configuration', 'regions', 'applicant'));
+        return view('application.edit', compact('periods', 'programs', 'regions', 'provinces', 'cities', 'barangays', 'applicant'));
     }
 
 

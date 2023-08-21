@@ -130,7 +130,9 @@
                         @foreach (Helpers::nationalities() as $nationality)
                             <option value="{{ $nationality }}"
                                 @if(old('nationality', $applicant->personal_info->nationality ?? '') == $nationality) selected @endif
-                            >{{ $nationality }}</option>
+                            >
+                                {{ $nationality }}
+                            </option>
                         @endforeach
                     </select>
                     @error('nationality')
