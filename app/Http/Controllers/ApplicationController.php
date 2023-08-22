@@ -37,8 +37,19 @@ class ApplicationController extends Controller
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
         $configuration = Configuration::take(1)->first();
         $regions = json_decode(File::get(public_path('json/region.json')), true);
+        $withperiod = false;
 
-        return view('application.online_application', compact('programs', 'configuration', 'regions'));
+        return view('application.online_application', compact('programs', 'configuration', 'regions', 'withperiod'));
+    }
+
+    public function create()
+    {
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
+        $regions = json_decode(File::get(public_path('json/region.json')), true);
+        $withperiod = true;
+
+        return view('application.create', compact('periods','programs', 'regions', 'withperiod'));
     }
 
     public function store(StoreApplicationRequest $request)
@@ -48,9 +59,10 @@ class ApplicationController extends Controller
         return response()->json($application);
     }
 
-    public function edit(Student $student)
+    public function edit(Student $application)
     {
-        $applicant = $student->load(['entryperiod','academic_info', 'contact_info', 'personal_info']);
+        $applicant = $application->load(['user', 'entryperiod','academic_info', 'contact_info', 'personal_info']);
+        $withperiod = true;
 
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
@@ -59,7 +71,7 @@ class ApplicationController extends Controller
         $cities = json_decode(File::get(public_path('json/city.json')), true);
         $barangays = json_decode(File::get(public_path('json/barangay.json')), true);
 
-        return view('application.edit', compact('periods', 'programs', 'regions', 'provinces', 'cities', 'barangays', 'applicant'));
+        return view('application.edit', compact('periods', 'programs', 'regions', 'provinces', 'cities', 'barangays', 'applicant', 'withperiod'));
     }
 
 

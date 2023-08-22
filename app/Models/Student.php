@@ -13,6 +13,12 @@ class Student extends Model
     const SEX_MALE = 1;
     const SEX_FEMALE = 2;
 
+    const STUDENT_CLASSIFICATION = [
+        1 => 'NEW STUDENT',
+        2 => 'TRANSFEREE',
+        3 => 'GRADUATED (New Program)'
+    ];
+
     protected $fillable = ['id', 'user_id', 'picture', 'last_name', 'first_name', 'middle_name', 'name_suffix', 'sex', 'program_id', 'year_level', 'curriculum_id', 'academic_status', 'report_card', 'als_certificate', 'classification', 'application_no', 'application_status', 'admission_status','admission_date', 'entry_date', 'entry_data', 'entry_period', 'assessed_by', 'assessed_date'];
 
     public function firstName(): Attribute

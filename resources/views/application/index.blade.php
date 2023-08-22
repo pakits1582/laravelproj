@@ -11,7 +11,19 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Applications <span id="period_name">{{ session('periodname') }}</span></h1>
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h1 class="h3 text-800 text-primary mb-0">Applications <span id="period_name">{{ session('periodname') }}</span></h1>
+                    </div>
+                    <div class="col-md-6 right">
+                        <a href="{{ route('applications.create') }}" class="btn btn-primary btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-plus-square"></i>
+                            </span>
+                            <span class="text">Add New Application</span>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <form method="POST" id="form_filterapplication" action="">

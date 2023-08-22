@@ -21,7 +21,7 @@
                                 <form method="POST" id="form_application" action="" enctype="multipart/form-data">
                                     @csrf
         
-                                    @include('application.partials.instruction_classification')
+                                    @include('application.partials.instruction_classification', ['withperiod' => $withperiod])
                                     
                                     <div class="row m-0">
                                         <div class="col-lg-6">

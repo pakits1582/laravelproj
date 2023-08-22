@@ -542,9 +542,13 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:applications']], function () {
-        Route::get('/applications', [ApplicationController::class, 'index']);
-        Route::get('/applications/{student}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
-
+        // Route::get('/applications', [ApplicationController::class, 'index']);
+        // Route::get('/applications/create', [ApplicationController::class, 'create'])->name();
+        // Route::get('/applications/{student}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
+        // Route::put('/applications/{student}', [ApplicationController::class, 'update'])->name('application.update');
+        Route::resource('applications', ApplicationController::class)->missing(function (Request $request) {
+            return Redirect::route('applications.index');
+        }); 
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
