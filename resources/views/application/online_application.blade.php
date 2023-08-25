@@ -51,8 +51,8 @@
                                             @include('application.partials.terms_and_condition')
                                         </div>
                                     </div>
-                                    <div class="row p-3">
-                                        <div class="col-lg-12">
+                                    <div class="row m-3">
+                                        <div class="col-lg-12 p-0">
                                             <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Submit Application">
                                         </div>
                                     </div>
