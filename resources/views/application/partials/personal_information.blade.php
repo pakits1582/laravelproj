@@ -3,7 +3,7 @@
         <h4 class="m-0 font-weight-bold text-primary">Personal Information</h4>
     </div>
     <div class="card-body" id="">
-        <div class="form-group" id="postcharge_fees">
+        <div class="form-group">
             <p class="font-italic font-weight-bold text-info">Note: LEGAL NAME (Name on Birth Certificate)</p>
             <div class="row align-items-center mb-1">
                 <div class="col-md-3 col-sm-3">

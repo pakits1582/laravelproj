@@ -311,7 +311,7 @@ class ApplicationService
 
     public function processPicture($request)
     {
-        $filename = time().rand(1,50).'.'.$request->picture->extension();
+        $filename = time().rand(1,50);
         $path = $this->UploadFile($request->file('picture'), 'image_uploads', 'public', $filename);//use the method in the trait
 
         return $path;
@@ -324,7 +324,7 @@ class ApplicationService
         {
             foreach($request->file('report_card') as $file)
             {
-                $filename = time().rand(1,50).'.'.$file->extension();
+                $filename = time().rand(1,50);
                 $path = $this->UploadFile($file, 'report_cards', 'public', $filename);
                 $files[] = $path;  
             }

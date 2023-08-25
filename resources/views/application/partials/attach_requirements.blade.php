@@ -11,10 +11,10 @@
                             <h4 class="mb-2 font-weight-bold text-black">ID Picture Upload</h4>
                     
                             <div class="row align-items-center">
-                                <div class="col-md-4 col-sm-4">
+                                <div class="col-md-5 col-sm-5">
                                     <div id="picture_preview" class="image-upload-preview"></div>
                                 </div>
-                                <div class="col-md-8 col-sm-8">
+                                <div class="col-md-7 col-sm-7">
                                     <p class="m-0 font-italic text-info">
                                         Note: 
                                         <ul class="m-0 font-italic text-info">

@@ -42,6 +42,13 @@ class ApplicationController extends Controller
         return view('application.online_application', compact('programs', 'configuration', 'regions', 'withperiod'));
     }
 
+    public function show(Student $application)
+    {
+        $applicant = $application->load(['user', 'entryperiod','academic_info', 'contact_info', 'personal_info']);
+
+        return view('application.view', compact('applicant'));
+    }
+
     public function create()
     {
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);

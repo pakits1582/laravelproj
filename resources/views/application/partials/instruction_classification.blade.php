@@ -16,7 +16,7 @@
                 @if ($withperiod)
                     <div class="row">
                         <div class="col-md-12">
-                            <label for="entry_period" class="m-0 font-weight-bold text-primary">Application Period</label>
+                            <label for="entry_period" class="m-0 font-weight-bold text-primary">* Application Period</label>
                             <select name="entry_period" required class="form-control" id="entry_period">
                                 @if ($periods)
                                     @foreach ($periods as $period)
@@ -29,7 +29,6 @@
                             @enderror
                             <div id="error_entry_period" class="errors"></div>
                         </div>
-                        <div class="col-md-3 d-none d-lg-block"></div>
                     </div>
                 @else
                     <input type="hidden" name="entry_period" required value="{{ $configuration->applicationperiod->id ?? session('current_period') }}" />
@@ -43,7 +42,6 @@
                         @enderror
                         <div id="error_idno" class="errors"></div>
                     </div>
-                    <div class="col-md-3 d-none d-lg-block"></div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -59,7 +57,6 @@
                         @enderror
                         <div id="error_classification" class="errors"></div>
                     </div>
-                    <div class="col-md-3 d-none d-lg-block"></div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">

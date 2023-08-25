@@ -63,7 +63,7 @@ $(function(){
 		}
 	});
 
-    $(document).on("submit", "#form_application", function(e){
+    $(document).on("submit", "#form_online_application", function(e){
         $.ajax({
             url: "/applications/saveonlineapplication",
             type: 'POST',
@@ -130,16 +130,12 @@ $(function(){
     });
 
     $(document).on("submit", "#form_update_setup_fee", function(e){
-        var postData = $(this).serializeArray();
-        var period = $("#period").val();
-        var setupfee_id = $(".checks:checked").attr("data-setupfeeid");
-
-        //postData.push({ name: "setupfee_id", value: setupfee_id });
+        var student = $("#student_applicant").val();
 
         $.ajax({
-            url: "/fees/"+setupfee_id+"/updatesetupfee",
+            url: "/fees/"+student+"/updatesetupfee",
             type: 'PUT',
-            data: postData,
+            data: new FormData(this),
             dataType: 'json',
             beforeSend: function() {
                 $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({

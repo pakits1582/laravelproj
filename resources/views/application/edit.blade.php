@@ -44,6 +44,7 @@
                             </div>
                             <div class="row p-3">
                                 <div class="col-lg-12">
+                                    <input type="hidden" id="student_applicant" value="{{ $applicant->id ?? '' }}" >
                                     <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Update Application">
                                 </div>
                             </div>

@@ -10,6 +10,11 @@ class Student extends Model
 {
     use HasFactory;
 
+    const SEX = [
+        1 => 'MALE',
+        2 => 'FEMALE'
+    ];
+
     const SEX_MALE = 1;
     const SEX_FEMALE = 2;
 
@@ -17,6 +22,35 @@ class Student extends Model
         1 => 'NEW STUDENT',
         2 => 'TRANSFEREE',
         3 => 'GRADUATED (New Program)'
+    ];
+
+    const SACRAMENTS = [
+        1 => 'YES',
+        2 => 'NO',
+        3 => 'N/A'
+    ];
+
+    const RELIGIONS = [
+        17 => 'Roman Catholic',
+        1 => 'Anglican',
+        2 => 'Aglipayan',
+        3 => 'Assembly of God',
+        4 => 'Baptist',
+        5 => 'Born Again Christian',
+        6 => 'Church of Latter-Day Saints (Mormons)',
+        7 => 'Crusaders of the Divine Church of Christ',
+        8 => 'Iglesia Filipina Independiente',
+        9 => 'Iglesia Ni Cristo',
+        10 => 'Islam',
+        11 => 'Jehovah\'s Witness',
+        12 => 'Lutheran',
+        13 => 'Methodist',
+        15 => 'Pentecost',
+        16 => 'Protestant',
+        18 => 'Seventh Day Adventist',
+        19 => 'Sikh',
+        20 => 'UCCP',
+        14 => 'Others',     
     ];
 
     protected $fillable = ['id', 'user_id', 'picture', 'last_name', 'first_name', 'middle_name', 'name_suffix', 'sex', 'program_id', 'year_level', 'curriculum_id', 'academic_status', 'report_card', 'als_certificate', 'classification', 'application_no', 'application_status', 'admission_status','admission_date', 'entry_date', 'entry_data', 'entry_period', 'assessed_by', 'assessed_date'];
