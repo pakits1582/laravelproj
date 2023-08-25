@@ -1,22 +1,23 @@
 @extends('layout')
-@section('title') {{ 'Edit Application' }} @endsection
+@section('title') {{ 'Add New Application' }} @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Edit Application</h1>
-        <p class="mb-4">Updating of student's applications.</p>
+        <h1 class="h3 mb-2 text-gray-800">Add New Application</h1>
+        <p class="mb-4">Adding of new student applications.</p>
         
         <div class="row justify-content-center">
             <div class="col-xl-12 col-lg-12 col-md-9">
                 <div class="card o-hidden border-0 shadow-lg my-0">
                     <div class="card-header py-3">
-                        <h4 class="m-0 font-weight-bold text-primary">Edit Application for {{ $applicant->entryperiod->name }}</h4>
+                        <h4 class="m-0 font-weight-bold text-primary">Add New Application for {{ session('periodname') }}</h4>
                     </div>
                     <div class="card-body p-0">
-                        <form method="POST" id="form_update_application" action="" enctype="multipart/form-data">
+                        <form method="POST" id="form_add_application" action="" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
+
                             @include('application.partials.instruction_classification', ['withperiod' => $withperiod])
                             
                             <div class="row m-0">
@@ -44,7 +45,7 @@
                             </div>
                             <div class="row p-3">
                                 <div class="col-lg-12">
-                                    <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Update Application">
+                                    <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Save Application">
                                 </div>
                             </div>
                         </form>

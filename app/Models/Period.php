@@ -20,4 +20,10 @@ class Period extends Model
     {
         return $this->hasOne(SetupPeriod::class);
     }
+
+    public function entryperiod()
+    {
+        return $this->belongsTo(Student::class, 'entry_period', 'id');
+
+    }
 }

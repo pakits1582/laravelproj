@@ -12,12 +12,32 @@
     <div class="col-lg-6 my-3">
         <div class="card border-left-info h-100">
             <div class="card-body p-2 align-items-end">
-                <p class="mb-0 font-italic font-weight-bold text-info">Please submit your old ID number if you are a graduate or returnee from this institution and you are applying to a new program.</p>
-                <div class="row pt-3">
+                <p class="mb-3 font-italic font-weight-bold text-info">Please submit your old ID number if you are a graduate or returnee from this institution and you are applying to a new program.</p>
+                @if ($withperiod)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="entry_period" class="m-0 font-weight-bold text-primary">Application Period</label>
+                            <select name="entry_period" required class="form-control" id="entry_period">
+                                @if ($periods)
+                                    @foreach ($periods as $period)
+                                        <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            @error('entry_period')
+                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                            @enderror
+                            <div id="error_entry_period" class="errors"></div>
+                        </div>
+                        <div class="col-md-3 d-none d-lg-block"></div>
+                    </div>
+                @else
+                    <input type="hidden" name="entry_period" required value="{{ $configuration->applicationperiod->id ?? session('current_period') }}" />
+                @endif
+                <div class="row">
                     <div class="col-md-12">
                         <label for="idno" class="m-0 font-weight-bold text-primary">ID Number</label>
-                        <input type="hidden" name="entry_period" required value="{{ $configuration->applicationperiod->id ?? session('current_period') }}" />
-                        <input type="text" name="idno" value="{{ old('idno') }}" placeholder="" class="form-control" id="idno">
+                        <input type="text" name="idno" value="{{ old('idno', $applicant->user->idno ?? '') }}" placeholder="" class="form-control" id="idno">
                         @error('idno')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
                         @enderror
@@ -30,10 +50,9 @@
                         <label for="classification" class="m-0 font-weight-bold text-primary">* Classification</label>
                         <select name="classification" required class="form-control text-uppercase" id="classification">
                             <option value="">- SELECT CLASSIFICATION -</option>
-                            <option value="1" @if(old('classification') == 1) selected @endif>NEW STUDENT</option>
-                            <option value="2" @if(old('classification') == 2) selected @endif>TRANSFEREE</option>
-                            <option value="3" @if(old('classification') == 4) selected @endif>GRADUATED (New Program)</option>
-                            {{-- <option value="4" @if(old('classification') == 3) selected @endif>READMIT</option> --}}
+                            @foreach(\App\Models\Student::STUDENT_CLASSIFICATION as $key => $val)
+                                <option value="{{ $key }}" @if(old('classification', $applicant->classification ?? '') ==  $key) selected @endif>{{ $val }}</option>
+                            @endforeach
                         </select>
                         @error('classification')
                             <p class="text-danger text-xs mt-1">{{$message}}</p>
@@ -68,7 +87,7 @@
                                         <optgroup label="{{ $groupName }}">
                                     @endif
                                     <option value="{{ $program->id }}"
-                                        @if(old('program_id') == $program->id) selected @endif
+                                        @if(old('program_id', $applicant->program_id ?? '') == $program->id) selected @endif
                                     >
                                         ({{ $program->code }}) - {{ $program->name }}
                                     </option>

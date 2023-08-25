@@ -41,7 +41,7 @@
                         <a href="#" id="{{ $applicant->id }}" class="btn btn-primary btn-circle btn-sm view_application" target="_blank" title="View Applicant">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="{{ route('applications.edit', ['student' => $applicant->id ]) }}" id="{{ $applicant->id }}" target="_blank" class="btn btn-success btn-circle btn-sm edit_application" title="Edit Applicant">
+                        <a href="{{ route('applications.edit', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" target="_blank" class="btn btn-success btn-circle btn-sm edit_application" title="Edit Applicant">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>
