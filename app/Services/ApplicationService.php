@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Traits\Upload;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\StudentContactInformationModel;
 use App\Models\StudentAcademicInformationModel;
 use App\Models\StudentPersonalInformationModel;
@@ -333,25 +334,65 @@ class ApplicationService
         return implode(',', $files);
     }
 
-    // public function update_file(Request $request) //POST
-    // {
-    //     //get the file id and retrieve the file record from the database
-    //     $file_id = $request->input('file_id');
-    //     $file = Files::where('id', $file_id)->first();
-    //     //check if the request has a file
-    //     if ($request->hasFile('file')) {
-    //         //check if the existing file is present and delete it from the storage
-    //         if (!is_null($file->path)) {
-    //             $this->deleteFile($file->path);
-    //         }
-    //         //upload the new file
-    //         $path = $this->UploadFile($request->file('file'), 'Products');
-    //     }
-    //     //upadate the file path in the database
-    //     $file->update(['path' => $path]);
+    public function applicationAction($action, $application_no, $application)
+    {
+        if ($action === 'delete') {
+            return $this->deleteApplication($application);
+        }
+        
+        $status = null;
+        if ($action === 'accept') {
+            $status = Student::APPLI_ACCEPTED;
+        } elseif ($action === 'reject') {
+            $status = Student::APPLI_REJECTED;
+        }
+        
+        if ($status !== null) {
+            return $this->updateApplicationStatus($application, $application_no, $status);
+        }
+    }
 
-    //     //redirect with the success message
-    //     return redirect()->back()->with('success', 'File Updated Successfully');
-    // }
+    private function deleteApplication($application)
+    {
+        if(!is_null($application->picture))
+        {
+            $this->deleteFile($application->picture);
+        }
 
+        if(!is_null($application->report_card))
+        {
+            $reportcards = explode(',', $application->report_card);
+
+            foreach ($reportcards as $reportcard) 
+            {
+                $this->deleteFile($reportcard);
+            }
+        }
+
+        $application->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Application successfully deleted!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
+    }
+
+    private function updateApplicationStatus($application, $application_no, $status)
+    {
+        $application->application_no = $application_no;
+        $application->application_status = $status;
+        $application->assessed_by = Auth::id();
+        $application->assessed_date = now();
+        
+        $application->save();
+
+        return [
+            'success' => true,
+            'message' => 'Application action successfully executed!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
+    }
 }

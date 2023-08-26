@@ -44,7 +44,7 @@ class ApplicationController extends Controller
 
     public function show(Student $application)
     {
-        $applicant = $application->load(['user', 'entryperiod','academic_info', 'contact_info', 'personal_info']);
+        $applicant = $application->load(['assessedby', 'entryperiod','academic_info', 'contact_info', 'personal_info']);
 
         return view('application.view', compact('applicant'));
     }
@@ -81,5 +81,15 @@ class ApplicationController extends Controller
         return view('application.edit', compact('periods', 'programs', 'regions', 'provinces', 'cities', 'barangays', 'applicant', 'withperiod'));
     }
 
+    public function update(StoreApplicationRequest $request)
+    {
+        return response()->json($request->student_applicant);
+    }
 
+    public function applicationaction(Request $request, Student $application)
+    {
+        $action = $this->applicationService->applicationAction($request->action, $request->application_no, $application);
+
+        return response()->json($action);
+    }
 }

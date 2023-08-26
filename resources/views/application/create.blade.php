@@ -14,9 +14,8 @@
                         <h4 class="m-0 font-weight-bold text-primary">Add New Application for {{ session('periodname') }}</h4>
                     </div>
                     <div class="card-body p-0">
-                        <form method="POST" id="form_add_application" action="" enctype="multipart/form-data">
+                        <form method="POST" id="form_application" action="" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
 
                             @include('application.partials.instruction_classification', ['withperiod' => $withperiod])
                             
@@ -45,6 +44,7 @@
                             </div>
                             <div class="row p-3">
                                 <div class="col-lg-12">
+                                    <input type="hidden"  name="agree_terms" type="checkbox" value="1" id="agree_terms" />
                                     <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Save Application">
                                 </div>
                             </div>

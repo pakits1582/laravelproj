@@ -63,9 +63,9 @@ $(function(){
 		}
 	});
 
-    $(document).on("submit", "#form_online_application", function(e){
+    $(document).on("submit", "#form_application", function(e){
         $.ajax({
-            url: "/applications/saveonlineapplication",
+            url: "/applications",
             type: 'POST',
             data: new FormData(this),
             dataType: 'json',
@@ -129,14 +129,69 @@ $(function(){
         e.preventDefault();
     });
 
-    $(document).on("submit", "#form_update_setup_fee", function(e){
-        var student = $("#student_applicant").val();
+    $(document).on("click", ".application_action", function(e){
+        var applicant = $("#applicant").val();
+        var action    = $(this).attr("id");
+        var application_no = $("#application_no").val();
 
+        $("#ui_content").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Action</div><div class="message">Are you sure you want to '+action+' application?<br>Continue Action?</div>').dialog({
+            show: 'fade',
+            resizable: false,	
+            draggable: false,
+            width: 350,
+            height: 'auto',
+            modal: true,
+            buttons: {
+                    'OK':function(){
+                        $(this).dialog('close');
+                        $.ajax({
+                            url: "/applications/"+applicant+"/applicationaction",
+                            type: 'PUT',
+                            dataType: 'json',
+                            data: ({ 'applicant':applicant, 'action':action, 'application_no':application_no }),
+                            success: function(data){
+                                
+                                if(data.success == true)
+                                {
+                                    showSuccess(data.message);
+                                }else{
+                                    showError(data.message);
+                                }
+
+                                window.setTimeout(function(){
+                                    location.reload();
+                                }, 1000);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                                var errors = data.responseJSON;
+                                if ($.isEmptyObject(errors) === false)
+                                {
+                                    showError('Something went wrong! Can not perform requested action!');
+                                }
+                            }
+                        });
+                    },
+                    'Cancel':function(){
+                        $(this).dialog('close');
+                        
+                    }//end of ok button	
+                }//end of buttons
+        });//end of dialogbox
+        $(".ui-dialog-titlebar").hide();
+        e.preventDefault();
+    });
+
+    $(document).on("submit", "#form_update_application", function(e){
+        
         $.ajax({
-            url: "/fees/"+student+"/updatesetupfee",
-            type: 'PUT',
+            url: "/applications/updateapplication",
+            type: 'POST',
             data: new FormData(this),
             dataType: 'json',
+            processData: false,
+            contentType: false,
+            cache: false,
             beforeSend: function() {
                 $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
                     show: 'fade',
@@ -150,14 +205,15 @@ $(function(){
             },
             success: function(response){
                 $("#confirmation").dialog('close');
-                if(response.data.success === false)
-                {
-                    showError(response.data.message);
-                }else{
-                    showSuccess(response.data.message);
-                }
-                $('#cancel').trigger('click');
-                returnSetupFees(period, 0);
+                console.log(response);
+                // if(response.data.success === false)
+                // {
+                //     showError(response.data.message);
+                // }else{
+                //     showSuccess(response.data.message);
+                // }
+                // $('#cancel').trigger('click');
+                // returnSetupFees(period, 0);
             },
             error: function (data) {
                console.log(data);

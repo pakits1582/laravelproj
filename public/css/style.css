@@ -572,6 +572,16 @@ label{
     background-clip: padding-box;
     border: 1px solid #d1d3e2;
     border-radius: 0.35rem;
+	min-height: calc(1.5em + 0.75rem + 2px);
+}
+
+.attached_credentials{
+	max-width: 100%;
+	display: block;
+}
+.attached_credentials img{
+	width: 100%;
+	height: auto;
 }
 
 

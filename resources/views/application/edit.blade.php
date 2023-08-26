@@ -16,7 +16,6 @@
                     <div class="card-body p-0">
                         <form method="POST" id="form_update_application" action="" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
                             @include('application.partials.instruction_classification', ['withperiod' => $withperiod])
                             
                             <div class="row m-0">
@@ -39,12 +38,13 @@
                             </div>
                             <div class="row m-0">
                                 <div class="col-lg-12">
-                                    @include('application.partials.attach_requirements')
+                                    @include('application.partials.attach_requirements', ['required' => false])
                                 </div>
                             </div>
                             <div class="row p-3">
                                 <div class="col-lg-12">
-                                    <input type="hidden" id="student_applicant" value="{{ $applicant->id ?? '' }}" >
+                                    <input type="hidden" name="student_applicant" id="student_applicant" value="{{ $applicant->id ?? '' }}" >
+                                    <input type="hidden"  name="agree_terms" type="checkbox" value="1" id="agree_terms" />
                                     <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Update Application">
                                 </div>
                             </div>

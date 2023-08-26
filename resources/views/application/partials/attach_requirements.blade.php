@@ -27,7 +27,7 @@
                             <div class="row align-items-center mt-2">
                                 <div class="col-md-12">
                                     <div class="custom-file">
-                                        <input type="file" name="picture" class="custom-file-input" id="picture" required accept="image/*">
+                                        <input type="file" name="picture" class="custom-file-input" id="picture" {{ (isset($required) && $required == false) ? '' : 'required' }} accept="image/*">
                                         <label class="custom-file-label" for="picture">Choose file</label>
                                     </div>
                                     @error('picture')
@@ -54,7 +54,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" multiple name="report_card[]" id="report_card" required accept="image/*,application/pdf">
+                                        <input type="file" class="custom-file-input" multiple name="report_card[]" id="report_card" {{ (isset($required) && $required == false) ? '' : 'required' }} accept="image/*,application/pdf">
                                         <label class="custom-file-label" for="report_card">Multiple selection user ctrl+click </label>
                                     </div>
                                     @error('report_card')
@@ -74,7 +74,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="contact_email" class="m-0 font-weight-bold text-primary">* Contact E-mail</label>
-                                    <input type="email" name="contact_email" placeholder="" class="form-control" required id="contact_email">
+                                    <input type="email" name="contact_email" value="{{ old('contact_email', $applicant->contact_info->contact_email ?? '') }}" placeholder="" class="form-control" required id="contact_email">
                                     @error('contact_email')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="contact_no" class="m-0 font-weight-bold text-primary">* Contact Number</label>
-                                    <input type="text" name="contact_no" placeholder="09XXXXXXXXX" class="form-control" required id="contact_no" minlength="1" maxlength="20">
+                                    <input type="text" name="contact_no" placeholder="09XXXXXXXXX" value="{{ old('contact_no', $applicant->contact_info->contact_no ?? '') }}" class="form-control" required id="contact_no" minlength="1" maxlength="20">
                                     @error('contact_no')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror

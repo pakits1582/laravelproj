@@ -24,6 +24,15 @@ class Student extends Model
         3 => 'GRADUATED (New Program)'
     ];
 
+    const APPLI_STATUS = [
+        1 => 'UNPROCESSED',
+        2 => 'ACCEPTED',
+        3 => 'REJECTED'
+    ];
+
+    const APPLI_ACCEPTED = 2;
+    const APPLI_REJECTED = 3;
+
     const SACRAMENTS = [
         1 => 'YES',
         2 => 'NO',
@@ -153,5 +162,9 @@ class Student extends Model
         return $this->hasOne(Period::class, 'id', 'entry_period');
     }
 
-    
+    public function assessedby()
+    {
+        return $this->belongsTo(User::class, 'assessed_by', 'id');
+    }
+
 }

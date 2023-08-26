@@ -57,6 +57,9 @@ class StoreApplicationRequest extends FormRequest
      */
     public function rules()
     {
+        $pictureRule = ($this->required == true) ? 'required|image|mimes:jpeg,png,jpg,gif|max:1024' : 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024';
+        $reportcardRule = ($this->required == true) ? 'required|array|max:5' : 'nullable|array|max:5';
+
         return [
             'entry_period' => 'required|integer',
             'idno' => ['nullable', 'numeric',  new IdnoRule],
@@ -142,10 +145,10 @@ class StoreApplicationRequest extends FormRequest
             'employer' => 'bail|nullable|string|min:2|max:255',
             'employer_address' => 'bail|nullable|string|min:2|max:255',
             'employer_contact' => 'bail|nullable|string|min:2|max:30',
-            'occupation_years' => 'bail|nullable|integer|min:1|max:2',
-
-            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
-            'report_card' => 'required|array|max:5', // Max 5 files can be uploaded (you can adjust this number as needed)
+            'occupation_years' => 'bail|nullable|integer|min:0|max:2',
+            
+            'picture' => $pictureRule,
+            'report_card' => $reportcardRule, // Max 5 files can be uploaded (you can adjust this number as needed)
             'report_card.*' => 'file|mimes:jpeg,png,jpg,gif,pdf|max:1024', // Each file should be an image (jpeg, png, jpg, gif) or PDF, max size 1024 KB (1MB)
 
             'contact_no' => 'bail|required|string|min:11|max:20',
