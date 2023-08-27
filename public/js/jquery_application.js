@@ -10,6 +10,15 @@ $(function(){
 	    dropdownParent: $("#ui_content4")
 	});
 
+    $(document).on("change",".checked_applicants", function(){
+		if($(this).is(':checked')){
+			 $(this).closest('tr').addClass('selected');
+		}else{
+			$(this).prop('checked', false);
+			$(this).closest('tr').removeClass('selected');
+		}
+	});
+
     var confirmationDialog = $("#confirmation").dialog({
         autoOpen: false,
         show: 'fade',
@@ -206,24 +215,25 @@ $(function(){
             success: function(response){
                 $("#confirmation").dialog('close');
                 console.log(response);
-                // if(response.data.success === false)
-                // {
-                //     showError(response.data.message);
-                // }else{
-                //     showSuccess(response.data.message);
-                // }
-                // $('#cancel').trigger('click');
-                // returnSetupFees(period, 0);
+                if(response.success == true)
+                {
+                    showSuccess(response.message);
+
+                    window.setTimeout(function(){
+                        location.reload();
+                    }, 1000);
+                }else{
+                    showError(response.message);
+                }
             },
             error: function (data) {
-               console.log(data);
-               var errors = data.responseJSON;
-               if ($.isEmptyObject(errors) == false) {
-                   $.each(errors.errors, function (key, value) {
-                       $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
-                   });
-               }
-           }
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false)
+                {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
         });
         e.preventDefault();
     });

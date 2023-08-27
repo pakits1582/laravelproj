@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\StudentContactInformationModel;
 use App\Models\StudentAcademicInformationModel;
 use App\Models\StudentPersonalInformationModel;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ApplicationService
 {
@@ -109,13 +110,25 @@ class ApplicationService
         }  
     }
 
-    private function  checkIfNameExists($validatedData)
+    private function  checkIfNameExists($validatedData, $id = null)
     {
-        $applicant = Student::where('last_name', $validatedData['last_name'])
-                        ->where('first_name', $validatedData['first_name'])
-                        ->where('middle_name', $validatedData['middle_name'])
-                        ->where('name_suffix', $validatedData['name_suffix'])
-                        ->first();
+        $query = Student::query();
+        
+        $query->when($validatedData , function ($query) use ($validatedData) 
+        {
+            $query-> where('last_name', $validatedData['last_name'])
+            ->where('first_name', $validatedData['first_name'])
+            ->where('middle_name', $validatedData['middle_name'])
+            ->where('name_suffix', $validatedData['name_suffix']);
+        });
+
+        $query->when(!is_null($id), function ($query) use ($id) 
+        {
+            $query->where('id', '!=', $id);
+        });
+
+        $applicant =  $query->first();
+
         if($applicant)
         {
             switch ($applicant->application_status) {
@@ -148,10 +161,10 @@ class ApplicationService
     {
         if($student)
         {
-           if($student->last_name !== $validatedData['last_name'] 
-            && $student->first_name !== $validatedData['first_name'] 
-            && $student->middle_name !== $validatedData['middle_name']
-            && $student->name_suffix !== $validatedData['name_suffix']
+           if(($student->last_name !== $validatedData['last_name'] 
+            || $student->first_name !== $validatedData['first_name'] 
+            || $student->middle_name !== $validatedData['middle_name']
+            || $student->name_suffix !== $validatedData['name_suffix'])
             && $student->sex == Student::SEX_MALE
             ){
                 return [
@@ -312,10 +325,13 @@ class ApplicationService
 
     public function processPicture($request)
     {
-        $filename = time().rand(1,50);
-        $path = $this->UploadFile($request->file('picture'), 'image_uploads', 'public', $filename);//use the method in the trait
+        if($request->hasfile('picture'))
+        {
+            $filename = time().rand(1,50);
+            $path = $this->UploadFile($request->file('picture'), 'image_uploads', 'public', $filename);//use the method in the trait
 
-        return $path;
+            return $path;
+        }
     }
 
     public function processReportCard($request)
@@ -354,11 +370,28 @@ class ApplicationService
 
     private function deleteApplication($application)
     {
+        $this->removePicture($application);
+        $this->removeReportCards($application);
+        $application->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Application successfully deleted!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
+    }
+
+    private function removePicture($application)
+    {
         if(!is_null($application->picture))
         {
             $this->deleteFile($application->picture);
         }
+    }
 
+    private function removeReportCards($application)
+    {
         if(!is_null($application->report_card))
         {
             $reportcards = explode(',', $application->report_card);
@@ -368,15 +401,6 @@ class ApplicationService
                 $this->deleteFile($reportcard);
             }
         }
-
-        $application->delete();
-
-        return [
-            'success' => true,
-            'message' => 'Application successfully deleted!',
-            'alert' => 'alert-success',
-            'status' => 200
-        ];
     }
 
     private function updateApplicationStatus($application, $application_no, $status)
@@ -394,5 +418,70 @@ class ApplicationService
             'alert' => 'alert-success',
             'status' => 200
         ];
+    }
+
+    public function updateApplicant($request)
+    {
+        $validatedData = $request->validated();
+
+        try 
+        {
+            DB::beginTransaction();
+
+            $student = Student::findOrFail($request->student_applicant);
+            
+            if(!$request->filled('idno')) 
+            {
+                $checkResult = $this->checkIfNameExists($validatedData, $student->id);
+                if($checkResult)
+                {
+                    return $checkResult;
+                }
+            }else{
+                $checkResult = $this->checkIfNameAndIdnoMatch($student, $validatedData);
+                if($checkResult) 
+                {
+                    return $checkResult;
+                }
+            }
+
+            $student = $this->updateStudent($student, $validatedData);
+            $this->studentPersonalInformation($student,$validatedData);
+            $this->studentContactInformation($student,$validatedData);
+            $this->studentAcademicInformation($student,$validatedData);
+
+            if($request->hasfile('picture'))
+            {
+                $this->removePicture($student);
+                $picture = $this->processPicture($request);
+                $student->picture = $picture;
+            }
+
+            if($request->hasfile('report_card'))
+            {
+                $this->removeReportCards($student);
+                $report_card = $this->processReportCard($request);
+                $student->report_card = $report_card;
+            }
+
+            $student->save();
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => 'Application successfully updated!',
+                'alert' => 'alert-success',
+                'status' => 200
+            ];
+
+        } catch (ModelNotFoundException $exception) {
+            return [
+                'success' => false,
+                'message' => 'Student application not found!',
+                'alert' => 'alert-danger',
+                'status' => 404
+            ];
+        }
     }
 }

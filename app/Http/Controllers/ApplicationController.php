@@ -83,7 +83,9 @@ class ApplicationController extends Controller
 
     public function update(StoreApplicationRequest $request)
     {
-        return response()->json($request->student_applicant);
+        $update_applicant = $this->applicationService->updateApplicant($request);
+
+        return response()->json($update_applicant);
     }
 
     public function applicationaction(Request $request, Student $application)
