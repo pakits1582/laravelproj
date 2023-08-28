@@ -29,9 +29,11 @@ class StoreProgramRequest extends FormRequest
             'years' => 'required|integer',
             'educational_level_id' => 'required',
             'college_id' => 'required',
-            'head' => '',
-            'source' => '',
-            'active' => '',
+            'head' => 'nullable|integer',
+            'type' => 'required',
+            'source' => 'integer',
+            'active' => 'boolean',
+            'display' => 'boolean',
         ];
     }
 }

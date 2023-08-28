@@ -11,7 +11,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\AdddropController;
-use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\ProgramController;
@@ -19,6 +18,7 @@ use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\ClassListController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\CurriculumController;
@@ -29,7 +29,9 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\MasterlistController;
 use App\Http\Controllers\PostchargeController;
 use App\Http\Controllers\ValidationController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\FacultyLoadController;
+use App\Http\Controllers\ReassessmentController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\ExternalGradeController;
 use App\Http\Controllers\GradingSystemController;
@@ -46,7 +48,6 @@ use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\UnsavedEnrollmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
 use App\Http\Controllers\ClassesSlotsMonitoringController;
-use App\Http\Controllers\ReassessmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -549,6 +550,14 @@ Route::group(['middleware' => ['auth']], function () {
             return Redirect::route('applications.index');
         }); 
         
+
+    });
+
+    Route::group(['middleware' => ['inaccess:admissions']], function () {
+        
+        Route::get('/admissions', [AdmissionController::class, 'index']);
+        Route::get('/admissions/{application}', [AdmissionController::class, 'show'])->name('admission.show');
+
 
     });
 

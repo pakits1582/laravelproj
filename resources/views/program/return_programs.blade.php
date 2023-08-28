@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (count($programs) > 0)
+            @if ($programs !== null && count($programs) > 0)
                 @foreach ($programs as $program)
                     <tr>
                         <td>{{ $loop->iteration }}</td>

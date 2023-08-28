@@ -10,7 +10,7 @@ class Program extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'name', 'educational_level_id', 'college_id', 'head', 'years', 'source', 'active'];
+    protected $fillable = ['code', 'name', 'educational_level_id', 'college_id', 'head', 'years', 'source', 'active', 'type', 'display'];
 
     public function code(): Attribute
     {

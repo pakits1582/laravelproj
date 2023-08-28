@@ -67,6 +67,18 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label for="type"  class="m-0 font-weight-bold text-primary">* Type</label>
+                                <select name="type" required class="form-control" id="type">
+                                    <option value="">- select type -</option>
+                                    <option value="CERTIFICATE" {{ ($program->type == 'CERTIFICATE') ? 'selected' : '' }}>CERTIFICATE</option>
+                                    <option value="UNDERGRADUATE" {{ ($program->type == 'UNDERGRADUATE') ? 'selected' : '' }}>UNDERGRADUATE</option>
+                                    <option value="GRADUATE" {{ ($program->type == 'GRADUATE') ? 'selected' : '' }}>GRADUATE</option>
+                                </select>
+                                @error('type')
+                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-2">
                                         <label for="code"  class="m-0 font-weight-bold text-primary">Source</label>
@@ -86,11 +98,25 @@
                                         <label for="code"  class="m-0 font-weight-bold text-primary">Active</label>
                                     </div>
                                     <div class="col-md-10">
-                                        <label for="no"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="active" value="0" id="no" {{ ($program->active == 0) ? 'checked' : '' }}> No </label>
-                                        <label for="yes"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="active" value="1" id="yes" {{ ($program->active == 1) ? 'checked' : '' }}> Yes </label>
+                                        <label for="no_active"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="active" value="0" id="no_active" {{ ($program->active == 0) ? 'checked' : '' }}> No </label>
+                                        <label for="yes_active"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="active" value="1" id="yes_active" {{ ($program->active == 1) ? 'checked' : '' }}> Yes </label>
                                     </div>
                                 </div>
                                 @error('active')
+                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="display"  class="m-0 font-weight-bold text-primary">Display</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label for="no_display"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="display" value="0" id="no_display" {{ ($program->display == 0) ? 'checked' : '' }}> No </label>
+                                        <label for="yes_display"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="display" value="1" id="yes_display" {{ ($program->display == 1) ? 'checked' : '' }}> Yes </label>
+                                    </div>
+                                </div>
+                                @error('display')
                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                 @enderror
                             </div>

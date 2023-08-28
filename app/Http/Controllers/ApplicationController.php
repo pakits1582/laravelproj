@@ -22,13 +22,18 @@ class ApplicationController extends Controller
         Helpers::setLoad(['jquery_application.js', 'select2.full.min.js']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
 
-        $applicants = $this->applicationService->applicantList(session('current_period'));
+        $applicants = $this->applicationService->applicantList($request);
 
+        if($request->ajax()){
+            return view('application.return_applicants', compact('applicants'));
+        }
+
+        // dd($applicants);
         return view('application.index', compact('periods', 'programs', 'applicants'));
     }
 

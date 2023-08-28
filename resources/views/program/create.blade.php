@@ -63,6 +63,18 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label for="type"  class="m-0 font-weight-bold text-primary">* Type</label>
+                                <select name="type" required class="form-control" id="type">
+                                    <option value="">- select type -</option>
+                                    <option value="CERTIFICATE" {{ old(type) == 'CERTIFICATE' ? 'selected' : '' }}>CERTIFICATE</option>
+                                    <option value="UNDERGRADUATE" {{ old(type) == 'UNDERGRADUATE' ? 'selected' : '' }}>UNDERGRADUATE</option>
+                                    <option value="GRADUATE" {{ old(type) == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+                                </select>
+                                @error('type')
+                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-2">
                                         <label for="code"  class="m-0 font-weight-bold text-primary">Source</label>
@@ -82,11 +94,25 @@
                                         <label for="code"  class="m-0 font-weight-bold text-primary">Active</label>
                                     </div>
                                     <div class="col-md-10">
-                                        <label for="no"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="active" value="0" id="no" checked> No </label>
-                                        <label for="yes"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="active" value="1" id="yes"> Yes </label>
+                                        <label for="no_active"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="active" value="0" id="no_active" checked> No </label>
+                                        <label for="yes_active"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="active" value="1" id="yes_active"> Yes </label>
                                     </div>
                                 </div>
                                 @error('active')
+                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="display"  class="m-0 font-weight-bold text-primary">Display</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label for="no_display"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="display" value="0" id="no_display" checked> No </label>
+                                        <label for="yes_display"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="display" value="1" id="yes_display"> Yes </label>
+                                    </div>
+                                </div>
+                                @error('display')
                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                 @enderror
                             </div>

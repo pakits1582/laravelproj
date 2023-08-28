@@ -43,12 +43,6 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
-                                        <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
                                         <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
                                         @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
                                     </div>
@@ -67,6 +61,12 @@
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                        <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
                                     </div>
                                 </div>
                             </div>

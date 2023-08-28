@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Traits\Upload;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
@@ -16,31 +15,37 @@ class ApplicationService
 {
     use Upload;//add this trait
    
-    public function applicantList($period, $level = '', $college = '', $program_id = '', $limit = 500)
+    public function applicantList($request, $limit = 10,  $all = false, $application_status = Student::APPLI_NEW)
     {
-        $query = Student::with(['program' => ['level', 'collegeinfo']])->orderBy('entry_date', 'DESC')->orderBy('last_name')->limit($limit);
+        $query = Student::with(['program' => ['level', 'collegeinfo']])->orderBy('entry_date', 'DESC')->orderBy('last_name');
 
-        $query->where('entry_period', $period)->where('application_status', 1);
+        $period = $request->period_id ?? session('current_period');
+
+        $query->where('entry_period', $period)->where('application_status', $application_status);
         
-        $query->when(isset($program_id) && !empty($program_id), function ($query) use($program_id) {
-            $query->where('program_id', $program_id);
+        if($request->has('keyword') && !empty($request->keyword)) {
+            $query->where(function($query) use($request){
+                $query->where('last_name', 'like', $request->keyword.'%')
+                ->orWhere('first_name', 'like', $request->keyword.'%')
+                ->orWhere('middle_name', 'like', $request->keyword.'%');
+            });
+        }
+
+        $query->when(isset($request->program_id) && !empty($request->program_id), function ($query) use($request) {
+            $query->where('program_id', $request->program_id);
         });
 
-        $query->when(isset($level) && !empty($level), function ($query) use($level) {
-            $query->whereHas('program.level', function($query) use($level){
-                $query->where('educational_levels.id', $level);
+        $query->when(isset($request->educational_level) && !empty($request->educational_level), function ($query) use($request) {
+            $query->whereHas('program.level', function($query) use($request){
+                $query->where('educational_levels.id', $request->educational_level);
             });
         });
 
-        $query->when(isset($college) && !empty($college), function ($query) use($college) {
-            $query->whereHas('program.collegeinfo', function($query) use($college){
-                $query->where('colleges.id', $college);
-            });
-        });
-
-        $results = $query->get();
-
-        return $results;
+        if($all){
+            return $query->get();
+        }
+    
+        return $query->paginate($limit);
     }
 
     public function saveApplication($request)

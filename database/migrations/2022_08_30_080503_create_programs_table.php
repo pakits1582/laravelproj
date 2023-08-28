@@ -26,6 +26,8 @@ return new class extends Migration
             $table->integer('years')->default(0);
             $table->tinyInteger('source')->default(1);
             $table->boolean('active')->default(0);
+            $table->string('type')->index();
+            $table->boolean('display')->default(0);
             $table->timestamps();
         });
     }

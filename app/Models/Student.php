@@ -30,6 +30,7 @@ class Student extends Model
         3 => 'REJECTED'
     ];
 
+    const APPLI_NEW = 1;
     const APPLI_ACCEPTED = 2;
     const APPLI_REJECTED = 3;
 

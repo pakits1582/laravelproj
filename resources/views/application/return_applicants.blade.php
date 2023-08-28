@@ -1,5 +1,6 @@
-<table id="scrollable_table" class="table table-sm table-striped table-bordered hover compact" style="width:100%; font-size:14px !important;">
-    <thead>
+<div class="table-responsive" id="table_data">
+    <table class="table table-bordered table-striped table-hover" id="applicantTable" width="100%" cellspacing="0">
+        <thead>
         <tr>
             <th class="w30 mid"><input type="checkbox" name="check_all" value="1" id="check_all" /></th>
             <th class="w50">#</th>
@@ -11,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        @if (count($applicants) > 0)
+        @if ($applicants !== null && count($applicants) > 0)
             @foreach ($applicants as $applicant)
                 <tr class="label">
                     <td class="mid">
@@ -60,4 +61,7 @@
         @endif
     </tbody>
 </table>
+{{ $applicants->onEachSide(1)->links() }}
+Showing {{ $applicants->firstItem() }} to {{ $applicants->lastItem() }} of total {{$applicants->total()}} entries
+</div>
 
