@@ -39,4 +39,9 @@ class AdmissionController extends Controller
     {
         dd($application);
     }
+
+    public function documents()
+    {
+        
+    }
 }
