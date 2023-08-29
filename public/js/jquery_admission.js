@@ -87,6 +87,8 @@ $(function(){
                 }
 
                 returnAdmissionDocuments();
+                $('#cancel').trigger('click');
+
             },
             error: function (data) {
                 console.log(data);
