@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('adminssion_documents', function (Blueprint $table) {
+        Schema::create('admission_documents', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('educational_level_id')->index();
             $table->foreign('educational_level_id')->references('id')->on('educational_levels');

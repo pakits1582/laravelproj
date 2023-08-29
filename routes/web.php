@@ -554,10 +554,15 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:admissions']], function () {
-        
+
+        Route::put('/admissions/{document}/updatedocument', [AdmissionController::class, 'updatedocument']);
+        Route::delete('/admissions/{document}/deletedocument', [AdmissionController::class, 'deletedocument']);
+        Route::get('/admissions/documents', [AdmissionController::class, 'documents'])->name('admission.documents');
+        Route::get('/admissions/returndocuments', [AdmissionController::class, 'returndocuments']);
+        Route::get('/admissions/{document}/editdocument', [AdmissionController::class, 'editdocument']);
+        Route::post('/admissions/savedocument', [AdmissionController::class, 'savedocument']);
         Route::get('/admissions', [AdmissionController::class, 'index']);
         Route::get('/admissions/{application}', [AdmissionController::class, 'show'])->name('admission.show');
-        Route::get('/admissions/documents', [AdmissionController::class, 'documents'])->name('admission.documents');
 
 
     });

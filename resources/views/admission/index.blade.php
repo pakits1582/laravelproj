@@ -65,13 +65,15 @@
                 <div id="">
                     @include('admission.return_applications')
                 </div>
-                <div class="row mt-3 d-flex align-items-center">
+                <div class="row align-items-center">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <h6 class="m-0 font-weight-bold text-primary">Total Applicants for Admission (<span id="totalcount">{{ count($applicants) ?? 0 }}</span>)</h6>
-                        </div>
+                        {{ $applicants->onEachSide(1)->links() }}
+                        Showing {{ $applicants->firstItem() ?? 0 }} to {{ $applicants->lastItem() ?? 0 }} of total {{$applicants->total()}} entries
                     </div>
                     <div class="col-md-6">
+                        <div class="right">
+                            <h6 class="m-0 font-weight-bold text-primary">Total Applicants for Admission (<span id="totalcount">{{ count($applicants) ?? 0 }}</span>)</h6>
+                        </div>
                     </div>
                 </div>
             </div>
