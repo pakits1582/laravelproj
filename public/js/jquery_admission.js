@@ -87,7 +87,7 @@ $(function(){
                 }
 
                 returnAdmissionDocuments();
-                $('#cancel').trigger('click');
+                $('#decription').val('');
 
             },
             error: function (data) {
