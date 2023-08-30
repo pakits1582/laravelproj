@@ -40,7 +40,10 @@ class AdmissionController extends Controller
 
     public function show(Student $application)
     {
-        dd($application);
+        $applicant = $application;
+        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
+
+        return view('admission.admit_applicant', compact('applicant', 'programs'));
     }
 
     public function documents()

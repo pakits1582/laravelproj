@@ -16,7 +16,7 @@
                     <tr class="label">
                         <td class="">{{ $loop->iteration }}</td>
                         <td class="">
-                            <a href="{{ route('admission.show', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" class="font-weight-bold text-primary" target="_blank" title="Admit Applicant">
+                            <a href="{{ route('admission.show', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" class="font-weight-bold text-primary" title="Admit Applicant">
                                 {{ $applicant->application_no }}
                             </a>
                         </td>
