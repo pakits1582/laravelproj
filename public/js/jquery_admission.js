@@ -57,6 +57,36 @@ $(function(){
         $('.errors').html('');  
 	});
 
+    $(document).on("click", "#generate_idno", function(e){
+        var period_id = $("#period_id").val();
+
+        $.ajax({
+            url: "/students/generateidno",
+            type: 'POST',
+            data: {'period_id': period_id},
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                if(response.success === false)
+                {
+                    showError(response.message);
+                }else{
+                    $("#idno").val(response);
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                $("#confirmation").dialog('close');
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
+        });
+
+        e.preventDefault();
+    });
+
     $(document).on("submit", "#form_add_admission_document", function(e){
         var postData = $(this).serializeArray();
 
@@ -269,4 +299,48 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on("submit", "#form_admit_applicant", function(e){
+        var postData = $(this).serializeArray();
+
+        if($(".checkbox:checked").length === 0)
+        {
+			showError('Please select at least one document submitted!');	
+		}else{
+            $.ajax({
+                url: "/admissions/admitapplicant",
+                type: 'POST',
+                data: postData,
+                dataType: 'json',
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons:false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
+                success: function(response){
+                    $("#confirmation").dialog('close');
+                    console.log(response)
+
+
+                },
+                error: function (data) {
+                    console.log(data);
+                    $("#confirmation").dialog('close');
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) == false) {
+                        $.each(errors.errors, function (key, value) {
+                            $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                        });
+                    }
+               }
+            });
+        }
+
+        e.preventDefault();
+    });
 });

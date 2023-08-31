@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdmitApplicantRquest;
 use App\Libs\Helpers;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -34,16 +35,16 @@ class AdmissionController extends Controller
             return view('admission.return_applications', compact('applicants'));
         }
 
-        // dd($applicants);
         return view('admission.index', compact('periods', 'programs', 'applicants'));
     }
 
     public function show(Student $application)
     {
-        $applicant = $application;
+        $applicant = $application->load('user', 'personal_info', 'contact_info', 'program.curricula');
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
+        $documents = AdmissionDocument::where('educational_level_id', $applicant->program->educational_level_id)->where('display', 1)->get();
 
-        return view('admission.admit_applicant', compact('applicant', 'programs'));
+        return view('admission.admit_applicant', compact('applicant', 'programs', 'documents'));
     }
 
     public function documents()
@@ -96,38 +97,9 @@ class AdmissionController extends Controller
 
     public function updatedocument(StoreAdmissionDocumentRequest $request, AdmissionDocument $document)
     {
-        try {
+        $update_document = $this->admissionService->updateDocument($request, $document);
 
-            $duplicate = AdmissionDocument::where('educational_level_id', $request->educational_level_id)
-                        ->where('program_id', $request->program_id)
-                        ->where('classification', $request->classification)
-                        ->where('description', $request->description)
-                        ->where('id', '!=', $document->id)
-                        ->first();
-            if($duplicate)
-            {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Duplicate entry, admission document already exists!',
-                    'alert' => 'alert-danger'
-                ], 200);
-            }
-
-            $document->update($request->validated());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Admission document successfully updated!',
-                'alert' => 'alert-success'
-            ], 200);
-
-        } catch (ModelNotFoundException $e) {
-           
-            return response()->json([
-                'success' => false,
-                'message' => 'Document not found',
-            ], 404);
-        }
+        return response()->json($update_document);
     }
 
     public function deletedocument(AdmissionDocument $document)
@@ -142,5 +114,12 @@ class AdmissionController extends Controller
                 'message' => 'Document not found',
             ], 404);
         }
+    }
+
+    public function admitapplicant(AdmitApplicantRquest $request)
+    {
+        $admit_applicant = $this->admissionService->admitApplicant($request);
+
+        return response()->json($admit_applicant);
     }
 }

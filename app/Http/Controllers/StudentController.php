@@ -60,31 +60,9 @@ class StudentController extends Controller
      */
     public function store(StoreStudentRequest $request)
     {
-        $alertCLass = 'alert-success';
-        $alertMessage = 'Student sucessfully added!';
-
         try {
-            DB::beginTransaction();
-
-            //INSERT TO USERS TABLE
-            $user = User::create([
-                'idno' => $request->idno,
-                'password' => Hash::make('password'),
-                'utype' => User::TYPE_STUDENT,
-            ]);
-            //INSERT TO STUDENT TABLE
-            Student::firstOrCreate([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'middle_name' => $request->middle_name,
-                'name_suffix' => $request->name_suffix,
-            ], array_merge($request->validated(), ['user_id' => $user->id])
-            );
-            
-            $accesses = $this->studentService->returnStudentAccesses();
-            $user->access()->saveMany($accesses);
-
-            DB::commit();
+           $this->studentService->insertStudent($request);
+           
         } catch (\Exception $e) {
             Log::error(get_called_class(), [
                 //'createdBy' => $user->userLoggedinName(),
@@ -94,7 +72,7 @@ class StudentController extends Controller
             ]);
         }
 
-        return back()->with(['alert-class' => $alertCLass, 'message' => $alertMessage]);
+        return back()->with(['alert-class' => 'alert-success', 'message' => 'Student sucessfully added!']);
     }
 
     /**
@@ -158,6 +136,15 @@ class StudentController extends Controller
 
         return response()->json($student);
     }
+
+    public function generateidno(Request $request)
+    {
+        $generated_idno = $this->studentService->generateIdno($request);
+
+        return response()->json($generated_idno);
+    }
+
+
 
 
 }

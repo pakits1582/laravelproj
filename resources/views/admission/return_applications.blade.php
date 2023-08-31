@@ -8,6 +8,7 @@
                 <th class="">Program</th>
                 <th class="">Classification</th>
                 <th class="">Date</th>
+                <th class=""></th>
             </tr>
         </thead>
         <tbody>
@@ -15,19 +16,25 @@
                 @foreach ($applicants as $applicant)
                     <tr class="label">
                         <td class="">{{ $loop->iteration }}</td>
+                        <td class="">{{ $applicant->application_no }}</td>
                         <td class="">
                             <a href="{{ route('admission.show', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" class="font-weight-bold text-primary" title="Admit Applicant">
-                                {{ $applicant->application_no }}
+                                {{ $applicant->name }}
                             </a>
                         </td>
-                        <td class="">{{ $applicant->name }}</td>
                         <td class="">{{ $applicant->program->code }}</td>
                         <td class="">{{ \App\Models\Student::STUDENT_CLASSIFICATION[$applicant->classification] }}</td>
                         <td class="mid">{{ \Carbon\Carbon::parse($applicant->entry_date)->format('F d, Y') }}</td>
+                        <td class="mid">
+                            <a href="{{ route('applications.show', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" class="btn btn-primary btn-circle btn-sm view_application" target="_blank" title="View Applicant">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             @else
                 <tr>
+                    <th class="">&nbsp;</th>
                     <th class="">&nbsp;</th>
                     <th class="">&nbsp;</th>
                     <th class="">&nbsp;</th>

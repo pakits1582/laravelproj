@@ -109,7 +109,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::view('/students/import', 'student.import')->name('students.import');
         // Route::post('/students/import', [StudentController::class, 'import'])->name('students.uploadimport');
         // Route::post('/students/export', [StudentController::class, 'export'])->name('students.downloadexcel');
-        // Route::post('/students/generatepdf', [StudentController::class, 'generatepdf'])->name('students.generatepdf');
+        Route::post('/students/generateidno', [StudentController::class, 'generateidno']);
         Route::resource('students', StudentController::class)->except(['destroy']);
         // ->missing(function (Request $request) {
         //     return Redirect::route('students.index');
@@ -555,6 +555,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:admissions']], function () {
 
+        Route::post('/admissions/admitapplicant', [AdmissionController::class, 'admitapplicant']);
         Route::put('/admissions/{document}/updatedocument', [AdmissionController::class, 'updatedocument']);
         Route::delete('/admissions/{document}/deletedocument', [AdmissionController::class, 'deletedocument']);
         Route::get('/admissions/documents', [AdmissionController::class, 'documents'])->name('admission.documents');

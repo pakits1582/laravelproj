@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\IdnoRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreStudentRequest extends FormRequest
+class AdmitApplicantRquest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +25,11 @@ class StoreStudentRequest extends FormRequest
     public function rules()
     {
         return [
-            'idno' => ['numeric',  new IdnoRule, 'unique:users,idno'],
-            'last_name' => 'required', 
-            'first_name' => 'required', 
-            'middle_name' => [], 
-            'name_suffix' => [], 
-            'sex' => 'required', 
-            'program_id' => 'required', 
-            'year_level' => 'required', 
-            'curriculum_id' => 'required', 
-            'academic_status' => 'required'
+            'student' => 'bail|required|numeric|exists:students,id',
+            'idno' => ['bail','required', 'numeric',  new IdnoRule, 'unique:users,idno'],
+            'program_id' => 'bail|required|numeric|exists:programs,id',
+            'curriculum_id' => 'bail|required|numeric|exists:curricula,id',
+            'documents_submitted' => 'required|array|min:1|exists:admission_documents,id'
         ];
     }
 }

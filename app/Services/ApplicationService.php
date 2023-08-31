@@ -15,13 +15,13 @@ class ApplicationService
 {
     use Upload;//add this trait
    
-    public function applicantList($request, $limit = 10,  $all = false, $application_status = Student::APPLI_NEW)
+    public function applicantList($request, $limit = 10,  $all = false, $application_status = Student::APPLI_NEW, $admission_status = 0)
     {
         $query = Student::with(['program' => ['level', 'collegeinfo']])->orderBy('entry_date', 'DESC')->orderBy('last_name');
 
         $period = $request->period_id ?? session('current_period');
 
-        $query->where('entry_period', $period)->where('application_status', $application_status);
+        $query->where('entry_period', $period)->where('application_status', $application_status)->where('admission_status', $admission_status);
         
         if($request->has('keyword') && !empty($request->keyword)) {
             $query->where(function($query) use($request){
