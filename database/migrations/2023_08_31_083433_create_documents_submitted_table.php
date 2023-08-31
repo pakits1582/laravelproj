@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('documents_submitted', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('student_id')->index();
+            $table->foreign('student_id')->references('id')->on('students');
+            $table->unsignedBigInteger('admission_documents_id')->index();
+            $table->foreign('admission_documents_id')->references('id')->on('admission_documents');
             $table->timestamps();
         });
     }

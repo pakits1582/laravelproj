@@ -168,4 +168,9 @@ class Student extends Model
         return $this->belongsTo(User::class, 'assessed_by', 'id');
     }
 
+    public function submitted_documents()
+    {
+        return $this->hasMany(DocumentSubmitted::class);
+    }
+
 }
