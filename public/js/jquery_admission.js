@@ -325,7 +325,35 @@ $(function(){
                 success: function(response){
                     $("#confirmation").dialog('close');
                     console.log(response)
+                    
+                    if(response.success === true)
+                    {
+                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Admission Saved</div><div class="message">Student was successfully admitted.<br>Print admission form?</div>').dialog({
+                            show: 'fade',
+                            resizable: false,	
+                            draggable: false,
+                            width: 350,
+                            height: 'auto',
+                            modal: true,
+                            buttons: {
+                                    'OK':function(){
+                                        $("#confirmation").dialog('close');
+                                        let idno = $("#idno").val();
 
+                                        window.open("/admissions/printadmissionform/"+idno, '_blank'); 
+                                        location.href = "/admissions";		
+                                    },
+                                    'Cancel':function(){
+                                        $("#confirmation").dialog('close');
+                                        location.href = "/admissions";			
+                                    }
+                                }//end of buttons
+                        });//end of dialogbox
+                        $(".ui-dialog-titlebar").hide();
+                        //end of dialogbox
+                    }else{
+                        showError(response.message);
+                    }
 
                 },
                 error: function (data) {

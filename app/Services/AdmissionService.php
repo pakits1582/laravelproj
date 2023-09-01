@@ -65,7 +65,7 @@ class AdmissionService
             
             DB::beginTransaction();
             $validated = $request->validated();
-    
+            
             $student->update([
                 'program_id' => $validated['program_id'],
                 'curriculum_id' => $validated['curriculum_id'],
@@ -83,7 +83,8 @@ class AdmissionService
             $user->access()->saveMany($accesses);
             
             $this->insertDocumentSubmitted($student, $validated['documents_submitted']);
-            //DB::commit();
+
+            DB::commit();
 
             return [
                 'success' => true,
@@ -93,10 +94,10 @@ class AdmissionService
 
         } catch (ModelNotFoundException $e) {
            
-            return response()->json([
+            return [
                 'success' => false,
                 'message' => 'Student not found',
-            ], 404);
+            ];
         }
     }
 
@@ -104,7 +105,17 @@ class AdmissionService
     {
         if($documents)
         {
-            
+            $insert_documents = [];
+            foreach ($documents as $document_id) {
+                $insert_documents[] = [
+                    'student_id' => $student->id,
+                    'admission_documents_id' => $document_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            $student->submitted_documents()->insert($insert_documents);
         }
     }
 }
