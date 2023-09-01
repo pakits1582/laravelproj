@@ -117,7 +117,7 @@ $(function(){
                 }
 
                 returnAdmissionDocuments();
-                $('#decription').val('');
+                $('#description').val('');
 
             },
             error: function (data) {

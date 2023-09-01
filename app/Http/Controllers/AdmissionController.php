@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AdmitApplicantRquest;
 use App\Libs\Helpers;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Models\Configuration;
 use App\Services\PeriodService;
 use App\Services\ProgramService;
 use App\Models\AdmissionDocument;
 use App\Services\AdmissionService;
 use App\Services\ApplicationService;
+use App\Http\Requests\AdmitApplicantRquest;
 use App\Http\Requests\StoreAdmissionDocumentRequest;
+use Symfony\Component\CssSelector\Node\FunctionNode;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AdmissionController extends Controller
@@ -121,5 +123,12 @@ class AdmissionController extends Controller
         $admit_applicant = $this->admissionService->admitApplicant($request);
 
         return response()->json($admit_applicant);
+    }
+
+    public function onlineadmission()
+    {
+        $configuration = Configuration::take(1)->first();
+
+        return view('admission.online_admission', compact('configuration'));
     }
 }

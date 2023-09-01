@@ -64,6 +64,7 @@ use App\Http\Controllers\ClassesSlotsMonitoringController;
 //     return view('auth.index');
 // });
 
+Route::get('/admissions/onlineadmission', [AdmissionController::class, 'onlineadmission'])->name('onlineadmission');
 Route::get('/applications/onlineapplication', [ApplicationController::class, 'onlineapplication'])->name('onlineapplication');
 Route::post('/applications/saveonlineapplication', [ApplicationController::class, 'store'])->name('saveonlineapplication');
 Route::post('/students/studentfullinfo', [StudentController::class, 'studentfullinfo'])->name('studentfullinfo');
