@@ -11,9 +11,10 @@ use App\Services\ProgramService;
 use App\Models\AdmissionDocument;
 use App\Services\AdmissionService;
 use App\Services\ApplicationService;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\AdmitApplicantRquest;
+use App\Http\Requests\OnlineAdmissionRequest;
 use App\Http\Requests\StoreAdmissionDocumentRequest;
-use Symfony\Component\CssSelector\Node\FunctionNode;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AdmissionController extends Controller
@@ -130,5 +131,36 @@ class AdmissionController extends Controller
         $configuration = Configuration::take(1)->first();
 
         return view('admission.online_admission', compact('configuration'));
+    }
+
+    public function getapplicantinfo(Request $request)
+    {
+        $rules = [
+            'application_no' => 'bail|required|numeric|min_digits:10|max_digits:255',
+        ];
+    
+        $messages = [
+            'application_no.required' => 'The application number is required.',
+            'application_no.numeric' => 'The application number must be numeric.',
+            'application_no.min_digits' => 'The application number must have at least 10 digits.',
+            'application_no.max_digits' => 'The application number cannot exceed 255 digits.',
+        ];
+    
+        $validator = Validator::make($request->all(), $rules, $messages);
+    
+        if ($validator->fails()) 
+        {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+
+        $application_info = $this->admissionService->applicationInformation($request->input('application_no'));
+
+        return response()->json($application_info);
+    }
+
+    public function saveonlineadmission(OnlineAdmissionRequest $request)
+    {
+        return $request;
     }
 }

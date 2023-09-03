@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\AdmissionDocument;
@@ -117,5 +118,53 @@ class AdmissionService
 
             $student->submitted_documents()->insert($insert_documents);
         }
+    }
+
+    public function applicationInformation($application_no)
+    {
+        try {
+            $applicant = Student::with('personal_info', 'contact_info', 'program')->where('application_no', $application_no)->firstOrfail();
+            $document_reqs = AdmissionDocument::where('educational_level_id', $applicant->program->educational_level_id)->where('display', 1)->get();
+
+            $documents = [];
+            if($document_reqs)
+            {
+                foreach ($document_reqs as $key => $document) 
+                {
+                    $documents[] = [ 
+                        'label' => ($document->is_required == 1) ? '* '.$document->description : $document->description,
+                        'name' => strtolower(str_replace(' ', '_', $document->description)),
+                        'is_required' => ($document->is_required == 1) ? 'required' : '',
+                    ];
+                }
+            }
+            return [
+                'applicant' => [
+                    'name' => $applicant->name,
+                    'classification' => Student::STUDENT_CLASSIFICATION[$applicant->classification] ?? '',
+                    'program' => $applicant->program->name,
+                    'civil_status' => $applicant->personal_info->civil_status,
+                    'birth_date' => Carbon::parse($applicant->personal_info->birth_date)->format('F d, Y'),
+                    'birth_place' => $applicant->personal_info->birth_place,
+                    'nationality' => $applicant->personal_info->nationality,
+                    'sex' => Student::SEX[$applicant->sex] ?? '',
+                    'email' => $applicant->contact_info->email,
+                    'mobileno' => $applicant->contact_info->mobileno,
+                    'contact_email' => $applicant->contact_info->contact_email,
+                    'contact_no' => $applicant->contact_info->contact_no,
+                    'picture' => $applicant->picture,
+                ],
+                'documents' => $documents
+            ];
+
+        } catch (ModelNotFoundException $e) {
+           
+            return [
+                'success' => false,
+                'message' => 'Sorry there is no application found using the application number provided!',
+            ];
+        }
+
+        
     }
 }

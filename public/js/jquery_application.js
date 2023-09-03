@@ -47,7 +47,7 @@ $(function(){
       //     dropdownParent: $("#ui_content4")
       // });
   
-    $(".custom-file-input").on("change", function() {
+    $(document).on("change", ".custom-file-input",  function() {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").removeClass("selected").html(fileName);
     });

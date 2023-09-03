@@ -65,6 +65,9 @@ use App\Http\Controllers\ClassesSlotsMonitoringController;
 // });
 
 Route::get('/admissions/onlineadmission', [AdmissionController::class, 'onlineadmission'])->name('onlineadmission');
+Route::post('/admissions/getapplicantinfo', [AdmissionController::class, 'getapplicantinfo'])->name('getapplicantinfo');
+Route::post('/admissions/saveonlineadmission', [AdmissionController::class, 'saveonlineadmission'])->name('saveonlineadmission');
+
 Route::get('/applications/onlineapplication', [ApplicationController::class, 'onlineapplication'])->name('onlineapplication');
 Route::post('/applications/saveonlineapplication', [ApplicationController::class, 'store'])->name('saveonlineapplication');
 Route::post('/students/studentfullinfo', [StudentController::class, 'studentfullinfo'])->name('studentfullinfo');

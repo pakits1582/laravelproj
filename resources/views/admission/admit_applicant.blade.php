@@ -162,12 +162,12 @@
                                                 <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ \App\Models\Student::SEX[$applicant->sex] ?? '' }}</h6></div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Contact Email</label></div>
-                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->contact_info->contact_email }}</h6></div>
+                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Email Address</label></div>
+                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->contact_info->email }}</h6></div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Contact No.</label></div>
-                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->contact_info->contact_no }}</h6></div>
+                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Mobile No.</label></div>
+                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->contact_info->mobileno }}</h6></div>
                                             </div>
                                         </div>
                                     </div>
@@ -175,7 +175,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card shadow mb-4 h-100">
+                            <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="font-weight-bold text-primary mb-0">Admission Documents</h6>  
                                 </div>
@@ -222,6 +222,34 @@
                                         @enderror
                                         <div id="error_documents_submitted" class="errors"></div>
                                     @endif
+                                </div>
+                            </div>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="font-weight-bold text-primary mb-0">Contact Details</h6>  
+                                </div>
+                                <div class="card-body">
+                                    
+                                    <p class="font-italic text-info">Note: Before admitting applicant, please check contact details.</p>                                                    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="contact_email" class="m-0 font-weight-bold text-primary">* Contact E-mail</label>
+                                            <input type="text" name="contact_email" value="{{ $applicant->contact_info->contact_email }}" placeholder="" class="form-control text-black" id="contact_email">
+                                            @error('contact_email')
+                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                            @enderror
+                                            <div id="error_contact_email" class="errors"></div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="contact_no" class="m-0 font-weight-bold text-primary">* Contact Number</label>
+                                            <input type="text" name="contact_no" value="{{ $applicant->contact_info->contact_no }}" placeholder="" class="form-control text-black" id="contact_no">
+                                            @error('contact_no')
+                                                <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                            @enderror
+                                            <div id="error_contact_no" class="errors"></div>
+                                        </div>
+                                    </div>
                                     <input type="hidden" name="student" value="{{ $applicant->id }}" >
                                     <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg mt-3" value="Admit Applicant">
                                 </div>

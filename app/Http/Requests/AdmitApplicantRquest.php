@@ -29,7 +29,9 @@ class AdmitApplicantRquest extends FormRequest
             'idno' => ['bail','required', 'numeric',  new IdnoRule, 'unique:users,idno'],
             'program_id' => 'bail|required|numeric|exists:programs,id',
             'curriculum_id' => 'bail|required|numeric|exists:curricula,id',
-            'documents_submitted' => 'required|array|min:1|exists:admission_documents,id'
+            'documents_submitted' => 'required|array|min:1|exists:admission_documents,id',
+            'contact_no' => 'bail|required|string|min:11|max:20',
+            'contact_email' => 'bail|required|email|max:150',
         ];
     }
 }
