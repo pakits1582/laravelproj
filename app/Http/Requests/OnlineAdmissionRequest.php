@@ -49,8 +49,6 @@ class OnlineAdmissionRequest extends FormRequest
             }
         }
 
-       
-
         return $rules;
     }
 

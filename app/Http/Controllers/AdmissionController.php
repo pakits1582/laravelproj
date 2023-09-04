@@ -161,6 +161,8 @@ class AdmissionController extends Controller
 
     public function saveonlineadmission(OnlineAdmissionRequest $request)
     {
-        return $request;
+        $online_admission = $this->admissionService->saveOnlineAdmission($request);
+
+        return response()->json($online_admission);
     }
 }
