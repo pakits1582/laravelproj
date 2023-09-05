@@ -172,23 +172,24 @@ class AdmissionService
     public function saveOnlineAdmission($request)
     {
         try {
-            $applicant = Student::with('documents_submitted', 'contact_info', 'program')->where('application_no', $request->application_no)->firstOrfail();
+            $applicant = Student::with('online_documents_submitted', 'contact_info', 'program')->where('application_no', $request->application_no)->firstOrfail();
             $document_reqs = AdmissionDocument::where('educational_level_id', $applicant->program->educational_level_id)->where('display', 1)->get();
 
             $documents_submitted = [];
 
-            if($document_reqs)
-            {
-                foreach ($document_reqs as $key => $document) 
-                {
-                    $name = strtolower(str_replace(' ', '_', $document->description));
+            return $applicant;
+            // if($document_reqs)
+            // {
+            //     foreach ($document_reqs as $key => $document) 
+            //     {
+            //         $name = strtolower(str_replace(' ', '_', $document->description));
                    
-                    $filename = time().rand(1,50);
-                    $path = $this->UploadFile($request->file($filename), 'documents_submitted', 'public', $filename);//use the method in the trait
+            //         $filename = time().rand(1,50);
+            //         $path = $this->UploadFile($request->file($filename), 'documents_submitted', 'public', $filename);//use the method in the trait
 
-                    return $path;
-                }
-            }
+            //         return $path;
+            //     }
+            // }
 
 
         } catch (ModelNotFoundException $e) {

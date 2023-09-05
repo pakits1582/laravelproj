@@ -173,4 +173,9 @@ class Student extends Model
         return $this->hasMany(DocumentSubmitted::class);
     }
 
+    public function online_documents_submitted()
+    {
+        return $this->hasMany(OnlineSubmittedDocument::class);
+    }
+
 }

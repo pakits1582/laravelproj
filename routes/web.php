@@ -554,7 +554,6 @@ Route::group(['middleware' => ['auth']], function () {
             return Redirect::route('applications.index');
         }); 
         
-
     });
 
     Route::group(['middleware' => ['inaccess:admissions']], function () {
@@ -568,7 +567,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/admissions/savedocument', [AdmissionController::class, 'savedocument']);
         Route::get('/admissions', [AdmissionController::class, 'index']);
         Route::get('/admissions/{application}', [AdmissionController::class, 'show'])->name('admission.show');
-
 
     });
 
