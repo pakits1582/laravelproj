@@ -510,27 +510,27 @@ $(function(){
                 $("#confirmation").dialog('close');
                 console.log(response)
                 
-                // if(response.success === true)
-                // {
-					//$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Online admission successfully submitted.</div><div class="message">Your information and credentials will be evaluated and you will receive an email acknowledgement from the school during the enrolment schedules.</div></div>').dialog({
-                        //         show: 'fade',
-                //         resizable: false,	
-                //         draggable: false,
-                //         width: 350,
-                //         height: 'auto',
-                //         modal: true,
-                //         buttons: {
-                //                 'OK':function(){
-                //                     $("#confirmation").dialog('close');
-                //                      window.location.reload();
-                //                 }
-                //             }//end of buttons
-                //     });//end of dialogbox
-                //     $(".ui-dialog-titlebar").hide();
-                //     //end of dialogbox
-                // }else{
-                //     showError(response.message);
-                // }
+                if(response.success === true)
+                {
+					$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Admission application successfully submitted.</div><div class="message">Your information and documents submitted will be evaluated and you will receive an email acknowledgement from the school during the enrolment schedules once application is approved.</div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        draggable: false,
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: {
+                                'OK':function(){
+                                    $("#confirmation").dialog('close');
+                                     window.location.reload();
+                                }
+                            }//end of buttons
+                    });//end of dialogbox
+                    $(".ui-dialog-titlebar").hide();
+                    //end of dialogbox
+                }else{
+                    showError(response.message);
+                }
             },
             error: function (data) {
                 console.log(data);

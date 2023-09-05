@@ -93,6 +93,61 @@ $(function(){
                 console.log(response);
                 if(response.success == true)
                 {
+                    showSuccess('Application successfully saved!');
+                    window.setTimeout(function(){
+                        location.reload();
+                    }, 1000);       
+                }else{
+                    showError(response.message);
+                }
+            },
+            error: function (data) {
+                confirmationDialog.dialog('close');
+
+                $('.errors').html('');
+                showError('Can not process form request, please check entries then submit again!');
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    var reportCardErrors = '';
+                    $.each(errors.errors, function (key, value) {
+                        if (key.includes('report_card.')) {
+                            reportCardErrors += value[0] + '<br>';
+                        } else {
+                            $('#error_' + key).html('<p class="text-danger text-xs mt-1">' + value[0] + '</p>');
+                        }
+                    });
+
+                    // Display the collated report_card errors in the error_report_card div
+                    $('#error_report_card').html('<p class="text-danger text-xs mt-1">' + reportCardErrors + '</p>');
+                }
+            }
+        });
+
+        e.preventDefault();
+    });
+
+    $(document).on("submit", "#form_online_application", function(e){
+        $.ajax({
+            url: "/applications/saveonlineapplication",
+            type: 'POST',
+            data: new FormData(this),
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            cache: false,
+            beforeSend: function() {
+                // Open the confirmation dialog
+                confirmationDialog.dialog("open");
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Submitting application, please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>');
+            },
+            success: function(response)
+            {
+                $('.errors').html('');
+                confirmationDialog.dialog('close');
+                console.log(response);
+                if(response.success == true)
+                {
                     $("#ui_content").html('<div class="confirmation"></div><div class="ui_title_confirm">Online Application</div><div class="message">'+response.message+'</div>').dialog({
                         show: 'fade',
                         resizable: false,	
@@ -237,6 +292,8 @@ $(function(){
         });
         e.preventDefault();
     });
+
+    
 
     function setCheckedByValue(inputName, dataValue) 
     {

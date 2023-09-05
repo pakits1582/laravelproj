@@ -73,7 +73,7 @@ class AdmissionService
             $student->update([
                 'program_id' => $validated['program_id'],
                 'curriculum_id' => $validated['curriculum_id'],
-                'admission_status' => 1,
+                'admission_status' => 2,
                 'admission_date' => now(),
             ]);
     
@@ -172,25 +172,56 @@ class AdmissionService
     public function saveOnlineAdmission($request)
     {
         try {
+            $validatedData = $request->validated();
+
             $applicant = Student::with('online_documents_submitted', 'contact_info', 'program')->where('application_no', $request->application_no)->firstOrfail();
             $document_reqs = AdmissionDocument::where('educational_level_id', $applicant->program->educational_level_id)->where('display', 1)->get();
 
+            DB::beginTransaction();
+
+            $applicant->contact_info()->update([
+                'contact_email' => $validatedData['contact_email'],
+                'contact_no'    => $validatedData['contact_no'],
+            ]);
+
+            $applicant->update(['admission_status' => 1]);
+
             $documents_submitted = [];
 
-            return $applicant;
-            // if($document_reqs)
-            // {
-            //     foreach ($document_reqs as $key => $document) 
-            //     {
-            //         $name = strtolower(str_replace(' ', '_', $document->description));
+            if($document_reqs)
+            {
+                foreach ($document_reqs as $key => $document) 
+                {
+                    $name = strtolower(str_replace(' ', '_', $document->description));
                    
-            //         $filename = time().rand(1,50);
-            //         $path = $this->UploadFile($request->file($filename), 'documents_submitted', 'public', $filename);//use the method in the trait
+                    if($request->hasfile($name))
+                    {
+                        foreach($request->file($name) as $file)
+                        {
+                            $filename = time().rand(1,50);
+                            $path = $this->UploadFile($file, 'documents_submitted', 'public', $filename);
 
-            //         return $path;
-            //     }
-            // }
+                            $documents_submitted[] =[
+                                'student_id' => $applicant->id,
+                                'admission_document_id' => $document->id,
+                                'path' => $path,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ];  
+                        }
+                    }
+                }
+            }
 
+            $applicant->online_documents_submitted()->insert($documents_submitted);
+
+            //DB::commit();
+
+            return [
+                'success' => true,
+                'message' => 'Admission application successfully submitted<br>Your information and documents submitted will be evaluated and you will receive an email acknowledgement from the school during the enrolment schedules if application is approved.',
+                'alert' => 'alert-success'
+            ];
 
         } catch (ModelNotFoundException $e) {
            
