@@ -63,7 +63,7 @@ class Student extends Model
         14 => 'Others',     
     ];
 
-    protected $fillable = ['id', 'user_id', 'picture', 'last_name', 'first_name', 'middle_name', 'name_suffix', 'sex', 'program_id', 'year_level', 'curriculum_id', 'academic_status', 'report_card', 'als_certificate', 'classification', 'application_no', 'application_status', 'admission_status','admission_date', 'entry_date', 'entry_data', 'entry_period', 'assessed_by', 'assessed_date'];
+    protected $fillable = ['id', 'user_id', 'picture', 'last_name', 'first_name', 'middle_name', 'name_suffix', 'sex', 'program_id', 'year_level', 'curriculum_id', 'academic_status', 'report_card', 'als_certificate', 'classification', 'application_no', 'application_status', 'admission_status','admission_date', 'online_admission', 'entry_date', 'entry_data', 'entry_period', 'assessed_by', 'assessed_date'];
 
     public function firstName(): Attribute
     {

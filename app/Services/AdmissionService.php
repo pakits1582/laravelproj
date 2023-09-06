@@ -130,7 +130,7 @@ class AdmissionService
             $document_reqs = AdmissionDocument::where('educational_level_id', $applicant->program->educational_level_id)->where('display', 1)->get();
 
             $documents = [];
-            if($document_reqs)
+            if($document_reqs->isNotEmpty())
             {
                 foreach ($document_reqs as $key => $document) 
                 {
@@ -156,6 +156,7 @@ class AdmissionService
                     'contact_email' => $applicant->contact_info->contact_email,
                     'contact_no' => $applicant->contact_info->contact_no,
                     'picture' => $applicant->picture,
+                    'admission_status' => $applicant->admission_status,
                 ],
                 'documents' => $documents
             ];
@@ -177,6 +178,14 @@ class AdmissionService
             $applicant = Student::with('online_documents_submitted', 'contact_info', 'program')->where('application_no', $request->application_no)->firstOrfail();
             $document_reqs = AdmissionDocument::where('educational_level_id', $applicant->program->educational_level_id)->where('display', 1)->get();
 
+            if($document_reqs->isEmpty())
+            {
+                return [
+                    'success' => false,
+                    'message' => 'Sorry there is no document requirements of program\'s educational level!',
+                ];
+            }
+
             DB::beginTransaction();
 
             $applicant->contact_info()->update([
@@ -184,11 +193,14 @@ class AdmissionService
                 'contact_no'    => $validatedData['contact_no'],
             ]);
 
-            $applicant->update(['admission_status' => 1]);
+            $applicant->update([
+                'admission_status' => 1,
+                'online_admission' => 1
+            ]);
 
             $documents_submitted = [];
 
-            if($document_reqs)
+            if($document_reqs->isNotEmpty())
             {
                 foreach ($document_reqs as $key => $document) 
                 {
@@ -215,7 +227,7 @@ class AdmissionService
 
             $applicant->online_documents_submitted()->insert($documents_submitted);
 
-            //DB::commit();
+            DB::commit();
 
             return [
                 'success' => true,

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('application_no')->index()->nullable();
             $table->tinyInteger('application_status')->default(0);
             $table->tinyInteger('admission_status')->default(0);
+            $table->tinyInteger('online_admission')->default(0);
             $table->date('admission_date')->nullable();
             $table->date('entry_date')->nullable();
             $table->string('entry_data')->nullable();

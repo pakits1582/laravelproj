@@ -421,6 +421,7 @@ $(function(){
                                 buttons: {
                                         'OK':function(){
                                             $(this).dialog('close');
+                                            window.location.reload();
                                         }//end of ok button	
                                     }//end of buttons
                                 });//end of dialogbox
@@ -508,7 +509,7 @@ $(function(){
             },
             success: function(response){
                 $("#confirmation").dialog('close');
-                console.log(response)
+                //console.log(response)
                 
                 if(response.success === true)
                 {
@@ -522,7 +523,7 @@ $(function(){
                         buttons: {
                                 'OK':function(){
                                     $("#confirmation").dialog('close');
-                                     window.location.reload();
+                                    window.location.reload();
                                 }
                             }//end of buttons
                     });//end of dialogbox
@@ -533,7 +534,7 @@ $(function(){
                 }
             },
             error: function (data) {
-                console.log(data);
+                //console.log(data);
                 $("#confirmation").dialog('close');
 
                 $('.errors').html('');

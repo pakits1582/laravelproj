@@ -165,4 +165,15 @@ class AdmissionController extends Controller
 
         return response()->json($online_admission);
     }
+
+    public function onlineadmissions()
+    {
+        $online_admissions = Student::with('online_documents_submitted', 'personal_info', 'contact_info', 'program')
+                                ->where('online_admission', 1)
+                                ->where('entry_period', session('current_period'))
+                                ->get();
+
+        return view('admission.online_admissions', compact('online_admissions'));
+
+    }
 }
