@@ -16,9 +16,9 @@
             <div class="card-body">
                 <form method="POST" action="" id="form_admit_applicant">
                     @csrf
-                    <div class="row">
+                    <div class="row mb-4 ">
                         <div class="col-md-8">
-                            <div class="card shadow mb-4">
+                            <div class="card shadow h-100">
                                 <div class="card-header py-3">
                                     <h6 class="font-weight-bold  text-primary mb-0">Student Information</h6>  
                                 </div>
@@ -131,56 +131,13 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="card shadow">
-                                <div class="card-header py-3">
-                                    <h6 class="font-weight-bold  text-primary mb-0">Personal Information</h6>  
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-3"><label for="" class="m-0 font-weight-bold text-primary">Civil Status</label></div>
-                                                <div class="col-md-9"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->personal_info->civil_status }}</h6></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3"><label for="" class="m-0 font-weight-bold text-primary">Birth Date</label></div>
-                                                <div class="col-md-9"><h6 class="font-weight-bold  text-black mb-0">{{ \Carbon\Carbon::parse($applicant->personal_info->birth_date)->format('F d, Y') }}</h6></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3"><label for="" class="m-0 font-weight-bold text-primary">Birth Place</label></div>
-                                                <div class="col-md-9"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->personal_info->birth_place }}</h6></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3"><label for="" class="m-0 font-weight-bold text-primary">Nationality</label></div>
-                                                <div class="col-md-9"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->personal_info->nationality }}</h6></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Sex</label></div>
-                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ \App\Models\Student::SEX[$applicant->sex] ?? '' }}</h6></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Email Address</label></div>
-                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->contact_info->email }}</h6></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Mobile No.</label></div>
-                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->contact_info->mobileno }}</h6></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card shadow mb-4">
+                            <div class="card shadow h-100">
                                 <div class="card-header py-3">
                                     <h6 class="font-weight-bold text-primary mb-0">Admission Documents</h6>  
                                 </div>
                                 <div class="card-body">
-                                    
                                     <p class="font-italic text-info">Note: (*) Please select all admission documents submitted by the applicant.</p>
                                     <h6 class="font-weight-bold text-primary mb-3">* Documents Submitted</h6>
                                     @if ($documents !== null && count($documents) > 0)
@@ -224,7 +181,54 @@
                                     @endif
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card shadow">
+                                <div class="card-header py-3">
+                                    <h6 class="font-weight-bold  text-primary mb-0">Personal Information</h6>  
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-3"><label for="" class="m-0 font-weight-bold text-primary">Civil Status</label></div>
+                                                <div class="col-md-9"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->personal_info->civil_status }}</h6></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3"><label for="" class="m-0 font-weight-bold text-primary">Birth Date</label></div>
+                                                <div class="col-md-9"><h6 class="font-weight-bold  text-black mb-0">{{ \Carbon\Carbon::parse($applicant->personal_info->birth_date)->format('F d, Y') }}</h6></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3"><label for="" class="m-0 font-weight-bold text-primary">Birth Place</label></div>
+                                                <div class="col-md-9"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->personal_info->birth_place }}</h6></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3"><label for="" class="m-0 font-weight-bold text-primary">Nationality</label></div>
+                                                <div class="col-md-9"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->personal_info->nationality }}</h6></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Sex</label></div>
+                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ \App\Models\Student::SEX[$applicant->sex] ?? '' }}</h6></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Email Address</label></div>
+                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->contact_info->email }}</h6></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4"><label for="" class="m-0 font-weight-bold text-primary">Mobile No.</label></div>
+                                                <div class="col-md-8"><h6 class="font-weight-bold  text-black mb-0">{{ $applicant->contact_info->mobileno }}</h6></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="font-weight-bold text-primary mb-0">Contact Details</h6>  

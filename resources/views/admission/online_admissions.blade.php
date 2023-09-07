@@ -33,11 +33,11 @@
                             <div class="form-group">
                                 <label for="period_id" class="m-0 font-weight-bold text-primary">Period</label>
                                 <select name="period_id" class="form-control dropdownfilter" id="period_id">
-                                    {{-- @if ($periods)
+                                    @if ($periods)
                                         @foreach ($periods as $period)
                                             <option value="{{ $period->id }}" {{ ($period->id === session('current_period')) ? 'selected' : '' }}>{{ $period->name }}</option>
                                         @endforeach
-                                    @endif --}}
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -52,11 +52,11 @@
                                 <label for="program_id" class="m-0 font-weight-bold text-primary">Program</label>
                                 <select name="program_id" class="form-control dropdownfilter" id="program_id">
                                     <option value="">- select program -</option>
-                                    {{-- @if ($programs)
+                                    @if ($programs)
                                         @foreach ($programs as $program)
                                             <option value="{{ $program->id }}">{{ $program->code }}</option>
                                         @endforeach
-                                    @endif --}}
+                                    @endif
                                 </select>
                             </div>
                         </div>

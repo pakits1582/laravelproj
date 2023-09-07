@@ -7,7 +7,7 @@
             <th class="">Name</th>
             <th class="">Program</th>
             <th class="">Classification</th>
-            <th class="">Date</th>
+            <th class="">Application Date</th>
             <th>Actions</th>
         </tr>
     </thead>

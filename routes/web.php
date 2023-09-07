@@ -558,6 +558,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:admissions']], function () {
 
+        Route::get('/admissions/{applicant}/viewapplication', [AdmissionController::class, 'viewapplication'])->name('admissions.viewapplication');
         Route::get('/admissions/onlineadmissions', [AdmissionController::class, 'onlineadmissions'])->name('onlineadmissions');
         Route::post('/admissions/admitapplicant', [AdmissionController::class, 'admitapplicant']);
         Route::put('/admissions/{document}/updatedocument', [AdmissionController::class, 'updatedocument']);
