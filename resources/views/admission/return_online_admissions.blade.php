@@ -26,7 +26,7 @@
                         <td class="">{{ \App\Models\Student::STUDENT_CLASSIFICATION[$applicant->classification] }}</td>
                         <td class="mid">{{ \Carbon\Carbon::parse($applicant->entry_date)->format('F d, Y') }}</td>
                         <td class="mid">
-                            <a href="{{ route('admissions.viewapplication', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" class="btn btn-primary btn-circle btn-sm view_admission_application" title="View Admission Application">
+                            <a href="{{ route('admissions.viewapplication', ['applicant' => $applicant->id ]) }}" id="{{ $applicant->id }}" class="btn btn-primary btn-circle btn-sm view_admission_application" title="View Admission Application">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>

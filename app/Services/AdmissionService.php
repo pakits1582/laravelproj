@@ -208,20 +208,24 @@ class AdmissionService
                    
                     if($request->hasfile($name))
                     {
+                        $files = [];
                         foreach($request->file($name) as $file)
                         {
                             $filename = time().rand(1,50);
                             $path = $this->UploadFile($file, 'documents_submitted', 'public', $filename);
-
-                            $documents_submitted[] =[
-                                'student_id' => $applicant->id,
-                                'admission_document_id' => $document->id,
-                                'path' => $path,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ];  
+                            $files[] = $path; 
                         }
+
+                        $documents_submitted[] =[
+                            'student_id' => $applicant->id,
+                            'admission_document_id' => $document->id,
+                            'path' => implode(',', $files),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];  
                     }
+
+                    
                 }
             }
 
