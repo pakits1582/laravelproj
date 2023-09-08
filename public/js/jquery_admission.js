@@ -560,4 +560,10 @@ $(function(){
 
         e.preventDefault();
     });
+
+    $(document).on("click", ".document_image", function(){
+        var path = $(this).attr('src');
+
+        alert(path);
+    });
 });

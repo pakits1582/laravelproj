@@ -48,6 +48,7 @@ use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\UnsavedEnrollmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
 use App\Http\Controllers\ClassesSlotsMonitoringController;
+use App\Http\Controllers\PdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,8 @@ use App\Http\Controllers\ClassesSlotsMonitoringController;
 // Route::get('/', function () {
 //     return view('auth.index');
 // });
+
+//Route::get('/pdf/{path}', [PdfController::class, 'show'])->where('path', '(.*)')->name('pdf.show');
 
 Route::get('/admissions/onlineadmission', [AdmissionController::class, 'onlineadmission'])->name('onlineadmission');
 Route::post('/admissions/getapplicantinfo', [AdmissionController::class, 'getapplicantinfo'])->name('getapplicantinfo');
@@ -558,6 +561,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:admissions']], function () {
 
+        Route::get('/pdf/{document}/onlinedocumentsubmitted', [PdfController::class, 'onlinedocumentsubmitted'])->name('onlinedocumentsubmitted');
         Route::get('/admissions/{applicant}/viewapplication', [AdmissionController::class, 'viewapplication'])->name('admissions.viewapplication');
         Route::get('/admissions/onlineadmissions', [AdmissionController::class, 'onlineadmissions'])->name('onlineadmissions');
         Route::post('/admissions/admitapplicant', [AdmissionController::class, 'admitapplicant']);

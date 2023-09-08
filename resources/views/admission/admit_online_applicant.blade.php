@@ -239,17 +239,31 @@
                                         </div>
                                         <div class="card-body">
                                             @if($applicant->online_documents_submitted)
-                                                @foreach ($applicant->online_documents_submitted as $document)
-                                                    <h6 class="font-weight-bold  text-primary mb-0">{{ $document->document->description }}</h6>  
+                                                @foreach ($applicant->online_documents_submitted as $document_submitted)
+                                                    <h6 class="font-weight-bold  text-primary mb-0">{{ $document_submitted->document->description }}</h6>  
                                                     <div class="row mb-2">
                                                         @php
-                                                            $documents = explode(',', $document->path);
+                                                            $documents = explode(',', $document_submitted->path);
                                                         @endphp
                                                     
                                                         @foreach ($documents as $document)
-                                                            <div class="col-md-6 attached_credentials p-3">
-                                                                <img src="{{ Storage::url($document) }}" alt="Image">
-                                                            </div>
+                                                            @php
+                                                                $type = explode('.', $document);
+                                                            @endphp
+                                                            @if ($type[1] == 'pdf')
+                                                                <div class="col-md-6 attached_credentials p-3">
+                                                                    {{-- <a href="{{ Storage::url($document) }}" target="_blank" class="btn btn-primary">
+                                                                        <i class="fas fa-file-pdf"></i> Open PDF File
+                                                                    </a> --}}
+                                                                    <a href="{{ route('onlinedocumentsubmitted', ['document' => $document_submitted->id]) }}" target="_blank" class="btn btn-primary">
+                                                                        <i class="fas fa-file-pdf"></i> Open PDF File
+                                                                    </a>
+                                                                </div>
+                                                            @else
+                                                                <div class="col-md-6 attached_credentials p-3">
+                                                                    <img src="{{ Storage::url($document) }}" alt="Image" class="document_image">
+                                                                </div>
+                                                            @endif
                                                         @endforeach
                                                     </div>
                                                 @endforeach
