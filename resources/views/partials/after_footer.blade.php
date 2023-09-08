@@ -23,6 +23,24 @@
     </div>
 </div>
 
+<div class="modal fade" id="displayImage" tabindex="-1" role="dialog" aria-labelledby="displayImage"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Image Preview</h1>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body attached_credentials" id="image_holder">
+
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
 <div id="confirmation"></div>
 <div id="ui_content"></div>
 <div id="ui_content2"></div>

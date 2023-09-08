@@ -578,6 +578,7 @@ label{
 .attached_credentials{
 	max-width: 100%;
 	display: block;
+	cursor: pointer;
 }
 .attached_credentials img{
 	width: 100%;

@@ -165,4 +165,12 @@ class ProgramController extends Controller
         $pdf = PDF::loadView('program.generatepdf', ['programs' => $programs]);
         return $pdf->stream('programs.pdf');
     }
+
+    public function getcurricula(Program $program)
+    {
+        $program = $program->load('curricula');
+
+        return response()->json(['curricula' => $program->curricula]);
+
+    }
 }

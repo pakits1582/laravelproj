@@ -166,14 +166,11 @@ class AdmissionController extends Controller
         return response()->json($online_admission);
     }
 
-    public function onlineadmissions()
+    public function onlineadmissions(Request $request)
     {
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
-        $online_admissions = Student::with('online_documents_submitted', 'personal_info', 'contact_info', 'program')
-                                ->where('online_admission', 1)
-                                ->where('entry_period', session('current_period'))
-                                ->get();
+        $online_admissions =  (new ApplicationService)->applicantList($request, 10, false, Student::APPLI_ACCEPTED, 1);
                                 
         return view('admission.online_admissions', compact('periods', 'programs', 'online_admissions'));
 

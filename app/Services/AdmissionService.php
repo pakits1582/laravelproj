@@ -88,7 +88,7 @@ class AdmissionService
             
             $this->insertDocumentSubmitted($student, $validated['documents_submitted']);
 
-            DB::commit();
+            //DB::commit();
 
             return [
                 'success' => true,
@@ -119,7 +119,7 @@ class AdmissionService
                 ];
             }
 
-            $student->submitted_documents()->insert($insert_documents);
+            $student->documents_submitted()->insert($insert_documents);
         }
     }
 

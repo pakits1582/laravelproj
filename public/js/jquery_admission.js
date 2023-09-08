@@ -16,6 +16,10 @@ $(function(){
         searching: false
     });
 
+    $("#program_id").select2({
+        dropdownParent: $("#ui_content")
+    });
+
     $(document).on("change", ".custom-file-input",  function() {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").removeClass("selected").html(fileName);
@@ -564,6 +568,44 @@ $(function(){
     $(document).on("click", ".document_image", function(){
         var path = $(this).attr('src');
 
-        alert(path);
+        $('#image_holder').html('<image src="'+path+'" class="" />');
+        $("#displayImage").modal('show');
+
+    });
+
+    $(document).on("change", "#program_id", function(e)
+    {
+        var program_id = $(this).val();
+
+        if(program_id)
+        {
+            $.ajax({
+                url: '/programs/'+program_id+'/getcurricula',
+                type: 'GET',
+                success: function(response){
+                    console.log(response);
+                    if(!jQuery.isEmptyObject(response.curricula))
+                    {
+                        var curricula = '<option value="">- select curriculum -</option>';
+                        $.each(response.curricula, function(k, v){
+                            curricula += '<option value="'+v.id+'">'+v.curriculum+'</option>';       
+                        });
+                        
+                        $("#curriculum_id").html(curricula);
+                    }else{
+                        $("#curriculum_id").html('<option value="">- NO CURRICULUM -</option>');
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) == false) {
+                        showError('Something went wrong! Can not perform requested action!');
+                    }
+                }
+            });
+        }
+
+        e.preventDefault();
     });
 });
