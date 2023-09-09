@@ -31,14 +31,28 @@ class AdmissionController extends Controller
     {
         $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
         $programs = (new ProgramService)->returnAllPrograms(0, true, true);
-
         $applicants = (new ApplicationService)->applicantList($request, 10, false, Student::APPLI_ACCEPTED);
 
-        if($request->ajax()){
+        if($request->ajax())
+        {
+            if($request->has('admission_status'))
+            {
+                return view('admission.return_online_admissions', compact('applicants'));
+            }
+            
             return view('admission.return_applications', compact('applicants'));
         }
 
         return view('admission.index', compact('periods', 'programs', 'applicants'));
+    }
+
+    public function onlineadmissions(Request $request)
+    {
+        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
+        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
+        $applicants =  (new ApplicationService)->applicantList($request, 10, false, Student::APPLI_ACCEPTED, 1);
+                                
+        return view('admission.online_admissions', compact('periods', 'programs', 'applicants'));
     }
 
     public function show(Student $application)
@@ -164,16 +178,6 @@ class AdmissionController extends Controller
         $online_admission = $this->admissionService->saveOnlineAdmission($request);
 
         return response()->json($online_admission);
-    }
-
-    public function onlineadmissions(Request $request)
-    {
-        $periods = (new PeriodService)->returnAllPeriods(0, true, 1);
-        $programs = (new ProgramService)->returnAllPrograms(0, true, true);
-        $online_admissions =  (new ApplicationService)->applicantList($request, 10, false, Student::APPLI_ACCEPTED, 1);
-                                
-        return view('admission.online_admissions', compact('periods', 'programs', 'online_admissions'));
-
     }
 
     public function viewapplication(Student $applicant)

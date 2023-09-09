@@ -19,6 +19,13 @@ $(function(){
 		}
 	});
 
+    $(document).on("change", "#period_id", function(e){
+        var period_name = $("#period_id option:selected").text();
+       
+        $("#period_name").text(period_name);
+
+    });
+
     var confirmationDialog = $("#confirmation").dialog({
         autoOpen: false,
         show: 'fade',

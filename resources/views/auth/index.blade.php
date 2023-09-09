@@ -45,6 +45,14 @@
                             <div class="col-lg-7">
                                 <div class="card shadow m-4 border-left-primary">
                                     <div class="card-header py-3">
+                                        <h4 class="text-800 text-primary mb-0">Announcement</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {{ $configuration->announcement }}
+                                    </div>
+                                </div>
+                                <div class="card shadow m-4 border-left-primary">
+                                    <div class="card-header py-3">
                                         <h4 class="text-800 text-primary mb-0">Online Application</h4>
                                     </div>
                                     <div class="card-body">

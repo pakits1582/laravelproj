@@ -82,13 +82,21 @@ class AdmissionService
                 'password' => Hash::make('password'),
                 'utype' => User::TYPE_STUDENT,
             ]);
+
+            $student->update([
+                'user_id' => $user->id,
+                'program_id' => $validated['program_id'],
+                'curriculum_id' => $validated['curriculum_id'],
+                'admission_status' => 2,
+                'admission_date' => now(),
+            ]);
     
             $accesses = (new StudentService)->returnStudentAccesses();
             $user->access()->saveMany($accesses);
             
             $this->insertDocumentSubmitted($student, $validated['documents_submitted']);
 
-            //DB::commit();
+            DB::commit();
 
             return [
                 'success' => true,

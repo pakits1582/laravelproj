@@ -16,17 +16,17 @@
                         <h1 class="h3 text-800 text-primary mb-0">Online Admission Applications <span id="period_name">{{ session('periodname') }}</span></h1>
                     </div>
                     <div class="col-md-3 right">
-                        {{-- <a href="{{ route('onlineadmissions') }}" class="btn btn-primary btn-icon-split">
+                        <a href="{{ route('admissions.index') }}" class="btn btn-primary btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-edit"></i>
                             </span>
-                            <span class="text">Online Admissions</span>
-                        </a> --}}
+                            <span class="text">Admissions</span>
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="" id="filter_form" target="_blank" data-field="admissions">
+                <form method="POST" action="" id="filter_form" data-field="admissions">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -64,6 +64,7 @@
                             <div class="form-group">
                                 <label for="college" class="m-0 font-weight-bold text-primary">Keyword</label>
                                 <input type="text" name="keyword" placeholder="Type keyword to search..." class="filter_item form-control" id="keyword">
+                                <input type="hidden" name="admission_status" value="1">
                             </div>
                         </div>
                     </div>
@@ -73,12 +74,12 @@
                 </div>
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        {{-- {{ $applicants->onEachSide(1)->links() }}
-                        Showing {{ $applicants->firstItem() ?? 0 }} to {{ $applicants->lastItem() ?? 0 }} of total {{$applicants->total()}} entries --}}
+                        {{ $applicants->onEachSide(1)->links() }}
+                        Showing {{ $applicants->firstItem() ?? 0 }} to {{ $applicants->lastItem() ?? 0 }} of total {{$applicants->total()}} entries
                     </div>
                     <div class="col-md-6">
                         <div class="right">
-                            {{-- <h6 class="m-0 font-weight-bold text-primary">Total Applicants for Admission (<span id="totalcount">{{ count($applicants) ?? 0 }}</span>)</h6> --}}
+                            <h6 class="m-0 font-weight-bold text-primary">Total Online Applicants for Admission (<span id="totalcount">{{ count($applicants) ?? 0 }}</span>)</h6>
                         </div>
                     </div>
                 </div>

@@ -20,6 +20,13 @@ $(function(){
         dropdownParent: $("#ui_content")
     });
 
+    $(document).on("change", "#period_id", function(e){
+        var period_name = $("#period_id option:selected").text();
+       
+        $("#period_name").text(period_name);
+
+    });
+
     $(document).on("change", ".custom-file-input",  function() {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").removeClass("selected").html(fileName);

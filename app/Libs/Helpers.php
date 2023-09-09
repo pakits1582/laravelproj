@@ -229,6 +229,63 @@ class Helpers
         }
     }
 
+    public static function studentMenuCategoryIcon($title)
+    {
+        switch ($title) {
+            case 'Assessment':
+                return 'fa-book';
+                break;
+            case 'Evaluation':
+                return 'fa-list-alt';
+                break;
+            case 'Grades':
+                return 'fa-graduation-cap';
+                break;
+            case 'Registration':
+                return 'fa-edit';
+                break;
+            case 'Profile':
+                return 'fa-user';
+                break;
+            case 'Account':
+                return 'fa-credit-card';
+                break;
+            case 'Attendance':
+                return 'fa-calendar';
+                break;
+            case 'Faculty Evaluation':
+                return 'fa-list';
+                break;
+            default:
+                return 'fa-cog';
+                break;
+        }
+    }
+
+    public static function facultyMenuCategoryIcon($title)
+    {
+        switch ($title) {
+            case 'Faculty Load':
+                return 'fa-book';
+                break;
+            case 'Faculty Class List':
+                return 'fa-list-alt';
+                break;
+            case 'Faculty Profile':
+                return 'fa-user';
+                break;
+            case 'Grading Sheet':
+                return 'fa-edit';
+                break;
+            case 'Grade Generator':
+                return 'fa-list';
+                break;
+            default:
+                return 'fa-cog';
+                break;
+        }
+    }
+
     public static function getDesignation($designation)
     {
         switch ($designation) {

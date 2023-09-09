@@ -572,7 +572,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admissions/returndocuments', [AdmissionController::class, 'returndocuments']);
         Route::get('/admissions/{document}/editdocument', [AdmissionController::class, 'editdocument']);
         Route::post('/admissions/savedocument', [AdmissionController::class, 'savedocument']);
-        Route::get('/admissions', [AdmissionController::class, 'index']);
+        Route::get('/admissions', [AdmissionController::class, 'index'])->name('admissions.index');
         Route::get('/admissions/{application}', [AdmissionController::class, 'show'])->name('admission.show');
 
 

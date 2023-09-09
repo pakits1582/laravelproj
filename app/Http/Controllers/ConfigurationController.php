@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreConfigScheduleRequest;
-use App\Http\Requests\UpdateConfigurationRequest;
+use Carbon\Carbon;
 use App\Libs\Helpers;
+use App\Models\Period;
 use App\Models\Configuration;
 use App\Models\ConfigurationSchedule;
-use App\Models\Period;
 use App\Services\ConfigurationService;
+use App\Http\Requests\StoreConfigScheduleRequest;
+use App\Http\Requests\UpdateConfigurationRequest;
 
 class ConfigurationController extends Controller
 {
@@ -30,6 +31,15 @@ class ConfigurationController extends Controller
         $periods = Period::with('terminfo')->where('display', 1)->orderBy('year', 'DESC')->get();
         $configuration = Configuration::take(1)->first();
         $configgrouped = ConfigurationSchedule::with(['collegeinfo', 'level'])->where('period_id', session('current_period'))->get()->groupBy('type');
+
+        $application_dateto = $configuration->dateto;
+        
+        $result = Carbon::createFromFormat('Y-m-d', $application_dateto)->isFuture();
+
+        if(!$result)
+        {
+            $configuration->update(['status' => 1]);
+        }
 
         return view('configuration.index', compact('periods', 'configuration', 'configgrouped'));
     }
@@ -111,7 +121,7 @@ class ConfigurationController extends Controller
      */
     public function applicationaction(Configuration $configuration, $action)
     {
-        $status = ($action == 'open') ? 1 : 0;
+        $status = ($action == 'open') ? 0 : 1;
         $configuration->update(['status' => $status]);
 
         return response()->json(['success' => true, 'alert' => 'alert-success', 'message' => 'Application action successfully excuted!']);

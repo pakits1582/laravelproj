@@ -12,13 +12,13 @@
             </tr>
         </thead>
         <tbody>
-            @if ($online_admissions !== null && count($online_admissions) > 0)
-                @foreach ($online_admissions as $applicant)
+            @if ($applicants !== null && count($applicants) > 0)
+                @foreach ($applicants as $applicant)
                     <tr class="label">
                         <td class="">{{ $loop->iteration }}</td>
                         <td class="">{{ $applicant->application_no }}</td>
                         <td class="">
-                            <a href="{{ route('admission.show', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" class="font-weight-bold text-primary" title="Admit Applicant">
+                            <a href="{{ route('admissions.viewapplication', ['applicant' => $applicant->id ]) }}" id="{{ $applicant->id }}" class="font-weight-bold text-primary" title="Admit Applicant">
                                 {{ $applicant->name }}
                             </a>
                         </td>

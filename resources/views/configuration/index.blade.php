@@ -277,14 +277,14 @@
                                     <div class="col-md-2">
                                         <label for="code"  class="m-0 font-weight-bold text-primary py-2">Status</label>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-3">
                                         <div class="h5 mb-0 font-weight-bold text-gray-800 py-2">
-                                            {{ (isset($configuration->status)) ?  ($configuration->status == 1) ? 'OPEN' : 'CLOSED' : 'CLOSED' }}
+                                            {{ (isset($configuration->status)) ?  ($configuration->status == 0) ? 'OPEN' : 'CLOSED' : 'CLOSED' }}
                                         </div>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-7 right">
                                         @isset($configuration->status)
-                                            @if ($configuration->status == 0)
+                                            @if ($configuration->status == 1)
                                                 <a href="#" id="open" data-id="{{ $configuration->id }}" class="applicationaction btn btn-primary btn-icon-split mx-2 align-middle">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-door-open"></i>
@@ -336,6 +336,18 @@
                     </div>
                 </div>
             </form>
+            <!-- ANNOUNCEMENT -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Announcement</h6>
+                </div>
+                <div class="card-body">
+                    <p class="font-italic text-info">Note: Announcement content will be displayed in start up or login page.</p>
+                    <div class="" id="announcement_container" style="height: 200px; overflow-y: scroll;">
+
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-lg-6">
             @if(Session::has('sched_message'))

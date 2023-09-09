@@ -20,6 +20,7 @@ class ApplicationService
         $query = Student::with(['program' => ['level', 'collegeinfo']])->orderBy('entry_date', 'DESC')->orderBy('last_name');
 
         $period = $request->period_id ?? session('current_period');
+        $admission_status = $request->admission_status ?? $admission_status;
 
         $query->where('entry_period', $period)->where('application_status', $application_status)->where('admission_status', $admission_status);
         

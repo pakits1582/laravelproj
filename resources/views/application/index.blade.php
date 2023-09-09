@@ -16,7 +16,13 @@
                         <h1 class="h3 text-800 text-primary mb-0">Applications <span id="period_name">{{ session('periodname') }}</span></h1>
                     </div>
                     <div class="col-md-6 right">
-                        <a href="{{ route('applications.create') }}" class="btn btn-primary btn-icon-split">
+                        <button type="button" id="delete_selected_applicants" class="btn btn-danger btn-icon-split mb-2">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                            <span class="text">Delete Selected</span>
+                        </button>
+                        <a href="{{ route('applications.create') }}" class="btn btn-primary btn-icon-split mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus-square"></i>
                             </span>
@@ -26,7 +32,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="" id="filter_form" target="_blank" data-field="applications">
+                <form method="POST" action="" id="filter_form" data-field="applications">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -71,19 +77,15 @@
                 <div id="">
                     @include('application.return_applicants')
                 </div>
-                <div class="row mt-3 d-flex align-items-center">
-                    <div class="col-md-2">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <h6 class="m-0 font-weight-bold text-primary">Total Applicants (<span id="totalcount">{{ count($applicants) ?? 0 }}</span>)</h6>
+                            {{ $applicants->onEachSide(1)->links() }}
+                            Showing {{ $applicants->firstItem() ?? 0 }} to {{ $applicants->lastItem() ?? 0 }} of total {{$applicants->total()}} entries
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <button type="button" id="delete_selected_applicants" class="btn btn-danger btn-icon-split mb-2">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                            <span class="text">Delete Selected</span>
-                        </button>
+                    <div class="col-md-6 right">
+                        <h6 class="m-0 font-weight-bold text-primary">Total Applicants (<span id="totalcount">{{ count($applicants) ?? 0 }}</span>)</h6>
                     </div>
                 </div>
             </div>
