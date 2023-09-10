@@ -48,6 +48,7 @@ use App\Http\Controllers\StudentadjustmentController;
 use App\Http\Controllers\UnsavedEnrollmentController;
 use App\Http\Controllers\ScholarshipdiscountController;
 use App\Http\Controllers\ClassesSlotsMonitoringController;
+use App\Http\Controllers\FacultyEvaluationController;
 use App\Http\Controllers\PdfController;
 
 /*
@@ -576,6 +577,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admissions/{application}', [AdmissionController::class, 'show'])->name('admission.show');
 
 
+    });
+
+    Route::group(['middleware' => ['inaccess:facultyevaluations']], function () {
+        
+        Route::resource('facultyevaluations', FacultyEvaluationController::class)->missing(function (Request $request) {
+            return Redirect::route('facultyevaluations.index');
+        }); 
+        
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
