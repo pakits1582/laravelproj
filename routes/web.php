@@ -581,6 +581,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:facultyevaluations']], function () {
         
+        Route::get('/facultyevaluations/questions', [FacultyEvaluationController::class, 'questions'])->name('facultyevaluations.questions');
+
         Route::resource('facultyevaluations', FacultyEvaluationController::class)->missing(function (Request $request) {
             return Redirect::route('facultyevaluations.index');
         }); 

@@ -6,7 +6,7 @@
 
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">Faculty Evaluations</h1>
-        <p class="mb-4">List and management of student admissions.</p>
+        <p class="mb-4">List and management of classes for evaluation.</p>
         
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
@@ -16,7 +16,7 @@
                         <h1 class="h3 text-800 text-primary mb-0">Faculty Evaluations <span id="period_name">{{ session('periodname') }}</span></h1>
                     </div>
                     <div class="col-md-5 right">
-                        <a href="{{ route('onlineadmissions') }}" class="btn btn-primary btn-icon-split">
+                        <a href="{{ route('facultyevaluations.questions') }}" class="btn btn-primary btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-edit"></i>
                             </span>

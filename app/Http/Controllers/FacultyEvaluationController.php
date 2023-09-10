@@ -21,4 +21,13 @@ class FacultyEvaluationController extends Controller
 
         return view('facultyevaluation.index');
     }
+
+
+
+
+
+    public function questions()
+    {
+        return view('facultyevaluation.questions.index');
+    }
 }
