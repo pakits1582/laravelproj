@@ -32,18 +32,18 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
-                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
+                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter', 'value' => 1])
                             </div>
                         </div>
                         <div class="col-md-9  right">
                             <div class="form-group">
-                                <a href="{{ route('facultyevaluations.index') }}" class="btn btn-success btn-icon-split">
+                                <a href="#" id="add_question" class="btn btn-success btn-icon-split">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-plus"></i>
                                     </span>
                                     <span class="text">Add Question</span>
                                 </a>
-                                <a href="{{ route('facultyevaluations.index') }}" class="btn btn-danger btn-icon-split">
+                                <a href="#" class="btn btn-danger btn-icon-split">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-trash"></i>
                                     </span>

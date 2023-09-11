@@ -24,10 +24,4 @@ class FacultyEvaluationController extends Controller
 
 
 
-
-
-    public function questions()
-    {
-        return view('facultyevaluation.questions.index');
-    }
 }

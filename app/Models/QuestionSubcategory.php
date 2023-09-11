@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class QuestionSubcategory extends Model
 {
     use HasFactory;
+    protected $table = 'question_subcategories';
+    protected $fillable = ['name'];
 }
