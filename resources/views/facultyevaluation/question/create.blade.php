@@ -26,12 +26,12 @@ aria-hidden="true">
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <label for="educational_level" class="m-0 font-weight-bold text-primary">* Level</label>
+                                                <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Level</label>
                                             </div>
                                             <div class="col-md-10">
-                                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter', 'value' => 1])
+                                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id', 'fieldclass' => '', 'value' => 1])
                                             </div>
-                                            <div id="error_educational_level" class="errors"></div>
+                                            <div id="error_educational_level_id" class="errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">

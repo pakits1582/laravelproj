@@ -9,6 +9,7 @@ use App\Models\QuestionCategory;
 use App\Services\QuestionService;
 use App\Models\QuestionSubcategory;
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\StoreQuestionRequest;
 
 class QuestionController extends Controller
 {
@@ -35,9 +36,11 @@ class QuestionController extends Controller
         return view('facultyevaluation.question.create', compact('categories', 'subcategories', 'groups'));
     }
 
-    public function store()
+    public function store(StoreQuestionRequest $request)
     {
+        $savequestion = $this->questionService->saveQuestion($request);
 
+        return response()->json($savequestion);
     }
     
     public function addquestioncategory(Request $request)

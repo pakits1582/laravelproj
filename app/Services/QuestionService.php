@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Question;
 use App\Models\QuestionCategory;
 use App\Models\QuestionGroup;
 use App\Models\QuestionSubcategory;
@@ -58,5 +59,20 @@ class QuestionService
         }
 
         return ['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, category already exists!'];
+    }
+
+    public function saveQuestion($request)
+    {
+        $insert = Question::firstOrCreate($request->validated(), $request->validated());
+           
+        if ($insert->wasRecentlyCreated) {
+            return [
+                'success' => true,
+                'message' => 'Question successfully added!',
+                'alert'   => 'alert-success',
+            ];
+        }
+
+        return ['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, question already exists!'];
     }
 }
