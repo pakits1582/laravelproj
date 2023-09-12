@@ -32,7 +32,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
-                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter', 'value' => 1])
+                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id', 'fieldclass' => '', 'value' => 1])
                             </div>
                         </div>
                         <div class="col-md-9  right">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </form>
-                <div id="">
+                <div id="return_questions">
                     @include('facultyevaluation.question.return_surveyquestions')
                 </div>
             </div>

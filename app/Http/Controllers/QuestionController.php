@@ -97,4 +97,9 @@ class QuestionController extends Controller
 
         return response()->json($savecategory);
     }
+
+    public function copyquestions()
+    {
+        return 'xxxxx';
+    }
 }

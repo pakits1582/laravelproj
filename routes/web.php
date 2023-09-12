@@ -581,19 +581,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:facultyevaluations']], function () {
-        
-        Route::get('/facultyevaluations/questions', [FacultyEvaluationController::class, 'questions'])->name('facultyevaluations.questions');
-        Route::get('/facultyevaluations/addquestion', [FacultyEvaluationController::class, 'addquestion'])->name('facultyevaluations.addquestion');
 
-        Route::resource('facultyevaluations', FacultyEvaluationController::class)->missing(function (Request $request) {
-            return Redirect::route('facultyevaluations.index');
-        }); 
-        
-    });
-
-    Route::group(['middleware' => ['inaccess:facultyevaluations']], function () {
-        
+        Route::view('/facultyevaluations/copyquestions', 'facultyevaluation.question.copy_questions');
         Route::get('/facultyevaluations/questions', [QuestionController::class, 'index'])->name('facultyevaluations.questions');
+
         Route::get('/facultyevaluations/addquestion', [QuestionController::class, 'create']);
         Route::post('/facultyevaluations/savequestion', [QuestionController::class, 'store'])->name('savequestion');
         Route::get('/facultyevaluations/{question}/editquestion', [QuestionController::class, 'edit']);
@@ -602,6 +593,11 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('/facultyevaluations/addquestioncategory', [QuestionController::class, 'addquestioncategory']);
         Route::post('/facultyevaluations/savecategory', [QuestionController::class, 'savecategory'])->name('savecategory');
+
+        Route::resource('facultyevaluations', FacultyEvaluationController::class)->missing(function (Request $request) {
+            return Redirect::route('facultyevaluations.index');
+        }); 
+        
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');

@@ -9,7 +9,7 @@
                     <table class="table table-sm table-bordered table-striped">
                         @foreach ($group['questions'] as $question)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="w30">{{ $loop->iteration }}</td>
                                 <td>{{ $question['question'] }}</td>
                                 <td class="mid w100">
                                     <a href="#" class="btn btn-primary btn-circle btn-sm edit_question" id="{{ $question['id'] }}" title="Edit">
@@ -26,4 +26,6 @@
             @endforeach
         @endforeach
     @endforeach
+@else
+    <h3 class="text-danger mid m-3">No survey questions to be displayed!</h3>
 @endif

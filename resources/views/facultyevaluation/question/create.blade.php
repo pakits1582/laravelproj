@@ -100,7 +100,7 @@ aria-hidden="true">
                                         <div id="error_question" class="errors"></div>
                                     </div>
                                     <div class="form-group">
-                                        <a href="#" class="m-0 font-weight-bold text-primary">Click here to copy all questions from other educational level.</a>
+                                        <a href="#" id="copy_questions" class="m-0 font-weight-bold text-primary">Click here to copy all questions from other educational level.</a>
                                     </div>
                                     <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Question</button>
                                </form>

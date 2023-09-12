@@ -5,6 +5,36 @@ $(function(){
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+    
+    function returnQuestions(educational_level_id)
+    {
+        if(educational_level_id){
+            $.ajax({
+                url: "/facultyevaluations/questions",
+                type: 'GET',
+                data: ({ 'educational_level_id':educational_level_id }),
+                success: function(data){
+                    console.log(data);
+                    $("#return_questions").html(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                    var errors = data.responseJSON;
+                    if ($.isEmptyObject(errors) === false) 
+                    {
+                        showError('Something went wrong! Can not perform requested action!');
+                        $("#return_questions").html('<h3 class="text-danger mid m-3">No survey questions to be displayed!</h3>');
+                    }
+                }
+            });
+        }
+    }
+
+    $(document).on("change", "#educational_level_id", function(e){
+        var educational_level_id = $("#educational_level_id").val();
+        returnQuestions(educational_level_id);
+        e.preventDefault();
+    });
 
 	$(document).on("click", "#add_question", function(e){
 
@@ -87,6 +117,8 @@ $(function(){
                 $("#form_addquestion").prepend('<p class="alert '+response.alert+'">'+response.message+'</p>');
                 if(response.success == true)
                 {
+                    var educational_level_id = $("#educational_level_id").val();
+                    returnQuestions(educational_level_id);
                     $("#question").val('');
                 }
             },
@@ -140,6 +172,8 @@ $(function(){
                 $('.errors').html('');
 
                 $("#form_editquestion").prepend('<p class="alert '+response.alert+'">'+response.message+'</p>');
+                var educational_level_id = $("#educational_level_id").val();
+                returnQuestions(educational_level_id);
             },
             error: function (data) {
                 //console.log(data);
@@ -179,6 +213,8 @@ $(function(){
                                 if(response.success == true)
                                 {
                                     showSuccess(response.message);
+                                    var educational_level_id = $("#educational_level_id").val();
+                                    returnQuestions(educational_level_id);
                                 }else{
                                     showError(response.message);
                                 }
@@ -199,4 +235,16 @@ $(function(){
 		//end of dialogbox
 		e.preventDefault();
 	});
+
+    $(document).on("click", "#copy_questions", function(e){
+        $.ajax({url: "/facultyevaluations/copyquestions",success: function(data){
+
+                $('#ui_content').html(data);
+                $("#addQuestionModal").modal('hide');
+
+                $("#copyQuestionsModal").modal('show');
+            }
+        });	
+        e.preventDefault();
+    });
 });
