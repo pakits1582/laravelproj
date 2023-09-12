@@ -3,7 +3,7 @@ aria-hidden="true">
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-           <h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Add New Question</h1>
+           <h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Edit Question</h1>
            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                <span aria-hidden="true">×</span>
            </button>
@@ -13,14 +13,14 @@ aria-hidden="true">
                <div class="row">
                    <div class="col-lg-12 mx-auto">
                        <div class="bg-white rounded-lg shadow-sm px-3 pb-3">
-                           <p class="mb-0">Add new record in the database</p>
+                           <p class="mb-0">Update record in the database</p>
                            <p class="font-italic text-info">Note: (*) Denotes field is required.</p>
                            <!-- credit card info-->
                            <div id="nav-tab-card" class="tab-pane fade show active">
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action="{{ route('savequestion') }}" id="form_addquestion" role="form">
+                                <form method="POST" action="{{ route('updatequestion', ['questioninfo' =>  $question->id]) }}" id="form_editquestion" role="form">
                                     @csrf
                                     <div class="form-group">
                                         <div class="row">
@@ -28,7 +28,7 @@ aria-hidden="true">
                                                 <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Level</label>
                                             </div>
                                             <div class="col-md-10">
-                                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id', 'fieldclass' => '', 'value' => 1])
+                                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id', 'fieldclass' => '', 'value' => $question->educational_level_id])
                                             </div>
                                             <div id="error_educational_level_id" class="errors"></div>
                                         </div>
@@ -43,7 +43,7 @@ aria-hidden="true">
                                                     <option value="">- select category -</option>
                                                     @if ($categories !== null && count($categories) > 0)
                                                         @foreach ($categories as $category)
-                                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                            <option value="{{ $category->id }}" {{ ($category->id == $question->question_category_id) ? 'selected' : '' }}>{{ $category->name }}</option>
                                                         @endforeach
                                                     @endif
                                                     <option value="add_item">- click to add new item -</option>
@@ -62,7 +62,7 @@ aria-hidden="true">
                                                     <option value="">- select sub-category -</option>
                                                     @if ($subcategories !== null && count($subcategories) > 0)
                                                         @foreach ($subcategories as $subcategory)
-                                                            <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                                            <option value="{{ $subcategory->id }}" {{ ($subcategory->id == $question->question_subcategory_id) ? 'selected' : '' }}>{{ $subcategory->name }}</option>
                                                         @endforeach
                                                     @endif
                                                     <option value="add_item">- click to add new item -</option>
@@ -81,7 +81,7 @@ aria-hidden="true">
                                                     <option value="">- select group -</option>
                                                     @if ($groups !== null && count($groups) > 0)
                                                         @foreach ($groups as $group)
-                                                            <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                                            <option value="{{ $group->id }}" {{ ($group->id == $question->question_group_id) ? 'selected' : '' }}>{{ $group->name }}</option>
                                                         @endforeach
                                                     @endif
                                                     <option value="add_item">- click to add new item -</option>
@@ -94,15 +94,12 @@ aria-hidden="true">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label for="question"  class="m-0 font-weight-bold text-primary">* Question</label>
-                                                <textarea name="question" id="question" class="form-control" rows="3"></textarea>
+                                                <textarea name="question" id="question" class="form-control" rows="3">{{ $question->question }}</textarea>
                                             </div>
                                         </div>
                                         <div id="error_question" class="errors"></div>
                                     </div>
-                                    <div class="form-group">
-                                        <a href="#" class="m-0 font-weight-bold text-primary">Click here to copy all questions from other educational level.</a>
-                                    </div>
-                                    <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Question</button>
+                                    <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Update Question</button>
                                </form>
                            </div>
                            <!-- End -->

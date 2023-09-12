@@ -10,6 +10,8 @@ use App\Services\QuestionService;
 use App\Models\QuestionSubcategory;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\StoreQuestionRequest;
+use App\Http\Requests\UpdateQuestionRequest;
+use App\Models\Question;
 
 class QuestionController extends Controller
 {
@@ -21,10 +23,16 @@ class QuestionController extends Controller
         Helpers::setLoad(['jquery_question.js', 'select2.full.min.js']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $questions = $this->questionService->surveyQuestions($request);
 
-        return view('facultyevaluation.question.index');
+        if($request->ajax())
+        {
+            return view('facultyevaluation.question.return_surveyquestions', compact('questions'));
+        }
+
+        return view('facultyevaluation.question.index', compact('questions'));
     }
 
     public function create()
@@ -41,6 +49,37 @@ class QuestionController extends Controller
         $savequestion = $this->questionService->saveQuestion($request);
 
         return response()->json($savequestion);
+    }
+
+    public function edit(Question $question)
+    {   
+        $categories    = QuestionCategory::all();
+        $subcategories = QuestionSubcategory::all();
+        $groups        = QuestionGroup::all();
+        
+        return view('facultyevaluation.question.edit', compact('question', 'categories', 'subcategories', 'groups'));
+    }
+
+    public function update(UpdateQuestionRequest $request, Question $questioninfo)
+    {   
+        $questioninfo->update($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Question successfully updated!',
+            'alert'   => 'alert-success',
+        ]);
+    }
+
+    public function destroy(Question $question)
+    {
+        $question->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Question successfully deleted!',
+            'alert'   => 'alert-success',
+        ]);
     }
     
     public function addquestioncategory(Request $request)

@@ -596,11 +596,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/facultyevaluations/questions', [QuestionController::class, 'index'])->name('facultyevaluations.questions');
         Route::get('/facultyevaluations/addquestion', [QuestionController::class, 'create']);
         Route::post('/facultyevaluations/savequestion', [QuestionController::class, 'store'])->name('savequestion');
+        Route::get('/facultyevaluations/{question}/editquestion', [QuestionController::class, 'edit']);
+        Route::put('/facultyevaluations/{questioninfo}/updatequestion', [QuestionController::class, 'update'])->name('updatequestion');
+        Route::delete('/facultyevaluations/{question}/deletequestion', [QuestionController::class, 'destroy']);
 
         Route::post('/facultyevaluations/addquestioncategory', [QuestionController::class, 'addquestioncategory']);
         Route::post('/facultyevaluations/savecategory', [QuestionController::class, 'savecategory'])->name('savecategory');
-
-
     });
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
