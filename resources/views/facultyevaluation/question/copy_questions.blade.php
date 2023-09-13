@@ -21,27 +21,23 @@ aria-hidden="true">
                                 @if(Session::has('message'))
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                                 @endif
-                                <form method="POST" action="{{ route('savecategory') }}" id="form_copyquestions" role="form">
+                                <form method="POST" action="{{ route('savecopyquestion') }}" id="form_copyquestions" role="form">
                                     @csrf
-                                    <div class="form-group">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-3">
-                                                <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Copy From</label>
-                                            </div>
-                                            <div class="col-md-9">
-                                                @include('partials.educlevels.dropdown', ['fieldname' => 'copy_from', 'fieldid' => 'copy_from', 'fieldclass' => ''])
-                                            </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-3">
+                                            <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Copy From</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            @include('partials.educlevels.dropdown', ['fieldname' => 'copy_from', 'fieldid' => 'copy_from'])
                                             <div id="error_copy_from" class="errors"></div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-3">
-                                                <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Copy To</label>
-                                            </div>
-                                            <div class="col-md-9">
-                                                @include('partials.educlevels.dropdown', ['fieldname' => 'copy_to', 'fieldid' => 'copy_to', 'fieldclass' => ''])
-                                            </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-3">
+                                            <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Copy To</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            @include('partials.educlevels.dropdown', ['fieldname' => 'copy_to', 'fieldid' => 'copy_to'])
                                             <div id="error_copy_to" class="errors"></div>
                                         </div>
                                     </div>

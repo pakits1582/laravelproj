@@ -43,7 +43,7 @@
                                     </span>
                                     <span class="text">Add Question</span>
                                 </a>
-                                <a href="#" class="btn btn-danger btn-icon-split">
+                                <a href="#" id="delete_all_questions" class="btn btn-danger btn-icon-split">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-trash"></i>
                                     </span>

@@ -6,6 +6,7 @@ use App\Models\Question;
 use App\Models\QuestionCategory;
 use App\Models\QuestionGroup;
 use App\Models\QuestionSubcategory;
+use Illuminate\Support\Facades\DB;
 
 class QuestionService
 {
@@ -138,5 +139,68 @@ class QuestionService
         }
 
         return ['success' => false, 'alert' => 'alert-danger', 'message' => 'Duplicate entry, question already exists!'];
+    }
+
+    public function saveCopyQuestion($request)
+    {
+        DB::beginTransaction();
+
+        $copy_from_questions = Question::where('educational_level_id', $request->copy_from)->get();
+
+        if ($copy_from_questions->isEmpty()) 
+        {
+            return [
+                'success' => false,
+                'message' => 'No questions to be copied from copy from educational level!',
+                'alert'   => 'alert-danger',
+            ];
+        }
+
+        $questions = [];
+
+        foreach ($copy_from_questions as $question) 
+        {
+            $questions[] = [
+                'question_category_id' => $question->question_category_id,
+                'question_subcategory_id' => $question->question_subcategory_id,
+                'question_group_id' => $question->question_group_id,
+                'question' => $question->question,
+                'educational_level_id' => $request->copy_to,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        $delete_questions = Question::where('educational_level_id', $request->copy_to)->delete();
+        $insert_questions = Question::insert($questions);
+
+        DB::commit();
+        
+        return [
+            'success' => true,
+            'message' => 'Questions successfully copied!',
+            'alert'   => 'alert-success',
+        ];
+    }
+
+    public function deleteAllQuestions($level)
+    {
+        $deletedCount = Question::where('educational_level_id', $level)->delete();
+
+        if ($deletedCount === 0) 
+        {
+            return [
+                'success' => false,
+                'message' => 'No questions to be deleted!',
+                'alert'   => 'alert-danger',
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Questions successfully deleted!',
+            'alert'   => 'alert-success',
+        ];
+
     }
 }

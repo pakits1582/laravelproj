@@ -577,13 +577,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admissions', [AdmissionController::class, 'index'])->name('admissions.index');
         Route::get('/admissions/{application}', [AdmissionController::class, 'show'])->name('admission.show');
 
-
     });
 
     Route::group(['middleware' => ['inaccess:facultyevaluations']], function () {
 
-        Route::view('/facultyevaluations/copyquestions', 'facultyevaluation.question.copy_questions');
         Route::get('/facultyevaluations/questions', [QuestionController::class, 'index'])->name('facultyevaluations.questions');
+        
+
+        Route::view('/facultyevaluations/copyquestions', 'facultyevaluation.question.copy_questions');
+        Route::post('/facultyevaluations/savecopyquestion', [QuestionController::class, 'savecopyquestion'])->name('savecopyquestion');
+        Route::delete('/facultyevaluations/{level}/deleteallquestions', [QuestionController::class, 'deleteallquestions']);
 
         Route::get('/facultyevaluations/addquestion', [QuestionController::class, 'create']);
         Route::post('/facultyevaluations/savequestion', [QuestionController::class, 'store'])->name('savequestion');

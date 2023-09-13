@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CopyQuestionsRequest;
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Models\QuestionGroup;
@@ -98,8 +99,17 @@ class QuestionController extends Controller
         return response()->json($savecategory);
     }
 
-    public function copyquestions()
+    public function savecopyquestion(CopyQuestionsRequest $request)
     {
-        return 'xxxxx';
+        $result = $this->questionService->saveCopyQuestion($request);
+
+        return response()->json($result);
+    }
+
+    public function deleteallquestions($level)
+    {
+        $result = $this->questionService->deleteAllQuestions($level);
+
+        return response()->json($result);
     }
 }

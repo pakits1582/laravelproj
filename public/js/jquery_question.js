@@ -92,7 +92,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) == false) {
                     $.each(errors.errors, function (key, value) {
-                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1 mb-0">'+value+'</p>');
                     });
                 }
             }
@@ -127,7 +127,7 @@ $(function(){
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) == false) {
                     $.each(errors.errors, function (key, value) {
-                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1 mb-0">'+value+'</p>');
                     });
                 }
             }
@@ -177,10 +177,11 @@ $(function(){
             },
             error: function (data) {
                 //console.log(data);
+                $('.errors').html('');
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) == false) {
                     $.each(errors.errors, function (key, value) {
-                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1 mb-0">'+value+'</p>');
                     });
                 }
             }
@@ -247,4 +248,111 @@ $(function(){
         });	
         e.preventDefault();
     });
+
+    $(document).on("submit", "#form_copyquestions", function(e){
+        var postData = $(this).serializeArray();
+        var url = $(this).attr('action');
+
+        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Copy</div><div class="message">Are you sure you want to copy questions? Existing questions in copy to level will be overwritten. Continue?</div>').dialog({
+			show: 'fade',
+			resizable: false,	
+			draggable: false,
+			width: 350,
+			height: 'auto',
+			modal: true,
+			buttons: {
+					'Cancel':function(){
+						$(this).dialog('close');
+					},
+					'OK':function(){
+						$(this).dialog('close');
+						$.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: postData,
+                            dataType: 'json',
+                            success: function(response){
+                                console.log(response);
+                                $('.alert').remove();
+                                $('.errors').html('');
+                
+                                $("#form_copyquestions").prepend('<p class="alert '+response.alert+'">'+response.message+'</p>');
+                                if(response.success == true)
+                                {
+                                    var copy_to = $("#copy_to").val();
+                                    $("#educational_level_id").val(copy_to);
+
+                                    returnQuestions(copy_to);
+                                }
+                            },
+                            error: function (data) {
+                                //console.log(data);
+                                $('.errors').html('');
+                                var errors = data.responseJSON;
+                                if ($.isEmptyObject(errors) == false) {
+                                    $.each(errors.errors, function (key, value) {
+                                        $('#error_' + key).html('<p class="text-danger text-xs mt-1 mb-0">'+value+'</p>');
+                                    });
+                                }
+                            }
+                        });	
+					}//end of ok button	
+				}//end of buttons
+			});//end of dialogbox
+			$(".ui-dialog-titlebar").hide();
+		//end of dialogbox
+
+        e.preventDefault();
+    });
+
+    $(document).on("click", "#delete_all_questions", function(e){
+		var educational_level_id = $("#educational_level_id").val();
+
+        if(educational_level_id)
+        {
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">Are you sure you want to delete all questions of selected level?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: false,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $(this).dialog('close');
+                        },
+                        'OK':function(){
+                            $(this).dialog('close');
+                            $.ajax({
+                                url: '/facultyevaluations/'+educational_level_id+'/deleteallquestions',
+                                type: 'DELETE',
+                                dataType: 'json',
+                                success: function(response){
+                                    console.log(response);
+                                    if(response.success == true)
+                                    {
+                                        showSuccess(response.message);
+                                        var educational_level_id = $("#educational_level_id").val();
+                                        returnQuestions(educational_level_id);
+                                    }else{
+                                        showError(response.message);
+                                    }
+                                },
+                                error: function (data) {
+                                    //console.log(data);
+                                    var errors = data.responseJSON;
+                                    if ($.isEmptyObject(errors) == false) {
+                                        showError('Something went wrong! Can not perform requested action!');
+                                    }
+                                }
+                            });
+                        }//end of ok button	
+                    }//end of buttons
+                });//end of dialogbox
+                $(".ui-dialog-titlebar").hide();
+            //end of dialogbox
+        }
+		e.preventDefault();
+	});
+
 });

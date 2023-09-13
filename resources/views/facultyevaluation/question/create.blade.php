@@ -22,85 +22,77 @@ aria-hidden="true">
                                 @endif
                                 <form method="POST" action="{{ route('savequestion') }}" id="form_addquestion" role="form">
                                     @csrf
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Level</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id', 'fieldclass' => '', 'value' => 1])
-                                            </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-2">
+                                            <label for="educational_level_id" class="m-0 font-weight-bold text-primary">* Level</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level_id', 'fieldid' => 'educational_level_id', 'fieldclass' => '', 'value' => 1])
                                             <div id="error_educational_level_id" class="errors"></div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="question_category_id" class="m-0 font-weight-bold text-primary">* Category</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select name="question_category_id" id="question_category_id" class="form-control question_category">
-                                                    <option value="">- select category -</option>
-                                                    @if ($categories !== null && count($categories) > 0)
-                                                        @foreach ($categories as $category)
-                                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                    <option value="add_item">- click to add new item -</option>
-                                                </select>
-                                                <div id="error_question_category_id" class="errors"></div>
-                                            </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-2">
+                                            <label for="question_category_id" class="m-0 font-weight-bold text-primary">* Category</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <select name="question_category_id" id="question_category_id" class="form-control question_category">
+                                                <option value="">- select category -</option>
+                                                @if ($categories !== null && count($categories) > 0)
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                                <option value="add_item">- click to add new item -</option>
+                                            </select>
+                                            <div id="error_question_category_id" class="errors"></div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="question_subcategory_id" class="m-0 font-weight-bold text-primary">Sub-category</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select name="question_subcategory_id" id="question_subcategory_id" class="form-control question_category">
-                                                    <option value="">- select sub-category -</option>
-                                                    @if ($subcategories !== null && count($subcategories) > 0)
-                                                        @foreach ($subcategories as $subcategory)
-                                                            <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                    <option value="add_item">- click to add new item -</option>
-                                                </select>
-                                                <div id="error_question_subcategory_id" class="errors"></div>
-                                            </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-2">
+                                            <label for="question_subcategory_id" class="m-0 font-weight-bold text-primary">Sub-category</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <select name="question_subcategory_id" id="question_subcategory_id" class="form-control question_category">
+                                                <option value="">- select sub-category -</option>
+                                                @if ($subcategories !== null && count($subcategories) > 0)
+                                                    @foreach ($subcategories as $subcategory)
+                                                        <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                                <option value="add_item">- click to add new item -</option>
+                                            </select>
+                                            <div id="error_question_subcategory_id" class="errors"></div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="question_group_id" class="m-0 font-weight-bold text-primary">Group</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select name="question_group_id" id="question_group_id" class="form-control question_category">
-                                                    <option value="">- select group -</option>
-                                                    @if ($groups !== null && count($groups) > 0)
-                                                        @foreach ($groups as $group)
-                                                            <option value="{{ $group->id }}">{{ $group->name }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                    <option value="add_item">- click to add new item -</option>
-                                                </select>
-                                                <div id="error_question_group_id" class="errors"></div>
-                                            </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-2">
+                                            <label for="question_group_id" class="m-0 font-weight-bold text-primary">Group</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <select name="question_group_id" id="question_group_id" class="form-control question_category">
+                                                <option value="">- select group -</option>
+                                                @if ($groups !== null && count($groups) > 0)
+                                                    @foreach ($groups as $group)
+                                                        <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                                <option value="add_item">- click to add new item -</option>
+                                            </select>
+                                            <div id="error_question_group_id" class="errors"></div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label for="question"  class="m-0 font-weight-bold text-primary">* Question</label>
-                                                <textarea name="question" id="question" class="form-control" rows="3"></textarea>
-                                            </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <label for="question"  class="m-0 font-weight-bold text-primary">* Question</label>
+                                            <textarea name="question" id="question" class="form-control" rows="3"></textarea>
+                                            <div id="error_question" class="errors"></div>
                                         </div>
-                                        <div id="error_question" class="errors"></div>
                                     </div>
-                                    <div class="form-group">
-                                        <a href="#" id="copy_questions" class="m-0 font-weight-bold text-primary">Click here to copy all questions from other educational level.</a>
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <a href="#" id="copy_questions" class="m-0 font-weight-bold text-primary">Click here to copy all questions from other educational level.</a>
+                                        </div>
                                     </div>
                                     <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm">Save Question</button>
                                </form>
