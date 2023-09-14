@@ -110,4 +110,5 @@ class Instructor extends Model
     {
         return $this->hasMany(OtherAssignment::class, 'instructor_id', 'id');
     }
+
 }

@@ -30,7 +30,7 @@ class Department extends Model
 
     public function headinfo()
     {
-        return $this->belongsTo(Instructor::class, 'head', 'id');
+        return $this->hasOne(Instructor::class, 'id', 'head');
     }
 
     public function headName(): Attribute

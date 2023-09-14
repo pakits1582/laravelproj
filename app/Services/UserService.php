@@ -11,7 +11,6 @@ use App\Models\Useraccess;
 use App\Models\AccessibleProgram;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Builder;
 
 class UserService
 {
