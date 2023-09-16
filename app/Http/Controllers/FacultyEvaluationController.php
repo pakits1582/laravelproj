@@ -21,7 +21,7 @@ class FacultyEvaluationController extends Controller
     {
         $classes = $this->facultyEvaluationService->classesForEvaluation(Auth::user(), $request);
 
-        return $classes;
+        dd($classes);
         //return view('facultyevaluation.index');
     }
 
