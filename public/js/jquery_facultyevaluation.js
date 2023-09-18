@@ -15,5 +15,13 @@ $(function(){
         info: false,
         searching: false
     });
+
+    $(document).on("click", ".evalaution_action", function(e){
+        var class_id = $(this).attr("id"); 
+        var action   = $(this).attr('data-action');
+
+        
+        e.preventDefault();
+    });
 	
 });
