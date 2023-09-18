@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Libs\Helpers;
 use Illuminate\Http\Request;
 use App\Services\FacultyEvaluationService;
+use App\Services\SlotMonitoringService;
 use Illuminate\Support\Facades\Auth;
 
 class FacultyEvaluationController extends Controller
@@ -20,9 +21,14 @@ class FacultyEvaluationController extends Controller
     public function index(Request $request)
     {
         $classes = $this->facultyEvaluationService->classesForEvaluation(Auth::user(), $request);
+        $classeswithslots = (new SlotMonitoringService)->getClassesSlots($classes);
+        
+        if($request->ajax())
+        {
+            return view('facultyevaluation.return_evaluations', compact('classeswithslots'));
+        }
 
-        dd($classes);
-        //return view('facultyevaluation.index');
+        return view('facultyevaluation.index', compact('classeswithslots'));
     }
 
 

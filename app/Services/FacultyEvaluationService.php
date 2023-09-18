@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class FacultyEvaluationService
 {
 
-    public function classesForEvaluation($user, $request, $limit = 10,  $all = false)
+    public function classesForEvaluation($user, $request, $limit = 100,  $all = false)
     {
         $query = Classes::query();
         $query->select(
@@ -42,7 +42,9 @@ class FacultyEvaluationService
         $query->leftJoin('enrollments', 'enrolled_classes.enrollment_id', '=', 'enrollments.id');
         $query->leftJoin('classes AS mergeclass', 'classes.merge', '=', 'mergeclass.id');
 
-        $query->where('classes.period_id', 1);
+        $query->where('classes.period_id', $request->period_id ?? session('current_period'));
+        $query->where('classes.dissolved', '!=', 1);
+        $query->where('classes.merge', '=', NULL);
 
         if ($user->utype === User::TYPE_INSTRUCTOR) {
             $user->load('instructorinfo');
@@ -81,14 +83,16 @@ class FacultyEvaluationService
             });
 
         }
-
        
         $query->groupBy('classes.id');
         $query->orderBy('subjects.code')
             ->orderBy('classes.id');
 
-        $classes = $query->get();
+        if($all)
+        {
+            return $query->get();
+        }
 
-        return $classes;
+        return $query->get($limit);
     }
 }

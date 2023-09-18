@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="" id="filter_form" data-field="admissions">
+                <form method="POST" action="" id="" data-field="">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -47,47 +47,24 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
-                                @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="program_id" class="m-0 font-weight-bold text-primary">Program</label>
+                                <label for="program_id" class="m-0 font-weight-bold text-primary">Faculty</label>
                                 <select name="program_id" class="form-control dropdownfilter" id="program_id">
-                                    <option value="">- select program -</option>
-                                    @if ($programs)
+                                    <option value="">- select faculty -</option>
+                                    {{-- @if ($programs)
                                         @foreach ($programs as $program)
                                             <option value="{{ $program->id }}">{{ $program->code }}</option>
                                         @endforeach
-                                    @endif
+                                    @endif --}}
                                 </select>
-                            </div>
-                        </div> --}}
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="college" class="m-0 font-weight-bold text-primary">Keyword</label>
-                                <input type="text" name="keyword" placeholder="Type keyword to search..." class="filter_item form-control" id="keyword">
                             </div>
                         </div>
                     </div>
                 </form>
                 <div id="">
-                    {{-- @include('admission.return_applications') --}}
+                    @include('facultyevaluation.return_evaluations')
                 </div>
-                {{-- <div class="row align-items-center">
-                    <div class="col-md-6">
-                        {{ $applicants->onEachSide(1)->links() }}
-                        Showing {{ $applicants->firstItem() ?? 0 }} to {{ $applicants->lastItem() ?? 0 }} of total {{$applicants->total()}} entries
-                    </div>
-                    <div class="col-md-6">
-                        <div class="right">
-                            <h6 class="m-0 font-weight-bold text-primary">Total Applicants for Admission (<span id="totalcount">{{ count($applicants) ?? 0 }}</span>)</h6>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
         </div>
     </div>
