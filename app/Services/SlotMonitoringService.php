@@ -94,6 +94,8 @@ class SlotMonitoringService
             	$classes_array[$key]['instructor_id'] = $v->instructor_id;
             	$classes_array[$key]['last_name']     = $v->last_name;
             	$classes_array[$key]['first_name']    = $v->first_name;
+                $classes_array[$key]['evaluation']    = $v->evaluation;
+
             	
                 $assessedinclass  = ($v->assessedinclass == "") ? 0 : $v->assessedinclass;
             	$validatedinclass = ($v->validatedinclass == "") ? 0 : $v->validatedinclass;
