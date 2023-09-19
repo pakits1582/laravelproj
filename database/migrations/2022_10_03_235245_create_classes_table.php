@@ -41,7 +41,7 @@ return new class extends Migration
             $table->boolean('isprof')->default(false);
             $table->boolean('evaluation')->default(false);
             $table->unsignedBigInteger('evaluated_by')->nullable()->index();
-            $table->foreign('evaluated_by')->references('id')->on('instructors');
+            $table->foreign('evaluated_by')->references('id')->on('users');
             $table->integer('evaluation_status')->nullable()->default(0);
             $table->timestamps();
         });

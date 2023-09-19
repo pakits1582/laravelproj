@@ -597,9 +597,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/facultyevaluations/addquestioncategory', [QuestionController::class, 'addquestioncategory']);
         Route::post('/facultyevaluations/savecategory', [QuestionController::class, 'savecategory'])->name('savecategory');
 
+        Route::get('/facultyevaluations/results', [FacultyEvaluationController::class, 'results'])->name('facultyevaluations.results');
         Route::resource('facultyevaluations', FacultyEvaluationController::class)->missing(function (Request $request) {
             return Redirect::route('facultyevaluations.index');
         }); 
+        Route::post('/facultyevaluations/filter', [FacultyEvaluationController::class, 'filter']);
+        Route::get('/facultyevaluations/{class}/{action}', [FacultyEvaluationController::class, 'evaluationaction']);
+
         
     });
 

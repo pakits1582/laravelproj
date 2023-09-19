@@ -9,8 +9,9 @@
             <th class="w200">Schedule</th>
             <th class="w120">Instructor</th>
             <th class="w30">Size</th>
-            <th class="w30">Evaluate</th>
-            <th class="w30"></th>
+            <th class="w30">Res</th>
+            <th class="w30">Details</th>
+            <th class="w80">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -45,15 +46,17 @@
                     <td class="w30 mid">{{ $class['totalvalidated'] }}</td>
                     <td class="w30 mid">{{ $class['evaluation'] == 1 ? 'YES' : 'NO' }}</td>
                     <td class="w30 mid">
-                        @if ($class['evaluation'] == 0)
-                            <a href="#" class="btn btn-primary btn-circle btn-sm evaluation_action" id="{{ $class['class_id'] }}" data-action="open" title="Open Evaluation">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                        @else
-                            <a href="#" class="btn btn-danger btn-circle btn-sm evaluation_action" id="{{ $class['class_id'] }}" data-action="close" title="Close Evaluation">
-                                <i class="fas fa-power-off"></i>
-                            </a>
-                        @endif
+                        <a href="#" class="btn btn-primary btn-circle btn-sm evaluation_action" id="{{ $class['class_id'] }}" data-action="open" title="Open Evaluation">
+                            <i class="fas fa-list"></i>
+                        </a>
+                    </td>
+                    <td class="mid">
+                        <a href="#" class="btn btn-success btn-circle btn-sm evaluation_action" id="{{ $class['class_id'] }}" data-action="open" title="Open Evaluation">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="#" class="btn btn-danger btn-circle btn-sm evaluation_action" id="{{ $class['class_id'] }}" data-action="close" title="Close Evaluation">
+                            <i class="fas fa-undo"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach

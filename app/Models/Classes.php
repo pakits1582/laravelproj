@@ -72,5 +72,10 @@ class Classes extends Model
     {
         return $this->hasManyThrough(EnrolledClass::class, Classes::class, 'merge', 'id');
     }
+
+    public function facultyevaluations()
+    {
+        return $this->hasMany(FacultyEvaluation::class, 'class_id', 'id');
+    }
     
 }
