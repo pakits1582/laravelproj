@@ -139,6 +139,7 @@ class FacultyEvaluationService
             	$classes_array[$key]['last_name']     = $v->last_name;
             	$classes_array[$key]['first_name']    = $v->first_name;
                 $classes_array[$key]['evaluation']    = $v->evaluation;
+                $classes_array[$key]['ismother']      = $v->ismother;
 
             	
                 $respondentsinclass  = ($v->faculty_evaluations_count == "") ? 0 : $v->faculty_evaluations_count;

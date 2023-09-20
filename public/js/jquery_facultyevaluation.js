@@ -106,4 +106,76 @@ $(function(){
     $(document).on("change", "#instructor_id", function(){
         returnFacultyEvaluations();
     });
+
+    $(document).on("click", ".reset_evaluation", function(e){
+        var class_id = $(this).attr("id"); 
+
+        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Action</div><div class="message">Are you sure you want to continue action?</div>').dialog({
+            show: 'fade',
+            resizable: false,	
+            draggable: false,
+            width: 350,
+            height: 'auto',
+            modal: true,
+            buttons: {
+                    'OK':function(){
+                        $("#confirmation").dialog('close');
+                        $.ajax({
+                            url: "/facultyevaluations/"+class_id+"/resetevaluation",
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(response)
+                            {
+                                console.log(response);
+                                // if(response.success == true)
+                                // {
+                                //     showSuccess(response.message);
+                                //     returnFacultyEvaluations()
+
+                                // }else{
+                                //     showError(response.message);
+                                // }
+                            },
+                            error: function (data) {
+                                console.log(data);
+                                var errors = data.responseJSON;
+                                if ($.isEmptyObject(errors) == false) {
+                                    showError('Something went wrong! Can not perform requested action!');
+                                }
+                            }
+                        });
+                    },
+                    'Cancel':function(){
+                        $("#confirmation").dialog('close');		
+                    }
+                }//end of buttons
+        });//end of dialogbox
+        $(".ui-dialog-titlebar").hide();
+
+        e.preventDefault();
+    });
+
+    $(document).on("click", ".view_respondents", function(e){
+        var class_id = $(this).attr("id"); 
+
+        $.ajax({
+            url: "/facultyevaluations/"+class_id+"/viewrespondents",
+            type: 'GET',
+            success: function(data)
+            {
+                $('#ui_content').html(data);
+                $("#viewRespondentsModal").modal('show');
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) == false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
+        });
+                   
+        e.preventDefault();
+    });
+
 });

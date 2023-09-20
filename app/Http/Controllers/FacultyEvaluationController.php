@@ -41,7 +41,7 @@ class FacultyEvaluationController extends Controller
     public function filter(Request $request)
     {
         $classes = $this->facultyEvaluationService->classesForEvaluation(Auth::user(), session('current_period'), $request->instructor_id, NULL, true);
-        $classeswithslots = (new SlotMonitoringService)->getClassesSlots($classes);
+        $classeswithslots = $this->facultyEvaluationService->getClassesSlots($classes);
 
         return view('facultyevaluation.return_evaluations', compact('classeswithslots'));
 
@@ -54,6 +54,21 @@ class FacultyEvaluationController extends Controller
         $instructors = $this->facultyEvaluationService->getUniqueInstructors($classes);
 
         return view('facultyevaluation.result.index', compact('classeswithslots', 'instructors'));
+    }
+
+    public function viewresult(Classes $class)
+    {
+        return $class;
+    }
+
+    public function resetevaluation(Classes $class)
+    {
+        return $class;
+    }
+
+    public function viewrespondents(Classes $class)
+    {
+        return view('facultyevaluation.result.view_respondents');
     }
 
 }

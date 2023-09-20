@@ -44,17 +44,17 @@
                     <td class="w200">{{ $class['schedule'] }}</td>
                     <td class="w120">{{ $faculty }}</td>
                     <td class="w30 mid">{{ $class['totalvalidated'] }}</td>
-                    <td class="w30 mid">{{ $class['evaluation'] == 1 ? 'YES' : 'NO' }}</td>
+                    <td class="w30 mid">{{ $class['totalrespondents'] }}</td>
                     <td class="w30 mid">
-                        <a href="#" class="btn btn-primary btn-circle btn-sm evaluation_action" id="{{ $class['class_id'] }}" data-action="open" title="Open Evaluation">
+                        <a href="#" class="btn btn-primary btn-circle btn-sm view_respondents" id="{{ $class['class_id'] }}" title="View Respondents">
                             <i class="fas fa-list"></i>
                         </a>
                     </td>
                     <td class="mid">
-                        <a href="#" class="btn btn-success btn-circle btn-sm evaluation_action" id="{{ $class['class_id'] }}" data-action="open" title="Open Evaluation">
+                        <a href="{{ route('facultyevaluations.viewresult', ['class' => $class['class_id']]) }}" target="_blank" class="btn btn-success btn-circle btn-sm" id="{{ $class['class_id'] }}" title="View Result">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="#" class="btn btn-danger btn-circle btn-sm evaluation_action" id="{{ $class['class_id'] }}" data-action="close" title="Close Evaluation">
+                        <a href="#" class="btn btn-danger btn-circle btn-sm reset_evaluation" id="{{ $class['class_id'] }}" title="Reset Evaulation">
                             <i class="fas fa-undo"></i>
                         </a>
                     </td>

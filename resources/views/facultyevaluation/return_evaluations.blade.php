@@ -37,7 +37,7 @@
                     @endphp
                     <td class="w50">{{ $class['class_code'] }}</td>
                     <td class="w120">{{ $class['section_code'] }}</td>
-                    <td class="w120"><b>{{ ($class['mothercode'] != '') ? '('.$class['mothercode'].') ' : '' }}</b>{{ $class['subject_code'] }}</td>
+                    <td class="w120"><b>{{ ($class['ismother'] == 1) ? '* ' : '' }}</b>{{ $class['subject_code'] }}</td>
                     <td class="w300">{{ $class['subject_name'] }}</td>
                     <td class="w30 mid">{{ $class['units'] }}</td>
                     <td class="w200">{{ $class['schedule'] }}</td>

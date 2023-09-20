@@ -598,6 +598,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/facultyevaluations/savecategory', [QuestionController::class, 'savecategory'])->name('savecategory');
 
         Route::get('/facultyevaluations/results', [FacultyEvaluationController::class, 'results'])->name('facultyevaluations.results');
+        Route::get('/facultyevaluations/{class}/viewresult', [FacultyEvaluationController::class, 'viewresult'])->name('facultyevaluations.viewresult');
+        Route::get('/facultyevaluations/{class}/resetevaluation', [FacultyEvaluationController::class, 'resetevaluation']);
+        Route::get('/facultyevaluations/{class}/viewrespondents', [FacultyEvaluationController::class, 'viewrespondents']);
+
         Route::resource('facultyevaluations', FacultyEvaluationController::class)->missing(function (Request $request) {
             return Redirect::route('facultyevaluations.index');
         }); 
