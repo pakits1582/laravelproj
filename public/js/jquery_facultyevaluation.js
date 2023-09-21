@@ -30,7 +30,7 @@ $(function(){
             data: {'instructor_id':instructor_id},
             success: function(data){
 
-                console.log(data);
+                //console.log(data);
 
                 $("#return_evaluations").html(data);
 
@@ -126,15 +126,17 @@ $(function(){
                             dataType: 'json',
                             success: function(response)
                             {
-                                console.log(response);
-                                // if(response.success == true)
-                                // {
-                                //     showSuccess(response.message);
-                                //     returnFacultyEvaluations()
+                                //console.log(response);
+                                if(response.success == true)
+                                {
+                                    showSuccess(response.message);
+                                    returnFacultyEvaluations()
 
-                                // }else{
-                                //     showError(response.message);
-                                // }
+                                }else{
+                                    showError(response.message);
+                                }
+
+                                alert('return results');
                             },
                             error: function (data) {
                                 console.log(data);

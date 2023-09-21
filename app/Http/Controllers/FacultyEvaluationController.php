@@ -63,12 +63,16 @@ class FacultyEvaluationController extends Controller
 
     public function resetevaluation(Classes $class)
     {
-        return $class;
+        $reset = $this->facultyEvaluationService->resetEvaluation($class);
+
+        return response()->json($reset); 
     }
 
     public function viewrespondents(Classes $class)
     {
-        return view('facultyevaluation.result.view_respondents');
+        $respondents = $this->facultyEvaluationService->returnRespondents($class);
+
+        return view('facultyevaluation.result.view_respondents', compact('respondents'));
     }
 
 }

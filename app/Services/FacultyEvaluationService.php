@@ -260,4 +260,20 @@ class FacultyEvaluationService
             'alert' => 'alert-success'
         ];
     }
+
+    public function resetEvaluation($class)
+    {
+        $facultyevaluation = FacultyEvaluation::where('class_id', $class->id)->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Action successfully executed!',
+            'alert' => 'alert-success'
+        ];
+    }
+
+    public function returnRespondents($class)
+    {
+        $class->load('facultyevaluations.enrollment');
+    }
 }
