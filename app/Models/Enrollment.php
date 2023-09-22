@@ -101,5 +101,10 @@ class Enrollment extends Model
         return $this->hasMany(Postcharge::class, 'enrollment_id', 'id');
     }
 
+    public function facultyevaluations()
+    {
+        return $this->hasMany(FacultyEvaluation::class, 'enrollment_id', 'id');
+    }
+
 
 }

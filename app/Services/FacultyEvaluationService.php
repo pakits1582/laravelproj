@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Classes;
+use App\Models\Enrollment;
 use App\Models\FacultyEvaluation;
 use App\Models\Instructor;
 use Illuminate\Support\Facades\Auth;
@@ -245,11 +246,12 @@ class FacultyEvaluationService
         DB::beginTransaction();
 
         $action = ($action == 'open') ? 1 : 0;
-        $class->update(['evaluation' => $action, 'evaluated_by' => Auth::id()]);
+        $evaluated_by = ($action == 'close') ? NULL : Auth::id();
+        $class->update(['evaluation' => $action, 'evaluated_by' => $evaluated_by]);
         
         if($class->ismother == 1)
         {
-            $class->merged()->update(['evaluation' => $action, 'evaluated_by' => Auth::id()]);
+            $class->merged()->update(['evaluation' => $action, 'evaluated_by' => $evaluated_by]);
         }
         
         DB::commit();
@@ -275,5 +277,32 @@ class FacultyEvaluationService
     public function returnRespondents($class)
     {
         $class->load('facultyevaluations.enrollment');
+
+
+    }
+
+    public function studentClassesForEvaluation($student)
+    {
+        DB::beginTransaction();
+
+        $enrollment = Enrollment::with([
+            'enrolled_classes.class' => function ($query) {
+                $query->where('evaluation', 1);
+            },
+        ])->whereHas('student', function ($query) use ($student) {
+                $query->where('user_id', $student);
+            })->first();
+    
+        if($enrollment !== null)
+        {
+            $facultyevaluations = [];
+
+            foreach ($enrollment as $key => $v) 
+            {
+                # code...
+            }
+            $enrollment->facultyevaluations()->saveMany();
+        }
+    
     }
 }

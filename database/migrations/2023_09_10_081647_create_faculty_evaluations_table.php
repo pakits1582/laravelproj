@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('enrollment_id')->references('id')->on('enrollments')->onDelete('cascade');
             $table->unsignedBigInteger('class_id')->index();
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
-            $table->date('date_taken');
+            $table->date('date_taken')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });

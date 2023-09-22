@@ -579,8 +579,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
-    Route::group(['middleware' => ['inaccess:facultyevaluations']], function () {
+    Route::group(['middleware' => ['inaccess:facultyevaluations/studentfacultyevaluation']], function () {
+        Route::get('/facultyevaluations/studentfacultyevaluation', [FacultyEvaluationController::class, 'studentfacultyevaluation']);
 
+    });
+
+    Route::group(['middleware' => ['inaccess:facultyevaluations']], function () {
         Route::get('/facultyevaluations/questions', [QuestionController::class, 'index'])->name('facultyevaluations.questions');
         
 
@@ -603,13 +607,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/facultyevaluations/{class}/viewrespondents', [FacultyEvaluationController::class, 'viewrespondents']);
 
         Route::resource('facultyevaluations', FacultyEvaluationController::class)->missing(function (Request $request) {
-            return Redirect::route('facultyevaluations.index');
+            //return Redirect::route('facultyevaluations.index');
         }); 
         Route::post('/facultyevaluations/filter', [FacultyEvaluationController::class, 'filter']);
         Route::get('/facultyevaluations/{class}/{action}', [FacultyEvaluationController::class, 'evaluationaction']);
-
         
     });
+
+
 
     Route::get('/home', [LoginController::class, 'home'])->name('home');
 });
