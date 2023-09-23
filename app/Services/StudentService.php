@@ -92,6 +92,7 @@ class StudentService
         if($request->searchTerm)
         {
             $query = Student::with(['program', 'curriculum', 'user'])->orderBy('last_name')->orderBy('first_name');
+            $query->where('user_id', '!=', null);
 
             if($request->has('searchTerm') && !empty($request->searchTerm)) 
             {

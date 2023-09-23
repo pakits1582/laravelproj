@@ -77,11 +77,10 @@ class FacultyEvaluationController extends Controller
 
     public function studentfacultyevaluation()
     {
-        $for_evaluation_classes = $this->facultyEvaluationService->studentClassesForEvaluation(Auth::id());
-
-        return $for_evaluation_classes;
+        $enrollment = $this->facultyEvaluationService->studentEnrollment(Auth::id());
+        $classes_for_evaluation = $this->facultyEvaluationService->studentClassesForEvaluation($enrollment);
         
-        return view('facultyevaluation.student.index');
+        return view('facultyevaluation.student.index', compact('enrollment', 'classes_for_evaluation'));
     }
 
 }

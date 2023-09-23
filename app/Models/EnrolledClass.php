@@ -22,6 +22,11 @@ class EnrolledClass extends Model
         return $this->belongsTo(Classes::class, 'class_id', 'id');
     }
 
+    public function enrolledclass()
+    {
+        return $this->belongsTo(Classes::class, 'class_id', 'id');
+    }
+
     public function addedby()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
