@@ -34,8 +34,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (isset($classes_for_evaluation) && count($classes_for_evaluation) > 0)
-                                        @foreach ($classes_for_evaluation as $class)
+                                    @php
+                                        $classesforevaluation = (isset($enrollment->facultyevaluations)) ? $enrollment->facultyevaluations : $classes_for_evaluation;
+                                    @endphp
+                                    @dd($classesforevaluation)
+                                    @if (isset($classesforevaluation) && count($classesforevaluation) > 0)
+                                        @foreach ($classesforevaluation as $class)
                                             <tr>
                                                 <td class="">{{ $class->code }}</td>
                                                 <td class="">{{ $class->sectioninfo->code }}</td>

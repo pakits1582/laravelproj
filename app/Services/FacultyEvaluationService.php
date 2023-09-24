@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Classes;
+use App\Models\EnrolledClass;
 use App\Models\Enrollment;
 use App\Models\FacultyEvaluation;
 use App\Models\Instructor;
@@ -283,16 +284,17 @@ class FacultyEvaluationService
 
     public function studentEnrollment($user_id)
     {
-        $enrollment = Enrollment::with([
-            'facultyevaluations',
-            'enrolled_classes.enrolledclass' => [
-                    'sectioninfo',
-                    'instructor', 
-                    'schedule',
-                    'curriculumsubject' => ['subjectinfo']
-                ]
-        ])
-        ->whereHas('student', function ($query) use ($user_id) {
+        $enrollment = Enrollment::
+        // with([
+        //     'facultyevaluations',
+        //     'enrolled_classes.enrolledclass' => [
+        //             'sectioninfo',
+        //             'instructor', 
+        //             'schedule',
+        //             'curriculumsubject' => ['subjectinfo']
+        //         ]
+        // ])
+        whereHas('student', function ($query) use ($user_id) {
             $query->where('user_id', $user_id);
         })
         ->where('period_id', session('current_period'))
@@ -305,40 +307,94 @@ class FacultyEvaluationService
     {
         DB::beginTransaction();
 
-        $classes_for_evaluation = [];
+        $enrollment->load('facultyevaluations.class');
 
-        if ($enrollment !== null) {
-            // Get enrolled classes with evaluation == 1
-            $enrolled_classes = $enrollment->enrolled_classes->filter(function ($enrolled_class) {
-                return $enrolled_class->enrolledclass->evaluation == 1;
-            })->pluck('enrolledclass');
-        
-            // Get class IDs in facultyevaluations
-            $facultyEvaluationClassIds = $enrollment->facultyevaluations->pluck('class_id')->toArray();
-        
-            // Filter out classes that are not in facultyevaluations
-            $classes_for_evaluation = $enrolled_classes->filter(function ($class) use ($facultyEvaluationClassIds) {
-                return !in_array($class->id, $facultyEvaluationClassIds);
-            });
-        
-            $insert_facultyevaluations = [];
-            if($classes_for_evaluation)
-            {
-                foreach ($classes_for_evaluation as $key => $class_for_evaluation) 
-                {
-                    $insert_facultyevaluations[] = [
-                        'enrollment_id' => $enrollment->id,
-                        'class_id' => $class_for_evaluation->id,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
-                }
+        $faculty_evaluations = $enrollment->facultyevaluations;
 
-                $enrollment->facultyevaluations()->insert($insert_facultyevaluations);
+        $classes_to_evaluate = EnrolledClass::with('class')
+        ->where('enrollment_id', $enrollment->id)
+        ->whereHas('class', function ($query) {
+            $query->where('evaluation', 1);
+        })->get();
+
+        $classes_not_in_faculty_evaluations = [];
+
+        foreach ($classes_to_evaluate as $class_to_evaluate) {
+            $classId = $class_to_evaluate->class->id;
+            
+            // Check if the class ID is not in faculty evaluations
+            $classNotInFacultyEvaluations = !$faculty_evaluations
+                ->pluck('class_id')
+                ->contains($classId);
+
+            if ($classNotInFacultyEvaluations) {
+                // If the class is not in faculty evaluations, add it to the result array
+                $classes_not_in_faculty_evaluations[] = $class_to_evaluate->class;
             }
-        }
+        }   
 
-        return $classes_for_evaluation;
+        $insert_facultyevaluations = [];
+        if($classes_not_in_faculty_evaluations)
+        {
+            foreach ($classes_not_in_faculty_evaluations as $key => $class_for_evaluation) 
+            {
+                $insert_facultyevaluations[] = [
+                    'enrollment_id' => $enrollment->id,
+                    'class_id' => $class_for_evaluation->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            $enrollment->facultyevaluations()->insert($insert_facultyevaluations);
+        }
+    
+
+        if (count($classes_not_in_faculty_evaluations) > 0) 
+        {
+            return $classes_not_in_faculty_evaluations;
+        } else {
+            return $faculty_evaluations->facultyevaluations;
+        }
+    
+        // DB::beginTransaction();
+
+        // $classes_for_evaluation = [];
+
+        // if ($enrollment !== null) {
+        //     // Get enrolled classes with evaluation == 1
+        //     $enrolled_classes = $enrollment->enrolled_classes->filter(function ($enrolled_class) {
+        //         return $enrolled_class->enrolledclass->evaluation == 1;
+        //     })->pluck('enrolledclass');
+        
+        //     // Get class IDs in facultyevaluations
+        //     $facultyEvaluationClassIds = $enrollment->facultyevaluations->pluck('class_id')->toArray();
+        
+        //     // Filter out classes that are not in facultyevaluations
+        //     $classes_for_evaluation = $enrolled_classes->filter(function ($class) use ($facultyEvaluationClassIds) {
+        //         return !in_array($class->id, $facultyEvaluationClassIds);
+        //     });
+        
+        //     $insert_facultyevaluations = [];
+        //     if($classes_for_evaluation)
+        //     {
+        //         foreach ($classes_for_evaluation as $key => $class_for_evaluation) 
+        //         {
+        //             $insert_facultyevaluations[] = [
+        //                 'enrollment_id' => $enrollment->id,
+        //                 'class_id' => $class_for_evaluation->id,
+        //                 'created_at' => now(),
+        //                 'updated_at' => now(),
+        //             ];
+        //         }
+
+        //         $enrollment->facultyevaluations()->insert($insert_facultyevaluations);
+        //     }
+        // }
+
+        // DB::commit();
+
+        // return $classes_for_evaluation;
         
     }
 }
