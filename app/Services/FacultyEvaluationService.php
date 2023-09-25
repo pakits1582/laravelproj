@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Classes;
 use App\Models\Enrollment;
@@ -378,18 +379,44 @@ class FacultyEvaluationService
                 $query->select('id', 'schedule');
             },
             'class.curriculumsubject.subjectinfo' => function ($query) {
-                $query->select('id', 'code AS subject_code', 'name AS subject_name', 'educational_level_id', 'college_id', 'department_id');
+                $query->select('id', 'code AS subject_code', 'name AS subject_name', 'educational_level_id', 'college_id');
             },
         ]);
+
+        return $this->checkEvaluationSchedule($facultyevaluation);
 
         return $facultyevaluation;
     }
 
-    public function checkEvaluationSchedule()
+    public function checkEvaluationSchedule($facultyevaluation)
     {
         $open = false;
+
+        if($facultyevaluation->class->evaluation_status == 1)
+        {
+            return true;
+        }
+
         $config_schedules = (new ConfigurationService())->configurationSchedule(session('current_period'), ConfigurationSchedule::SCHEDULE_FACULTY_EVALUATION);
 
+        if($config_schedules->count() > 0)
+        {
+            $today = Carbon::today();
+
+            foreach ($config_schedules as $key => $config) 
+            {
+                if ($config->educational_level_id === 0 || $config->educational_level_id === $facultyevaluation->class->curriculumsubject->subjectinfo->educational_level_id) 
+                {
+                    $startDate = Carbon::parse($config->date_from);
+                    $endDate = Carbon::parse($config->date_to);
+            
+                    if ($today->between($startDate, $endDate)) {
+                        $open = true;
+                        break;
+                    }
+                }
+            }
+        }
 
         return $open;
     }
