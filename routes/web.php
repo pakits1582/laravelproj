@@ -580,8 +580,8 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:facultyevaluations/studentfacultyevaluation']], function () {
-        Route::get('/facultyevaluations/studentfacultyevaluation', [FacultyEvaluationController::class, 'studentfacultyevaluation']);
-
+        Route::get('/facultyevaluations/studentfacultyevaluation', [FacultyEvaluationController::class, 'studentfacultyevaluation'])->name('studentfacultyevaluation');
+        Route::get('/facultyevaluations/{facultyevaluation}/evaluateclass', [FacultyEvaluationController::class, 'evaluateclass'])->name('evaluateclass');
     });
 
     Route::group(['middleware' => ['inaccess:facultyevaluations']], function () {

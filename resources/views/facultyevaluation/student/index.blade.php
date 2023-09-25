@@ -34,19 +34,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $classesforevaluation = (isset($enrollment->facultyevaluations)) ? $enrollment->facultyevaluations : $classes_for_evaluation;
-                                    @endphp
-                                    @dd($classesforevaluation)
-                                    @if (isset($classesforevaluation) && count($classesforevaluation) > 0)
-                                        @foreach ($classesforevaluation as $class)
+                                    @if (isset($classes_for_evaluation) && count($classes_for_evaluation) > 0)
+                                        @foreach ($classes_for_evaluation as $class_for_evaluation)
                                             <tr>
-                                                <td class="">{{ $class->code }}</td>
-                                                <td class="">{{ $class->sectioninfo->code }}</td>
-                                                <td class="">{{ $class->curriculumsubject->subjectinfo->code }}</td>
-                                                <td class="">{{ $class->curriculumsubject->subjectinfo->name }}</td>
-                                                <td class="mid">{{ $class->units }}</td>
-                                                <td class="">{{ $class->schedule->schedule }}</td>
+                                                <td class="">{{ $class_for_evaluation->class->code }}</td>
+                                                <td class="">{{ $class_for_evaluation->class->sectioninfo->code }}</td>
+                                                <td class="">{{ $class_for_evaluation->class->curriculumsubject->subjectinfo->code }}</td>
+                                                <td class="">{{ $class_for_evaluation->class->curriculumsubject->subjectinfo->name }}</td>
+                                                <td class="mid">{{ $class_for_evaluation->class->units }}</td>
+                                                <td class="">{{ $class_for_evaluation->class->schedule->schedule }}</td>
+                                                <td class="mid">
+                                                    @if($class_for_evaluation->status == 2)
+                                                        <span class="h6 font-weight-bold text-success">Evaluated</span>
+                                                    @else
+                                                        <a href="{{ route('evaluateclass', ['facultyevaluation' => $class_for_evaluation->id]) }}" class="btn btn-primary btn-sm btn-icon-split">
+                                                            <span class="icon text-white-50">
+                                                                <i class="fas fa-edit"></i>
+                                                            </span>
+                                                            <span class="text">Evaluate</span>
+                                                        </a>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     @else

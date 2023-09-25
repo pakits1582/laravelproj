@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Configuration;
+use App\Models\ConfigurationSchedule;
 
 class ConfigurationService
 {
@@ -44,5 +45,14 @@ class ConfigurationService
     public function recordAuditLog()
     {
         
+    }
+
+    public function configurationSchedule($period, $type)
+    {
+        $query = ConfigurationSchedule::query();
+        $query->where('period_id', $period);
+        $query->where('type', $type);
+
+        return $query->get();
     }
 }

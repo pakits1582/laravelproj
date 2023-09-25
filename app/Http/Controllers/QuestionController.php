@@ -26,7 +26,7 @@ class QuestionController extends Controller
 
     public function index(Request $request)
     {
-        $questions = $this->questionService->surveyQuestions($request);
+        $questions = $this->questionService->surveyQuestions($request->educational_level_id);
 
         if($request->ajax())
         {

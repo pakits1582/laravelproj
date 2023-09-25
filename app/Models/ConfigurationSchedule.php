@@ -10,6 +10,15 @@ class ConfigurationSchedule extends Model
 {
     use HasFactory;
 
+    const SCHEDULE_ENROLMENT = 'enrolment';
+    const SCHEDULE_ADD_DROP = 'addingdropping';
+    const SCHEDULE_STUDENT_REGISTRATION = 'student_registration';
+    const SCHEDULE_GRADE_POSTING = 'grade_posting';
+    const SCHEDULE_FINAL_GRADE_SUBMISSION = 'final_grade_submission';
+    const SCHEDULE_FACULTYLOAD_POSTING = 'facultyload_posting';
+    const SCHEDULE_CLASS_SCHEDULING = 'class_scheduling';
+    const SCHEDULE_FACULTY_EVALUATION = 'faculty_evaluation';
+
     protected $fillable = ['educational_level_id', 'college_id', 'year', 'date_from', 'date_to', 'period_id', 'type'];
 
     public function level()

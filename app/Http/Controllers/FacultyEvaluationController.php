@@ -8,8 +8,8 @@ use App\Models\FacultyEvaluation;
 use Illuminate\Http\Request;
 use App\Services\PeriodService;
 use Illuminate\Support\Facades\Auth;
-use App\Services\SlotMonitoringService;
 use App\Services\FacultyEvaluationService;
+use App\Services\QuestionService;
 
 class FacultyEvaluationController extends Controller
 {
@@ -80,8 +80,16 @@ class FacultyEvaluationController extends Controller
         $enrollment = $this->facultyEvaluationService->studentEnrollment(Auth::id());
         $classes_for_evaluation = $this->facultyEvaluationService->studentClassesForEvaluation($enrollment);
         
-        return $classes_for_evaluation;
-        //return view('facultyevaluation.student.index', compact('enrollment', 'classes_for_evaluation'));
+        return view('facultyevaluation.student.index', compact('enrollment', 'classes_for_evaluation'));
+    }
+
+    public function evaluateclass(FacultyEvaluation $facultyevaluation)
+    {
+        $evaluate_class = $this->facultyEvaluationService->evaluateClass($facultyevaluation);
+        $survey_questions = (new QuestionService)->surveyQuestions($evaluate_class->class->curriculumsubject->subjectinfo->educational_level_id);
+
+        return $survey_questions;
+        //return view('facultyevaluation.student.evaluate', compact('evaluate_class', 'config_schedules'));
     }
 
 }

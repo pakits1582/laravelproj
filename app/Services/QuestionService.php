@@ -12,9 +12,9 @@ class QuestionService
 {
     //
 
-    public function surveyQuestions($request)
+    public function surveyQuestions($educational_level_id)
     {
-        $level = $request->filled('educational_level_id') ? $request->educational_level_id : 1;
+        $level = ($educational_level_id) ? $educational_level_id : 1;
 
         $results = Question::select([
             'questions.id',
