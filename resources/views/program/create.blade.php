@@ -66,9 +66,9 @@
                                 <label for="type"  class="m-0 font-weight-bold text-primary">* Type</label>
                                 <select name="type" required class="form-control" id="type">
                                     <option value="">- select type -</option>
-                                    <option value="CERTIFICATE" {{ old(type) == 'CERTIFICATE' ? 'selected' : '' }}>CERTIFICATE</option>
-                                    <option value="UNDERGRADUATE" {{ old(type) == 'UNDERGRADUATE' ? 'selected' : '' }}>UNDERGRADUATE</option>
-                                    <option value="GRADUATE" {{ old(type) == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+                                    <option value="CERTIFICATE" {{ old('type') == 'CERTIFICATE' ? 'selected' : '' }}>CERTIFICATE</option>
+                                    <option value="UNDERGRADUATE" {{ old('type') == 'UNDERGRADUATE' ? 'selected' : '' }}>UNDERGRADUATE</option>
+                                    <option value="GRADUATE" {{ old('type') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
                                 </select>
                                 @error('type')
                                     <p class="text-danger text-xs mt-1">{{$message}}</p>

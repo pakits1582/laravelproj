@@ -12,6 +12,7 @@ use App\Models\FacultyEvaluation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ConfigurationSchedule;
+use Illuminate\Support\Facades\Route;
 
 class FacultyEvaluationService
 {
@@ -383,9 +384,14 @@ class FacultyEvaluationService
             },
         ]);
 
-        return $this->checkEvaluationSchedule($facultyevaluation);
+        $is_open = $this->checkEvaluationSchedule($facultyevaluation);
+        $survey_questions = $is_open ? (new QuestionService)->surveyQuestions($facultyevaluation->class->curriculumsubject->subjectinfo->educational_level_id) : [];
 
-        return $facultyevaluation;
+        return [
+            'is_open' => $is_open,
+            'class_info' => $facultyevaluation,
+            'questions' => $survey_questions,
+        ];
     }
 
     public function checkEvaluationSchedule($facultyevaluation)

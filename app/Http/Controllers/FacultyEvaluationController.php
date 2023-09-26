@@ -86,10 +86,8 @@ class FacultyEvaluationController extends Controller
     public function evaluateclass(FacultyEvaluation $facultyevaluation)
     {
         $evaluate_class = $this->facultyEvaluationService->evaluateClass($facultyevaluation);
-       // $survey_questions = (new QuestionService)->surveyQuestions($evaluate_class->class->curriculumsubject->subjectinfo->educational_level_id);
 
-        return $evaluate_class;
-        //return view('facultyevaluation.student.evaluate', compact('evaluate_class', 'config_schedules'));
+        return view('facultyevaluation.student.evaluate', compact('evaluate_class'));
     }
 
 }
