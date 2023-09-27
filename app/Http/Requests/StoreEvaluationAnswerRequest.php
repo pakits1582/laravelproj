@@ -20,7 +20,8 @@ class StoreEvaluationAnswerRequest extends FormRequest
     public function messages()
     {
         return [
-            //'choice.required' => 'All questions must have a choice selected.',
+            'choice.*.required' => 'This question must have a choice selected.',
+            'choice.*.in' => 'This question must have a choice selected.',
             'overallrate.required' => 'The over all rate of instructor is required.',
         ];
     }

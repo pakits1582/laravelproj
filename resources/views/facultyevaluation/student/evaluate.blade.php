@@ -141,17 +141,18 @@
                                                 </div>
                                                 <div class="row mb-2">
                                                     <div class="col-md-3 mid">
-                                                        <label for="choice1_{{ $question['id'] }}" class="m-0 font-weight-bold text-primary"><input type="radio" class="radio_choices" name="choice[{{ $question['id'] }}]" value="1" id="choice1_{{ $question['id'] }}"> {{ $choice1 }} </label>
+                                                        <label for="choice1_{{ $question['id'] }}" class="m-0 font-weight-bold text-primary"><input type="radio" class="radio_choices" name="choice[{{ $question['id'] }}]" data-id="{{ $question['id'] }}" value="1" id="choice1_{{ $question['id'] }}"> {{ $choice1 }} </label>
                                                     </div>
                                                     <div class="col-md-3 mid">
-                                                        <label for="choice2_{{ $question['id'] }}" class="m-0 font-weight-bold text-primary"><input type="radio" class="radio_choices" name="choice[{{ $question['id'] }}]" value="2" id="choice2_{{ $question['id'] }}"> {{ $choice2 }} </label>
+                                                        <label for="choice2_{{ $question['id'] }}" class="m-0 font-weight-bold text-primary"><input type="radio" class="radio_choices" name="choice[{{ $question['id'] }}]" data-id="{{ $question['id'] }}" value="2" id="choice2_{{ $question['id'] }}"> {{ $choice2 }} </label>
                                                     </div>
                                                     <div class="col-md-3 mid">
-                                                        <label for="choice3_{{ $question['id'] }}" class="m-0 font-weight-bold text-primary"><input type="radio" class="radio_choices" name="choice[{{ $question['id'] }}]" value="3" id="choice3_{{ $question['id'] }}"> {{ $choice3 }} </label>
+                                                        <label for="choice3_{{ $question['id'] }}" class="m-0 font-weight-bold text-primary"><input type="radio" class="radio_choices" name="choice[{{ $question['id'] }}]" data-id="{{ $question['id'] }}" value="3" id="choice3_{{ $question['id'] }}"> {{ $choice3 }} </label>
                                                     </div>
                                                     <div class="col-md-3 mid">
-                                                        <label for="choice4_{{ $question['id'] }}" class="m-0 font-weight-bold text-primary"><input type="radio" class="radio_choices" name="choice[{{ $question['id'] }}]" value="4" id="choice4_{{ $question['id'] }}"> {{ $choice4 }} </label>
+                                                        <label for="choice4_{{ $question['id'] }}" class="m-0 font-weight-bold text-primary"><input type="radio" class="radio_choices" name="choice[{{ $question['id'] }}]" data-id="{{ $question['id'] }}" value="4" id="choice4_{{ $question['id'] }}"> {{ $choice4 }} </label>
                                                     </div>
+                                                    <input type="hidden" name="choice[{{ $question['id'] }}]" value="unchecked" checked >
                                                     <div class="errors pl-5" id="error_choice_{{ $question['id'] }}"></div>
                                                 </div>
                                             

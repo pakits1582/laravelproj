@@ -180,15 +180,16 @@ $(function(){
         e.preventDefault();
     });
 
-    $(document).on("submit", "#form_evaluateclass", function(e){
-        $(".radio_choices").each(function() {
-            // Check if a radio button is not checked
-            if (!$(this).is(":checked")) {
-                // Add a hidden input with the same name and a default value
-                $(this).after('<input type="hidden" name="' + $(this).attr("name") + '" value="unchecked">');
-            }
-        });
+    $(document).on("change", ".radio_choices", function(e){
+        if ($(this).is(":checked")) {
+            var id = $(this).attr("data-id");
+            // Remove the hidden input with the same name
+            $('input[type="hidden"][name="' + $(this).attr("name") + '"]').remove();
+            $("#error_choice_"+id).html('');
+        }
+    });
 
+    $(document).on("submit", "#form_evaluateclass", function(e){
         var postData = $(this).serializeArray();
 
         $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Action</div><div class="message">Are you sure you want to submit evaluation?</div>').dialog({
