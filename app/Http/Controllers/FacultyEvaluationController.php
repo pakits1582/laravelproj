@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEvaluationAnswerRequest;
 use App\Libs\Helpers;
 use App\Models\Classes;
 use App\Models\FacultyEvaluation;
@@ -87,7 +88,13 @@ class FacultyEvaluationController extends Controller
     {
         $evaluate_class = $this->facultyEvaluationService->evaluateClass($facultyevaluation);
 
+        //dd($evaluate_class);
         return view('facultyevaluation.student.evaluate', compact('evaluate_class'));
+    }
+
+    public function saveevaluation(StoreEvaluationAnswerRequest $request)
+    {   
+        return $request;
     }
 
 }
