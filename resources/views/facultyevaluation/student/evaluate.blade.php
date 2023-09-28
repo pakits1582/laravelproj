@@ -133,7 +133,7 @@
                                     @foreach ($subcategory['group'] as $group)
                                         <h6 class="text-primary font-weight-bolder pl-3 mt-3"><u>{{ $group['group'] }}</u></h6>
                                         @foreach ($group['questions'] as $question)
-                                                <input type="hidden" name="question_id[]" value="{{ $question['id'] }}">
+                                                <input type="hidden" name="question_ids[]" value="{{ $question['id'] }}">
                                                 <div class="row">
                                                     <div class="col-md-12 text-black font-weight-bold pl-5">
                                                         {{ $loop->iteration }}. {{ $question['question'] }}

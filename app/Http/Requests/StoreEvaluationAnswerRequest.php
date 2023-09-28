@@ -35,8 +35,8 @@ class StoreEvaluationAnswerRequest extends FormRequest
     {
         return [
             'faculty_evaluation_id' => 'bail|required|numeric|exists:faculty_evaluations,id',
-            'question_id' => 'required|array',
-            'question_id.*' => 'required|numeric|exists:questions,id',
+            'question_ids' => 'required|array',
+            'question_ids.*' => 'required|numeric|exists:questions,id',
             'choice' => ['required','array'],
             'choice.*' => 'required|in:1,2,3,4',
             'overallrate' => 'required|in:1,2,3,4',

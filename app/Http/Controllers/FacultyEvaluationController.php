@@ -88,13 +88,14 @@ class FacultyEvaluationController extends Controller
     {
         $evaluate_class = $this->facultyEvaluationService->evaluateClass($facultyevaluation);
 
-        //dd($evaluate_class);
         return view('facultyevaluation.student.evaluate', compact('evaluate_class'));
     }
 
     public function saveevaluation(StoreEvaluationAnswerRequest $request)
     {   
-        return $request;
+        $save_evaluation = $this->facultyEvaluationService->saveEvaluationAnswers($request);
+
+        return response()->json($save_evaluation); 
     }
 
 }

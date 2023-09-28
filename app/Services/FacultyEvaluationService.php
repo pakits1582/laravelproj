@@ -426,4 +426,38 @@ class FacultyEvaluationService
 
         return $open;
     }
+
+    public function saveEvaluationAnswers($request)
+    {
+        DB::beginTransaction();
+
+        $facultyevaluation = FacultyEvaluation::findOrFail($request->faculty_evaluation_id);
+
+        $answerArray = [];
+        foreach ($request->question_ids as $key => $question_id) 
+        {
+            $answerArray[] = [
+                'faculty_evaluation_id' => $facultyevaluation->id,
+                'question_id'   => $question_id,
+                'answer' => $request->choice[$question_id],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        $facultyevaluation->survey_answers()->insert($answerArray);
+        $facultyevaluation->overall_rates()->insert($answerArray);
+        $facultyevaluation->strongpoints()->insert($answerArray);
+        $facultyevaluation->weakpoints()->insert($answerArray);
+        $facultyevaluation->suggestions()->insert($answerArray);
+        $facultyevaluation->student_services()->insert($answerArray);
+
+        //DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Evaluation answers successfully submitted!',
+            'alert' => 'alert-success'
+        ];
+    }
 }

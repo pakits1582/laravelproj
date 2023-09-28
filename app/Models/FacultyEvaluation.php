@@ -28,4 +28,40 @@ class FacultyEvaluation extends Model
     {
         return $this->belongsTo(Classes::class, 'class_id', 'id');
     }
+
+    public function survey_answers()
+    {
+        return $this->hasMany(SurveyAnswer::class, 'faculty_evaluation_id', 'id');
+        
+    }
+
+    public function overall_rates()
+    {
+        return $this->hasMany(OverallRate::class, 'faculty_evaluation_id', 'id');
+        
+    }
+
+    public function strongpoints()
+    {
+        return $this->hasMany(StrongPoint::class, 'faculty_evaluation_id', 'id');
+        
+    }
+
+    public function weakpoints()
+    {
+        return $this->hasMany(WeakPoint::class, 'faculty_evaluation_id', 'id');
+        
+    }
+
+    public function suggestions()
+    {
+        return $this->hasMany(Suggestion::class, 'faculty_evaluation_id', 'id');
+        
+    }
+
+    public function student_services()
+    {
+        return $this->hasMany(StudentService::class, 'faculty_evaluation_id', 'id');
+        
+    }
 }
