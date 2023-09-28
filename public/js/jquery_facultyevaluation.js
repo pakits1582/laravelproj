@@ -224,14 +224,15 @@ $(function(){
                                 $("#confirmation").dialog('close');
 
                                 console.log(response);
-                                // if(response.success == true)
-                                // {
-                                //     showSuccess(response.message);
-                                //     returnFacultyEvaluations()
-
-                                // }else{
-                                //     showError(response.message);
-                                // }
+                                if(response.success == true)
+                                {
+                                    showSuccess(response.message);
+                                    window.setTimeout(function(){
+                                        location.href = "/facultyevaluations/studentfacultyevaluation";		
+                                    }, 1000);   
+                                }else{
+                                    showError(response.message);
+                                }
 
                             },
                             error: function (data) {

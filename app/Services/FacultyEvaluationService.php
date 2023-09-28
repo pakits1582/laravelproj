@@ -342,8 +342,8 @@ class FacultyEvaluationService
                 $insert_facultyevaluations[] = [
                     'enrollment_id' => $enrollment->id,
                     'class_id' => $class_for_evaluation->class_id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
                 ];
             }
 
@@ -440,19 +440,21 @@ class FacultyEvaluationService
                 'faculty_evaluation_id' => $facultyevaluation->id,
                 'question_id'   => $question_id,
                 'answer' => $request->choice[$question_id],
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ];
         }
 
         $facultyevaluation->survey_answers()->insert($answerArray);
-        $facultyevaluation->overall_rates()->insert($answerArray);
-        $facultyevaluation->strongpoints()->insert($answerArray);
-        $facultyevaluation->weakpoints()->insert($answerArray);
-        $facultyevaluation->suggestions()->insert($answerArray);
-        $facultyevaluation->student_services()->insert($answerArray);
+        $facultyevaluation->overall_rates()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'answer' => $request->overallrate]);
+        $facultyevaluation->strongpoints()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'comment' => $request->strongpoint]);
+        $facultyevaluation->weakpoints()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'comment' => $request->weakpoint]);
+        $facultyevaluation->suggestions()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'comment' => $request->suggestion]);
+        $facultyevaluation->student_services()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'comment' => $request->studentservices]);
 
-        //DB::commit();
+        $facultyevaluation->update(['date_taken' => Carbon::now()->toDateString(), 'status' => FacultyEvaluation::FACULTY_EVAL_FINISHED]);
+        
+        DB::commit();
 
         return [
             'success' => true,
