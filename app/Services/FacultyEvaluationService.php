@@ -408,11 +408,6 @@ class FacultyEvaluationService
 
     public function evaluateClass($facultyevaluation){
 
-        if($facultyevaluation->status == FacultyEvaluation::FACULTY_EVAL_FINISHED)
-        {
-            return redirect()->route('studentfacultyevaluation');
-        }
-
         $facultyevaluation->load([
             'class.sectioninfo' => function ($query) {
                 $query->select('id', 'code AS section_code');
@@ -542,9 +537,16 @@ class FacultyEvaluationService
             ->get();
 
         $groupedAnswersAndQuestions = $this->groupSurveyResult($faculty_evaluation_result->toArray());
-        $overall_rate = OverallRate::where()
+        $overall_rate = OverallRate::whereHas('facultyevaluation', function ($query) use ($class) {
+            $query->where('class_id', $class->id);
+        })->get();
+        
+        return [
+            'class' => $class,
+            'overall_rate' => $overall_rate,
+            'questions' => $groupedAnswersAndQuestions,
+        ];
 
-        return $groupedAnswersAndQuestions;
     }
     
     public function groupSurveyResult($questions)

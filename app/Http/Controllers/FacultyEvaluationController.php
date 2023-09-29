@@ -59,9 +59,9 @@ class FacultyEvaluationController extends Controller
 
     public function viewresult(Classes $class)
     {
-        $evaluation_result = $this->facultyEvaluationService->evaluationResult($class);
+        $result = $this->facultyEvaluationService->evaluationResult($class);
 
-        return $evaluation_result;
+        return view('facultyevaluation.result.view', compact('result'));
     }
 
     public function resetevaluation(Classes $class)
@@ -88,6 +88,11 @@ class FacultyEvaluationController extends Controller
 
     public function evaluateclass(FacultyEvaluation $facultyevaluation)
     {
+        if($facultyevaluation->status == FacultyEvaluation::FACULTY_EVAL_FINISHED)
+        {
+            return redirect()->route('studentfacultyevaluation');
+        }
+        
         $evaluate_class = $this->facultyEvaluationService->evaluateClass($facultyevaluation);
 
         return view('facultyevaluation.student.evaluate', compact('evaluate_class'));

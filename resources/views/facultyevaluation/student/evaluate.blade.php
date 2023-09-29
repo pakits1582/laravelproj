@@ -61,11 +61,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="font-weight-bold text-black">
-                        {{ 
-                            $evaluate_class['class_info']->class->instructor->last_name.', '.
-                            $evaluate_class['class_info']->class->instructor->first_name.' '.
-                            $evaluate_class['class_info']->class->instructor->middle_name
-                        }}
+                            @if ($evaluate_class['class_info']->class->instructor_id)
+                            {{ 
+                                $evaluate_class['class_info']->class->instructor->last_name.', '.
+                                $evaluate_class['class_info']->class->instructor->first_name.' '.
+                                $evaluate_class['class_info']->class->instructor->middle_name
+                            }}
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-2">

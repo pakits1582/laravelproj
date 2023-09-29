@@ -14,6 +14,6 @@ class OverallRate extends Model
 
     public function facultyevaluation()
     {
-        return $this->belongsTo(FacultyEvaluation::class, 'id', 'faculty_evaluation_id');
+        return $this->belongsTo(FacultyEvaluation::class, 'faculty_evaluation_id', 'id');
     }
 }
