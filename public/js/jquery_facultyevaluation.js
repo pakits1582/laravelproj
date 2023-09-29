@@ -10,6 +10,17 @@ $(function(){
 	    dropdownParent: $("#ui_content4")
 	});
 
+    $('#scrollable_table_respondents').DataTable({
+        scrollY: 200,
+        scrollX: true,
+        scrollCollapse: true,
+        paging: false,
+        "bAutoWidth": false,
+        ordering: false,
+        info: false,
+        searching: false
+    });
+
 	var dataTable = $('#scrollable_table_faculty_evaluations').DataTable({
         scrollY: 400,
         scrollX: true,

@@ -646,6 +646,8 @@ class ClassesService
             'enrollment.student.user:id,idno',
             'enrollment.section:id,code',
             'enrollment.student.program:id,code',
+            'facultyEvaluations' // Load the custom relationship
+
         ])->wherein("class_id", $class_ids)->get();
 
         $enrolled_students = $enrolled_students->sortBy("enrollment.student.last_name")->sortBy("enrollment.student.first_name");;

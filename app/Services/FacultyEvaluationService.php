@@ -12,6 +12,7 @@ use App\Models\FacultyEvaluation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ConfigurationSchedule;
+use App\Models\OverallRate;
 use Illuminate\Support\Facades\Route;
 
 class FacultyEvaluationService
@@ -280,9 +281,52 @@ class FacultyEvaluationService
 
     public function returnRespondents($class)
     {
-        $class->load('facultyevaluations.enrollment');
+        $class->load([
+            'sectioninfo:id,code',
+            'instructor',
+            'schedule:id,schedule',
+            'merged:id,merge',
+            'mergetomotherclass:id,code',
+            'curriculumsubject.subjectinfo:id,code,name',
+        ]);
 
+        $class_ids = [];
 
+        if ($class->ismother == 1) 
+        {
+            $class_ids = $class->merged->pluck('id')->toArray();
+            $class_ids[] = $class->id;
+
+        }else if($class->merge !== null){
+
+            $class_ids_of_all_merged = Classes::select('id','code')->where("merge", $class->mergetomotherclass->id)->get();
+            $class_ids = $class_ids_of_all_merged->pluck('id')->toArray();
+            $class_ids[] = $class->mergetomotherclass->id;
+
+        }else{
+            $class_ids[] = $class->id;
+        }
+
+        $enrolled_students = EnrolledClass::select(
+            'classes.code AS class_code',
+            'users.idno AS idno',
+            'sections.code AS section_code',
+            'enrollments.year_level',
+            'programs.code AS program_code',
+            DB::raw('(SELECT f.status FROM faculty_evaluations AS f WHERE enrolled_classes.class_id = f.class_id AND f.enrollment_id = enrolled_classes.enrollment_id) AS status'),
+            DB::raw('CONCAT_WS(" ", students.last_name, students.first_name, students.name_suffix, students.middle_name) AS full_name')
+        )
+        ->join('enrollments', 'enrolled_classes.enrollment_id', '=', 'enrollments.id')
+        ->join('classes', 'enrolled_classes.class_id', '=', 'classes.id')
+        ->join('students', 'enrollments.student_id', '=', 'students.id')
+        ->join('users', 'students.user_id', '=', 'users.id')
+        ->join('sections', 'enrollments.section_id', '=', 'sections.id')
+        ->join('programs', 'students.program_id', '=', 'programs.id')
+        ->whereIn('enrolled_classes.class_id', $class_ids)
+        ->orderBy('students.last_name', 'asc')
+        ->get();
+
+        return ['class' => $class, 'respondents' => $enrolled_students];
     }
 
     public function studentEnrollment($user_id)
@@ -461,5 +505,105 @@ class FacultyEvaluationService
             'message' => 'Evaluation answers successfully submitted!',
             'alert' => 'alert-success'
         ];
+    }
+
+    public function evaluationResult($class)
+    {
+        $class->load([
+            'sectioninfo:id,code',
+            'instructor',
+            'schedule:id,schedule',
+            'merged:id,merge',
+            'mergetomotherclass:id,code',
+            'curriculumsubject.subjectinfo:id,code,name',
+        ]);
+
+        $faculty_evaluation_result = FacultyEvaluation::select(
+                'faculty_evaluations.id',
+                'faculty_evaluations.class_id',
+                'faculty_evaluations.enrollment_id',
+                'faculty_evaluations.status',
+                'faculty_evaluations.date_taken',
+                'survey_answers.answer',
+                'questions.id AS question_id',
+                'questions.question',
+                'questions.educational_level_id',
+                'question_categories.name AS category',
+                'question_subcategories.name AS subcategory',
+                'question_groups.name AS group'
+            )
+            ->join('survey_answers', 'faculty_evaluations.id', '=', 'survey_answers.faculty_evaluation_id')
+            ->join('questions', 'survey_answers.question_id', '=', 'questions.id')
+            ->leftJoin('question_categories', 'questions.question_category_id', '=', 'question_categories.id')
+            ->leftJoin('question_subcategories', 'questions.question_subcategory_id', '=', 'question_subcategories.id')
+            ->leftJoin('question_groups', 'questions.question_group_id', '=', 'question_groups.id')
+            ->where('faculty_evaluations.class_id', $class->id)
+            ->where('faculty_evaluations.status', FacultyEvaluation::FACULTY_EVAL_FINISHED)
+            ->get();
+
+        $groupedAnswersAndQuestions = $this->groupSurveyResult($faculty_evaluation_result->toArray());
+        $overall_rate = OverallRate::where()
+
+        return $groupedAnswersAndQuestions;
+    }
+    
+    public function groupSurveyResult($questions)
+    {
+        $grouped = [];
+
+        foreach ($questions as $question) {
+            $category     = $question['category'];
+            $subcategory  = $question['subcategory'];
+            $group        = $question['group'];
+            $questionText = $question['question'];
+            $question_id  = $question['question_id'];
+
+            if (!isset($grouped[$category])) {
+                $grouped[$category] = [
+                    'category' => $category,
+                    'subcategory' => [],
+                ];
+            }
+
+            if (!isset($grouped[$category]['subcategory'][$subcategory])) {
+                $grouped[$category]['subcategory'][$subcategory] = [
+                    'subcategory' => $subcategory,
+                    'group' => [],
+                ];
+            }
+
+            if (!isset($grouped[$category]['subcategory'][$subcategory]['group'][$group])) {
+                $grouped[$category]['subcategory'][$subcategory]['group'][$group] = [
+                    'group' => $group,
+                    'questions' => [],
+                ];
+            }
+
+            if (!isset($grouped[$category]['subcategory'][$subcategory]['group'][$group]['questions'][$question_id])) {
+                $grouped[$category]['subcategory'][$subcategory]['group'][$group]['questions'][$question_id] = [
+                    'id' => $question['id'],
+                    'question' => $questionText,
+                    'answers' => []
+                ];
+            }
+
+            $grouped[$category]['subcategory'][$subcategory]['group'][$group]['questions'][$question_id]['answers'][] = [
+                'answer' => $question['answer']
+            ];
+        }
+
+        $grouped = array_values($grouped);
+        foreach ($grouped as &$group) {
+            $group['subcategory'] = array_values($group['subcategory']);
+            foreach ($group['subcategory'] as &$subcategory) {
+                $subcategory['group'] = array_values($subcategory['group']);
+                foreach ($subcategory['group'] as &$group) {
+                    $group['questions'] = array_values($group['questions']);
+                }
+            }
+        }
+
+        return $grouped;
+
     }
 }

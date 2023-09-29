@@ -59,7 +59,9 @@ class FacultyEvaluationController extends Controller
 
     public function viewresult(Classes $class)
     {
-        return $class;
+        $evaluation_result = $this->facultyEvaluationService->evaluationResult($class);
+
+        return $evaluation_result;
     }
 
     public function resetevaluation(Classes $class)

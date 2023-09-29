@@ -9,9 +9,16 @@ class FacultyEvaluation extends Model
 {
     use HasFactory;
 
-    const FACULTY_EVAL_UNSTARTED = 0;
+    const FACULTY_EVAL_UNSTARTED = NULL;
     const FACULTY_EVAL_STARTED   = 1;
     const FACULTY_EVAL_FINISHED  = 2;
+
+    const FACULTY_EVAL_STATUS = [
+        NULL => 'NOT STARTED',
+        0 => 'NOT STARTED',
+        1 => 'STARTED',
+        2 => 'EVALUATED'
+    ];
 
     const CLASS_FOR_EVALUATION_FALSE = 0;
     const CLASS_FOR_EVALUATION_TRUE  = 1;
