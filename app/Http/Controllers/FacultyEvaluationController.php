@@ -61,6 +61,7 @@ class FacultyEvaluationController extends Controller
     {
         $result = $this->facultyEvaluationService->evaluationResult($class);
 
+        //dd($result);
         return view('facultyevaluation.result.view', compact('result'));
     }
 
@@ -103,6 +104,16 @@ class FacultyEvaluationController extends Controller
         $save_evaluation = $this->facultyEvaluationService->saveEvaluationAnswers($request);
 
         return response()->json($save_evaluation); 
+    }
+
+    public function printresult(Classes $class)
+    {
+
+    }
+
+    public function commentsummary(Classes $class)
+    {
+
     }
 
 }

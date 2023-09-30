@@ -118,6 +118,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::view('/students/import', 'student.import')->name('students.import');
         // Route::post('/students/import', [StudentController::class, 'import'])->name('students.uploadimport');
         // Route::post('/students/export', [StudentController::class, 'export'])->name('students.downloadexcel');
+        Route::get('/students/studentswithnoaccess', [StudentController::class, 'studentswithnoaccess']);
         Route::post('/students/generateidno', [StudentController::class, 'generateidno']);
         Route::resource('students', StudentController::class)->except(['destroy']);
         // ->missing(function (Request $request) {
@@ -604,12 +605,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/facultyevaluations/savecategory', [QuestionController::class, 'savecategory'])->name('savecategory');
 
         Route::get('/facultyevaluations/results', [FacultyEvaluationController::class, 'results'])->name('facultyevaluations.results');
+        Route::get('/facultyevaluations/{class}/commentsummary', [FacultyEvaluationController::class, 'commentsummary'])->name('facultyevaluations.commentsummary');
+        Route::get('/facultyevaluations/{class}/printresult', [FacultyEvaluationController::class, 'printresult'])->name('facultyevaluations.printresult');
         Route::get('/facultyevaluations/{class}/viewresult', [FacultyEvaluationController::class, 'viewresult'])->name('facultyevaluations.viewresult');
         Route::get('/facultyevaluations/{class}/resetevaluation', [FacultyEvaluationController::class, 'resetevaluation']);
         Route::get('/facultyevaluations/{class}/viewrespondents', [FacultyEvaluationController::class, 'viewrespondents']);
 
         Route::resource('facultyevaluations', FacultyEvaluationController::class)->missing(function (Request $request) {
-            //return Redirect::route('facultyevaluations.index');
+            return Redirect::route('facultyevaluations.index');
         }); 
         Route::post('/facultyevaluations/filter', [FacultyEvaluationController::class, 'filter']);
         Route::get('/facultyevaluations/{class}/{action}', [FacultyEvaluationController::class, 'evaluationaction']);

@@ -14,8 +14,8 @@ class SubjectService
 
         if($request->has('keyword') && !empty($request->keyword)) {
             $query->where(function($query) use($request){
-                $query->where('code', 'like', '%'.$request->keyword.'%')
-                ->orWhere('name', 'like', '%'.$request->keyword.'%');
+                $query->where('code', 'like', $request->keyword.'%')
+                ->orWhere('name', 'like', $request->keyword.'%');
             });
         }
         if($request->has('educational_level') && !empty($request->educational_level)) {

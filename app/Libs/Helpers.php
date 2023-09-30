@@ -511,5 +511,21 @@ class Helpers
         return $filteredItems;
     }
 
+    public static function transval($answer, $educational_level) {
+        $transvalValues = [
+            'COLLEGE' => ['1' => 100, '2' => 85, '3' => 65, '4' => 50],
+            'DOCTORAL' => ['1' => 100, '2' => 93, '3' => 87, '4' => 80],
+            'MASTERAL' => ['1' => 100, '2' => 93, '3' => 87, '4' => 80],
+            'LAW' => ['1' => 100, '2' => 93, '3' => 87, '4' => 80],
+        ];
+    
+        if (isset($transvalValues[$educational_level][$answer])) {
+            return $transvalValues[$educational_level][$answer];
+        } else {
+            return 0; // Default value when combination is not found
+        }
+    }
+    
+
 }
     

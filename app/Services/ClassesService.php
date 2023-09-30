@@ -599,9 +599,9 @@ class ClassesService
         $query->where(function($query) use($searchcodes){
             foreach($searchcodes as $key => $code){
                 $query->orwhere(function($query) use($code){
-                    $query->orWhere('code', 'LIKE', '%'.$code.'%');
+                    $query->orWhere('code', 'LIKE', $code.'%');
                     $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
-                        $query->where('subjects.code', 'LIKE', '%'.$code.'%');
+                        $query->where('subjects.code', 'LIKE', $code.'%');
                     });
                 });
             }
@@ -645,9 +645,7 @@ class ClassesService
             'enrollment.student',
             'enrollment.student.user:id,idno',
             'enrollment.section:id,code',
-            'enrollment.student.program:id,code',
-            'facultyEvaluations' // Load the custom relationship
-
+            'enrollment.student.program:id,code'
         ])->wherein("class_id", $class_ids)->get();
 
         $enrolled_students = $enrolled_students->sortBy("enrollment.student.last_name")->sortBy("enrollment.student.first_name");;

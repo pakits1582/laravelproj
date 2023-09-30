@@ -144,7 +144,13 @@ class StudentController extends Controller
         return response()->json($generated_idno);
     }
 
+    public function studentswithnoaccess()
+    {
+        $result = $this->studentService->studentsWithNoAccess();
 
+        dd($result);
+        return response()->json($result);
+    }
 
 
 }

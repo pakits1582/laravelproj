@@ -85,43 +85,24 @@
                         <h1 class="h3 text-800 text-primary mb-0">Survey Questions</h1>
                     </div> 
                     <div class="card-body">
-                        {{-- <p class="font-italic text-info">Direction: Rate the performance of the faculty using a 4-point scale defined as follows:</p>
-                        @if ($result['class']->curriculumsubject->subjectinfo->educational_level_id == \App\Models\Educationallevel::DEFAULT_EDUCATIONAL_LEVEL)
-                            <div class="row">
-                                <div class="col-md-3 text-black"><u>Always</u> - <i>All the time</i></div>
-                                <div class="col-md-3 text-black"><u>Often</u> - <i>Most of the time</i></div>
-                                <div class="col-md-3 text-black"><u>Sometimes</u> - <i>Once in a while</i></div>
-                                <div class="col-md-3 text-black"><u>Never</u> - <i>Not at all</i></div>
-                            </div>
-                            @php
-                                $choice1 = 'Always';
-                                $choice2 = 'Often';
-                                $choice3 = 'Sometimes';
-                                $choice4 = 'Never';
-                            @endphp
-                        @else
-                            <div class="row">
-                                <div class="col-md-3 text-black"><u>Always</u></div>
-                                <div class="col-md-3 text-black"><u>Sometimes</u></div>
-                                <div class="col-md-3 text-black"><u>Rarely</div>
-                                <div class="col-md-3 text-black"><u>No opportunity to observe</u></div>
-                            </div>
-                            @php
-                                $choice1 = 'Always';
-                                $choice2 = 'Sometimes';
-                                $choice3 = 'Rarely';
-                                $choice4 = 'No opportunity to observe';
-                            @endphp
-                        @endif
-                        <h6 class="my-3 font-weight-bold text-black"><i>Select radio button which corresponds to the rating of your instructor.</i></h6> --}}
                         @if ($result['questions'] !== null && count($result['questions']) > 0)
+                            @php
+                                $grand_total_answer_value = 0;
+                                $grand_total_questions = 0;
+                            @endphp
+
                             @foreach ($result['questions'] as $question)
-                                <h4 class="text-primary">{{ $question['category'] }}</h4>
+                                <h4 class="text-primary">&bull; {{ $question['category'] }}</h4>
                                 @foreach ($question['subcategory'] as $subcategory)
                                     <h5 class="text-success font-italic">{{ $subcategory['subcategory'] }}</h5>
                                     @foreach ($subcategory['group'] as $group)
                                         <h6 class="text-black font-weight-bolder pl-5"><u>{{ $group['group'] }}</u></h6>
                                         <div class="table-responsive">
+                                            @php
+                                                $question_count = count($group['questions']);
+                                                $grand_total_questions += $question_count;
+                                                $totalave = 0;
+                                            @endphp
                                             <table class="table table-sm table-bordered table-striped">
                                                 <tr>
                                                     <th>#</th>
@@ -129,14 +110,39 @@
                                                     <th>Rate</th>
                                                 </tr>
                                                 @foreach ($group['questions'] as $question)
+                                                    @php
+                                                        $total_question = 0;
+                                                        $total_respondents = count($question['answers']);
+                                                        $sum_answers = 0;
+
+                                                        foreach ($question['answers'] as $key => $answer) 
+                                                        {
+                                                            $sum_answers += Helpers::transval($answer['answer'], $result['class']->curriculumsubject->subjectinfo->educlevel->code);
+                                                        }
+
+                                                        $ave = ($sum_answers != 0 && $total_respondents != 0) ? @($sum_answers/$total_respondents) : 0;
+                                                    @endphp
                                                     <tr>
                                                         <td class="w30">{{ $loop->iteration }}</td>
                                                         <td>{{ $question['question'] }}</td>
                                                         <td class="mid w100">
-                                                           
+                                                            <h6 class="m-0 text-black font-weight-bold">{{ number_format($ave, 2) }}</h6>
                                                         </td>
                                                     </tr>
+                                                    @php
+                                                        $totalave += $ave;
+                                                        $grand_total_answer_value += $ave;
+                                                    @endphp
                                                 @endforeach
+                                                @php
+                                                    $qave = $totalave/$question_count;
+                                                @endphp
+                                                <tr>
+                                                    <td class="w30" colspan="2"></td>
+                                                    <td class="mid w100">
+                                                        <h5 class="m-0 text-success font-weight-bold">{{ number_format($qave, 2) }}</h5>
+                                                    </td>
+                                                </tr>
                                             </table>
                                         </div>
                                     @endforeach
@@ -155,10 +161,51 @@
                                             <td class="w30">1</td>
                                             <td>As a whole, how do you rate your instructor's performance?</td>
                                             <td class="mid w100">
-                                                
+                                                @php
+                                                    $overall_rate_count = count($result['overall_rate']);
+                                                    $total_answer_sum   = 0;
+                                                    $grand_total_questions += 1;
+                                                    foreach ($result['overall_rate'] as $key => $answer) 
+                                                    {
+                                                        $total_answer_sum += Helpers::transval($answer, $result['class']->curriculumsubject->subjectinfo->educlevel->code);
+                                                    }
+
+                                                    $ave = ($total_answer_sum != 0 && $overall_rate_count != 0) ? @($total_answer_sum/$overall_rate_count) : 0;
+                                                    $totalave += $ave;
+                                                    $grand_total_answer_value += $ave;
+                                                @endphp
+                                               <h6 class="m-0 text-black font-weight-bold">{{ number_format($ave, 2) }}</h6>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w30" colspan="2"></td>
+                                            <td class="mid w100">
+                                                <h5 class="m-0 text-success font-weight-bold">{{ number_format($ave, 2) }}</h5>
                                             </td>
                                         </tr>
                                     </table>
+                                </div>
+                            </div>
+                            @php
+                                $overallrating = $grand_total_answer_value/$grand_total_questions;
+                            @endphp
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="{{ route('facultyevaluations.printresult', ['class' => $result['class']->code]) }}" class="btn btn-danger btn-icon-split actions mb-2">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-print"></i>
+                                        </span>
+                                        <span class="text">Print Result</span>
+                                    </a>
+                                    <a href="{{ route('facultyevaluations.commentsummary', ['class' => $result['class']->code]) }}" class="btn btn-success btn-icon-split actions mb-2">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-list"></i>
+                                        </span>
+                                        <span class="text">Comments Summary</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <h1 class="right text-primary">Overall Rating: {{ number_format($overallrating, 2) }}</h1>
                                 </div>
                             </div>
                         @else

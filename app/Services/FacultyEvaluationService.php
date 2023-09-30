@@ -56,7 +56,7 @@ class FacultyEvaluationService
 
         $query->where('classes.period_id', $period_id ?? session('current_period'));
         $query->where('classes.dissolved', '!=', 1);
-        $query->where('classes.merge', '=', NULL);
+        //$query->where('classes.merge', '=', NULL);
 
         if ($user->utype === User::TYPE_INSTRUCTOR) 
         {
@@ -129,7 +129,10 @@ class FacultyEvaluationService
             foreach ($classes as $key => $v) 
             {
                 $totalrespondents  = 0;
+                $totalassessed  = 0;
             	$totalvalidated = 0;
+                $totalenrolled  = 0;
+            	$remainingslot  = 0;
 
             	$classes_array[$key]['class_id']      = $v->id;
             	$classes_array[$key]['class_code']    = $v->code;
@@ -146,10 +149,14 @@ class FacultyEvaluationService
             	$classes_array[$key]['first_name']    = $v->first_name;
                 $classes_array[$key]['evaluation']    = $v->evaluation;
                 $classes_array[$key]['ismother']      = $v->ismother;
+                $classes_array[$key]['merge']         = $v->merge;
+
 
             	
                 $respondentsinclass  = ($v->faculty_evaluations_count == "") ? 0 : $v->faculty_evaluations_count;
+                $assessedinclass  = ($v->assessedinclass == "") ? 0 : $v->assessedinclass;
             	$validatedinclass = ($v->validatedinclass == "") ? 0 : $v->validatedinclass;
+                $enrolledinclass  = ($v->enrolledinclass == "") ? 0 : $v->enrolledinclass;
 
                 if($v->ismother > 0){
 					$classes_array[$key]['slots'] = $v->slots;
@@ -160,19 +167,25 @@ class FacultyEvaluationService
 					});
 
 					$sum_respondentsinclass  = 0;
+					$sum_assessedinclass  = 0;
 					$sum_validatedinclass = 0;
+                    $sum_enrolledinclass  = 0;
 
 					if($children)
 					{
 						foreach ($children as $child) 
 						{
 							$sum_respondentsinclass  += $child['faculty_evaluations_count'];
+                            $sum_assessedinclass  += $child['assessedinclass'];
             				$sum_validatedinclass += $child['validatedinclass'];
-						}
+                            $sum_enrolledinclass  += $child['enrolledinclass'];						}
 					}
 
 					$totalrespondents = $respondentsinclass + $sum_respondentsinclass;
-					$totalvalidated   = $validatedinclass + $sum_validatedinclass;
+                    $totalassessed  = $assessedinclass + $sum_assessedinclass;
+					$totalvalidated = $validatedinclass + $sum_validatedinclass;
+                    $totalenrolled  = $enrolledinclass + $sum_enrolledinclass;
+					$remainingslot  = $v->slots - $totalenrolled;
 
 				}else{//not a mothercode
 					/*
@@ -189,13 +202,16 @@ class FacultyEvaluationService
 
 						$sum_mother_respondentsinclass  = 0;
 						$sum_mother_validatedinclass = 0;
-
+                        $sum_mother_assessedinclass  = 0;
+                        $sum_mother_enrolledinclass  = 0;
 						if($mother)
 						{
 							foreach ($mother as $m) 
 							{
 								$sum_mother_respondentsinclass  += $m['faculty_evaluations_count'];
+	            				$sum_mother_assessedinclass  += $m['assessedinclass'];
 	            				$sum_mother_validatedinclass += $m['validatedinclass'];
+                                $sum_mother_enrolledinclass  += $m['enrolledinclass'];
 							}
 						}
 
@@ -204,30 +220,43 @@ class FacultyEvaluationService
 						});
 
 						$sum_respondentsinclass = 0;
+                        $sum_assessedinclass  = 0;
 						$sum_validatedinclass = 0;
+                        $sum_enrolledinclass  = 0;
 
 						if($children)
 						{
 							foreach ($children as $child) 
 							{
 								$sum_respondentsinclass  += $child['faculty_evaluations_count'];
+                                $sum_assessedinclass  += $child['assessedinclass'];
 	            				$sum_validatedinclass += $child['validatedinclass'];
-							}
+                                $sum_enrolledinclass  += $child['enrolledinclass'];							}
 						}
                         
-                        $classes_array[$key]['slots'] = $v->mothercodeslots;
 						$totalrespondents  += $sum_respondentsinclass + $sum_mother_respondentsinclass;
+                        $classes_array[$key]['slots'] = $v->mothercodeslots;
+						$totalassessed  += $sum_assessedinclass + $sum_mother_assessedinclass;
 						$totalvalidated += $sum_validatedinclass + $sum_mother_validatedinclass;
+                        $totalenrolled  += $sum_enrolledinclass + $sum_mother_enrolledinclass;
+                        $remainingslot  = $v->mothercodeslots - $totalenrolled;
 
 					}else{
-						$classes_array[$key]['slots'] = $v->slots ?? 0;
 						$totalrespondents  = $respondentsinclass;
 						$totalvalidated = $validatedinclass;
+                        $classes_array[$key]['slots'] = $v->slots ?? 0;
+						$totalassessed  = $assessedinclass;
+						$totalvalidated = $validatedinclass;
+                        $totalenrolled  = $enrolledinclass;
+						$remainingslot  = $v->slots - $totalenrolled;
 					}	
 				}
 
                 $classes_array[$key]['totalrespondents']  = $totalrespondents;
+                $classes_array[$key]['totalassessed']  = $totalassessed;
                 $classes_array[$key]['totalvalidated'] = $totalvalidated;
+                $classes_array[$key]['totalenrolled']  = $totalenrolled;
+                $classes_array[$key]['remainingslot']  = $remainingslot;            
             }
         }
 
@@ -323,6 +352,7 @@ class FacultyEvaluationService
         ->join('sections', 'enrollments.section_id', '=', 'sections.id')
         ->join('programs', 'students.program_id', '=', 'programs.id')
         ->whereIn('enrolled_classes.class_id', $class_ids)
+        ->where('enrollments.validated', 1)
         ->orderBy('students.last_name', 'asc')
         ->get();
 
@@ -510,7 +540,8 @@ class FacultyEvaluationService
             'schedule:id,schedule',
             'merged:id,merge',
             'mergetomotherclass:id,code',
-            'curriculumsubject.subjectinfo:id,code,name',
+            'curriculumsubject.subjectinfo',
+            'curriculumsubject.subjectinfo.educlevel',
         ]);
 
         $faculty_evaluation_result = FacultyEvaluation::select(
@@ -539,7 +570,7 @@ class FacultyEvaluationService
         $groupedAnswersAndQuestions = $this->groupSurveyResult($faculty_evaluation_result->toArray());
         $overall_rate = OverallRate::whereHas('facultyevaluation', function ($query) use ($class) {
             $query->where('class_id', $class->id);
-        })->get();
+        })->pluck('answer')->toArray();
         
         return [
             'class' => $class,

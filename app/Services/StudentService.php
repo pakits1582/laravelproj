@@ -202,4 +202,13 @@ class StudentService
             ];
         }
     }
+
+    public function studentsWithNoAccess()
+    {
+        $students = Student::whereNotNull('user_id')
+        ->whereDoesntHave('user.access')
+        ->get();
+
+        return $students;
+    }
 }
