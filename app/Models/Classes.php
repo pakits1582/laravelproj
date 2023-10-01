@@ -53,6 +53,11 @@ class Classes extends Model
         return $this->hasMany(EnrolledClass::class, 'class_id', 'id');
     }
 
+    public function mergedenrolledstudents()
+    {
+        return $this->hasManyThrough(EnrolledClass::class, Classes::class,'merge', 'class_id');
+    }
+
     public function getEnrolledStudentCountAttribute()
     {
         return $this->enrolledstudents()->count();
@@ -66,11 +71,6 @@ class Classes extends Model
     public function merged()
     {
         return $this->hasMany(Classes::class, 'merge', 'id');
-    }
-
-    public function mergedenrolledstudentscount()
-    {
-        return $this->hasManyThrough(EnrolledClass::class, Classes::class, 'merge', 'id');
     }
 
     public function facultyevaluations()

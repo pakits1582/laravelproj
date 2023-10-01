@@ -150,8 +150,6 @@ class FacultyEvaluationService
                 $classes_array[$key]['evaluation']    = $v->evaluation;
                 $classes_array[$key]['ismother']      = $v->ismother;
                 $classes_array[$key]['merge']         = $v->merge;
-
-
             	
                 $respondentsinclass  = ($v->faculty_evaluations_count == "") ? 0 : $v->faculty_evaluations_count;
                 $assessedinclass  = ($v->assessedinclass == "") ? 0 : $v->assessedinclass;
@@ -178,7 +176,8 @@ class FacultyEvaluationService
 							$sum_respondentsinclass  += $child['faculty_evaluations_count'];
                             $sum_assessedinclass  += $child['assessedinclass'];
             				$sum_validatedinclass += $child['validatedinclass'];
-                            $sum_enrolledinclass  += $child['enrolledinclass'];						}
+                            $sum_enrolledinclass  += $child['enrolledinclass'];						
+                        }
 					}
 
 					$totalrespondents = $respondentsinclass + $sum_respondentsinclass;
@@ -515,11 +514,23 @@ class FacultyEvaluationService
         }
 
         $facultyevaluation->survey_answers()->insert($answerArray);
-        $facultyevaluation->overall_rates()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'answer' => $request->overallrate]);
-        $facultyevaluation->strongpoints()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'comment' => $request->strongpoint]);
-        $facultyevaluation->weakpoints()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'comment' => $request->weakpoint]);
-        $facultyevaluation->suggestions()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'comment' => $request->suggestion]);
-        $facultyevaluation->student_services()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['faculty_evaluation_id' => $facultyevaluation->id, 'comment' => $request->studentservices]);
+        $facultyevaluation->overall_rates()->updateOrCreate(['faculty_evaluation_id' => $facultyevaluation->id], ['answer' => $request->overallrate]);
+        
+        $request->filled('strongpoint') && $facultyevaluation->strongpoints()->updateOrCreate(
+            ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->strongpoint]
+        );
+
+        $request->filled('weakpoints') && $facultyevaluation->weakpoints()->updateOrCreate(
+            ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->weakpoints]
+        );
+
+        $request->filled('suggestions') && $facultyevaluation->suggestions()->updateOrCreate(
+            ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->suggestions]
+        );
+
+        $request->filled('studentservices') && $facultyevaluation->student_services()->updateOrCreate(
+            ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->studentservices]
+        );
 
         $facultyevaluation->update(['date_taken' => Carbon::now()->toDateString(), 'status' => FacultyEvaluation::FACULTY_EVAL_FINISHED]);
         
@@ -542,7 +553,19 @@ class FacultyEvaluationService
             'mergetomotherclass:id,code',
             'curriculumsubject.subjectinfo',
             'curriculumsubject.subjectinfo.educlevel',
+            'enrolledstudents',
+            'mergedenrolledstudents'
         ]);
+
+        $class_ids = [];
+
+        if ($class->ismother == 1) 
+        {
+            $class_ids = $class->merged->pluck('id')->toArray();
+            $class_ids[] = $class->id;
+        }else{
+            $class_ids[] = $class->id;
+        }
 
         $faculty_evaluation_result = FacultyEvaluation::select(
                 'faculty_evaluations.id',
@@ -563,7 +586,7 @@ class FacultyEvaluationService
             ->leftJoin('question_categories', 'questions.question_category_id', '=', 'question_categories.id')
             ->leftJoin('question_subcategories', 'questions.question_subcategory_id', '=', 'question_subcategories.id')
             ->leftJoin('question_groups', 'questions.question_group_id', '=', 'question_groups.id')
-            ->where('faculty_evaluations.class_id', $class->id)
+            ->whereIn('faculty_evaluations.class_id', $class_ids)
             ->where('faculty_evaluations.status', FacultyEvaluation::FACULTY_EVAL_FINISHED)
             ->get();
 

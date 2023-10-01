@@ -7,6 +7,7 @@ use App\Libs\Helpers;
 use App\Models\Period;
 use App\Models\Student;
 use App\Models\Useraccess;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
@@ -209,6 +210,34 @@ class StudentService
         ->whereDoesntHave('user.access')
         ->get();
 
-        return $students;
+        $user_accesses = [];
+
+        foreach ($students as $k => $student) 
+        {
+            foreach (Helpers::studentDefaultAccesses() as $key => $access) 
+            {
+                $user_accesses[] = [
+                    'user_id' => $student->user_id,
+                    'access' => $access['access'],
+                    'title' => $access['title'],
+                    'category' => $access['category'],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+            }
+        }
+
+        $chunkedUserAccesses = array_chunk($user_accesses, 1000);
+
+        foreach ($chunkedUserAccesses as $chunk) 
+        {
+            if (!empty($chunk)) 
+            {
+                UserAccess::insert($chunk);
+            }
+        }
+
+        return "Records inserted successfully.";
+
     }
 }
