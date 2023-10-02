@@ -50,8 +50,7 @@ class FacultyEvaluation extends Model
 
     public function strongpoints()
     {
-        return $this->hasMany(StrongPoint::class, 'faculty_evaluation_id', 'id');
-        
+        return $this->hasMany(StrongPoint::class);
     }
 
     public function weakpoints()

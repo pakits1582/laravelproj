@@ -53,14 +53,41 @@ class Classes extends Model
         return $this->hasMany(EnrolledClass::class, 'class_id', 'id');
     }
 
+    public function enrolledstudentsvalidated()
+    {
+        return $this->hasMany(EnrolledClass::class, 'class_id', 'id')
+            ->whereHas('enrollment', function ($query) {
+                $query->where('validated', 1);
+            });
+    }
+
     public function mergedenrolledstudents()
     {
         return $this->hasManyThrough(EnrolledClass::class, Classes::class,'merge', 'class_id');
     }
 
-    public function getEnrolledStudentCountAttribute()
+    public function mergedenrolledstudentsvalidated()
     {
-        return $this->enrolledstudents()->count();
+        return $this->hasManyThrough(EnrolledClass::class, Classes::class, 'merge', 'class_id')
+            ->whereHas('enrollment', function ($query) {
+                $query->where('validated', 1);
+            });
+    }
+
+    public function getEnrolledAndMergedStudentCountAttribute()
+    {
+        $enrolledCount = $this->enrolledstudents()->count();
+        $mergedCount   = $this->mergedenrolledstudents()->count();
+
+        return $enrolledCount + $mergedCount;
+    }
+
+    public function getEnrolledAndMergedStudentCountValidatedAttribute()
+    {
+        $enrolledCount = $this->enrolledstudentsvalidated()->count();
+        $mergedCount   = $this->mergedenrolledstudentsvalidated()->count();
+
+        return $enrolledCount + $mergedCount;
     }
 
     public function mergetomotherclass()

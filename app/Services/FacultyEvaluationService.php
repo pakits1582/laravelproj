@@ -5,14 +5,17 @@ namespace App\Services;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Classes;
+use App\Models\WeakPoint;
 use App\Models\Enrollment;
 use App\Models\Instructor;
+use App\Models\OverallRate;
+use App\Models\StrongPoint;
 use App\Models\EnrolledClass;
 use App\Models\FacultyEvaluation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ConfigurationSchedule;
-use App\Models\OverallRate;
+use App\Models\Suggestion;
 use Illuminate\Support\Facades\Route;
 
 class FacultyEvaluationService
@@ -520,12 +523,12 @@ class FacultyEvaluationService
             ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->strongpoint]
         );
 
-        $request->filled('weakpoints') && $facultyevaluation->weakpoints()->updateOrCreate(
-            ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->weakpoints]
+        $request->filled('weakpoint') && $facultyevaluation->weakpoints()->updateOrCreate(
+            ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->weakpoint]
         );
 
-        $request->filled('suggestions') && $facultyevaluation->suggestions()->updateOrCreate(
-            ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->suggestions]
+        $request->filled('suggestion') && $facultyevaluation->suggestions()->updateOrCreate(
+            ['faculty_evaluation_id' => $facultyevaluation->id], ['comment' => $request->suggestion]
         );
 
         $request->filled('studentservices') && $facultyevaluation->student_services()->updateOrCreate(
@@ -543,6 +546,34 @@ class FacultyEvaluationService
         ];
     }
 
+    public function returnEvaluationResult($class_ids)
+    {
+        $faculty_evaluation_result = FacultyEvaluation::select(
+            'faculty_evaluations.id',
+            'faculty_evaluations.class_id',
+            'faculty_evaluations.enrollment_id',
+            'faculty_evaluations.status',
+            'faculty_evaluations.date_taken',
+            'survey_answers.answer',
+            'questions.id AS question_id',
+            'questions.question',
+            'questions.educational_level_id',
+            'question_categories.name AS category',
+            'question_subcategories.name AS subcategory',
+            'question_groups.name AS group'
+        )
+        ->join('survey_answers', 'faculty_evaluations.id', '=', 'survey_answers.faculty_evaluation_id')
+        ->join('questions', 'survey_answers.question_id', '=', 'questions.id')
+        ->leftJoin('question_categories', 'questions.question_category_id', '=', 'question_categories.id')
+        ->leftJoin('question_subcategories', 'questions.question_subcategory_id', '=', 'question_subcategories.id')
+        ->leftJoin('question_groups', 'questions.question_group_id', '=', 'question_groups.id')
+        ->whereIn('faculty_evaluations.class_id', $class_ids)
+        ->where('faculty_evaluations.status', FacultyEvaluation::FACULTY_EVAL_FINISHED)
+        ->get();
+
+        return $faculty_evaluation_result;
+    }
+
     public function evaluationResult($class)
     {
         $class->load([
@@ -553,8 +584,6 @@ class FacultyEvaluationService
             'mergetomotherclass:id,code',
             'curriculumsubject.subjectinfo',
             'curriculumsubject.subjectinfo.educlevel',
-            'enrolledstudents',
-            'mergedenrolledstudents'
         ]);
 
         $class_ids = [];
@@ -567,28 +596,7 @@ class FacultyEvaluationService
             $class_ids[] = $class->id;
         }
 
-        $faculty_evaluation_result = FacultyEvaluation::select(
-                'faculty_evaluations.id',
-                'faculty_evaluations.class_id',
-                'faculty_evaluations.enrollment_id',
-                'faculty_evaluations.status',
-                'faculty_evaluations.date_taken',
-                'survey_answers.answer',
-                'questions.id AS question_id',
-                'questions.question',
-                'questions.educational_level_id',
-                'question_categories.name AS category',
-                'question_subcategories.name AS subcategory',
-                'question_groups.name AS group'
-            )
-            ->join('survey_answers', 'faculty_evaluations.id', '=', 'survey_answers.faculty_evaluation_id')
-            ->join('questions', 'survey_answers.question_id', '=', 'questions.id')
-            ->leftJoin('question_categories', 'questions.question_category_id', '=', 'question_categories.id')
-            ->leftJoin('question_subcategories', 'questions.question_subcategory_id', '=', 'question_subcategories.id')
-            ->leftJoin('question_groups', 'questions.question_group_id', '=', 'question_groups.id')
-            ->whereIn('faculty_evaluations.class_id', $class_ids)
-            ->where('faculty_evaluations.status', FacultyEvaluation::FACULTY_EVAL_FINISHED)
-            ->get();
+        $faculty_evaluation_result = $this->returnEvaluationResult($class_ids);
 
         $groupedAnswersAndQuestions = $this->groupSurveyResult($faculty_evaluation_result->toArray());
         $overall_rate = OverallRate::whereHas('facultyevaluation', function ($query) use ($class) {
@@ -661,5 +669,48 @@ class FacultyEvaluationService
 
         return $grouped;
 
+    }
+
+    public function commentSummary($class)
+    {
+        $class->load([
+            'sectioninfo:id,code',
+            'instructor',
+            'schedule:id,schedule',
+            'merged:id,merge',
+            'mergetomotherclass:id,code',
+            'curriculumsubject.subjectinfo',
+            'curriculumsubject.subjectinfo.educlevel',
+        ]);
+
+        $class_ids = [];
+
+        if ($class->ismother == 1) 
+        {
+            $class_ids = $class->merged->pluck('id')->toArray();
+            $class_ids[] = $class->id;
+        }else{
+            $class_ids[] = $class->id;
+        }
+
+        $strong_points = StrongPoint::whereHas('facultyevaluation', function ($query) use ($class_ids) {
+            $query->whereIn('class_id', $class_ids);
+        })->get();
+
+        $weak_points = WeakPoint::whereHas('facultyevaluation', function ($query) use ($class_ids) {
+            $query->whereIn('class_id', $class_ids);
+        })->get();
+
+        $suggestions = Suggestion::whereHas('facultyevaluation', function ($query) use ($class_ids) {
+            $query->whereIn('class_id', $class_ids);
+        })->get();
+        
+
+        return [
+            'class' => $class,
+            'strong_points' => $strong_points,
+            'weak_points' => $weak_points,
+            'suggestions' => $suggestions,
+        ];
     }
 }

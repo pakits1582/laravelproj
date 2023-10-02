@@ -61,7 +61,7 @@ class FacultyEvaluationController extends Controller
     {
         $result = $this->facultyEvaluationService->evaluationResult($class);
 
-        dd($result);
+        //dd($result);
         return view('facultyevaluation.result.view', compact('result'));
     }
 
@@ -113,7 +113,9 @@ class FacultyEvaluationController extends Controller
 
     public function commentsummary(Classes $class)
     {
+        $result = $this->facultyEvaluationService->commentSummary($class);
 
+        return view('facultyevaluation.result.comment_summary', compact('result'));
     }
 
 }

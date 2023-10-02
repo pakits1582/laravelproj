@@ -359,8 +359,8 @@ class Helpers
             case 'class_scheduling':
                 return 'Class Scheduling';
                 break;
-            case 'Faculty Evaluation':
-                return 'Others';
+            case 'faculty_evaluation':
+                return 'Faculty Evaluation';
                 break;
             default:
                 return '';

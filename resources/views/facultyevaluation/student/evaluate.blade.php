@@ -22,7 +22,7 @@
                     <div class="col-md-2">
                         <label for="question"  class="m-0 font-weight-bold text-primary">Subject Description</label>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="font-weight-bold text-black">
                             {{ $evaluate_class['class_info']->class->curriculumsubject->subjectinfo->subject_name }}
                         </div>
@@ -30,7 +30,7 @@
                     <div class="col-md-2">
                         <label for="question"  class="m-0 font-weight-bold text-primary">Subject Code</label>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="font-weight-bold text-black">
                             ({{ $evaluate_class['class_info']->class->code }})
                             {{ $evaluate_class['class_info']->class->curriculumsubject->subjectinfo->subject_code }}
@@ -41,7 +41,7 @@
                     <div class="col-md-2">
                         <label for="question"  class="m-0 font-weight-bold text-primary">Subject Schedule</label>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="font-weight-bold text-black">
                             {{ $evaluate_class['class_info']->class->schedule->schedule }}
                         </div>
@@ -49,7 +49,7 @@
                     <div class="col-md-2">
                         <label for="question"  class="m-0 font-weight-bold text-primary">Subject Units</label>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="font-weight-bold text-black">
                             {{ $evaluate_class['class_info']->class->units }}
                         </div>
@@ -59,7 +59,7 @@
                     <div class="col-md-2">
                         <label for="question"  class="m-0 font-weight-bold text-primary">Faculty Name</label>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="font-weight-bold text-black">
                             @if ($evaluate_class['class_info']->class->instructor_id)
                             {{ 
@@ -73,7 +73,7 @@
                     <div class="col-md-2">
                         <label for="question"  class="m-0 font-weight-bold text-primary">Section</label>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="font-weight-bold text-black">
                             {{ $evaluate_class['class_info']->class->sectioninfo->section_code }}
                         </div>

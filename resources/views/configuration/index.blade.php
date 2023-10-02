@@ -443,7 +443,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">{{ Helpers::getConfigschedtype($type) }}</h6>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-sm">
                         <thead>
                           <tr>
                             <th scope="col">Level</th>

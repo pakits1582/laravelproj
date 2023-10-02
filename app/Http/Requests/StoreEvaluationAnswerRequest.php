@@ -40,10 +40,10 @@ class StoreEvaluationAnswerRequest extends FormRequest
             'choice' => ['required','array'],
             'choice.*' => 'required|in:1,2,3,4',
             'overallrate' => 'required|in:1,2,3,4',
-            'strongpoint' => 'nullable|string|min:2|max:255',
-            'weakpoint' => 'nullable|string|min:2|max:255',
-            'suggestion' => 'nullable|string|min:2|max:255',
-            'studentservices' => 'nullable|string|min:2|max:255',
+            'strongpoint' => 'nullable|string|min:2|max:500',
+            'weakpoint' => 'nullable|string|min:2|max:500',
+            'suggestion' => 'nullable|string|min:2|max:500',
+            'studentservices' => 'nullable|string|min:2|max:500',
         ];
     }
 }
