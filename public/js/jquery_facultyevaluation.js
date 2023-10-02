@@ -34,26 +34,27 @@ $(function(){
     function returnFacultyEvaluations()
     {
         var instructor_id = $("#instructor_id").val();
+        var field = $("#instructor_id").attr("data-field");
 
         $.ajax({
             url: "/facultyevaluations/filter",
             type: 'POST',
-            data: {'instructor_id':instructor_id},
+            data: {'instructor_id':instructor_id, 'field':field},
             success: function(data){
 
-                //console.log(data);
+                console.log(data);
 
-                $("#return_evaluations").html(data);
+                // $("#return_evaluations").html(data);
 
-                var dataTable = $('#scrollable_table_faculty_evaluations').DataTable({
-                    scrollY: 400,
-                    scrollX: true,
-                    scrollCollapse: true,
-                    paging: false,
-                    ordering: false,
-                    info: false,
-                    searching: false
-                });
+                // var dataTable = $('#scrollable_table_faculty_evaluations').DataTable({
+                //     scrollY: 400,
+                //     scrollX: true,
+                //     scrollCollapse: true,
+                //     paging: false,
+                //     ordering: false,
+                //     info: false,
+                //     searching: false
+                // });
             },
             error: function (data) {
                 console.log(data);

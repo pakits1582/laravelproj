@@ -155,6 +155,12 @@
                         @endif
                     </div>
                 </div>
+                <a href="{{ route('facultyevaluations.printcommentssummary', ['class' => $result['class']->id]) }}" target="_blank" class="btn btn-danger btn-icon-split actions mb-2">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-print"></i>
+                    </span>
+                    <span class="text">Print Comment Summary</span>
+                </a>
             </div>
         </div>
     </div>

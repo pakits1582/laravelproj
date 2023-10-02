@@ -50,7 +50,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="instructor_id" class="m-0 font-weight-bold text-primary">Faculty</label>
-                                <select name="instructor_id" class="form-control" id="instructor_id">
+                                <select name="instructor_id" class="form-control" id="instructor_id" data-field="evaluations">
                                     <option value="">- select faculty -</option>
                                     @if ($instructors)
                                         @foreach ($instructors as $instructor)

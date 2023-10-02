@@ -606,6 +606,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/facultyevaluations/results', [FacultyEvaluationController::class, 'results'])->name('facultyevaluations.results');
         Route::get('/facultyevaluations/{class}/commentsummary', [FacultyEvaluationController::class, 'commentsummary'])->name('facultyevaluations.commentsummary');
+        Route::get('/facultyevaluations/{class}/printcommentssummary', [FacultyEvaluationController::class, 'printcommentssummary'])->name('facultyevaluations.printcommentssummary');
         Route::get('/facultyevaluations/{class}/printresult', [FacultyEvaluationController::class, 'printresult'])->name('facultyevaluations.printresult');
         Route::get('/facultyevaluations/{class}/viewresult', [FacultyEvaluationController::class, 'viewresult'])->name('facultyevaluations.viewresult');
         Route::get('/facultyevaluations/{class}/resetevaluation', [FacultyEvaluationController::class, 'resetevaluation']);

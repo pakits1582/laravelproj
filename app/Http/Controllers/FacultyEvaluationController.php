@@ -41,11 +41,12 @@ class FacultyEvaluationController extends Controller
 
     public function filter(Request $request)
     {
+        return $request;
+        
         $classes = $this->facultyEvaluationService->classesForEvaluation(Auth::user(), session('current_period'), $request->instructor_id, NULL, true);
         $classeswithslots = $this->facultyEvaluationService->getClassesSlots($classes);
 
         return view('facultyevaluation.return_evaluations', compact('classeswithslots'));
-
     }
 
     public function results()
@@ -108,7 +109,10 @@ class FacultyEvaluationController extends Controller
 
     public function printresult(Classes $class)
     {
+        $result = $this->facultyEvaluationService->evaluationResult($class);
 
+        //dd($result);
+        return view('facultyevaluation.result.print_result', compact('result'));
     }
 
     public function commentsummary(Classes $class)
@@ -116,6 +120,13 @@ class FacultyEvaluationController extends Controller
         $result = $this->facultyEvaluationService->commentSummary($class);
 
         return view('facultyevaluation.result.comment_summary', compact('result'));
+    }
+
+    public function printcommentssummary(Classes $class)
+    {
+        $result = $this->facultyEvaluationService->commentSummary($class);
+
+        return view('facultyevaluation.result.print_comments', compact('result'));
     }
 
 }
