@@ -69,9 +69,18 @@ class EnrollmentService
     {
         $period_id = ($period_id == NULL) ? session('current_period') : $period_id;
         
-        $query = Enrollment::with(['period', 'student', 'program' => ['level', 'collegeinfo'], 'curriculum', 'section', 'assessment' => ['exam', 'breakdowns', 'details']])
-                    ->where('student_id', $student_id)
-                    ->where('period_id', $period_id);
+        $query = Enrollment::with([
+            'period',
+            'student', 
+            'program' => ['level', 'collegeinfo'], 
+            'curriculum', 
+            'section', 
+            'assessment' => ['exam', 'breakdowns', 'details'],
+            'grade.internalgrades',
+            'enrolled_classes'
+            ])
+            ->where('student_id', $student_id)
+            ->where('period_id', $period_id);
             if($acctok == 1)
             {
                 $query->where('acctok', 1);

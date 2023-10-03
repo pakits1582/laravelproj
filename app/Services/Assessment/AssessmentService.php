@@ -2,12 +2,13 @@
 
 namespace App\Services\Assessment;
 
+use Carbon\Carbon;
+use App\Models\Enrollment;
 use App\Models\AssessmentDetail;
 use Illuminate\Support\Facades\DB;
 use App\Models\AssessmentBreakdown;
-use App\Models\EnrolledClassSchedule;
-use App\Models\Enrollment;
 use Illuminate\Support\Facades\Auth;
+use App\Models\EnrolledClassSchedule;
 
 class AssessmentService
 {
@@ -102,6 +103,10 @@ class AssessmentService
 
     public function reenterInternalGrades($enrollment)
     {
+        $enrolled_classes = $enrollment->enrolled_classes;
+        $internalgrades = $enrollment->grade->internalgrades;
+
+
         $grade_id = $enrollment->grade->id;
 
         if($enrollment->enrolled_classes->isNotEmpty()) 
@@ -117,8 +122,8 @@ class AssessmentService
                     'completion_grade' => NULL,
                     'final' => 0,
                     'user_id' =>  $enrolled_class->user_id,
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
                 ];
             }
             $enrollment->grade->internalgrades()->delete();

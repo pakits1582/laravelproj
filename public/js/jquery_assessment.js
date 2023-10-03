@@ -106,41 +106,41 @@ $(function(){
                 dataType: 'json',
                 success: function(response){
                     console.log(response);
-                    if(response.data === false)
-                    {
-                        showError('Student is not enrolled!');
-                        clearForm();
-                    }else{
-                        if(response.data.acctok === 0)
-                        {
-                            showError('Student enrollment is not yet saved! Please save enrollment first!');
-                            clearForm();
-                        }else{
-                            // //DISPLAY ENROLLMENT
-                            $("#enrollment_id").val(response.data.id);
-                            $("#assessment_id").val(response.data.assessment.id);
-                            $("#program").val(response.data.program.name);
-                            $("#educational_level").val(response.data.program.level.code);
-                            $("#college").val(response.data.program.collegeinfo.code);
-                            $("#curriculum").val(response.data.curriculum.curriculum);
-                            $("#year_level").val(response.data.year_level);
-                            $("#section").val(response.data.section.code);
+                    // if(response.data === false)
+                    // {
+                    //     showError('Student is not enrolled!');
+                    //     clearForm();
+                    // }else{
+                    //     if(response.data.acctok === 0)
+                    //     {
+                    //         showError('Student enrollment is not yet saved! Please save enrollment first!');
+                    //         clearForm();
+                    //     }else{
+                    //         // //DISPLAY ENROLLMENT
+                    //         $("#enrollment_id").val(response.data.id);
+                    //         $("#assessment_id").val(response.data.assessment.id);
+                    //         $("#program").val(response.data.program.name);
+                    //         $("#educational_level").val(response.data.program.level.code);
+                    //         $("#college").val(response.data.program.collegeinfo.code);
+                    //         $("#curriculum").val(response.data.curriculum.curriculum);
+                    //         $("#year_level").val(response.data.year_level);
+                    //         $("#section").val(response.data.section.code);
 
-                            var formattedDate = $.format.date(response.data.created_at, "MM/dd/yyyy hh:mm:ss a");
-                            $("#enrollment_date").val(formattedDate);
+                    //         var formattedDate = $.format.date(response.data.created_at, "MM/dd/yyyy hh:mm:ss a");
+                    //         $("#enrollment_date").val(formattedDate);
 
-                            $("#new").prop("checked", (response.data.new === 1) ? true : false);
-                            $("#old").prop("checked", (response.data.old === 1) ? true : false);
-                            $("#returnee").prop("checked", (response.data.returnee === 1) ? true : false);
-                            $("#transferee").prop("checked", (response.data.transferee === 1) ? true : false);      
-                            $("#cross").prop("checked", (response.data.cross_enrollee === 1) ? true : false);
-                            $("#foreigner").prop("checked", (response.data.foreigner === 1) ? true : false);      
-                            $("#probationary").prop("checked", (response.data.probationary === 1) ? true : false); 
-                            $(".actions").prop("disabled", false);
-                            returnAssessmentPreview(response.data.assessment.id);
-                            returnScheduleTable(response.data.id);
-                        }
-                    }
+                    //         $("#new").prop("checked", (response.data.new === 1) ? true : false);
+                    //         $("#old").prop("checked", (response.data.old === 1) ? true : false);
+                    //         $("#returnee").prop("checked", (response.data.returnee === 1) ? true : false);
+                    //         $("#transferee").prop("checked", (response.data.transferee === 1) ? true : false);      
+                    //         $("#cross").prop("checked", (response.data.cross_enrollee === 1) ? true : false);
+                    //         $("#foreigner").prop("checked", (response.data.foreigner === 1) ? true : false);      
+                    //         $("#probationary").prop("checked", (response.data.probationary === 1) ? true : false); 
+                    //         $(".actions").prop("disabled", false);
+                    //         returnAssessmentPreview(response.data.assessment.id);
+                    //         returnScheduleTable(response.data.id);
+                    //     }
+                    // }
                 },
                 error: function (data) {
                     console.log(data);
