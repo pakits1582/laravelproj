@@ -26,7 +26,7 @@
                             <td>{{ $period->adddrop_start  }}</td>
                             <td>{{ $period->priority_lvl }}</td>
                             <td class="mid">
-                                <a href="{{ route('periods.edit', ['period' => $period->id ]) }}" class="btn btn-primary btn-icon-split">
+                                <a href="{{ route('periods.edit', ['period' => $period->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-edit"></i>
                                     </span>

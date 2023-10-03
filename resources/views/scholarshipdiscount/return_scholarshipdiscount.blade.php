@@ -43,7 +43,7 @@
                         <td>{{ $scholarshipdiscount->totalassessment }}</td>
                         <td>{{ $scholarshipdiscount->totalassessment_type }}</td>
                         <td class="mid">
-                            <a href="{{ route('scholarshipdiscounts.edit', ['scholarshipdiscount' => $scholarshipdiscount->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('scholarshipdiscounts.edit', ['scholarshipdiscount' => $scholarshipdiscount->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

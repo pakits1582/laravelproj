@@ -18,7 +18,7 @@
                         <td>{{ $department->name }}</td>
                         <td>{{ $department->headName }}</td>
                         <td class="mid">
-                            <a href="{{ route('departments.edit', ['department' => $department->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('departments.edit', ['department' => $department->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

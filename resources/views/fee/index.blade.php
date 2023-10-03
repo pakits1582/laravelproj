@@ -11,41 +11,45 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                {{-- <h6 class="m-0 font-weight-bold text-primary">departments Table</h6> --}}
-                <a href="{{ route('fees.create') }}" class="btn btn-primary btn-icon-split">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-plus-square"></i>
-                    </span>
-                    <span class="text">Add New Fee</span>
-                </a>
+                <div class="row align-items-center">
+                    <div class="col-md-7">
+                        <h1 class="h3 text-800 text-primary mb-0">List of Fees</h1>
+                    </div>
+                    <div class="col-md-5 right">
+                        <a href="{{ route('fees.create') }}" class="btn btn-primary btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-plus-square"></i>
+                            </span>
+                            <span class="text">Add New Fee</span>
+                        </a>
+                    </div>
+                </div>                
+            </div>
+            <div class="card-body">
                 <form method="POST" action="" id="filter_form" target="_blank" data-field="fees">
                     @csrf
-                    <div class="mt-3">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="keyword" class="m-0 font-weight-bold text-primary">Keyword</label>
-                                    <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
-                                </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="keyword" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="fee_type" class="m-0 font-weight-bold text-primary">Fee Type</label>
-                                    <select name="fee_type_id" class="form-control dropdownfilter" id="fee_type">
-                                        <option value="">- select type -</option>
-                                        @if ($fee_types)
-                                            @foreach ($fee_types as $fee_type)
-                                                <option  value="{{ $fee_type->id }}">{{ $fee_type->type }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="fee_type" class="m-0 font-weight-bold text-primary">Fee Type</label>
+                                <select name="fee_type_id" class="form-control dropdownfilter" id="fee_type">
+                                    <option value="">- select type -</option>
+                                    @if ($fee_types)
+                                        @foreach ($fee_types as $fee_type)
+                                            <option  value="{{ $fee_type->id }}">{{ $fee_type->type }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                     </div>
                 </form>
-            </div>
-            <div class="card-body">
                 @include('fee.return_fees')
             </div>
         </div>

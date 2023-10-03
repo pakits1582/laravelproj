@@ -76,6 +76,7 @@ class Classes extends Model
 
     public function getEnrolledAndMergedStudentCountAttribute()
     {
+        //enrolled_and_merged_student_count
         $enrolledCount = $this->enrolledstudents()->count();
         $mergedCount   = $this->mergedenrolledstudents()->count();
 
@@ -84,6 +85,7 @@ class Classes extends Model
 
     public function getEnrolledAndMergedStudentCountValidatedAttribute()
     {
+        //enrolled_and_merged_student_count_validated
         $enrolledCount = $this->enrolledstudentsvalidated()->count();
         $mergedCount   = $this->mergedenrolledstudentsvalidated()->count();
 

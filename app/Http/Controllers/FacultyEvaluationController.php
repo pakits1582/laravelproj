@@ -41,12 +41,18 @@ class FacultyEvaluationController extends Controller
 
     public function filter(Request $request)
     {
-        return $request;
-        
-        $classes = $this->facultyEvaluationService->classesForEvaluation(Auth::user(), session('current_period'), $request->instructor_id, NULL, true);
+        if($request->field == 'evaluations')
+        {
+            $classes = $this->facultyEvaluationService->classesForEvaluation(Auth::user(), session('current_period'), $request->instructor_id, NULL, true);
+            $blade = 'return_evaluations';
+        }else{
+            $classes = $this->facultyEvaluationService->classesForEvaluation(Auth::user(), session('current_period'), $request->instructor_id, null, true, FacultyEvaluation::CLASS_FOR_EVALUATION_TRUE, Auth::id());
+            $blade = 'result.return_results';
+        }
+
         $classeswithslots = $this->facultyEvaluationService->getClassesSlots($classes);
 
-        return view('facultyevaluation.return_evaluations', compact('classeswithslots'));
+        return view('facultyevaluation.'.$blade, compact('classeswithslots'));
     }
 
     public function results()

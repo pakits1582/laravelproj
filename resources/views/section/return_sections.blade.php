@@ -22,7 +22,7 @@
                         <td>{{ $section->year }}</td>
                         <td>{{ $section->minenrollee }}</td>
                         <td class="mid">
-                            <a href="{{ route('sections.edit', ['section' => $section->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('sections.edit', ['section' => $section->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

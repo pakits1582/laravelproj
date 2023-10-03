@@ -13,7 +13,7 @@
             <div class="card-header py-3">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <h1 class="h3 text-800 text-primary mb-0">Admission Documents</h1>
+                        <h1 class="h3 text-800 text-primary mb-0">Admission Documents Management</h1>
                     </div>
                     <div class="col-md-6 right">
                     </div>

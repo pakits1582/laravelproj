@@ -11,30 +11,33 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                {{-- <h6 class="m-0 font-weight-bold text-primary">instructor Table</h6> --}}
-                <div>
-                    <form method="POST" action="" id="filter_form" target="_blank" data-field="evaluations">
-                        @csrf
-                        <div class="mt-3">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
-                                        <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label for="program" class="m-0 font-weight-bold text-primary">Program</label>
-                                        @include('partials.programs.dropdown', ['fieldname' => 'program', 'fieldid' => 'program', 'fieldclass' => 'dropdownfilter'])
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-7">
+                        <h1 class="h3 text-800 text-primary mb-0">Evaluate Students</h1>
+                    </div>
+                    <div class="col-md-5 right">
+                        
+                    </div>
+                </div>  
             </div>
             <div class="card-body">
+                <form method="POST" action="" id="filter_form" target="_blank" data-field="evaluations">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="program" class="m-0 font-weight-bold text-primary">Program</label>
+                                @include('partials.programs.dropdown', ['fieldname' => 'program', 'fieldid' => 'program', 'fieldclass' => 'dropdownfilter'])
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 @include('evaluation.return_students')
             </div>
         </div>

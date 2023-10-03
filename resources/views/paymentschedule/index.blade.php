@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">{{ session('periodname') }}</h1>
+                <h1 class="h3 text-800 text-primary mb-0">Payment Schedules Management {{ session('periodname') }}</h1>
             </div>
             <div class="card-body">
                 <div class="row">

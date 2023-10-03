@@ -11,36 +11,41 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary">All programs under Deanship/Headship</h1>
+                <div class="row align-items-center">
+                    <div class="col-md-7">
+                        <h1 class="h3 text-800 text-primary">All programs under Deanship/Headship</h1>
+                    </div>
+                    <div class="col-md-5 right">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
                 @if (Auth::user()->utype == 0)
                     <form method="POST" action="" id="filter_form" target="_blank" data-field="curriculum">
                         @csrf
-                        <div class="mt-3">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
-                                        <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
-                                    </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="department" class="m-0 font-weight-bold text-primary">Keyword</label>
+                                    <input type="text" name="keyword" placeholder="Type keyword to search..." class="form-control" id="keyword">
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
-                                        @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
-                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="educational_level" class="m-0 font-weight-bold text-primary">Level</label>
+                                    @include('partials.educlevels.dropdown', ['fieldname' => 'educational_level', 'fieldid' => 'educational_level', 'fieldclass' => 'dropdownfilter'])
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="college" class="m-0 font-weight-bold text-primary">College</label>
-                                        @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'dropdownfilter'])
-                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="college" class="m-0 font-weight-bold text-primary">College</label>
+                                    @include('partials.colleges.dropdown', ['fieldname' => 'college', 'fieldid' => 'college', 'fieldclass' => 'dropdownfilter'])
                                 </div>
                             </div>
                         </div>
                     </form>
                 @endif
-            </div>
-            <div class="card-body">
                 @include('curriculum.return_programs')
             </div>
         </div>

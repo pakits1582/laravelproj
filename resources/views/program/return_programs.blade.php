@@ -26,7 +26,7 @@
                         <td>{{ $program->headName }}</td>
                         <td>{{ ($program->active === 1) ? 'YES' : 'NO' }}</td>
                         <td class="mid">
-                            <a href="{{ route('programs.edit', ['program' => $program->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('programs.edit', ['program' => $program->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

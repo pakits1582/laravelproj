@@ -20,7 +20,7 @@
                         <td>{{ $fee->feetype->type }}</td>
                         <td>{{ $fee->default_value }}</td>
                         <td class="mid">
-                            <a href="{{ route('fees.edit', ['fee' => $fee->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('fees.edit', ['fee' => $fee->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

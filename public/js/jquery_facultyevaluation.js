@@ -21,7 +21,7 @@ $(function(){
         searching: false
     });
 
-	var dataTable = $('#scrollable_table_faculty_evaluations').DataTable({
+	var dataTable = $('.scroll_table').DataTable({
         scrollY: 400,
         scrollX: true,
         scrollCollapse: true,
@@ -42,19 +42,19 @@ $(function(){
             data: {'instructor_id':instructor_id, 'field':field},
             success: function(data){
 
-                console.log(data);
+                //console.log(data);
 
-                // $("#return_evaluations").html(data);
+                $("#return_"+field).html(data);
 
-                // var dataTable = $('#scrollable_table_faculty_evaluations').DataTable({
-                //     scrollY: 400,
-                //     scrollX: true,
-                //     scrollCollapse: true,
-                //     paging: false,
-                //     ordering: false,
-                //     info: false,
-                //     searching: false
-                // });
+                var dataTable = $('.scroll_table').DataTable({
+                    scrollY: 400,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    ordering: false,
+                    info: false,
+                    searching: false
+                });
             },
             error: function (data) {
                 console.log(data);

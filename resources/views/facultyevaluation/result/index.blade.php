@@ -36,7 +36,9 @@
                                     <option value="">- select faculty -</option>
                                     @if ($instructors)
                                         @foreach ($instructors as $instructor)
-                                            <option value="{{ $instructor['id'] }}">{{ $instructor['full_name'] }}</option>
+                                            @if ($instructor['id'] !== null)
+                                                <option value="{{ $instructor['id'] }}">{{ $instructor['full_name'] }}</option>
+                                            @endif
                                         @endforeach
                                     @endif
                                 </select>

@@ -23,7 +23,7 @@
                         <td>{{ $student->curriculum->curriculum  }}</td>
                         <td class="mid">
                             {{-- <a href="#" class="btn btn-primary btn-icon-split"> --}}
-                            <a href="{{ route('evaluations.show', ['evaluation' => $student->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('evaluations.show', ['evaluation' => $student->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

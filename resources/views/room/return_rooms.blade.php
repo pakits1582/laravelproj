@@ -20,7 +20,7 @@
                         <td>{{ $room->capacity }}</td>
                         <td>{{ ($room->excludechecking === 1) ? 'NO' : 'YES' }}</td>
                         <td class="mid">
-                            <a href="{{ route('rooms.edit', ['room' => $room->id ]) }}" class="btn btn-primary btn-icon-split">
+                            <a href="{{ route('rooms.edit', ['room' => $room->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>
