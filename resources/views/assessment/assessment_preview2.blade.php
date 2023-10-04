@@ -3,15 +3,19 @@ asdasd<form method="POST" action="" id="assessment_form">
         <!-- Page Heading -->
         @php
         echo '<pre>';
-            print_r($enrollment);
+            print_r($enrollment['enrolled_classes']);
 
             $result = array_reduce($enrollment['enrolled_classes'], function ($carry, $enrolled_class) {
-                $subjectinfo = $enrolled_class['class']['curriculumsubject']['subjectinfo'];
-                $tfunits = $enrolled_class['class']['tfunits'];
+                // Check if the expected keys exist in the array
+                if (isset($enrolled_class['class']['curriculumsubject']['subjectinfo']['professional']) && isset($enrolled_class['class']['tfunits'])) 
+                {
+                    $subjectinfo = $enrolled_class['class']['curriculumsubject']['subjectinfo'];
+                    $tfunits = $enrolled_class['class']['tfunits'];
 
-                $key = $subjectinfo['professional'] == 1 ? 'professional' : 'academic';
-                
-                $carry[$key][] = $tfunits;
+                    $key = $subjectinfo['professional'] == 1 ? 'professional' : 'academic';
+
+                    $carry[$key][] = $tfunits;
+                }
 
                 return $carry;
             }, ['professional' => [], 'academic' => []]);

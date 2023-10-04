@@ -46,14 +46,11 @@ $(function(){
         $(".actions").prop("disabled", true);
     }
 
-    function returnAssessmentPreview(enrollment)
+    function returnAssessmentPreview(assessment_id)
     {
         $.ajax({
-            // url: "/assessments/"+assessment_id,
-            // type: 'GET',
-            url: "/assessments/preview",
-            type: 'POST',
-            data: enrollment,
+            url: "/assessments/"+assessment_id,
+            type: 'GET',
             beforeSend: function() {
 				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
 					show: 'fade',
@@ -142,7 +139,7 @@ $(function(){
                             $("#probationary").prop("checked", (response.data.probationary === 1) ? true : false); 
                             $(".actions").prop("disabled", false);
 
-                            returnAssessmentPreview(response);
+                            returnAssessmentPreview(response.data.assessment.id);
                             returnScheduleTable(response.data.id);
                         }
                     }

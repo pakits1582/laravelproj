@@ -68,7 +68,7 @@ class Enrollment extends Model
 
     public function enrolled_classes()
     {
-        return $this->hasMany(EnrolledClass::class, 'enrollment_id', 'id');
+        return $this->hasMany(EnrolledClass::class);
     }
 
     public function enrolled_class_schedules()

@@ -76,8 +76,12 @@ class AssessmentController extends Controller
 
     public function preview(Request $request)
     {
+        return $request;
+        
         $configuration = Configuration::take(1)->first();
         $enrollment = $request['data'];
+
+        
 
         $setup_fees        = (new FeeService())->returnSetupFees($enrollment['period_id'], $enrollment['program']['educational_level_id']);
         $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', session('current_period'))->where('educational_level_id', $enrollment['program']['educational_level_id'])->get();
