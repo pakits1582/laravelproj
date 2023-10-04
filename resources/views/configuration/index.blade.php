@@ -26,10 +26,10 @@
                             <div id="nav-tab-card" class="tab-pane fade show active">
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="name"  class="m-0 font-weight-bold text-primary py-2">Logo</label>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-9">
                                             <div class="uploadfile signature card border-left-primary shadow" id="school_logo" style="background-image:url({{ (isset($configuration->logo)) ? asset('images/'.$configuration->logo) : '' }})">
                                                 &nbsp;
                                             </div>
@@ -42,10 +42,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="name"  class="m-0 font-weight-bold text-primary py-2">Name</label>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-9">
                                             <input type="text" name="name" placeholder="" class="form-control " value="{{ (old('name')) ? old('name') : ($configuration->name  ?? '') }}">
                                         </div>
                                     </div>
@@ -55,10 +55,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="address"  class="m-0 font-weight-bold text-primary py-2">Address</label>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-9">
                                             <input type="text" name="address" placeholder="" class="form-control " value="{{ (old('address')) ? old('address') : ($configuration->address  ?? '') }}">
                                         </div>
                                     </div>
@@ -68,10 +68,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="contactno"  class="m-0 font-weight-bold text-primary py-2">Contact #</label>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-9">
                                             <input type="text" name="contactno" placeholder="" class="form-control " value="{{ (old('name')) ? old('name') : ($configuration->contactno  ?? '') }}">
                                         </div>
                                     </div>
@@ -81,10 +81,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="accronym"  class="m-0 font-weight-bold text-primary py-2">Accronym</label>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-9">
                                             <input type="text" name="accronym" placeholder="" class="form-control " value="{{ (old('accronym')) ? old('accronym') : ($configuration->accronym  ?? '') }}">
                                         </div>
                                     </div>
@@ -94,10 +94,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-2">
-                                            <label for="code"  class="m-0 font-weight-bold text-primary py-2">Period</label>
+                                        <div class="col-md-3">
+                                            <label for="code"  class="m-0 font-weight-bold text-primary py-2">Current Period</label>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-9">
                                             <select name="current_period" class="form-control">
                                                 <option value="">- select period -</option>
                                                 @if ($periods)

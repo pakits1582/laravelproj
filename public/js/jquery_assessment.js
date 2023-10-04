@@ -46,11 +46,14 @@ $(function(){
         $(".actions").prop("disabled", true);
     }
 
-    function returnAssessmentPreview(assessment_id)
+    function returnAssessmentPreview(enrollment)
     {
         $.ajax({
-            url: "/assessments/"+assessment_id,
-            type: 'GET',
+            // url: "/assessments/"+assessment_id,
+            // type: 'GET',
+            url: "/assessments/preview",
+            type: 'POST',
+            data: enrollment,
             beforeSend: function() {
 				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
 					show: 'fade',
@@ -63,10 +66,11 @@ $(function(){
 				$(".ui-dialog-titlebar").hide();
 			},
             success: function(response){
-                $("#confirmation").dialog('close');
                 console.log(response);
+
+                $("#confirmation").dialog('close');
                 $("#assessment_preview").html(response);
-                // $("#save_assessment").focus();
+                $("#save_assessment").focus();
             },
             error: function (data) {
                 $("#confirmation").dialog('close');
@@ -105,42 +109,43 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
-                    // if(response.data === false)
-                    // {
-                    //     showError('Student is not enrolled!');
-                    //     clearForm();
-                    // }else{
-                    //     if(response.data.acctok === 0)
-                    //     {
-                    //         showError('Student enrollment is not yet saved! Please save enrollment first!');
-                    //         clearForm();
-                    //     }else{
-                    //         // //DISPLAY ENROLLMENT
-                    //         $("#enrollment_id").val(response.data.id);
-                    //         $("#assessment_id").val(response.data.assessment.id);
-                    //         $("#program").val(response.data.program.name);
-                    //         $("#educational_level").val(response.data.program.level.code);
-                    //         $("#college").val(response.data.program.collegeinfo.code);
-                    //         $("#curriculum").val(response.data.curriculum.curriculum);
-                    //         $("#year_level").val(response.data.year_level);
-                    //         $("#section").val(response.data.section.code);
+                    //console.log(response);
+                    if(response.data === false)
+                    {
+                        showError('Student is not enrolled!');
+                        clearForm();
+                    }else{
+                        if(response.data.acctok === 0)
+                        {
+                            showError('Student enrollment is not yet saved! Please save enrollment first!');
+                            clearForm();
+                        }else{
+                            // //DISPLAY ENROLLMENT
+                            $("#enrollment_id").val(response.data.id);
+                            $("#assessment_id").val(response.data.assessment.id);
+                            $("#program").val(response.data.program.name);
+                            $("#educational_level").val(response.data.program.level.code);
+                            $("#college").val(response.data.program.collegeinfo.code);
+                            $("#curriculum").val(response.data.curriculum.curriculum);
+                            $("#year_level").val(response.data.year_level);
+                            $("#section").val(response.data.section.code);
 
-                    //         var formattedDate = $.format.date(response.data.created_at, "MM/dd/yyyy hh:mm:ss a");
-                    //         $("#enrollment_date").val(formattedDate);
+                            var formattedDate = $.format.date(response.data.created_at, "MM/dd/yyyy hh:mm:ss a");
+                            $("#enrollment_date").val(formattedDate);
 
-                    //         $("#new").prop("checked", (response.data.new === 1) ? true : false);
-                    //         $("#old").prop("checked", (response.data.old === 1) ? true : false);
-                    //         $("#returnee").prop("checked", (response.data.returnee === 1) ? true : false);
-                    //         $("#transferee").prop("checked", (response.data.transferee === 1) ? true : false);      
-                    //         $("#cross").prop("checked", (response.data.cross_enrollee === 1) ? true : false);
-                    //         $("#foreigner").prop("checked", (response.data.foreigner === 1) ? true : false);      
-                    //         $("#probationary").prop("checked", (response.data.probationary === 1) ? true : false); 
-                    //         $(".actions").prop("disabled", false);
-                    //         returnAssessmentPreview(response.data.assessment.id);
-                    //         returnScheduleTable(response.data.id);
-                    //     }
-                    // }
+                            $("#new").prop("checked", (response.data.new === 1) ? true : false);
+                            $("#old").prop("checked", (response.data.old === 1) ? true : false);
+                            $("#returnee").prop("checked", (response.data.returnee === 1) ? true : false);
+                            $("#transferee").prop("checked", (response.data.transferee === 1) ? true : false);      
+                            $("#cross").prop("checked", (response.data.cross_enrollee === 1) ? true : false);
+                            $("#foreigner").prop("checked", (response.data.foreigner === 1) ? true : false);      
+                            $("#probationary").prop("checked", (response.data.probationary === 1) ? true : false); 
+                            $(".actions").prop("disabled", false);
+
+                            returnAssessmentPreview(response);
+                            returnScheduleTable(response.data.id);
+                        }
+                    }
                 },
                 error: function (data) {
                     console.log(data);
@@ -178,6 +183,8 @@ $(function(){
 				$(".ui-dialog-titlebar").hide();
 			},
             success: function(response){
+
+                //console.log(response);
                 $("#confirmation").dialog('close');
                 $("#save_assessment").prop("disabled", false);
 

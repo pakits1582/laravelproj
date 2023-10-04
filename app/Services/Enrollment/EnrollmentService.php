@@ -77,7 +77,7 @@ class EnrollmentService
             'section', 
             'assessment' => ['exam', 'breakdowns', 'details'],
             'grade.internalgrades',
-            'enrolled_classes'
+            'enrolled_classes.class.curriculumsubject.subjectinfo'
             ])
             ->where('student_id', $student_id)
             ->where('period_id', $period_id);

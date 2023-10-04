@@ -309,11 +309,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:assessments']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
+            
         Route::get('/assessments/unpaid', [UnpaidAssessmentController::class, 'index']);
         Route::post('/assessments/filterunpaidassessments', [UnpaidAssessmentController::class, 'filterunpaidassessments']);
         Route::delete('/assessments/deleteunpaidassessments', [UnpaidAssessmentController::class, 'deleteunpaidassessments']);
 
-
+        Route::post('/assessments/preview', [AssessmentController::class, 'preview']);
         Route::get('/assessments/printassessment/{assessment}', [AssessmentController::class, 'printassessment']);
         Route::post('/assessments/scheduletable', [AssessmentController::class, 'scheduletable']);
 

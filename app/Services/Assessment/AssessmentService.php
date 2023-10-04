@@ -7,6 +7,7 @@ use App\Models\Enrollment;
 use App\Models\AssessmentDetail;
 use Illuminate\Support\Facades\DB;
 use App\Models\AssessmentBreakdown;
+use App\Models\Configuration;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EnrolledClassSchedule;
 
@@ -15,21 +16,29 @@ class AssessmentService
 
     public function updateAssessment($request, $assessment)
     {
+        DB::beginTransaction();
+
         $validated = $request->validate([
             'enrollment_id' => 'required',
             'assessment_id' => 'required',
         ]);    
 
-        DB::beginTransaction();
+        $assessment->load(
+            'enrollment',
+            'enrollment.enrolled_classes',
+            'enrollment.enrolled_classes.class',
+            'enrollment.studentledger_assessment',
+            'enrollment.grade.internalgrades',
+            'enrollment.assessment.details',
+        );
+
+        $enrollment = $assessment->enrollment;
+        $enrollment->update(['assessed' => 1, 'enrolled_units' => $request->enrolled_units]);
 
         $assessment->assessed = 1;
         $assessment->amount = $request->totalfees;
         $assessment->user_id = Auth::id();
         $assessment->save();
-
-        $assessment->enrollment->assessed = 1;
-        $assessment->enrollment->enrolled_units = $request->enrolled_units;
-        $assessment->enrollment->save();
 
         $assessment->breakdowns()->delete();
         $assessment->details()->delete();
@@ -46,8 +55,8 @@ class AssessmentService
                     'assessment_id' => $assessment->id,
                     'fee_id' => $fee_info[0],
                     'amount' => $fee_info[1],
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'created_at' => carbon::now(),
+                    'updated_at' => carbon::now()
                 ];
             }
 
@@ -65,8 +74,8 @@ class AssessmentService
                     'assessment_id' => $assessment->id,
                     'fee_type_id' => $assessbreakdown_info[0],
                     'amount' => $assessbreakdown_info[1],
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'created_at' => carbon::now(),
+                    'updated_at' => carbon::now()
                 ];
             }
 
@@ -86,9 +95,6 @@ class AssessmentService
             $assessment->exam()->create($exams);
         }
 
-        //IF ENROLLMENT IS VALIDATED
-        $enrollment = Enrollment::with(['enrolled_classes' => ['class'], 'studentledger_assessment', 'grade', 'assessment' => ['details']])->findOrFail($assessment->enrollment_id);
-
         if($enrollment && $enrollment->validated == 1)
         {
             $this->reenterInternalGrades($enrollment);
@@ -103,31 +109,58 @@ class AssessmentService
 
     public function reenterInternalGrades($enrollment)
     {
+        $configuration = Configuration::select('current_period')->first();
+        $current_period = $configuration->current_period;
+        
         $enrolled_classes = $enrollment->enrolled_classes;
         $internalgrades = $enrollment->grade->internalgrades;
 
-
-        $grade_id = $enrollment->grade->id;
-
-        if($enrollment->enrolled_classes->isNotEmpty()) 
+        if($enrolled_classes->isNotEmpty()) 
         {
             $internal_grades = [];
-            foreach ($enrollment->enrolled_classes as $key => $enrolled_class) 
+
+            if($current_period != session('current_period'))
             {
-                $internal_grades[] = [
-                    'grade_id' => $grade_id,
-                    'class_id' => $enrolled_class->class->id,
-                    'units' => $enrolled_class->class->units,
-                    'grading_system_id' => NULL,
-                    'completion_grade' => NULL,
-                    'final' => 0,
-                    'user_id' =>  $enrolled_class->user_id,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ];
+                foreach ($enrolled_classes as $key => $enrolled_class) 
+                {
+                    $class_id_exists = $internalgrades->contains('class_id', $enrolled_class->class_id);
+
+                    if(!$class_id_exists)
+                    {
+                        $internal_grades[] = [
+                            'grade_id' => $enrollment->grade->id,
+                            'class_id' => $enrolled_class->class->id,
+                            'units' => $enrolled_class->class->units,
+                            'grading_system_id' => NULL,
+                            'completion_grade' => NULL,
+                            'final' => 0,
+                            'user_id' =>  $enrolled_class->user_id,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
+                        ];
+                    }
+                }
+
+                $enrollment->grade->internalgrades()->insert($internal_grades);
+            }else{
+                foreach ($enrolled_classes as $key => $enrolled_class) 
+                {
+                    $internal_grades[] = [
+                        'grade_id' => $enrollment->grade->id,
+                        'class_id' => $enrolled_class->class->id,
+                        'units' => $enrolled_class->class->units,
+                        'grading_system_id' => NULL,
+                        'completion_grade' => NULL,
+                        'final' => 0,
+                        'user_id' =>  $enrolled_class->user_id,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now()
+                    ];
+                }
+
+                $enrollment->grade->internalgrades()->where('final', 0)->delete();
+                $enrollment->grade->internalgrades()->insert($internal_grades);
             }
-            $enrollment->grade->internalgrades()->delete();
-            $enrollment->grade->internalgrades()->insert($internal_grades);
         }
     }
 
@@ -149,8 +182,8 @@ class AssessmentService
                     'studentledger_id' => $studentledger_id,
                     'fee_id' => $assessment_detail->fee_id,
                     'amount' =>  $assessment_detail->amount,
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'created_at' => carbon::now(),
+                    'updated_at' => carbon::now()
                 ];
             }
             $enrollment->studentledger_assessment->details()->delete();
