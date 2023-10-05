@@ -115,7 +115,6 @@ $(function(){
         $.ajax({url: "/classes/"+class_id, success: function(response)
             {
                 //console.log(response);
-
                 var number_of_enrolled = response.data.enrolledstudents.length
 
                 if(number_of_enrolled > 0)

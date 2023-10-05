@@ -94,7 +94,7 @@ $(function(){
             //dataType: 'json',
             data: ({ 'enrollment_id':enrollment_id }),
             success: function(data){
-                console.log(data);
+                //console.log(data);
                 $("#return_enrolled_subjects").html(data);
             },
             error: function (data) {
@@ -115,7 +115,7 @@ $(function(){
 			type: 'POST',
 			data: ({ 'enrollment_id' : enrollment_id}),
 			success: function(data){
-				console.log(data);
+				//console.log(data);
 				$("#schedule_table").html(data);
 			},
 			error: function (data) {
@@ -132,7 +132,7 @@ $(function(){
             data: ({ 'program_id' : program_id, 'year_level' : year_level }),
             dataType: 'json',
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 var sections = '<option value="">- select section -</option>';
                 $.each(response.data, function(k, v){
                     sections += '<option value="'+v.id+'"';
@@ -165,7 +165,7 @@ $(function(){
             data: ({ 'curriculum_id' : curriculum_id, 'year_level' : year_level, 'isprobi' : isprobi }),
             dataType: 'json',
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 $("#units_allowed").val(response.data);
             },
             error: function (data) {
@@ -222,7 +222,7 @@ $(function(){
             dataType: 'json',
             data: ({ 'student_id' : student_id, 'studentinfo' : studentinfo }),
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 if(response.data.success == false)
                 {
                     showError(response.data.message);
@@ -263,7 +263,7 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
+                    //console.log(response);
                     if(response.data.success == false)
                     {
                         showError(response.data.message);
@@ -297,7 +297,7 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
+                    //console.log(response);
 
                     $("#educational_level").val(response.program.level.code);
                     $("#college").val(response.program.collegeinfo.code);
@@ -389,7 +389,7 @@ $(function(){
 
         if(section){
             $.ajax({url: "/enrolments/searchandaddclasses",success: function(data){
-                    console.log(data);
+                    //console.log(data);
                     $('#ui_content').html(data);
                     $("#modalll").modal('show');
                 }
@@ -560,7 +560,7 @@ $(function(){
 					},
 				success: function(response){
 					$("#confirmation").dialog('close');
-                    console.log(response);
+                    //console.log(response);
                     if(response.data.success == true)
                     {
                         showSuccess(response.data.message);
@@ -670,7 +670,7 @@ $(function(){
 			},
             success: function(response){
                 $("#confirmation").dialog('close');
-                console.log(response);
+                //console.log(response);
                 $.ajax({
                     url: "/assessments/"+response,
                     type: 'GET',
@@ -702,48 +702,6 @@ $(function(){
         e.preventDefault();
     });
 
-    function displayAssessmentPreview(assessment_id)
-    {
-        $.ajax({
-            url: "/assessments/"+assessment_id,
-            type: 'GET',
-            beforeSend: function() {
-				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-					show: 'fade',
-					resizable: false,	
-					width: 350,
-					height: 'auto',
-					modal: true,
-					buttons: false
-				});
-				$(".ui-dialog-titlebar").hide();
-			},
-            success: function(response){
-                //console.log(response);
-
-                $("#confirmation").dialog('close');
-                var header = '<div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
-                    header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
-                    header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
-                    header += '</div><div class="modal-body">';
-                
-                var footer = '</div></div></div></div>';
-                $('#ui_content').html(header+response+footer);
-                $("#modalll").modal('show');
-                $("#save_assessment").focus();
-            },
-            error: function (data) {
-                $("#confirmation").dialog('close');
-                console.log(data);
-                var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) == false) {
-                    showError('Something went wrong! Can not perform requested action, please refresh page!');
-                    clearForm()
-                }
-            }
-        });
-    }
-
     $(document).on("submit","#assessment_form", function(e){
         var enrolled_units = $("#enrolledunits").text();
         var assessment_id = $("#assessment_id").val();
@@ -768,7 +726,7 @@ $(function(){
 				$(".ui-dialog-titlebar").hide();
 			},
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 $("#confirmation").dialog('close');
                 $("#save_assessment").prop("disabled", false);
                 $('#modalll').modal('hide');

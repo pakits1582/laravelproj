@@ -81,50 +81,22 @@ class AdddropController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEnrollmentRequest $request)
+    public function update(UpdateEnrollmentRequest $request, Enrollment $adddrop)
     {
-        $enrollment = Enrollment::with(['assessment', 'enrolled_class_schedules', 'enrolled_classes' => ['class.schedule']])->findOrFail($request->enrollment_id);
+        $enrollment =  $adddrop->load([
+            'assessment', 
+            'student'        
+        ]);
 
         DB::beginTransaction();
 
-        $enrollment->student()->update([
+        $enrollment->student->update([
             'program_id' => $request->program_id,
             'year_level' => $request->year_level,
             'curriculum_id' => $request->curriculum_id,
         ]);
 
         $enrollment->update($request->validated());
-
-        if ($enrollment->enrolled_classes->count() > 0) 
-        {
-            $enroll_class_schedules = [];
-
-            foreach ($enrollment->enrolled_classes as $key => $enrolled_class) 
-            {
-                if(!is_null($enrolled_class->class->schedule_id))
-                {
-                    $class_schedules = (new ClassesService())->processSchedule($enrolled_class->class->schedule->schedule);
-
-                    foreach ($class_schedules as $key => $class_schedule) 
-                    {
-                        foreach ($class_schedule['days'] as $key => $day) {
-                            $enroll_class_schedules[] = [
-                                'enrollment_id' => $request->enrollment_id,
-                                'class_id' => $enrolled_class->class_id,
-                                'from_time' => $class_schedule['timefrom'],
-                                'to_time' => $class_schedule['timeto'],
-                                'day' => $day,
-                                'room' => $class_schedule['room'],
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ];
-                        }
-                    }
-                }
-            }
-            $enrollment->enrolled_class_schedules()->delete();
-            $enrollment->enrolled_class_schedules()->insert($enroll_class_schedules);
-        }
 
         DB::commit();
 

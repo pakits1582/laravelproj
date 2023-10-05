@@ -190,7 +190,11 @@ class ClassesService
             }
         }
 
-        return true;        
+        return [
+            'success' => true,
+            'message' => 'Code generated successfully!',
+            'alert' => 'alert-success',
+        ];
     }
 
     public function processSchedule($schedule)
@@ -402,14 +406,14 @@ class ClassesService
                    
                     foreach ($class_schedule['days'] as $key => $day) {
                         $classes_schedules[] =  [
-                                        'class_id'      => $class->id,
+                                        'class_id'    => $class->id,
                                         'from_time'   => $class_schedule['timefrom'],
                                         'to_time'     => $class_schedule['timeto'],
                                         'day'         => $day,
                                         'room_id'     => ($room_info) ? $room_info->id : '',
                                         'schedule_id' => $schedule_info->id,
-                                        'created_at'  => now(),
-                                        'updated_at'  => now()
+                                        'created_at'  => Carbon::now(),
+                                        'updated_at'  => Carbon::now()
                                     ];
                     }//end of days
                 }
@@ -429,8 +433,8 @@ class ClassesService
                                 'to_time'       => $sched['to_time'],
                                 'day'           => $sched['day'],
                                 'room'          => $rooms->firstWhere('id', $sched['room_id'])->code,
-                                'created_at'    => now(),
-                                'updated_at'    => now()
+                                'created_at'    => Carbon::now(),
+                                'updated_at'    => Carbon::now()
                             ];
                         }
                     }
@@ -592,8 +596,8 @@ class ClassesService
             'sectioninfo',
             'instructor', 
             'schedule',
-            'enrolledstudents.enrollment',
-            'curriculumsubject' => fn($query) => $query->with('subjectinfo')
+            'enrolledstudents',
+            'curriculumsubject.subjectinfo'
         ])->where('period_id', session('current_period'));
 
         $query->where(function($query) use($searchcodes){
@@ -607,8 +611,6 @@ class ClassesService
             }
         });
 
-
-        //return $query->toSql();
         return $query->get()->sortBy('curriculumsubject.subjectinfo.code');
     }
 

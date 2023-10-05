@@ -76,8 +76,6 @@ class EnrollmentService
             'curriculum', 
             'section', 
             'assessment' => ['exam', 'breakdowns', 'details'],
-            'grade.internalgrades',
-            'enrolled_classes.class.curriculumsubject.subjectinfo'
             ])
             ->where('student_id', $student_id)
             ->where('period_id', $period_id);
@@ -546,8 +544,8 @@ class EnrollmentService
                 'enrollment_id' => $request->enrollment_id,
                 'class_id' => $class_subject['id'],
                 'user_id' => Auth::id(),
-                'created_at' => now(),
-                'updated_at' => now()
+                'created_at' => carbon::now(),
+                'updated_at' => carbon::now()
             ];
             
             if(!is_null($class_subject['schedule']))
@@ -564,8 +562,8 @@ class EnrollmentService
                             'to_time' => $class_schedule['timeto'],
                             'day' => $day,
                             'room' => $class_schedule['room'],
-                            'created_at' => now(),
-                            'updated_at' => now()
+                            'created_at' => carbon::now(),
+                            'updated_at' => carbon::now()
                         ];
                     }
                 }
@@ -638,9 +636,9 @@ class EnrollmentService
         $query->where(function($query) use($searchcodes){
             foreach($searchcodes as $key => $code){
                 $query->orwhere(function($query) use($code){
-                    $query->orWhere('code', 'LIKE', '%'.$code.'%');
+                    $query->orWhere('code', 'LIKE', $code.'%');
                     $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
-                        $query->where('subjects.code', 'LIKE', '%'.$code.'%');
+                        $query->where('subjects.code', 'LIKE', $code.'%');
                     });
                 });
             }
@@ -699,10 +697,9 @@ class EnrollmentService
 
     public function addSelectedClasses($request)
     {
-        $class_subjects = Classes::with(['schedule'])->whereIn("id", $request->class_ids)->get();
-
         DB::beginTransaction();
 
+        $class_subjects = Classes::with(['schedule'])->whereIn("id", $request->class_ids)->get();
         $enrollment = Enrollment::findOrFail($request->enrollment_id);
 
         $enroll_classes = [];
@@ -714,8 +711,8 @@ class EnrollmentService
                 'enrollment_id' => $request->enrollment_id,
                 'class_id' => $class_subject['id'],
                 'user_id' => Auth::id(),
-                'created_at' => now(),
-                'updated_at' => now()
+                'created_at' => carbon::now(),
+                'updated_at' => carbon::now()
             ];
             
             if(!is_null($class_subject['schedule']['schedule']))
@@ -732,8 +729,8 @@ class EnrollmentService
                             'to_time' => $class_schedule['timeto'],
                             'day' => $day,
                             'room' => $class_schedule['room'],
-                            'created_at' => now(),
-                            'updated_at' => now()
+                            'created_at' => carbon::now(),
+                            'updated_at' => carbon::now()
                         ];
                     }
                 }
@@ -774,7 +771,7 @@ class EnrollmentService
     {
         DB::beginTransaction();
 
-        $enrollment->student()->update([
+        $enrollment->student->update([
             'program_id' => $request->program_id,
             'year_level' => $request->year_level,
             'curriculum_id' => $request->curriculum_id,

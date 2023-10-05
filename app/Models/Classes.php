@@ -53,25 +53,9 @@ class Classes extends Model
         return $this->hasMany(EnrolledClass::class, 'class_id', 'id');
     }
 
-    public function enrolledstudentsvalidated()
-    {
-        return $this->hasMany(EnrolledClass::class, 'class_id', 'id')
-            ->whereHas('enrollment', function ($query) {
-                $query->where('validated', 1);
-            });
-    }
-
     public function mergedenrolledstudents()
     {
         return $this->hasManyThrough(EnrolledClass::class, Classes::class,'merge', 'class_id');
-    }
-
-    public function mergedenrolledstudentsvalidated()
-    {
-        return $this->hasManyThrough(EnrolledClass::class, Classes::class, 'merge', 'class_id')
-            ->whereHas('enrollment', function ($query) {
-                $query->where('validated', 1);
-            });
     }
 
     public function getEnrolledAndMergedStudentCountAttribute()
@@ -81,6 +65,22 @@ class Classes extends Model
         $mergedCount   = $this->mergedenrolledstudents()->count();
 
         return $enrolledCount + $mergedCount;
+    }
+
+    public function enrolledstudentsvalidated()
+    {
+        return $this->hasMany(EnrolledClass::class, 'class_id', 'id')
+            ->whereHas('enrollment', function ($query) {
+                $query->where('validated', 1);
+            });
+    }
+
+    public function mergedenrolledstudentsvalidated()
+    {
+        return $this->hasManyThrough(EnrolledClass::class, Classes::class, 'merge', 'class_id')
+            ->whereHas('enrollment', function ($query) {
+                $query->where('validated', 1);
+            });
     }
 
     public function getEnrolledAndMergedStudentCountValidatedAttribute()

@@ -27,7 +27,7 @@
                         <p class="font-italic text-info">Note: You can search multiple subject code by separating it by comma (,) code 1, code 2..</p>
                         <form action="{{ route('classes.savemerge') }}" method="post" id="form_merge_class">
                             <div id="return_search_classtomerge">
-                                @include('class.return_search_code_results')
+                                @include('class.merging.return_search_code_results')
                             </div>
                             <input type="hidden" name="class_id" id="class_id" value="{{ $class['id'] }}"  />
                             <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3">Merge Classes</button>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="card-body">
                         <div id="return_merged_classes">
-                            @include('class.merged_classes')
+                            @include('class.merging.merged_classes')
                         </div>
                     </div>
                 </div>

@@ -42,7 +42,7 @@
                             @endphp
                         @endif
                         <td class="">{{ $faculty }}</td>
-                        <td class="mid">{{ isset($class['enrolledstudents']['enrollment']) ? count($class['enrolledstudents']['enrollment']) : 0 }}</td>
+                        <td class="mid">{{ count($class['enrolledstudents']) ?? 0 }}</td>
                         <td class="mid">{{ $class['slots'] }}</td>
                     </tr>
                 @endforeach

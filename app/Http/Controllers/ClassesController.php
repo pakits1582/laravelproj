@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Term;
 use App\Libs\Helpers;
 use App\Models\Classes;
@@ -12,8 +11,6 @@ use App\Services\ClassesService;
 use App\Services\CurriculumService;
 use App\Services\InstructorService;
 use App\Http\Requests\UpdateClassRequest;
-use Illuminate\Database\Eloquent\Collection;
-
 
 class ClassesController extends Controller
 {
@@ -24,11 +21,7 @@ class ClassesController extends Controller
         $this->classesService = $classesService;
         Helpers::setLoad(['jquery_classes.js', 'jquery_classes_merging.js', 'select2.full.min.js']);
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function index(InstructorService $instructorService)
     {
         $instructors = $instructorService->getInstructor();
@@ -75,40 +68,26 @@ class ClassesController extends Controller
         return view('class.return_sectionclasssubjects', compact('section_subjects'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Classes  $classes
-     * @return \Illuminate\Http\Response
-     */
     public function show(Classes $class)
     {
-        //return $this->classesService->processSchedule('9:00 AM-10:30 AM TTH ONLINE, 7:30 AM-9:00 AM TTH ONLINE');
         $class->load([
             'sectioninfo',
-            'curriculumsubject.subjectinfo', 
-            'instructor', 
+            'curriculumsubject.subjectinfo',
+            'instructor',
             'schedule',
             'enrolledstudents.enrollment',
-            'merged' => [
-                'curriculumsubject' => fn($query) => $query->with('subjectinfo'),
-                'sectioninfo',
-                'instructor', 
-                'schedule',
-                'enrolledstudents.enrollment',
-                'mergetomotherclass',
-            ]
+            'merged.curriculumsubject.subjectinfo',
+            'merged.sectioninfo',
+            'merged.instructor',
+            'merged.schedule',
+            'merged.enrolledstudents.enrollment',
+            'merged.mergetomotherclass',
         ]);
+        
 
         return response()->json(['data' => $class]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Classes  $classes
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Classes $class)
     {
         $class->load(['curriculumsubject.subjectinfo', 'instructor', 'schedule']);
@@ -116,26 +95,13 @@ class ClassesController extends Controller
         return response()->json(['data' => $class]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Classes  $classes
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Classes $class, UpdateClassRequest $request)
+    public function update(UpdateClassRequest $request, Classes $class)
     {
         $return = $this->classesService->UpdateClassSubject($class, $request);
 
         return response()->json($return);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Classes  $classes
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Classes $class)
     {
         $data = $this->classesService->deleteClassSubject($class);
@@ -161,9 +127,10 @@ class ClassesController extends Controller
 
     public function generatecode()
     {
-        $this->classesService->generateCode();
+        $data = $this->classesService->generateCode();
 
-        return with('Code generated successfully!');
+        return response()->json($data);
+
     }
 
     public function copyclass(Section $section)
@@ -187,7 +154,6 @@ class ClassesController extends Controller
     {
         $enrolled_students = $this->classesService->displayEnrolledToClassSubject($class);
 
-        //return $enrolled_students;
         return view('class.display_enrolled_students', $enrolled_students);
     }
 
@@ -196,7 +162,6 @@ class ClassesController extends Controller
         $update_slots = $this->classesService->saveInlineUpdateSlots($request);
 
         return response()->json($update_slots);
-
     }
 
     public function scheduletable(Request $request)

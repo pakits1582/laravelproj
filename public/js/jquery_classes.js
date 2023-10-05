@@ -81,7 +81,7 @@ $(function(){
 			type: 'POST',
 			data: ({ 'section' : section}),
 			success: function(data){
-				console.log(data);
+				//console.log(data);
 				$("#return_classsubjects").html(data);
 
                 returnScheduleTable(section);
@@ -521,6 +521,7 @@ $(function(){
 		$.ajax({
 			url: "/classes/generatecode/",
 			type: 'GET',
+            dataType: 'json',
             beforeSend: function() {
                 $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
                     show: 'fade',
@@ -532,11 +533,16 @@ $(function(){
                 });
                 $(".ui-dialog-titlebar").hide();
             },
-			success: function(data){
-                console.log(data);
-                
+			success: function(response){
+                //console.log(data);
                 $("#confirmation").dialog('close');
-                showSuccess(data);
+                if(response.success == true)
+                {
+                    showSuccess(response.message);
+                }else{
+                    showError(response.message);
+                }
+                
                 returnClassSubjects(section);
 			}
 		});	

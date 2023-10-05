@@ -21,7 +21,7 @@ class ClassesMergingController extends Controller
     {
         $class_info = $request->class; 
 
-        return view('class.merge_class', ['class' => $class_info]);
+        return view('class.merging.merge_class', ['class' => $class_info]);
     }
 
     public function searchcodetomerge(Request $request)
@@ -30,7 +30,7 @@ class ClassesMergingController extends Controller
 
         $classes = $search_classes->where('merge', 0)->where('ismother', 0)->where('id', '!=', $request->class_id);
 
-        return view('class.return_search_code_results', ['classes' => $classes]);
+        return view('class.merging.return_search_code_results', ['classes' => $classes]);
     }
 
     public function savemerge(Request $request)
@@ -93,7 +93,7 @@ class ClassesMergingController extends Controller
             ]
         ]);
 
-        return view('class.merged_classes', ['class' => $class]);
+        return view('class.merging.merged_classes', ['class' => $class]);
     }
 
 }
