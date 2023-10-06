@@ -1,5 +1,5 @@
 <div class="table-responsive" id="table_data">
-    <table class="table table-bordered table-striped" id="collegeTable" width="100%" cellspacing="0">
+    <table class="table table-sm table-bordered table-striped" id="collegeTable" width="100%" cellspacing="0">
         <thead>
             <tr>
                 <th>#</th>

@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Adding Dropping {{ session('periodname') }}</h1>
+                <h6 class="font-weight-bold text-primary mb-0">Adding Dropping <span id="period_name">{{ session('periodname') }}</h6>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -134,25 +134,25 @@
                                         </div>
                                     </div>
                                     <div class="form-group" id="button_group">
-                                        <button type="submit" id="save_enrollment" class="btn btn-success btn-icon-split actions mb-2" disabled>
+                                        <button type="submit" id="save_enrollment" class="btn btn-sm btn-success btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-save"></i>
                                             </span>
                                             <span class="text">Save Enrollment</span>
                                         </button>
-                                        <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="add_subjects" class="btn btn-sm btn-primary btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-plus-square"></i>
                                             </span>
                                             <span class="text">(F2) Add Subjects</span>
                                         </button>
-                                        <button type="button" id="delete_selected" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="delete_selected" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-trash"></i>
                                             </span>
                                             <span class="text">Delete Selected</span>
                                         </button>
-                                        <button type="button" id="withdraw_enrollment" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="withdraw_enrollment" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-trash"></i>
                                             </span>

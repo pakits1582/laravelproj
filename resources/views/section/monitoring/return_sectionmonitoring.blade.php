@@ -1,6 +1,6 @@
 @if (count($grouped_sectiomonitorings) > 0)
     @foreach ($grouped_sectiomonitorings as $grouped_section)
-        <h3 class="mb-2 font-weight-bold text-black">({{ $grouped_section['program_code'] }}) {{ $grouped_section['program_name'] }}</h3>
+        <h6 class="mb-2 font-weight-bold text-black">({{ $grouped_section['program_code'] }}) {{ $grouped_section['program_name'] }}</h6>
         <div class="table-responsive-sm">
             <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
                 <thead class="">

@@ -1,5 +1,5 @@
 @if (count($enrollment_summary) > 0)
-    <table class="table table-sm table-striped table-bordered" id="enrollment_summary_table">
+    <table class="table table-sm table-striped table-bordered compact" id="enrollment_summary_table">
         <tbody id="">
             @php
                  $totalreserved = 0;

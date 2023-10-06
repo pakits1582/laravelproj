@@ -13,10 +13,10 @@
             <div class="card-header py-3">
                 <div class="row align-items-center">
                     <div class="col-md-7">
-                        <h1 class="h3 text-800 text-primary mb-0">List of Fees</h1>
+                        <h6 class="font-weight-bold text-primary mb-0">List of Fees</span></h6>
                     </div>
                     <div class="col-md-5 right">
-                        <a href="{{ route('fees.create') }}" class="btn btn-primary btn-icon-split">
+                        <a href="{{ route('fees.create') }}" class="btn btn-sm btn-primary btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus-square"></i>
                             </span>

@@ -1,6 +1,6 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary">Family Information</h4>
+        <h6 class="font-weight-bold text-primary mb-0">Family Information</h6>
     </div>
     <div class="card-body" id="">
         <div class="form-group" id="">
@@ -10,7 +10,7 @@
                         <div class="card-body p-2">                    
                             <div class="row align-items-center">
                                 <div class="col-lg-5 col-sm-5">
-                                    <h4 class="mb-2 font-weight-bold text-black">Father</h4>
+                                    <h6 class="mb-2 font-weight-bold text-black">Father</h6>
                                 </div>
                                 <div class="col-lg-7 col-sm-7">
                                     <label for="fatheralive"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="father_alive" value="1" id="fatheralive"  @if(!isset($applicant) || $applicant->personal_info->father_alive == 1) checked @endif> Living </label>
@@ -47,7 +47,7 @@
                         <div class="card-body p-2">
                             <div class="row align-items-center">
                                 <div class="col-lg-5 col-sm-5">
-                                    <h4 class="mb-2 font-weight-bold text-black">Mother</h4>
+                                    <h6 class="mb-2 font-weight-bold text-black">Mother</h6>
                                 </div>
                                 <div class="col-lg-7 col-sm-7">
                                     <label for="motheralive" class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="mother_alive" value="1" id="motheralive"  @if(!isset($applicant) || $applicant->personal_info->mother_alive == 1) checked @endif> Living </label>
@@ -86,7 +86,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2">
-                            <h4 class="mb-2 font-weight-bold text-black">Guardian/Spouse (If married)</h4>
+                            <h6 class="mb-2 font-weight-bold text-black">Guardian/Spouse (If married)</h6>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label for="guardian_name" class="m-0 font-weight-bold text-primary">Name</label>
@@ -152,7 +152,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2">
-                            <h4 class="mb-2 font-weight-bold text-black">Work Details (If applicant is working)</h4>
+                            <h6 class="mb-2 font-weight-bold text-black">Work Details (If applicant is working)</h6>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label for="occupation" class="m-0 font-weight-bold text-primary">Present Occupation</label>

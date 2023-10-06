@@ -12,7 +12,7 @@
             <div class="card-header py-3">
                 <div class="row align-items-center">
                     <div class="col-md-7">
-                        <h1 class="h3 text-800 text-primary mb-0">Class Evaluation for <span id="period_name">{{ session('periodname') }}</span></h1>
+                        <h6 class="font-weight-bold text-primary mb-0">Class Evaluation for <span id="period_name">{{ session('periodname') }}</h6>
                     </div>
                     <div class="col-md-5 right"></div>
                 </div>

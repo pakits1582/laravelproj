@@ -1,5 +1,5 @@
 <div class="table-responsive" id="table_data">
-    <table class="table table-bordered table-striped table-hover" id="" width="100%" cellspacing="0">
+    <table class="table table-sm table-bordered table-striped table-hover" id="" width="100%" cellspacing="0">
         <thead>
             <tr>
                 <th class="w30 mid"><input type="checkbox" name="check_all" value="1" id="check_all" /></th>

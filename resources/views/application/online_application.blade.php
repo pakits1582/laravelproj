@@ -17,7 +17,7 @@
                     <div class="col-xl-12 col-lg-12 col-md-9">
                         <div class="card o-hidden border-0 shadow-lg my-5">
                             <div class="card-header py-3">
-                                <h4 class="m-0 font-weight-bold text-primary">Online Application for {{ $configuration->applicationperiod->name ?? '' }}</h4>
+                                <h6 class="m-0 font-weight-bold text-primary">Online Application for {{ $configuration->applicationperiod->name ?? '' }}</h6>
                             </div>
                             <div class="card-body p-0">
                                 <form method="POST" id="form_online_application" action="" enctype="multipart/form-data">

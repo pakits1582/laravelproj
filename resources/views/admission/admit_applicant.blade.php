@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 font-weight-bold text-primary mb-0">Application Admission <span id="period_name">{{ session('periodname') }}</span></h1> 
+                <h6 class="font-weight-bold text-primary mb-0">Application Admission  <span id="period_name">{{ session('periodname') }}</span></h6>
             </div>
             <div class="card-body">
                 <form method="POST" action="" id="form_admit_applicant">

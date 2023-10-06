@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Assessment {{ session('periodname') }}</h1>
+                <h6 class="font-weight-bold text-primary mb-0">Assessment <span id="period_name">{{ session('periodname') }}</h6>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -114,23 +114,23 @@
                                         </div>
                                     </div>
                                     <div class="form-group right" id="button_group">
-                                        <button type="button" id="print_assessment" class="btn btn-success btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="print_assessment" class="btn btn-sm btn-success btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-print"></i>
                                             </span>
                                             <span class="text">Print Assessment</span>
                                         </button>
-                                        <button type="button" id="add_subjects" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="add_subjects" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
-                                                <i class="fas fa-plus-square"></i>
+                                                <i class="fas fa-print"></i>
                                             </span>
-                                            <span class="text">(F2) Add Subjects</span>
+                                            <span class="text">Print Certification</span>
                                         </button>
-                                        <button type="button" id="delete_selected" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="delete_selected" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
-                                                <i class="fas fa-trash"></i>
+                                                <i class="fas fa-print"></i>
                                             </span>
-                                            <span class="text">Delete Selected</span>
+                                            <span class="text">Print Certificate of Enrolment and Billing</span>
                                         </button>
                                     </div>
                                 </form>

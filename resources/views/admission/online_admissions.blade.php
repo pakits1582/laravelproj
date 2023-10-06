@@ -13,10 +13,10 @@
             <div class="card-header py-3">
                 <div class="row align-items-center">
                     <div class="col-md-9">
-                        <h1 class="h3 text-800 text-primary mb-0">Online Admission Applications <span id="period_name">{{ session('periodname') }}</span></h1>
+                        <h6 class="font-weight-bold text-primary mb-0">Online Admission Applications <span id="period_name">{{ session('periodname') }}</span></h6>
                     </div>
                     <div class="col-md-3 right">
-                        <a href="{{ route('admissions.index') }}" class="btn btn-primary btn-icon-split">
+                        <a href="{{ route('admissions.index') }}" class="btn btn-sm btn-primary btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-edit"></i>
                             </span>

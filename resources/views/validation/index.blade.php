@@ -13,7 +13,7 @@
             <div class="card-header py-3">
                 <div class="row  align-items-center">
                     <div class="col-md-6">
-                        <h1 class="h3 text-800 text-primary mb-0">Validation {{ session('periodname') }}</h1>
+                        <h6 class="font-weight-bold text-primary mb-0">Validation <span id="period_name">{{ session('periodname') }}</h6>
                     </div>
                     <div class="col-md-6 right">
                         <div class="m-0 font-weight-bold" id="status"></div>
@@ -128,7 +128,7 @@
                                             <span class="font-italic text-info">Note: To unvalidate student's enrollment you can uncheck the validated checkbox</span>
                                         </div>
                                         <div class="col-md-3 align-items-center right">
-                                            <button type="button" id="validate_enrollment" class="btn btn-success btn-icon-split actions mb-2" disabled>
+                                            <button type="button" id="validate_enrollment" class="btn btn-sm btn-success btn-icon-split actions mb-2" disabled>
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-save"></i>
                                                 </span>

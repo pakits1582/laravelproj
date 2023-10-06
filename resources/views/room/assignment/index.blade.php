@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Room Assignment <span id="period_name">{{ session('periodname') }}</span></h1>
+                <h6 class="font-weight-bold text-primary mb-0">Room Assignment <span id="period_name">{{ session('periodname') }}</span></h6>
             </div>
             <div class="card-body">
                 <div class="row align-items-end">
@@ -43,9 +43,9 @@
                         </div>
                     </div>
                     <div class="col-md-2"></div>
-                    <div class="col-md-3">
+                    <div class="col-md-3 right">
                         <div class="form-group">
-                            <button type="submit" id="print_roomassignment" class="btn btn-danger btn-icon-split actions mb-2">
+                            <button type="submit" id="print_roomassignment" class="btn btn-sm btn-danger btn-icon-split actions mb-2">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-print"></i>
                                 </span>

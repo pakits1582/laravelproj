@@ -11,7 +11,7 @@
             <div class="col-xl-12 col-lg-12 col-md-9">
                 <div class="card o-hidden border-0 shadow-lg my-0">
                     <div class="card-header py-3">
-                        <h4 class="m-0 font-weight-bold text-primary">Student's Application for {{ $applicant->entryperiod->name }}</h4>
+                        <h6 class="m-0 font-weight-bold text-primary">Student's Application for {{ $applicant->entryperiod->name }}</h6>
                     </div>
                     <div class="card-body p-0">
                         @include('application.partials.manage_application')
@@ -20,7 +20,7 @@
                             <div class="col-lg-6">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h4 class="m-0 font-weight-bold text-primary">Personal Information</h4>
+                                        <h6 class="m-0 font-weight-bold text-primary">Personal Information</h6>
                                     </div>
                                     <div class="card-body" id="">
                                         <div class="form-group">
@@ -139,14 +139,14 @@
                             <div class="col-lg-6">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h4 class="m-0 font-weight-bold text-primary">Contact Information</h4>
+                                        <h6 class="m-0 font-weight-bold text-primary">Contact Information</h6>
                                     </div>
                                     <div class="card-body" id="">
                                         <div class="form-group">
                                             <p class="font-italic font-weight-bold text-info mb-0">Note: Please provide your correct contact information and addresses.</p>
                                             <div class="row align-items-center mb-3">
                                                 <div class="col-md-12">
-                                                    <h5 class="m-0 font-weight-bold text-black">Current Address</h5>
+                                                    <h6 class="m-0 font-weight-bold text-black">Current Address</h6>
                                                 </div>
                                             </div>
                                             <div class="row align-items-center mb-1">
@@ -199,7 +199,7 @@
                                             </div>
                                             <div class="row align-items-center mb-3">
                                                 <div class="col-md-12">
-                                                    <h5 class="m-0 font-weight-bold text-black">Permanent Address</h5>
+                                                    <h6 class="m-0 font-weight-bold text-black">Permanent Address</h6>
                                                     <p class="font-italic font-weight-bold text-info mb-0">Note: (If not the same as current address)
                                                 </div>
                                             </div>
@@ -285,31 +285,31 @@
                             <div class="col-lg-12">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h4 class="m-0 font-weight-bold text-primary">Academic Information</h4>
+                                        <h6 class="m-0 font-weight-bold text-primary">Academic Information</h6>
                                     </div>
                                     <div class="card-body" id="">
                                         <div class="form-group" id="">
                                             <div class="row align-items-center mb-1">
                                                 <div class="col-lg-1 d-none d-lg-block">
-                                                    <h5 class="m-0 font-weight-bold text-black text-center">Level</h5>                
+                                                    <h6 class="m-0 font-weight-bold text-black text-center">Level</h6>                
                                                 </div>
                                                 <div class="col-lg-3 d-none d-lg-block">
-                                                    <h5 class="m-0 font-weight-bold text-black text-center">Program</h5>
+                                                    <h6 class="m-0 font-weight-bold text-black text-center">Program</h6>
                                                 </div>
                                                 <div class="col-lg-3 d-none d-lg-block">
-                                                    <h5 class="m-0 font-weight-bold text-black text-center">Name of School</h5>
+                                                    <h6 class="m-0 font-weight-bold text-black text-center">Name of School</h6>
                                                 </div>
                                                 <div class="col-lg-3 d-none d-lg-block">
-                                                    <h5 class="m-0 font-weight-bold text-black text-center">Address</h5>
+                                                    <h6 class="m-0 font-weight-bold text-black text-center">Address</h6>
                                                 </div>
                                                 <div class="col-lg-2 d-none d-lg-block">
-                                                    <h5 class="m-0 font-weight-bold text-black text-center">Period Covered</h5>
+                                                    <h6 class="m-0 font-weight-bold text-black text-center">Period Covered</h6>
                                                 </div>
                                             </div>
                                             <div class="row align-items-center mb-1">
                                                 <div class="col-lg-1">
                                                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">Elementary</label>
-                                                    <h4 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">Elementary</h4>
+                                                    <h6 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">Elementary</h6>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="displaydata"></div>
@@ -331,7 +331,7 @@
                                             <div class="row align-items-center mb-1">
                                                 <div class="col-lg-1">
                                                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">Junior High</label>
-                                                    <h4 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">Junior High</h4>
+                                                    <h6 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">Junior High</h6>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="displaydata"></div>
@@ -353,7 +353,7 @@
                                             <div class="row align-items-center mb-1">
                                                 <div class="col-lg-1">
                                                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">Senior High</label>
-                                                    <h4 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">Senior High</h4>
+                                                    <h6 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">Senior High</h6>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="row align-items-center mb-1">
@@ -384,7 +384,7 @@
                                             <div class="row align-items-center mb-1">
                                                 <div class="col-lg-1">
                                                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">College</label>
-                                                    <h4 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">College</h4>
+                                                    <h6 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">College</h6>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label for="college_program" class="d-lg-none m-0 font-weight-bold text-primary">Program</label>
@@ -407,7 +407,7 @@
                                             <div class="row align-items-center mb-1">
                                                 <div class="col-lg-1">
                                                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">Graduate</label>
-                                                    <h4 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">Graduate Studies</h4>
+                                                    <h6 class="d-lg-none mb-1 mt-3 font-weight-bold text-black">Graduate Studies</h6>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label for="graduate_program" class="d-lg-none m-0 font-weight-bold text-primary">Program</label>
@@ -436,7 +436,7 @@
                             <div class="col-lg-12">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h4 class="m-0 font-weight-bold text-primary">Family Information</h4>
+                                        <h6 class="m-0 font-weight-bold text-primary">Family Information</h6>
                                     </div>
                                     <div class="card-body" id="">
                                         <div class="form-group" id="">
@@ -446,7 +446,7 @@
                                                         <div class="card-body p-2">                    
                                                             <div class="row align-items-center">
                                                                 <div class="col-lg-5 col-sm-5">
-                                                                    <h4 class="mb-2 font-weight-bold text-black">Father</h4>
+                                                                    <h6 class="mb-2 font-weight-bold text-black">Father</h6>
                                                                 </div>
                                                                 <div class="col-lg-7 col-sm-7">
                                                                     <label for="fatheralive"  class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="father_alive" value="1" id="fatheralive"  @if(!isset($applicant) || $applicant->personal_info->father_alive == 1) checked @endif> Living </label>
@@ -471,7 +471,7 @@
                                                         <div class="card-body p-2">
                                                             <div class="row align-items-center">
                                                                 <div class="col-lg-5 col-sm-5">
-                                                                    <h4 class="mb-2 font-weight-bold text-black">Mother</h4>
+                                                                    <h6 class="mb-2 font-weight-bold text-black">Mother</h6>
                                                                 </div>
                                                                 <div class="col-lg-7 col-sm-7">
                                                                     <label for="motheralive" class="m-0 font-weight-bold text-primary"><input type="radio" class="" name="mother_alive" value="1" id="motheralive"  @if(!isset($applicant) || $applicant->personal_info->mother_alive == 1) checked @endif> Living </label>
@@ -498,7 +498,7 @@
                                                 <div class="col-lg-4 mb-3">
                                                     <div class="card border-left-info h-100">
                                                         <div class="card-body p-2">
-                                                            <h4 class="mb-2 font-weight-bold text-black">Guardian/Spouse (If married)</h4>
+                                                            <h6 class="mb-2 font-weight-bold text-black">Guardian/Spouse (If married)</h6>
                                                             <div class="row">
                                                                 <div class="col-lg-12">
                                                                     <label for="guardian_name" class="m-0 font-weight-bold text-primary">Name</label>
@@ -536,7 +536,7 @@
                                                 <div class="col-lg-4 mb-3">
                                                     <div class="card border-left-info h-100">
                                                         <div class="card-body p-2">
-                                                            <h4 class="mb-2 font-weight-bold text-black">Work Details (If applicant is working)</h4>
+                                                            <h6 class="mb-2 font-weight-bold text-black">Work Details (If applicant is working)</h6>
                                                             <div class="row">
                                                                 <div class="col-lg-12">
                                                                     <label for="occupation" class="m-0 font-weight-bold text-primary">Present Occupation</label>
@@ -560,7 +560,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <h4 class="mt-3 font-weight-bold text-black">Contact Details</h4>
+                                                            <h6 class="mt-3 font-weight-bold text-black">Contact Details</h6>
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <label for="contact_email" class="m-0 font-weight-bold text-primary">* Contact E-mail</label>
@@ -584,7 +584,7 @@
                             <div class="col-lg-12">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h4 class="m-0 font-weight-bold text-primary">Attached Requirements</h4>
+                                        <h6 class="m-0 font-weight-bold text-primary">Attached Requirements</h6>
                                     </div>
                                     <div class="card-body" id="">
                                         @if ($applicant->report_card)

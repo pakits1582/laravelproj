@@ -1,30 +1,30 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary">Academic Information</h4>
+        <h6 class="font-weight-bold text-primary mb-0">Academic Information</h6>
     </div>
     <div class="card-body" id="">
         <div class="form-group" id="">
             <div class="row align-items-center mb-1">
                 <div class="col-lg-1 d-none d-lg-block">
-                    <h5 class="m-0 font-weight-bold text-black text-center">Level</h5>                
+                    <h6 class="m-0 font-weight-bold text-black text-center">Level</h6>                
                 </div>
                 <div class="col-lg-3 d-none d-lg-block">
-                    <h5 class="m-0 font-weight-bold text-black text-center">Program</h5>
+                    <h6 class="m-0 font-weight-bold text-black text-center">Program</h6>
                 </div>
                 <div class="col-lg-3 d-none d-lg-block">
-                    <h5 class="m-0 font-weight-bold text-black text-center">Name of School</h5>
+                    <h6 class="m-0 font-weight-bold text-black text-center">Name of School</h6>
                 </div>
                 <div class="col-lg-3 d-none d-lg-block">
-                    <h5 class="m-0 font-weight-bold text-black text-center">Address</h5>
+                    <h6 class="m-0 font-weight-bold text-black text-center">Address</h6>
                 </div>
                 <div class="col-lg-2 d-none d-lg-block">
-                    <h5 class="m-0 font-weight-bold text-black text-center">Period Covered</h5>
+                    <h6 class="m-0 font-weight-bold text-black text-center">Period Covered</h6>
                 </div>
             </div>
             <div class="row align-items-center mb-1">
                 <div class="col-lg-1">
                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">Elementary</label>
-                    <h4 class="d-lg-none mb-2 font-weight-bold text-black">Elementary</h4>
+                    <h6 class="d-lg-none mb-2 font-weight-bold text-black">Elementary</h6>
                 </div>
                 <div class="col-lg-3">
                     <input type="text" name="" placeholder="" class="form-control col-sm mb-1" id="" disabled>
@@ -58,7 +58,7 @@
             <div class="row align-items-center mb-1">
                 <div class="col-lg-1">
                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">Junior High</label>
-                    <h4 class="d-lg-none mb-2 font-weight-bold text-black">Junior High</h4>
+                    <h6 class="d-lg-none mb-2 font-weight-bold text-black">Junior High</h6>
                 </div>
                 <div class="col-lg-3">
                     <input type="text" name="" placeholder="" class="form-control col-sm mb-1" id="" disabled>
@@ -92,7 +92,7 @@
             <div class="row align-items-center mb-1">
                 <div class="col-lg-1">
                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">Senior High</label>
-                    <h4 class="d-lg-none mb-2 font-weight-bold text-black">Senior High</h4>
+                    <h6 class="d-lg-none mb-2 font-weight-bold text-black">Senior High</h6>
                 </div>
                 <div class="col-lg-3">
                     <div class="row align-items-center mb-1">
@@ -150,7 +150,7 @@
             <div class="row align-items-center mb-1">
                 <div class="col-lg-1">
                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">College</label>
-                    <h4 class="d-lg-none mb-2 font-weight-bold text-black">College</h4>
+                    <h6 class="d-lg-none mb-2 font-weight-bold text-black">College</h6>
                 </div>
                 <div class="col-lg-3">
                     <label for="college_program" class="d-lg-none m-0 font-weight-bold text-primary">Program</label>
@@ -189,7 +189,7 @@
             <div class="row align-items-center mb-1">
                 <div class="col-lg-1">
                     <label  class="d-none d-lg-block m-0 font-weight-bold text-primary">Graduate</label>
-                    <h4 class="d-lg-none mb-2 font-weight-bold text-black">Graduate Studies</h4>
+                    <h6 class="d-lg-none mb-2 font-weight-bold text-black">Graduate Studies</h6>
                 </div>
                 <div class="col-lg-3">
                     <label for="graduate_program" class="d-lg-none m-0 font-weight-bold text-primary">Program</label>

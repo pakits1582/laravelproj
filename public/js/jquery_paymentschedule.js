@@ -8,6 +8,15 @@ $(function(){
     
     $('.datepicker').datepicker(pickerOpts);  
 
+    var dataTable = $('#scrollable_table_paymentschedules').DataTable({
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        paging: false,
+        ordering: false,
+        info: false,
+        searching: false
+    });
 
     $("#period").select2({
 	    dropdownParent: $("#ui_content4")
@@ -67,6 +76,15 @@ $(function(){
             url: "/paymentschedules/"+period+"/returnpaymentschedules",
             success: function(data){
                 $("#return_paymentschedules").html(data);
+                $('#scrollable_table_paymentschedules').DataTable({
+                    scrollY: 400,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    ordering: false,
+                    info: false,
+                    searching: false
+                });
             },
             error: function (data) {
                 console.log(data);

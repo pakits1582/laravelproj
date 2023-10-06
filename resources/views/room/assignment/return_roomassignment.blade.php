@@ -1,6 +1,6 @@
 @if (count($grouped_rooms) > 0)
     @foreach ($grouped_rooms as $grouped_room)
-        <h3 class="mb-2 font-weight-bold text-black">Room: {{ $grouped_room['room'] }}</h3>
+        <h6 class="mb-2 font-weight-bold text-black">ROOM: {{ $grouped_room['room'] }}</h6>
         <div class="table-responsive-sm">
             <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
                 <thead class="">

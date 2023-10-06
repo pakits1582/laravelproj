@@ -13,16 +13,16 @@
             <div class="card-header py-3">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <h1 class="h3 text-800 text-primary mb-0">Applications <span id="period_name">{{ session('periodname') }}</span></h1>
+                        <h6 class="font-weight-bold text-primary mb-0">Applications <span id="period_name">{{ session('periodname') }}</span></h6>
                     </div>
                     <div class="col-md-6 right">
-                        <button type="button" id="delete_selected_applicants" class="btn btn-danger btn-icon-split mb-2">
+                        <button type="button" id="delete_selected_applicants" class="btn btn-sm btn-danger btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-trash"></i>
                             </span>
                             <span class="text">Delete Selected</span>
                         </button>
-                        <a href="{{ route('applications.create') }}" class="btn btn-primary btn-icon-split mb-2">
+                        <a href="{{ route('applications.create') }}" class="btn btn-sm btn-primary btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus-square"></i>
                             </span>

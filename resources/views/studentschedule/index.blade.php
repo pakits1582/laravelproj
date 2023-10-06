@@ -13,7 +13,7 @@
             <div class="card-header py-3">
                 <div class="row  align-items-center">
                     <div class="col-md-8">
-                        <h1 class="h3 text-800 text-primary mb-0">Student's Schedule {{ session('periodname') }}</h1>
+                        <h6 class="font-weight-bold text-primary mb-0">Student's Schedule <span id="period_name">{{ session('periodname') }}</span></h6>
                     </div>
                     <div class="col-md-4 right">
                         <div class="m-0 font-weight-bold" id="status"></div>

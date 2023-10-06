@@ -6,15 +6,17 @@ $(function(){
 		}
 	});
 
-    var dataTable = $('#scrollable_table').DataTable({
+    $('#scrollable_table').DataTable({
         scrollY: 400,
         scrollX: true,
         scrollCollapse: true,
         paging: false,
+        "bAutoWidth": false,
         ordering: false,
         info: false,
         searching: false
     });
+    
     
     $('.datepicker').datepicker(pickerOpts);  
 
@@ -205,6 +207,7 @@ $(function(){
                     scrollX: true,
                     scrollCollapse: true,
                     paging: false,
+                    "bAutoWidth": false,
                     ordering: false,
                     info: false,
                     searching: false
@@ -463,6 +466,17 @@ $(function(){
                     $("#period_copyfrom").select2({
                         dropdownParent: $("#modalll")
                     });
+
+                    // $('#scrollable_table_copyclass').DataTable({
+                    //     scrollY: 400,
+                    //     scrollX: true,
+                    //     scrollCollapse: true,
+                    //     paging: false,
+                    //     "bAutoWidth": false,
+                    //     ordering: false,
+                    //     info: false,
+                    //     searching: false
+                    // });
                 }
             });	
         }else{
@@ -477,16 +491,27 @@ $(function(){
         if(period_copyfrom)
         {
             $.ajax({
-                url: "/fees/"+period_copyfrom+"/returnfeessetup",
+                url: "/fees/"+period_copyfrom+"/returncopyfeessetup",
                 data: ({ 'selectall' : 1}),
                 success: function(data){
                     $("#return_copy_setup_fees").html(data);
+
+                    $('#scrollable_table_copyclass').DataTable({
+                        scrollY: 400,
+                        scrollX: true,
+                        scrollCollapse: true,
+                        paging: false,
+                        "bAutoWidth": false,
+                        ordering: false,
+                        info: false,
+                        searching: false
+                    });
                 },
                 error: function (data) {
                     console.log(data);
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) == false) {
-                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                        showError('Something went wrong! Can not perform requested action! ');
                     }
                 }
             });

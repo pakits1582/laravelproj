@@ -13,28 +13,28 @@
             <div class="card-header py-3">
                 <div class="row align-items-center">
                     <div class="col-md-3">
-                        <h1 class="h3 text-800 text-primary mb-0">List of Students</h1>
+                        <h6 class="font-weight-bold text-primary mb-0">List of Students</h6>
                     </div>
                     <div class="col-md-9 right">
-                        <a href="{{ route('students.create') }}" class="btn btn-primary btn-icon-split">
+                        <a href="{{ route('students.create') }}" class="btn btn-sm btn-primary btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus-square"></i>
                             </span>
                             <span class="text">Add new student</span>
                         </a>
-                        <a href="#" class="btn btn-danger btn-icon-split" id="generate_pdf">
+                        <a href="#" class="btn btn-sm btn-danger btn-icon-split" id="generate_pdf">
                             <span class="icon text-white-50">
                                 <i class="fas fa-print"></i>
                             </span>
                             <span class="text">Print PDF</span>
                         </a>
-                        <a href="#" class="btn btn-success btn-icon-split" id="download_excel">
+                        <a href="#" class="btn btn-sm btn-success btn-icon-split" id="download_excel">
                             <span class="icon text-white-50">
                                 <i class="fas fa-download"></i>
                             </span>
                             <span class="text">Download Excel</span>
                         </a>
-                        <a href="{{ route('students.index') }}" class="btn btn-secondary btn-icon-split" id="upload_excel" data-field="students">
+                        <a href="{{ route('students.index') }}" class="btn btn-sm btn-secondary btn-icon-split" id="upload_excel" data-field="students">
                             <span class="icon text-white-50">
                                 <i class="fas fa-upload"></i>
                             </span>

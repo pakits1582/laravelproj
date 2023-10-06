@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">General Schedule <span id="period_name">{{ session('periodname') }}</span></h1>
+                <h6 class="font-weight-bold text-primary mb-0">General Schedule <span id="period_name">{{ session('periodname') }}</span></h6>
             </div>
             <div class="card-body">
                 <form method="POST" id="form_filtergeneralschedule" action="">
@@ -79,13 +79,13 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" id="print_masterlist" class="btn btn-danger btn-icon-split actions mb-3">
+                        <button type="submit" id="print_masterlist" class="btn btn-sm btn-danger btn-icon-split actions mb-3">
                             <span class="icon text-white-50">
                                 <i class="fas fa-print"></i>
                             </span>
                             <span class="text">Print PDF</span>
                         </button>
-                        <button type="submit" id="download_masterlist" class="btn btn-success btn-icon-split actions mb-3">
+                        <button type="submit" id="download_masterlist" class="btn btn-sm btn-success btn-icon-split actions mb-3">
                             <span class="icon text-white-50">
                                 <i class="fas fa-download"></i>
                             </span>

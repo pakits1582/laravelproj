@@ -1,6 +1,6 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary">Attach Requirements</h4>
+        <h6 class="font-weight-bold text-primary mb-0">Attach Requirements</h6>
     </div>
     <div class="card-body" id="">
         <div class="form-group" id="">
@@ -8,7 +8,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2">
-                            <h4 class="mb-2 font-weight-bold text-black">ID Picture Upload</h4>
+                            <h6 class="mb-2 font-weight-bold text-black">ID Picture Upload</h6>
                     
                             <div class="row align-items-center">
                                 <div class="col-md-5 col-sm-5">
@@ -42,7 +42,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2 align-items-end">
-                            <h4 class="mb-2 font-weight-bold text-black">Report Card/OTR Upload</h4>
+                            <h6 class="mb-2 font-weight-bold text-black">Report Card/OTR Upload</h6>
                             <p class="m-0 font-italic text-info">
                                 Note: 
                                 <ul class="m-0 font-italic text-info">
@@ -69,7 +69,7 @@
                 <div class="col-lg-4 mb-3">
                     <div class="card border-left-info h-100">
                         <div class="card-body p-2">
-                            <h4 class="mb-2 font-weight-bold text-black">Contact Details</h4>
+                            <h6 class="mb-2 font-weight-bold text-black">Contact Details</h6>
                             <p class="font-italic text-info">Note: Please provide a working email address where we will send your status of Application and a mobile/landline number for us to reach you.</p>
                             <div class="row">
                                 <div class="col-md-12">

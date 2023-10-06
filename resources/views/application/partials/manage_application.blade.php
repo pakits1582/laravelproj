@@ -2,7 +2,7 @@
     <div class="col-lg-6 my-3">
         <div class="card border-left-info h-100">
             <div class="card-body p-2">
-                <h4 class="mb-2 font-weight-bold text-primary">Instructions</h4>
+                <h6 class="font-weight-bold text-primary mb-0">Instructions</h6>
                 <div class="row">
                     <p class="pl-3 font-italic font-weight-bold text-info">Fill out this form carefully and type all information requested. Write N/A if the information is not applicable to you. Omissions can delay the processing of your application.</p>
                     <p class="pl-3 font-italic font-weight-bold text-info">INCOMPLETE APPLICATION FORMS WILL NOT BE PROCESSED.</p>
@@ -10,14 +10,14 @@
                 </div>
                 <div class="row align-items-center">
                     <div class="col-md-6 mid">
-                        <button type="button" id="delete" class="btn btn-danger btn-icon-split mb-2 application_action">
+                        <button type="button" id="delete" class="btn btn-sm btn-danger btn-icon-split mb-2 application_action">
                             <span class="icon text-white-50">
                                 <i class="fas fa-trash"></i>
                             </span>
                             <span class="text">Delete</span>
                         </button>
 
-                        <a href="{{ route('applications.edit', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" target="_blank" class="btn btn-primary btn-icon-split mb-2" title="Edit Applicant">
+                        <a href="{{ route('applications.edit', ['application' => $applicant->id ]) }}" id="{{ $applicant->id }}" target="_blank" class="btn btn-sm btn-primary btn-icon-split mb-2" title="Edit Applicant">
                             <span class="icon text-white-50">
                                 <i class="fas fa-edit"></i>
                             </span>
@@ -26,13 +26,13 @@
                     </div>
                     <div class="col-md-6 mid">
                         @if($applicant->application_status == 1)
-                            <button type="button" id="accept" class="btn btn-success btn-icon-split mb-2 application_action">
+                            <button type="button" id="accept" class="btn btn-sm btn-success btn-icon-split mb-2 application_action">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-check"></i>
                                 </span>
                                 <span class="text">Accept</span>
                             </button>
-                            <button type="button" id="reject" class="btn btn-danger btn-icon-split mb-2 application_action">
+                            <button type="button" id="reject" class="btn btn-sm btn-danger btn-icon-split mb-2 application_action">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-trash"></i>
                                 </span>

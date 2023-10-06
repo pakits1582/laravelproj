@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Unpaid Assessment <span id="period_name">{{ session('periodname') }}</span></h1>
+                <h6 class="font-weight-bold text-primary mb-0">Unpaid Assessment <span id="period_name">{{ session('periodname') }}</h6>
             </div>
             <div class="card-body">
                 <form method="POST" id="form_filterunpaidassessment" action="">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <button type="button" id="delete_selected_unpaid" class="btn btn-danger btn-icon-split mb-2">
+                        <button type="button" id="delete_selected_unpaid" class="btn btn-sm btn-danger btn-icon-split mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-trash"></i>
                             </span>

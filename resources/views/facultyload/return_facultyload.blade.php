@@ -1,4 +1,4 @@
-<table id="scrollable_table" class="table table-striped table-bordered hover" style="width:100%;">
+<table id="scrollable_table" class="table table-sm table-striped table-bordered hover compact" style="width:100%; font-size:14px !important;">
     <thead>
         <tr>
             <th class="w120">Name</th>

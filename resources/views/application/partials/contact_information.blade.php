@@ -1,13 +1,14 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary">Contact Information</h4>
+        <h6 class="font-weight-bold text-primary mb-0">Contact Information</h6>
+
     </div>
     <div class="card-body" id="">
         <div class="form-group" id="postcharge_fees">
             <p class="font-italic font-weight-bold text-info mb-0">Note: Please provide your correct contact information and addresses.</p>
             <div class="row align-items-center mb-3">
                 <div class="col-md-12">
-                    <h5 class="m-0 font-weight-bold text-black">Current Address</h5>
+                    <h6 class="m-0 font-weight-bold text-black">Current Address</h6>
                 </div>
             </div>
             <div class="row align-items-center mb-1">
@@ -146,7 +147,7 @@
             </div>
             <div class="row align-items-center mb-3">
                 <div class="col-md-12">
-                    <h5 class="m-0 font-weight-bold text-black">Permanent Address</h5>
+                    <h6 class="m-0 font-weight-bold text-black">Permanent Address</h6>
                     <p class="font-italic font-weight-bold text-info mb-0">Note: (If not the same as current address)
                 </div>
             </div>

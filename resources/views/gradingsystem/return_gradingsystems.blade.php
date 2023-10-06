@@ -1,5 +1,5 @@
 <div class="table-responsive" id="table_data">
-    <table class="table table-bordered table-striped" id="gradingsystemTable" width="100%" cellspacing="0">
+    <table class="table table-sm table-bordered table-striped" id="gradingsystemTable" width="100%" cellspacing="0">
         <thead>
             <tr>
                 <th>#</th>
@@ -20,7 +20,7 @@
                         <td>{{ $gradingsystem->remark->remark }}</td>
                         <td>{{ $gradingsystem->level->level }}</td>
                         <td class="mid">
-                            <a href="{{ route('gradingsystems.edit', ['gradingsystem' => $gradingsystem->id ]) }}" class="btn btn-primary btn-icon-split btn-sm">
+                            <a href="{{ route('gradingsystems.edit', ['gradingsystem' => $gradingsystem->id ]) }}" class="btn btn-sm btn-primary btn-icon-split btn-sm">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

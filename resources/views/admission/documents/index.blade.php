@@ -13,7 +13,7 @@
             <div class="card-header py-3">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <h1 class="h3 text-800 text-primary mb-0">Admission Documents Management</h1>
+                        <h6 class="font-weight-bold text-primary mb-0">Admission Documents Management</h6>
                     </div>
                     <div class="col-md-6 right">
                     </div>
@@ -83,25 +83,25 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group" id="button_group">
-                                                <button type="submit" id="save_setup_fee" class="btn btn-success btn-icon-split mb-2">
+                                                <button type="submit" id="save_setup_fee" class="btn btn-sm btn-success btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-save"></i>
                                                     </span>
                                                     <span class="text">Save</span>
                                                 </button>
-                                                <button type="button" id="edit" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                                <button type="button" id="edit" class="btn btn-sm btn-primary btn-icon-split actions mb-2" disabled>
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>
                                                     </span>
                                                     <span class="text">Edit</span>
                                                 </button>
-                                                <button type="button" id="delete_selected" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                                <button type="button" id="delete_selected" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-trash"></i>
                                                     </span>
                                                     <span class="text">Delete</span>
                                                 </button>
-                                                <button type="button" id="cancel" class="btn btn-danger btn-icon-split mb-2">
+                                                <button type="button" id="cancel" class="btn btn-sm btn-danger btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-trash"></i>
                                                     </span>

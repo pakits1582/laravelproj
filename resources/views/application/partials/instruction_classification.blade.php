@@ -2,7 +2,7 @@
     <div class="col-lg-6 my-3">
         <div class="card border-left-info h-100">
             <div class="card-body p-2">
-                <h4 class="mb-2 font-weight-bold text-primary">Instructions</h4>
+                <h6 class="font-weight-bold text-primary mb-0">Instructions</h6>
                 <p class="pl-3 font-italic font-weight-bold text-info">Fill out this form carefully and type all information requested. Write N/A if the information is not applicable to you. Omissions can delay the processing of your application.</p>
                 <p class="pl-3 font-italic font-weight-bold text-info">INCOMPLETE APPLICATION FORMS WILL NOT BE PROCESSED.</p>
                 <p class="pl-3 font-italic font-weight-bold text-info">(*) Denotes required fields, you may opt to skip filling up fields without an asterisk.</p>

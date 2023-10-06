@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Assessment Fees Setup <span id="period_name">{{ session('periodname') }}</span></h1>
+                <h6 class="font-weight-bold text-primary mb-0">Assessment Fees Setup <span id="period_name">{{ session('periodname') }}</span></h6>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -164,25 +164,25 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group" id="button_group">
-                                                <button type="submit" id="save_setup_fee" class="btn btn-success btn-icon-split mb-2">
+                                                <button type="submit" id="save_setup_fee" class="btn btn-sm btn-success btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-save"></i>
                                                     </span>
                                                     <span class="text">Save</span>
                                                 </button>
-                                                <button type="button" id="edit" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                                <button type="button" id="edit" class="btn btn-sm btn-primary btn-icon-split actions mb-2" disabled>
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-edit"></i>
                                                     </span>
                                                     <span class="text">Edit</span>
                                                 </button>
-                                                <button type="button" id="delete_selected" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                                <button type="button" id="delete_selected" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-trash"></i>
                                                     </span>
                                                     <span class="text">Delete</span>
                                                 </button>
-                                                <button type="button" id="cancel" class="btn btn-danger btn-icon-split mb-2">
+                                                <button type="button" id="cancel" class="btn btn-sm btn-danger btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-trash"></i>
                                                     </span>
@@ -192,19 +192,19 @@
                                         </div>
                                         <div class="col-md-7 right">
                                             <div class="form-group" id="button_group">
-                                                <button type="button" id="print_setup_summary" class="btn btn-primary btn-icon-split mb-2">
+                                                <button type="button" id="print_setup_summary" class="btn btn-sm btn-primary btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-print"></i>
                                                     </span>
                                                     <span class="text">Print Setup Summary</span>
                                                 </button>
-                                                <button type="button" id="print_subject_fees" class="btn btn-primary btn-icon-split mb-2">
+                                                <button type="button" id="print_subject_fees" class="btn btn-sm btn-primary btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-print"></i>
                                                     </span>
                                                     <span class="text">Print Subject Fees</span>
                                                 </button>
-                                                <button type="button" id="copy_setup" class="btn btn-primary btn-icon-split mb-2">
+                                                <button type="button" id="copy_setup" class="btn btn-sm btn-primary btn-icon-split mb-2">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-copy"></i>
                                                     </span>
