@@ -33,13 +33,13 @@
                 </div>
                 <div class="col-md-4 mid">
                     <div class="form-group" id="button_group">
-                        <button type="button" id="add_fee" class="btn btn-success btn-icon-split mb-0">
+                        <button type="button" id="add_fee" class="btn btn-sm btn-success btn-icon-split mb-0">
                             <span class="icon text-white-50">
                                 <i class="fas fa-plus"></i>
                             </span>
                             <span class="text">(F2) Add</span>
                         </button>
-                        <button type="button" id="delete_fee" class="btn btn-danger btn-icon-split actions mb-0" disabled>
+                        <button type="button" id="delete_fee" class="btn btn-sm btn-danger btn-icon-split actions mb-0" disabled>
                             <span class="icon text-white-50">
                                 <i class="fas fa-trash"></i>
                             </span>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="col-md-6 right">
                     <div class="form-group" id="button_group">
-                        <button type="submit" id="save_payment" class="btn btn-success btn-icon-split mb-2">
+                        <button type="submit" id="save_payment" class="btn btn-sm btn-success btn-icon-split mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-save"></i>
                             </span>

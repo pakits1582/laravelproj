@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">Student's Grade File</h1>
+                <h6 class="font-weight-bold text-primary mb-0">Student's Grade File</h6>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -84,43 +84,43 @@
                             <div class="row">
                                 <div class="col-md-12 mid">
                                     <div class="form-group">
-                                        <button type="button" id="probationary" class="btn btn-info btn-icon-split mb-2">
+                                        <button type="button" id="probationary" class="btn btn-sm btn-info btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-copy"></i>
                                             </span>
                                             <span class="text">Probationary</span>
                                         </button>
-                                        <button type="button" id="deans_list" class="btn btn-info btn-icon-split mb-2">
+                                        <button type="button" id="deans_list" class="btn btn-sm btn-info btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-copy"></i>
                                             </span>
                                             <span class="text">Dean's List</span>
                                         </button>
-                                        <button type="button" id="batch_print" class="btn btn-primary btn-icon-split mb-2">
+                                        <button type="button" id="batch_print" class="btn btn-sm btn-primary btn-icon-split mb-2">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-retweet"></i>
                                             </span>
                                             <span class="text">Batch Print</span>
                                         </button>
-                                        <button type="button" id="print_certification" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="print_certification" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-print"></i>
                                             </span>
                                             <span class="text">Certification</span>
                                         </button>
-                                        <button type="button" id="print_grade_file" class="btn btn-danger btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="print_grade_file" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-print"></i>
                                             </span>
                                             <span class="text">Grade File</span>
                                         </button>
-                                        <button type="button" id="print_official_grade" class="btn btn-success btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="print_official_grade" class="btn btn-sm btn-success btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-print"></i>
                                             </span>
                                             <span class="text">Official Grade</span>
                                         </button>
-                                        <button type="button" id="transcript_of_records" class="btn btn-primary btn-icon-split actions mb-2" disabled>
+                                        <button type="button" id="transcript_of_records" class="btn btn-sm btn-primary btn-icon-split actions mb-2" disabled>
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-edit"></i>
                                             </span>

@@ -466,17 +466,6 @@ $(function(){
                     $("#period_copyfrom").select2({
                         dropdownParent: $("#modalll")
                     });
-
-                    // $('#scrollable_table_copyclass').DataTable({
-                    //     scrollY: 400,
-                    //     scrollX: true,
-                    //     scrollCollapse: true,
-                    //     paging: false,
-                    //     "bAutoWidth": false,
-                    //     ordering: false,
-                    //     info: false,
-                    //     searching: false
-                    // });
                 }
             });	
         }else{
@@ -494,6 +483,7 @@ $(function(){
                 url: "/fees/"+period_copyfrom+"/returncopyfeessetup",
                 data: ({ 'selectall' : 1}),
                 success: function(data){
+                    //console.log(data);
                     $("#return_copy_setup_fees").html(data);
 
                     $('#scrollable_table_copyclass').DataTable({
@@ -511,7 +501,7 @@ $(function(){
                     console.log(data);
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) == false) {
-                        showError('Something went wrong! Can not perform requested action! ');
+                        showError('Something went wrong! Can not perform requested action!');
                     }
                 }
             });

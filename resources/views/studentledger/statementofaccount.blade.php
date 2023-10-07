@@ -96,7 +96,7 @@
                                         <tr>
                                             <td colspan="7" class="right">
                                                 @if (abs($remaining_balance) != 0.00)
-                                                    <button type="button" id="forward_balance" class="btn btn-primary btn-icon-split m-1">
+                                                    <button type="button" id="forward_balance" class="btn btn-sm btn-primary btn-icon-split m-1">
                                                         <span class="icon text-white-50">
                                                             <i class="fas fa-arrow-right"></i>
                                                         </span>

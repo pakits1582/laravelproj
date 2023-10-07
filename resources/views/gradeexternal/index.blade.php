@@ -11,7 +11,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h1 class="h3 text-800 text-primary mb-0">External Grades Management</h1>
+                <h6 class="font-weight-bold text-primary mb-0">External Grades Management</h6>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -108,7 +108,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Student's External Grade File</h6>
                             </div>
                             <div class="col-md-6 text-right">
-                                <button type="button" id="grade_information" class="btn btn-primary btn-icon-split mb-2 mb-md-0">
+                                <button type="button" id="grade_information" class="btn btn-sm btn-primary btn-icon-split mb-2 mb-md-0">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-edit"></i>
                                     </span>

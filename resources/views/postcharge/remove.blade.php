@@ -26,7 +26,7 @@
                     
                 </div>
                 <div class="form-group right" id="button_group">
-                    <button type="button" id="remove_postcharge" class="btn btn-danger btn-icon-split actions">
+                    <button type="button" id="remove_postcharge" class="btn btn-sm btn-danger btn-icon-split actions">
                         <span class="icon text-white-50">
                             <i class="fas fa-trash"></i>
                         </span>

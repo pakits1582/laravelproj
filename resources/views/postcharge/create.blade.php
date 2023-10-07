@@ -27,7 +27,7 @@
                             <div id="error_amount" class="errors"></div>
                         </div>
                         <div class="col-md-1">
-                            <a href="#" id="add_fee" class="btn btn-primary btn-circle btn-sm" title="Add Fee">
+                            <a href="#" id="add_fee" class="btn btn-sm btn-primary btn-circle btn-sm" title="Add Fee">
                                 <i class="fas fa-plus"></i>
                             </a>
                         </div>
@@ -35,7 +35,7 @@
                 </div>
                 <h3 class="right text-black">TOTAL FEE: <span id="totalfee">0.00</span></h3>
                 <div class="form-group right" id="button_group">
-                    <button type="submit" id="save_postcharge" class="btn btn-success btn-icon-split actions">
+                    <button type="submit" id="save_postcharge" class="btn btn-sm btn-success btn-icon-split actions">
                         <span class="icon text-white-50">
                             <i class="fas fa-save"></i>
                         </span>

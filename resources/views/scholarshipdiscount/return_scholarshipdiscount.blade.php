@@ -1,5 +1,5 @@
 <div class="table-responsive" id="table_data">
-    <table class="table table-bordered table-striped" id="scholarshipdiscountTable" width="100%" cellspacing="0">
+    <table class="table table-sm table-bordered table-striped" id="scholarshipdiscountTable" width="100%" cellspacing="0">
         <thead>
             <tr>
                 <th rowspan="2" class="w40">NO.</th>
@@ -43,7 +43,7 @@
                         <td>{{ $scholarshipdiscount->totalassessment }}</td>
                         <td>{{ $scholarshipdiscount->totalassessment_type }}</td>
                         <td class="mid">
-                            <a href="{{ route('scholarshipdiscounts.edit', ['scholarshipdiscount' => $scholarshipdiscount->id ]) }}" class="btn btn-sm btn-primary btn-icon-split">
+                            <a href="{{ route('scholarshipdiscounts.edit', ['scholarshipdiscount' => $scholarshipdiscount->id ]) }}" class="btn btn-sm btn-sm btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-edit"></i>
                                 </span>

@@ -20,7 +20,7 @@
         </tr>
     </thead>
     <tbody>
-        @if (count($feessetups) > 0)
+        @if ($feessetups !== null && count($feessetups) > 0)
             @foreach ($feessetups as $feessetup)
                 <tr class="label" id="">
                     <td class="w30 mid">

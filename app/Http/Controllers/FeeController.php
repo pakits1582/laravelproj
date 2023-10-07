@@ -226,9 +226,9 @@ class FeeController extends Controller
         return view('fee.setup.copy_setup', compact('period', 'periods'));
     }
 
-    public function returncopyfeessetup(Request $request)
+    public function returncopyfeessetup(Request $request, $period_id)
     {
-        $feessetups = $this->feeService->returnSetupFees($request->period_id);
+        $feessetups = $this->feeService->returnSetupFees($period_id);
 
         return view('fee.setup.return_copy_setup', compact('feessetups'))->with('selectall', $request->selectall);
     }

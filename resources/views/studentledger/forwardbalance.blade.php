@@ -77,11 +77,11 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="6" class="mid">
+                                                <td colspan="6" class="right">
                                                     <input type="hidden" name="student_id" value="{{ $student->id }}">
                                                     <input type="hidden" name="period_from" value="{{ $soa_to_forward[0]['period_id'] }}">
                                                     <input type="hidden" name="balance" value="{{ $soa_to_forward[0]['balance'] }}">
-                                                    <button type="submit" id="" class="btn btn-primary btn-icon-split m-1">
+                                                    <button type="submit" id="" class="btn btn-sm btn-primary btn-icon-split m-1">
                                                         <span class="icon text-white-50">
                                                             <i class="fas fa-arrow-right"></i>
                                                         </span>
@@ -99,8 +99,8 @@
             </div>
          </div>
          <div class="modal-footer">
-            {{-- <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a> --}}
+            {{-- <button class="btn btn-sm btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-sm btn-primary" href="login.html">Logout</a> --}}
          </div>
      </div>
  </div>

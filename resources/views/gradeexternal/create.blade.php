@@ -122,25 +122,25 @@
                         <div class="col-md-7">
                             <div class="form-group mid" id="button_group">
                                 <input type="hidden" name="external_grade_id" id="external_grade_id" class="clearable" value="">
-                                <button type="submit" id="save_class" class="btn btn-success btn-icon-split mb-2 mb-md-0">
+                                <button type="submit" id="save_class" class="btn btn-sm btn-sm btn-success btn-icon-split mb-2 mb-md-0">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-save"></i>
                                     </span>
                                     <span class="text">Save Changes</span>
                                 </button>
-                                <button type="button" id="edit" class="btn btn-primary btn-icon-split actions mb-2 mb-md-0" disabled>
+                                <button type="button" id="edit" class="btn btn-sm btn-sm btn-primary btn-icon-split actions mb-2 mb-md-0" disabled>
                                     <span class="icon text-white-50">
                                         <i class="fas fa-edit"></i>
                                     </span>
                                     <span class="text">Edit</span>
                                 </button>
-                                <button type="button" id="delete" class="btn btn-danger btn-icon-split actions mb-2 mb-md-0" disabled>
+                                <button type="button" id="delete" class="btn btn-sm btn-sm btn-danger btn-icon-split actions mb-2 mb-md-0" disabled>
                                     <span class="icon text-white-50">
                                         <i class="fas fa-trash"></i>
                                     </span>
                                     <span class="text">Delete</span>
                                 </button>
-                                <button type="button" id="cancel" class="btn btn-danger btn-icon-split mb-2 mb-md-0">
+                                <button type="button" id="cancel" class="btn btn-sm btn-sm btn-danger btn-icon-split mb-2 mb-md-0">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-times"></i>
                                     </span>
