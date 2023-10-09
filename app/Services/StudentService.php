@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\StudentUserAccess;
 use App\Models\User;
 use App\Libs\Helpers;
 use App\Models\Period;
@@ -227,17 +228,23 @@ class StudentService
             }
         }
 
-        $chunkedUserAccesses = array_chunk($user_accesses, 1000);
+        $chunkedUserAccesses = array_chunk($user_accesses, 500);
+
+        //return $chunkedUserAccesses;
 
         foreach ($chunkedUserAccesses as $chunk) 
         {
             if (!empty($chunk)) 
             {
-                UserAccess::insert($chunk);
+                StudentUserAccess::dispatch($chunk);
             }
         }
 
-        return "Records inserted successfully.";
+        return[
+            'success' => true,
+            'message' => 'Records inserted successfully',
+            'alert' => 'alert-success'
+        ];
 
     }
 }

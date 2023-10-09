@@ -58,5 +58,42 @@ $(function(){
         $("#period_name").text(period_name);
     });
 
+    $(document).on("click", "#reassess_students", function(e){
+        var postData = $("#form_filterenrolledstudents").serializeArray();
+
+        $.ajax({
+            url: "/reassessments/reassess",
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons: false
+                });
+                $(".ui-dialog-titlebar").hide();
+            },
+            success: function(response){
+                $("#confirmation").dialog('close');
+
+                console.log(response);
+            },
+            error: function (data) {
+                $("#confirmation").dialog('close');
+                //console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                    clearForm()
+                }
+            }
+        });
+        e.preventDefault();
+    });
+
     
 });

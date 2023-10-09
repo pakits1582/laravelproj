@@ -148,7 +148,6 @@ class StudentController extends Controller
     {
         $result = $this->studentService->studentsWithNoAccess();
 
-        dd($result);
         return response()->json($result);
     }
 
