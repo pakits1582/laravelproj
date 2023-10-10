@@ -36,5 +36,15 @@ class ReassessmentController extends Controller
         return response()->json(['enrolled_count' => count($enrolled_students) ?? 0]); 
     }
 
+    public function reassess(Request $request)
+    {
+        $reassess = $this->reassessmentService->reassessEnrollments($request->period_id, $request->educational_level, $request->college, $request->program_id, $request->year_level);
+
+        return $reassess;
+
+        //return response()->json(['enrolled_count' => count($enrolled_students) ?? 0]); 
+
+    }
+
 
 }
