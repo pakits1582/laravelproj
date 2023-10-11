@@ -240,6 +240,7 @@
                             @php
                                 if(strcasecmp($feetype['type'], 'Tuition Fees') == 0)
                                 {
+                                    //ACADEMIC
                                     if(strcasecmp($fee['fee']['name'], 'academic') == 0)
                                     {
                                         if($academic_subjects != 0)
@@ -254,7 +255,7 @@
                                                     $description   = $fee['fee']['name'].' ('.$academic_subjects.' unit(s) x '.$fee['rate'].'/unit)';
                                                     break;
                                                 case 3: //per subject
-                                                    $acadsubjtotal = $total_subjects*$v['rate'];
+                                                    $acadsubjtotal = $total_subjects*$fee['rate'];
                                                     $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
                                                     break;
                                                 default:
@@ -292,7 +293,7 @@
                                                     $description   = $fee['fee']['name'].' ('.$professional_subjects.' unit(s) x '.$fee['rate'].'/unit)';
                                                     break;
                                                 case 3: //per subject
-                                                    $profsubjtotal = $total_subjects*$v['rate'];
+                                                    $profsubjtotal = $total_subjects*$fee['rate'];
                                                     $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
                                                     break;
                                                 default:
@@ -330,7 +331,7 @@
                                                     $description   = $fee['fee']['name'].' ('.$total_units.' unit(s) x '.$fee['rate'].'/unit)';
                                                     break;
                                                 case 3: //per subject
-                                                    $tuitiontotal = $total_subjects*$v['rate'];
+                                                    $tuitiontotal = $total_subjects*$fee['rate'];
                                                     $description   = $fee['fee']['name'].' ('.$total_subjects.' subject(s) x '.$fee['rate'].'/subject)';
                                                     break;
                                                 default:
