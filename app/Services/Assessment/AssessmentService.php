@@ -52,8 +52,8 @@ class AssessmentService
                     'assessment_id' => $assessment->id,
                     'fee_id' => $fee_info[0],
                     'amount' => $fee_info[1],
-                    'created_at' => carbon::now(),
-                    'updated_at' => carbon::now()
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
                 ];
             }
 
@@ -71,8 +71,8 @@ class AssessmentService
                     'assessment_id' => $assessment->id,
                     'fee_type_id' => $assessbreakdown_info[0],
                     'amount' => $assessbreakdown_info[1],
-                    'created_at' => carbon::now(),
-                    'updated_at' => carbon::now()
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
                 ];
             }
 
@@ -179,8 +179,8 @@ class AssessmentService
                     'studentledger_id' => $studentledger_id,
                     'fee_id' => $assessment_detail->fee_id,
                     'amount' =>  $assessment_detail->amount,
-                    'created_at' => carbon::now(),
-                    'updated_at' => carbon::now()
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
                 ];
             }
             $enrollment->studentledger_assessment->details()->delete();
