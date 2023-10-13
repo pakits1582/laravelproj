@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Jobs\Reassessment;
 use Carbon\Carbon;
 use App\Models\FeeSetup;
 use App\Models\Enrollment;
 use App\Models\PaymentSchedule;
+use Illuminate\Support\Facades\DB;
 
 
 class ReassessmentService
@@ -51,7 +53,8 @@ class ReassessmentService
             'program',
             'program.level',
             'enrolled_classes.class.curriculumsubject.subjectinfo',
-            'assessment'
+            'grade.internalgrades',
+            'studentledger_assessment'
         ])
         ->where('period_id', $period_id)
         ->where('assessed', 1)
@@ -465,56 +468,20 @@ class ReassessmentService
 
     public function processFeesForInsert(
         $enrollment, 
-        $total_units, $total_fees, 
+        $total_units, 
+        $total_fees, 
         $assessment_details,
         $assessment_breakdowns, 
         $assessment_exams
     )
     {
-        $enrollment->update(['enrolled_units' => $total_units]);
-        $enrollment->assessment()->update(['amount' => $total_fees]);
-
-        $enrollment->assessment->breakdowns()->delete();
-        $enrollment->assessment->details()->delete();
-        $enrollment->assessment->exam()->delete();
-
-        if($assessment_details)
-        {
-            $fees = [];
-            foreach ($assessment_details as $key => $fee) 
-            {
-                $fees[] = [
-                    'assessment_id' => $enrollment->assessment->id,
-                    'fee_id' => $fee['fee_id'],
-                    'amount' => $fee['amount'],
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ];
-            }
-
-            $enrollment->assessment->details()->insert($fees);
-        }
-
-        if($assessment_breakdowns)
-        {
-            $assessbreakdowns = [];
-            foreach ($assessment_breakdowns as $key => $assessbreakdown) 
-            {
-                $assessbreakdowns[] = [
-                    'assessment_id' => $enrollment->assessment->id,
-                    'fee_type_id' => $assessbreakdown['fee_type_id'],
-                    'amount' => $assessbreakdown['amount'],
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ];
-            }
-
-            $enrollment->assessment->breakdowns()->insert($assessbreakdowns);
-        }
-
-        $enrollment->assessment->exam()->create($assessment_exams);
-
-        
-        
+        Reassessment::dispatch(
+            $enrollment, 
+            $total_units, 
+            $total_fees, 
+            $assessment_details,
+            $assessment_breakdowns, 
+            $assessment_exams
+        );
     }
 }

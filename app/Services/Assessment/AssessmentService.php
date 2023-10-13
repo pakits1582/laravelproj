@@ -22,11 +22,8 @@ class AssessmentService
 
         $assessment->load(
             'enrollment',
-            'enrollment.enrolled_classes',
             'enrollment.enrolled_classes.class',
-            'enrollment.studentledger_assessment',
             'enrollment.grade.internalgrades',
-            'enrollment.assessment.details',
         );
 
         $enrollment = $assessment->enrollment;
