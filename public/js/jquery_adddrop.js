@@ -445,6 +445,16 @@ $(function(){
 						$('#confirmation').dialog('close');
 						//console.log(data);
 						$("#return_searchedclasses").html(data);
+
+                        $('#add_classsubjects_table').DataTable({
+                            scrollY: 300,
+                            scrollX: true,
+                            scrollCollapse: true,
+                            paging: false,
+                            ordering: false,
+                            info: false,
+                            searching: false
+                        });
 					}
 				});	
 			}
@@ -537,7 +547,7 @@ $(function(){
 
         if(selected_classes.length == 0)
         {
-			showError('Please select atleast one checkbox/class subject to add!');
+			showError('Please select at least one checkbox/class subject to add!');
 			$("#add_selected_classes").attr("disabled", false);	
 		}else{
             var class_ids = selected_classes.map(function(){ return $(this).attr("value"); }).get();
@@ -619,6 +629,16 @@ $(function(){
                     $('#confirmation').dialog('close');
                     console.log(data);
                     $("#return_searchedclasses").html(data);
+
+                    $('#add_classsubjects_table').DataTable({
+                        scrollY: 300,
+                        scrollX: true,
+                        scrollCollapse: true,
+                        paging: false,
+                        ordering: false,
+                        info: false,
+                        searching: false
+                    });
                 }
             });
         }

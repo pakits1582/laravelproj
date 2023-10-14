@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use App\Models\StudentContactInformationModel;
 use App\Observers\UppercaseAttributesObserver;
@@ -63,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
         StudentPersonalInformationModel::observe(UppercaseAttributesObserver::class);
         StudentContactInformationModel::observe(UppercaseAttributesObserver::class);
         StudentAcademicInformationModel::observe(UppercaseAttributesObserver::class);
+        Model::preventLazyLoading(! $this->app->isProduction());
         
     }
 }

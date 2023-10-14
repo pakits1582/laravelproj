@@ -86,7 +86,8 @@ class ClassesService
                     // 'prerequisites' => ['curriculumsubject.subjectinfo'], 
                     // 'corequisites', 
                     // 'equivalents'
-                ]
+                ],
+                'mergetomotherclass.curriculumsubject.subjectinfo'
             ])->where('section_id', $section)->where('period_id', $period);
         
         $query->when($with_dissolved == false, function ($q) {

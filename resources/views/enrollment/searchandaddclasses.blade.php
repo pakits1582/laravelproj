@@ -37,27 +37,10 @@
                     </div>
                     <div class="card-body">
                         <form action="" method="post" id="form_tag_grade">
-                            <div class="col-xs-8 col-xs-offset-2 well">
-                                <table class="table table-sm table-scroll table-striped table-bordered" id="add_classsubjects_table" style="font-size:14px;">
-                                    <thead>
-                                        <tr>
-                                            <th class="w30">#</th>
-                                            <th class="w50">Code</th>
-                                            <th class="w120">Section</th>
-                                            <th class="w120">Subject</th>
-                                            <th>Description</th>
-                                            <th class="w50">Units</th>
-                                            <th>Schedule</th>
-                                            <th class="w50">Size</th>
-                                            <th class="w50">Max</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="return_searchedclasses">
-                                        <tr><td colspan="9" class="mid">No records to be displayed!</td></tr>
-                                    </tbody>
-                                </table>
+                            <div id="return_searchedclasses">
+                                @include('enrollment.return_searchedclasses')
                             </div>
-                            <button type="button" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm" id="add_selected_classes">Add Selected Classes</button>
+                            <button type="button" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3" id="add_selected_classes">Add Selected Classes</button>
                         </form>
                     </div>
                 </div>

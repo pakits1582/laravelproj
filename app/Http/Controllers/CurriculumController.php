@@ -106,7 +106,12 @@ class CurriculumController extends Controller
 
     public function managecurriculumsubject(CurriculumSubjects $curriculum_subject)
     {
-        $curriculum_subjects = CurriculumSubjects::with('subjectinfo')->where("curriculum_id", $curriculum_subject->curriculum->id)->get();
+        $curriculum_subject->load([
+            'prerequisites.curriculumsubject.subjectinfo', 
+            'corequisites.curriculumsubject.subjectinfo', 
+            'equivalents.subjectinfo'
+        ]);
+        $curriculum_subjects = CurriculumSubjects::with(['subjectinfo'])->where("curriculum_id", $curriculum_subject->curriculum->id)->get();
 
         return view('curriculum.manage_curriculum_subject', ['curriculum_subject' => $curriculum_subject, 'curriculum_subjects' => $curriculum_subjects]);
     }

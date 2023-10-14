@@ -227,7 +227,7 @@
                         </div>
                     </div>
                 @else
-                    <h3 class="text-danger mid m-3">No survey questions to be displayed!</h3>
+                    <h3 class="text-danger mid m-3">No survey result to be displayed!</h3>
                 @endif
             </div>
         </div>

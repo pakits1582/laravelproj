@@ -739,7 +739,7 @@ $(function(){
                     $("#display_enrolled_students_in_class").modal('show');
 
                     $('#scrollable_table').DataTable({
-                        scrollY: 400,
+                        scrollY: 300,
                         scrollX: true,
                         scrollCollapse: true,
                         paging: false,

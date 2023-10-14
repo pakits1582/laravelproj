@@ -2,12 +2,14 @@
 
 namespace App\Jobs;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class Reassessment implements ShouldQueue
 {
@@ -40,20 +42,20 @@ class Reassessment implements ShouldQueue
     {
         DB::beginTransaction();
 
-        $enrollment->update(['enrolled_units' => $total_units]);
-        $enrollment->assessment()->update(['amount' => $total_fees]);
+        $this->enrollment->update(['enrolled_units' => $this->total_units]);
+        $this->enrollment->assessment()->update(['amount' => $this->total_fees]);
 
-        $enrollment->assessment->breakdowns()->delete();
-        $enrollment->assessment->details()->delete();
-        $enrollment->assessment->exam()->delete();
+        $this->enrollment->assessment->breakdowns()->delete();
+        $this->enrollment->assessment->details()->delete();
+        $this->enrollment->assessment->exam()->delete();
 
-        if($assessment_details)
+        if($this->assessment_details)
         {
             $fees = [];
-            foreach ($assessment_details as $key => $fee) 
+            foreach ($this->assessment_details as $key => $fee) 
             {
                 $fees[] = [
-                    'assessment_id' => $enrollment->assessment->id,
+                    'assessment_id' => $this->enrollment->assessment->id,
                     'fee_id' => $fee['fee_id'],
                     'amount' => $fee['amount'],
                     'created_at' => Carbon::now(),
@@ -61,16 +63,16 @@ class Reassessment implements ShouldQueue
                 ];
             }
 
-            $enrollment->assessment->details()->insert($fees);
+            $this->enrollment->assessment->details()->insert($fees);
         }
 
-        if($assessment_breakdowns)
+        if($this->assessment_breakdowns)
         {
             $assessbreakdowns = [];
-            foreach ($assessment_breakdowns as $key => $assessbreakdown) 
+            foreach ($this->assessment_breakdowns as $key => $assessbreakdown) 
             {
                 $assessbreakdowns[] = [
-                    'assessment_id' => $enrollment->assessment->id,
+                    'assessment_id' => $this->enrollment->assessment->id,
                     'fee_type_id' => $assessbreakdown['fee_type_id'],
                     'amount' => $assessbreakdown['amount'],
                     'created_at' => Carbon::now(),
@@ -78,30 +80,30 @@ class Reassessment implements ShouldQueue
                 ];
             }
 
-            $enrollment->assessment->breakdowns()->insert($assessbreakdowns);
+            $this->enrollment->assessment->breakdowns()->insert($assessbreakdowns);
         }
 
-        $enrollment->assessment->exam()->create($assessment_exams);
+        $this->enrollment->assessment->exam()->create($this->assessment_exams);
 
-        if($enrollment->validated == 1)
+        if($this->enrollment->validated == 1)
         {
-            $enrollment->studentledger_assessment()->update(['amount' => $total_fees]);
+            $this->enrollment->studentledger_assessment()->update(['amount' => $this->total_fees]);
         
-            if($assessment_details) 
+            if($this->assessment_details) 
             {
                 $studentledger_details = [];
-                foreach ($assessment_details as $key => $assessment_detail) 
+                foreach ($this->assessment_details as $key => $assessment_detail) 
                 {
                     $studentledger_details[] = [
-                        'studentledger_id' => $enrollment->studentledger_assessment->id,
+                        'studentledger_id' => $this->enrollment->studentledger_assessment->id,
                         'fee_id' => $assessment_detail['fee_id'],
                         'amount' =>  $assessment_detail['amount'],
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now()
                     ];
                 }
-                $enrollment->studentledger_assessment->details()->delete();
-                $enrollment->studentledger_assessment->details()->insert($studentledger_details);
+                $this->enrollment->studentledger_assessment->details()->delete();
+                $this->enrollment->studentledger_assessment->details()->insert($studentledger_details);
             }
         }
     }
