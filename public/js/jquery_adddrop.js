@@ -470,13 +470,16 @@ $(function(){
         {
             var checkbox = $(this);
 			var errors   = $(this).attr("data-errors");
-
+            
 			$('.check_searched_class:checked').each(function(){
 				taken_units += isNaN(parseInt($(this).parent().siblings(".units").text())) ? 0 : parseInt($(this).parent().siblings(".units").text());
 			});
+
+            errors += ((taken_units > allowed_units)) ? '[MAX UNITS ALLOWED]' : '';
             
-            if(errors || (taken_units > allowed_units)){
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The subject you are selecting has deficiency!<br>Continue selecting subject?</div>').dialog({
+            if(errors)
+            {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The subject you are selecting has '+errors+' deficiency!<br>Continue selecting subject?</div>').dialog({
 					show: 'fade',
 					resizable: false,	
 					draggable: false,
