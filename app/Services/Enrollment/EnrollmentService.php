@@ -585,7 +585,7 @@ class EnrollmentService
                 'sectioninfo',
                 'instructor', 
                 'schedule',
-                'curriculumsubject' => ['subjectinfo']
+                'curriculumsubject.subjectinfo', 
             ],
             'addedby'
         ])->where('enrollment_id', $enrollment_id)->get();

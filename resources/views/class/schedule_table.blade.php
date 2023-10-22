@@ -1,6 +1,6 @@
 @inject('carbon', 'Carbon\Carbon')
 
-@if(count($class_schedules) > 0)
+@if(isset($class_schedules) && count($class_schedules) > 0)
     @php
         $week_days = array('M','T','W','TH','F','S','SU');
 		$firstTime = strtotime(env('SCHEDULE_TIME_FROM'));

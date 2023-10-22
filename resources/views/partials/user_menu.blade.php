@@ -12,6 +12,9 @@
     @php
         if(isset($user)){
             $userAccesses = Helpers::userAccessCategories($user->access->toArray());
+            $categories = array_unique(array_column($userAccesses, 'category'));
+            $categoryCount = count($categories);
+
             if($userAccesses){
                 if($user->utype == \App\Models\User::TYPE_ADMIN)
                 {
@@ -41,30 +44,52 @@
                         @php
                     }
                 }else if($user->utype == \App\Models\User::TYPE_INSTRUCTOR){
-                    foreach ($userAccesses as $access){
-                        $accessCategory = Str::replaceFirst(' ', '_', $access['category']);
-                        @endphp
-                            <!-- Nav Item - Pages Collapse Menu -->
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse{{ $accessCategory }}"
-                                    aria-expanded="true" aria-controls="collapse{{ $accessCategory }}">
-                                    <i class="fas fa-fw {{ Helpers::menuCategoryIcon($access['category']) }}"></i>
-                                    <span>{{ $access['category'] }}</span>
-                                </a>
-                                <div id="collapse{{ $accessCategory }}" class="collapse" aria-labelledby="heading{{ $accessCategory }}" data-parent="#accordionSidebar">
-                                    <div class="bg-white py-2 collapse-inner rounded">
-                                        <h6 class="collapse-header">Category Menu</h6>
-                                        @php
-                                            foreach ($access['access'] as $key => $v) {
-                                                @endphp
-                                                    <a class="collapse-item" href="/{{ $v['access'] }}">{{ $v['title'] }}</a>
-                                                @php
-                                            }
-                                        @endphp
+
+                    if($categoryCount == 1)
+                    {
+                        foreach ($userAccesses as $access){
+                            @endphp
+                                <li class="nav-item">
+                                    @php
+                                        foreach ($access['access'] as $key => $v) {
+                                            @endphp
+                                                <a class="nav-link" href="/{{ $v['access'] }}">
+                                                    <i class="fas fa-fw {{ Helpers::facultyMenuCategoryIcon($v['title']) }}"></i>
+                                                    <span>{{ $v['title'] }}</span>
+                                                </a>
+                                            @php
+                                        }
+                                    @endphp
+                                    
+                                </li>
+                            @php
+                        }
+                    }else{
+                        foreach ($userAccesses as $access){
+                            $accessCategory = Str::replaceFirst(' ', '_', $access['category']);
+                            @endphp
+                                <!-- Nav Item - Pages Collapse Menu -->
+                                <li class="nav-item">
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse{{ $accessCategory }}"
+                                        aria-expanded="true" aria-controls="collapse{{ $accessCategory }}">
+                                        <i class="fas fa-fw {{ Helpers::menuCategoryIcon($access['category']) }}"></i>
+                                        <span>{{ $access['category'] }}</span>
+                                    </a>
+                                    <div id="collapse{{ $accessCategory }}" class="collapse" aria-labelledby="heading{{ $accessCategory }}" data-parent="#accordionSidebar">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <h6 class="collapse-header">Category Menu</h6>
+                                            @php
+                                                foreach ($access['access'] as $key => $v) {
+                                                    @endphp
+                                                        <a class="collapse-item" href="/{{ $v['access'] }}">{{ $v['title'] }}</a>
+                                                    @php
+                                                }
+                                            @endphp
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                        @php
+                                </li>
+                            @php
+                        }
                     }
                 }else{
                     foreach ($userAccesses as $access){

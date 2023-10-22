@@ -77,26 +77,46 @@ Route::get('/applications/onlineapplication', [ApplicationController::class, 'on
 Route::post('/applications/saveonlineapplication', [ApplicationController::class, 'store'])->name('saveonlineapplication');
 Route::post('/students/studentfullinfo', [StudentController::class, 'studentfullinfo'])->name('studentfullinfo');
 
-
-
 Route::get('/', [LoginController::class, 'index'])->name('loginindex');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/changepassword', [LoginController::class, 'changepassword'])->name('changepassword');
 Route::post('/savechangepassword', [LoginController::class, 'savechangepassword'])->name('savechangepassword');
 
+//STUDENT ACCESSES
+Route::group(['middleware' => ['auth', 'student']], function () {
+
+    Route::get('/assessments/studentassessment', [AssessmentController::class, 'studentassessment'])->middleware('inaccess:assessments/studentassessment')->name('studentassessment');
+
+    // 'assessments/studentassessment', 
+    // 'evaluations/studentevaluation', 
+    // 'grades/studentgrade', 
+    // 'registration',
+    // 'students/profile', 
+    // 'studentledgers/studentaccountledger',
+    // 'attendances/studentattendance',
+    // 'facultyevaluations/studentfacultyevaluation'
+
+});
+
+//FACULTY ACCESSES
+Route::group(['middleware' => ['auth', 'faculty']], function () {
+    // 'facultyloads/facultyload'
+    // 'classlist/facultyclasslist'
+    // 'gradingsheets'
+    // 'gradegenerator'
+
+});
+
 Route::group(['middleware' => ['auth']], function () {
-    Route::resource('schools', SchoolController::class)->except(['show', 'destroy'])->middleware(['inaccess:schools'])
-        ->missing(function (Request $request) {
+   
+    Route::group(['middleware' => ['inaccess:schools']], function () {
+        Route::resource('schools', SchoolController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('schools.index');
         });
-
+    });
     
     Route::group(['middleware' => ['inaccess:users']], function () {
-        // Route::view('/instructors/import', 'instructor.import')->name('instructors.import');
-        // Route::post('/instructors/import', [InstructorController::class, 'import'])->name('instructors.uploadimport');
-        // Route::post('/instructors/export', [InstructorController::class, 'export'])->name('instructors.downloadexcel');
-        // Route::post('/instructors/generatepdf', [InstructorController::class, 'generatepdf'])->name('instructors.generatepdf');
         Route::post('/users/{user}/useraction/{action}', [UserController::class, 'useraction']);
         Route::resource('users', UserController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('users.index');

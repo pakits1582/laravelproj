@@ -8,9 +8,11 @@ use App\Models\Assessment;
 use App\Services\FeeService;
 use Illuminate\Http\Request;
 use App\Models\Configuration;
+use App\Models\Enrollment;
 use App\Models\PaymentSchedule;
 use App\Services\Assessment\AssessmentService;
 use App\Services\Enrollment\EnrollmentService;
+use Illuminate\Support\Facades\Auth;
 
 class AssessmentController extends Controller
 {
@@ -61,17 +63,40 @@ class AssessmentController extends Controller
      */
     public function show(Assessment $assessment)
     {
-        $assessment->load(['enrollment' =>['period', 'student' => ['user'], 'program', 'curriculum', 'section']]);
-        $configuration = Configuration::take(1)->first();
+        $assessment_info = $this->assessmentService->assessmentInformation($assessment);
+        
+        return view('assessment.assessment_preview', $assessment_info)->with('withbutton', 1);
+    }
 
-        $enrolled_classes  = (new EnrollmentService())->enrolledClassSubjects($assessment->enrollment_id);
-        $setup_fees        = (new FeeService())->returnSetupFees($assessment->period_id, $assessment->enrollment->program->educational_level_id);
-        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', session('current_period'))->where('educational_level_id', $assessment->enrollment->program->educational_level_id)->get();
-        //POSTCHARGES
+    public function studentassessment()
+    {
+        $user = Auth::user();
+
+        $student_id = $user->studentinfo->id; 
+        $period_id = session("current_period");
         
-        //PREVIOUS BALANCE
+        $assessment = Assessment::whereHas('enrollment', function ($query) use ($student_id, $period_id) {
+            $query->where('student_id', $student_id)->where('period_id', $period_id);
+        })->first();
         
-        return view('assessment.assessment_preview', compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules'))->with('withbutton', 1);
+        if ($assessment) 
+        {
+            $assessment_info = $this->assessmentService->assessmentInformation($assessment);
+            // $class_schedules = $this->assessmentService->enrolledClassSchedules($assessment->enrollment_id);
+            // $with_faculty = false;
+
+            // $assessment_info['class_schedules'] = $class_schedules;
+            // $assessment_info['with_faculty'] = $with_faculty;
+
+            return view('assessment.student_assessment', $assessment_info)->with('withbutton', 0);
+                
+        }else{
+
+            return view('assessment.student_assessment', ['success' => false]);
+        }
+        
+        
+
     }
 
     /**
@@ -101,15 +126,9 @@ class AssessmentController extends Controller
 
     public function printassessment(Assessment $assessment)
     {
-        $assessment->load(['enrollment' =>['period', 'student' => ['user'], 'program', 'curriculum', 'section']]);
-        $configuration = Configuration::take(1)->first();
-
-        $enrolled_classes  = (new EnrollmentService())->enrolledClassSubjects($assessment->enrollment_id);
-        $setup_fees        = (new FeeService())->returnSetupFees($assessment->period_id, $assessment->enrollment->program->educational_level_id);
-        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', session('current_period'))->where('educational_level_id', $assessment->enrollment->program->educational_level_id)->get();
+        $assessment_info = $this->assessmentService->assessmentInformation($assessment);
         
-        $pdf = PDF::loadView('assessment.print_assessment', compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules'))
-        ->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('assessment.print_assessment', $assessment_info)->setPaper('a4', 'portrait');
        
         return $pdf->stream('assessment.pdf');
     }
@@ -121,6 +140,7 @@ class AssessmentController extends Controller
 
         return view('class.schedule_table', compact('class_schedules', 'with_faculty'));
     }
+
 
   
 }

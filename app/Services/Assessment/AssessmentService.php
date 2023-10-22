@@ -3,10 +3,13 @@
 namespace App\Services\Assessment;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use App\Services\FeeService;
 use App\Models\Configuration;
+use App\Models\PaymentSchedule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EnrolledClassSchedule;
+use App\Services\Enrollment\EnrollmentService;
 
 class AssessmentService
 {
@@ -199,7 +202,8 @@ class AssessmentService
 
         $class_schedule_array = [];
 
-        if ($enrolled_class_schedules->isNotEmpty()) {
+        if ($enrolled_class_schedules->isNotEmpty()) 
+        {
             foreach ($enrolled_class_schedules as $key => $class_schedule) 
             {
                 $class_schedule_array[] = [
@@ -221,5 +225,20 @@ class AssessmentService
         }
 
         return $class_schedule_array; 
+    }
+
+    public function assessmentInformation($assessment)
+    {
+        $assessment->load(['enrollment.period', 'enrollment.student.user', 'enrollment.program', 'enrollment.curriculum', 'enrollment.section']);
+        $configuration = Configuration::take(1)->first();
+
+        $enrolled_classes  = (new EnrollmentService())->enrolledClassSubjects($assessment->enrollment_id);
+        $setup_fees        = (new FeeService())->returnSetupFees($assessment->period_id, $assessment->enrollment->program->educational_level_id);
+        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', session('current_period'))->where('educational_level_id', $assessment->enrollment->program->educational_level_id)->get();
+        //POSTCHARGES
+        
+        //PREVIOUS BALANCE
+
+        return compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules');
     }
 }
