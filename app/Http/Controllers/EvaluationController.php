@@ -133,4 +133,9 @@ class EvaluationController extends Controller
         return view('evaluation.tagged_grade', $return);
     }
 
+    public function studentevaluation()
+    {
+        return 'xxxx';
+    }
+
 }

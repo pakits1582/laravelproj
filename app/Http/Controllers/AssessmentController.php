@@ -82,21 +82,17 @@ class AssessmentController extends Controller
         if ($assessment) 
         {
             $assessment_info = $this->assessmentService->assessmentInformation($assessment);
-            // $class_schedules = $this->assessmentService->enrolledClassSchedules($assessment->enrollment_id);
-            // $with_faculty = false;
+            $class_schedules = $this->assessmentService->enrolledClassSchedules($assessment->enrollment_id);
+            $with_faculty = false;
 
-            // $assessment_info['class_schedules'] = $class_schedules;
-            // $assessment_info['with_faculty'] = $with_faculty;
+            $assessment_info['class_schedules'] = $class_schedules;
+            $assessment_info['with_faculty'] = $with_faculty;
 
             return view('assessment.student_assessment', $assessment_info)->with('withbutton', 0);
                 
         }else{
-
             return view('assessment.student_assessment', ['success' => false]);
         }
-        
-        
-
     }
 
     /**

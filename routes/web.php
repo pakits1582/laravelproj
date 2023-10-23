@@ -87,8 +87,8 @@ Route::post('/savechangepassword', [LoginController::class, 'savechangepassword'
 Route::group(['middleware' => ['auth', 'student']], function () {
 
     Route::get('/assessments/studentassessment', [AssessmentController::class, 'studentassessment'])->middleware('inaccess:assessments/studentassessment')->name('studentassessment');
+    Route::get('/evaluations/studentevaluation', [EvaluationController::class, 'studentevaluation'])->middleware('inaccess:evaluations/studentevaluation')->name('studentevaluations');
 
-    // 'assessments/studentassessment', 
     // 'evaluations/studentevaluation', 
     // 'grades/studentgrade', 
     // 'registration',
