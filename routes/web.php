@@ -89,6 +89,12 @@ Route::group(['middleware' => ['auth', 'student']], function () {
     Route::get('/assessments/studentassessment', [AssessmentController::class, 'studentassessment'])->middleware('inaccess:assessments/studentassessment')->name('studentassessment');
     Route::get('/evaluations/studentevaluation', [EvaluationController::class, 'studentevaluation'])->middleware('inaccess:evaluations/studentevaluation')->name('studentevaluations');
 
+    Route::group(['middleware' => ['inaccess:facultyevaluations/studentfacultyevaluation']], function () {
+        Route::get('/facultyevaluations/studentfacultyevaluation', [FacultyEvaluationController::class, 'studentfacultyevaluation'])->name('studentfacultyevaluation');
+        Route::get('/facultyevaluations/{facultyevaluation}/evaluateclass', [FacultyEvaluationController::class, 'evaluateclass'])->name('evaluateclass');
+        Route::post('/facultyevaluations/saveevaluation', [FacultyEvaluationController::class, 'saveevaluation'])->name('saveevaluation');
+    });
+    
     // 'evaluations/studentevaluation', 
     // 'grades/studentgrade', 
     // 'registration',
@@ -600,13 +606,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/admissions/savedocument', [AdmissionController::class, 'savedocument']);
         Route::get('/admissions', [AdmissionController::class, 'index'])->name('admissions.index');
         Route::get('/admissions/{application}', [AdmissionController::class, 'show'])->name('admission.show');
-
-    });
-
-    Route::group(['middleware' => ['inaccess:facultyevaluations/studentfacultyevaluation']], function () {
-        Route::get('/facultyevaluations/studentfacultyevaluation', [FacultyEvaluationController::class, 'studentfacultyevaluation'])->name('studentfacultyevaluation');
-        Route::get('/facultyevaluations/{facultyevaluation}/evaluateclass', [FacultyEvaluationController::class, 'evaluateclass'])->name('evaluateclass');
-        Route::post('/facultyevaluations/saveevaluation', [FacultyEvaluationController::class, 'saveevaluation'])->name('saveevaluation');
 
     });
 

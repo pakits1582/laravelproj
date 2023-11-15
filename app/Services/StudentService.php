@@ -152,6 +152,19 @@ class StudentService
         return $student;
     }
 
+    public function studentInformationByUserId($user_id)
+    {
+        $student = Student::with([
+            'program.curricula', 
+            'program.level', 
+            'program.collegeinfo',
+            'curriculum', 
+            'user'
+            ])->where('user_id', $user_id)->first();
+
+        return $student;
+    }
+
     public function studentFullInformation($request)
     {
         $query = Student::with(['user', 'academic_info', 'contact_info', 'personal_info']);

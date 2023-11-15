@@ -102,9 +102,15 @@ class EvaluationController extends Controller
      */
     public function show(Student $evaluation, Request $request)
     {
-        $student = $evaluation->load(['user', 'curriculum', 'program']);
+        $student = $evaluation->load([ 
+            'program.curricula', 
+            'program.level', 
+            'program.collegeinfo',
+            'curriculum', 
+            'user'
+        ]);
 
-        $student_evaluation = $this->evaluationService->evaluateStudent($student, $request);
+        $student_evaluation = $this->evaluationService->evaluateStudent($student);
         
         //return $student_evaluation;
         if($request->ajax())
@@ -135,7 +141,11 @@ class EvaluationController extends Controller
 
     public function studentevaluation()
     {
-        return 'xxxx';
+        $student = (new StudentService)->studentInformationByUserId(Auth::id());
+
+        $student_evaluation = $this->evaluationService->evaluateStudent($student);
+
+        return view('evaluation.student.index', $student_evaluation);
     }
 
 }

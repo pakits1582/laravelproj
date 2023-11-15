@@ -246,16 +246,16 @@ class UserService
 
     public function handleUserPrograms($user)
     {
-        if($user->utype === User::TYPE_INSTRUCTOR)
+        if($user->utype == User::TYPE_INSTRUCTOR)
         {
             $user->load('instructorinfo');
 
-            if($user->instructorinfo->designation === Instructor::TYPE_PROGRAM_HEAD)
+            if($user->instructorinfo->designation == Instructor::TYPE_PROGRAM_HEAD)
             {
                 $programs = (new ProgramService())->programHeadship($user);
             }
 
-            if($user->instructorinfo->designation === Instructor::TYPE_DEAN)
+            if($user->instructorinfo->designation == Instructor::TYPE_DEAN)
             {
                 $programs = (new ProgramService())->programDeanship($user);
             }

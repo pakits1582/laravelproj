@@ -13,7 +13,7 @@
             <div class="card-header py-3">
                 <div class="row align-items-center">
                     <div class="col-md-7">
-                        <h6 class="font-weight-bold text-primary mb-0">All programs under Deanship/Headship</h6>
+                        <h6 class="font-weight-bold text-primary mb-0">All Programs Under Deanship/Headship</h6>
                     </div>
                     <div class="col-md-5 right">
                         
