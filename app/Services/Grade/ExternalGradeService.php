@@ -126,9 +126,10 @@ class ExternalGradeService
         $query = ExternalGrade::query();
         $query->select(
             'external_grades.*', 
-            'remarks.remark'
+            'remarks.remark',
+            'grades.period_id'
         );
-        $query->leftJoin('grades', 'external_grades.grade_id', 'grades.id');
+        $query->Join('grades', 'external_grades.grade_id', 'grades.id');
         $query->leftJoin('remarks', 'external_grades.remark_id', 'remarks.id');
         $query->where(function($query){
             $query->where('remarks.remark', '=', 'PASSED');

@@ -6,6 +6,7 @@ use App\Libs\Helpers;
 use App\Models\Student;
 use App\Models\TaggedGrades;
 use Illuminate\Http\Request;
+use App\Models\Configuration;
 use App\Services\StudentService;
 use App\Models\CurriculumSubjects;
 use Illuminate\Support\Collection;
@@ -14,6 +15,7 @@ use App\Services\CurriculumService;
 use App\Services\TaggedGradeService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
+use App\Services\ConfigurationService;
 use App\Services\Grade\ExternalGradeService;
 use App\Services\Grade\InternalGradeService;
 use App\Services\Evaluation\EvaluationService;
@@ -49,12 +51,12 @@ class EvaluationController extends Controller
 
     }
 
-    public function paginate($items, $perPage = 5, $page = null, $options = [])
-    {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-    }
+    // public function paginate($items, $perPage = 5, $page = null, $options = [])
+    // {
+    //     $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+    //     $items = $items instanceof Collection ? $items : Collection::make($items);
+    //     return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -142,10 +144,12 @@ class EvaluationController extends Controller
     public function studentevaluation()
     {
         $student = (new StudentService)->studentInformationByUserId(Auth::id());
-
+        $config_schedules = (new ConfigurationService)->configurationSchedule(session('current_period'),'grade_posting');
         $student_evaluation = $this->evaluationService->evaluateStudent($student);
+        $configuration = Configuration::take(1)->first();
 
-        return view('evaluation.student.index', $student_evaluation);
+        //return $student_evaluation;
+        return view('evaluation.student.index', $student_evaluation + compact('config_schedules', 'configuration'));
     }
 
 }

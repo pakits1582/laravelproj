@@ -74,9 +74,10 @@ class InternalGradeService
             'curriculum_subjects.subject_id',
             'subjects.code',
             'subjects.units',
-            'subjects.name'
+            'subjects.name',
+            'grades.period_id'
         );
-        $query->leftJoin('grades', 'internal_grades.grade_id', 'grades.id');
+        $query->Join('grades', 'internal_grades.grade_id', 'grades.id');
         $query->leftJoin('classes', 'internal_grades.class_id', 'classes.id');
         $query->leftJoin('curriculum_subjects', 'curriculum_subjects.id', 'classes.curriculum_subject_id');
         $query->leftJoin('subjects', 'subjects.id', 'curriculum_subjects.subject_id');

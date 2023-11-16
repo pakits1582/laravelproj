@@ -4,17 +4,19 @@ namespace App\Services\Evaluation;
 
 use App\Models\User;
 use App\Libs\Helpers;
-use App\Models\ExternalGrade;
 use App\Models\Instructor;
 use App\Models\TaggedGrades;
+use App\Models\Configuration;
+use App\Models\ExternalGrade;
+use App\Services\UserService;
 use App\Services\ProgramService;
 use App\Services\StudentService;
 use App\Services\CurriculumService;
+use App\Services\TaggedGradeService;
 use Illuminate\Support\Facades\Auth;
+use App\Services\ConfigurationService;
 use App\Services\Grade\ExternalGradeService;
 use App\Services\Grade\InternalGradeService;
-use App\Services\TaggedGradeService;
-use App\Services\UserService;
 
 class EvaluationService
 {
@@ -51,6 +53,9 @@ class EvaluationService
         $blank_grades    = (new InternalGradeService())->getAllBlankInternalGrades($student->id);
         $curriculuminfo  = (new CurriculumService())->viewCurriculum($student->program, $student->curriculum);
 
+        // $config_schedules = (new ConfigurationService)->configurationSchedule(session('current_period'),'grade_posting');
+        // $configuration = Configuration::take(1)->first();
+
         $evaluation = [];
         if($curriculuminfo['program'])
         {
@@ -71,6 +76,7 @@ class EvaluationService
                                 $units      = '';
                                 $origin     = '';
                                 $ispassed   = 0;
+                                $period_id  = 0;
                                 $manage     = true;
 
                                 $grades = $internal_grades->where('subject_id', $subject['subject_id'])->toArray();
@@ -87,6 +93,7 @@ class EvaluationService
                                         $units      = $grade_info['units'];
                                         $origin     = 'internal';
                                         $ispassed   = 1;
+                                        $period_id  = $grade_info['period_id'];
                                         $manage     = ($subject['subjectinfo']['units'] !== $grade_info['units']) ? true : false;
                                     }
                                 }else{
@@ -103,7 +110,6 @@ class EvaluationService
                                             //GET ALL EXTERNAL GRADES OF EQUIVALENT SUBJECTS
                                             $equivalent_subjects_external_grades += $tagged_grades->where('subject_id', $equivalent_subject['equivalent'])->toArray();
                                         }
-
                                         
                                         if($equivalent_subjects_internal_grades)
                                         {
@@ -127,6 +133,7 @@ class EvaluationService
                                                     $units      = $grade_info['units'];
                                                     $origin     = $grade_info['source'];
                                                     $ispassed   = 1;
+                                                    $period_id  = $grade_info['period_id'];
                                                     $manage     = true;
                                                 }
                                             }
@@ -152,6 +159,7 @@ class EvaluationService
                                             $units      = $grade_info['units'];
                                             $origin     = $grade_info['source'];
                                             $ispassed   = 1;
+                                            $period_id  = $grade_info['period_id'];
                                             $manage     = true;
                                         }
                                     }//end of if has tagged subject
@@ -164,6 +172,7 @@ class EvaluationService
                                     'units' => $units,
                                     'origin' => $origin,
                                     'ispassed' => $ispassed,
+                                    'period_id' => $period_id,
                                     'manage' => $manage,
                                     'inprogress' => (!$blank_grades->isEmpty()) ? ((Helpers::is_column_in_array($subject['subject_id'], 'subject_id', $blank_grades->toArray()) === false) ? 0 : 1) : 0
                                 ];
