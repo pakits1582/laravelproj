@@ -88,13 +88,9 @@ class CurriculumController extends Controller
 
     public function storesubjects(StoreCurriculumSubjectsRequest $request)
     {
-        $this->curriculumService->storeCurriculumSubjects($request);
+        $store_subjects = $this->curriculumService->storeCurriculumSubjects($request);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Subjects sucessfully added!',
-            'alert' => 'alert-success'
-        ], 200);
+        return response()->json($store_subjects);
     }
 
     public function viewcurriculum(Program $program, Curriculum $curriculum)

@@ -21,7 +21,7 @@ $(function(){
                 var term_type = $("#term option:selected").attr('data-type');
                 var term_text = $("#term option:selected").text();
                 var periodyear = parseInt(year) + 1;
-                var periodname = (term_type == 1) ? term_text+', '+year+'-'+periodyear : term_text+' '+year;
+                var periodname = (term_type == 1) ? term_text+', '+year+'-'+periodyear : term_text+' '+periodyear;
                 $("#name").val(periodname);
 
 			}else{

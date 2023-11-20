@@ -44,7 +44,7 @@
                                                     @endif
                                                     <option value="addcurriculum" data-toggle="modal" data-target="#modal">- Click to add new curriculum -</option>  
                                                 </select>
-                                                <div id="error_curriculum_id"></div>
+                                                <div id="error_curriculum_id" class="errors"></div>
                                                 @error('curriculum_id')
                                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                                 @enderror
@@ -67,7 +67,7 @@
                                                         @endforeach
                                                     @endif
                                                 </select>
-                                                <div id="error_term_id"></div>
+                                                <div id="error_term_id" class="errors"></div>
                                                 @error('term_id')
                                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                                 @enderror
@@ -76,14 +76,11 @@
                                                 <label for="year_level" class="m-0 font-weight-bold text-primary">* Year Level</label>
                                                 <select name="year_level" class="form-control">
                                                     <option value="">- select year level -</option>
-                                                    <option value="1" {{ (old('year_level') == 1) ? 'selected' : '' }}>First Year</option>
-                                                    <option value="2" {{ (old('year_level') == 2) ? 'selected' : '' }}>Second Year</option>
-                                                    <option value="3" {{ (old('year_level') == 3) ? 'selected' : '' }}>Third Year</option>
-                                                    <option value="4" {{ (old('year_level') == 4) ? 'selected' : '' }}>Fourth Year</option>
-                                                    <option value="5" {{ (old('year_level') == 5) ? 'selected' : '' }}>Fifth Year</option>
-                                                    <option value="6" {{ (old('year_level') == 6) ? 'selected' : '' }}>Sixth Year</option>
+                                                    @for ($i = 1; $i <= $program->years; $i++)
+                                                        <option value="{{ $i }}" {{ (old('year_level') == $i) ? 'selected' : '' }}>{{ Helpers::yearLevel($i) }}</option>
+                                                    @endfor
                                                 </select>
-                                                <div id="error_year_level"></div>
+                                                <div id="error_year_level" class="errors"></div>
                                                 @error('year_level')
                                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                                 @enderror
@@ -137,7 +134,7 @@
                                                         <option value="">- Add at least one subject -</option>
                                                     </select>
                                                     <p class="font-italic text-info">Note: (*)  Only highlighted subjects will be added. Please double check selection.</p>
-                                                    <div id="error_subjects"></div>
+                                                    <div id="error_subjects" class="errors"></div>
                                                     @error('subjects')
                                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                                     @enderror

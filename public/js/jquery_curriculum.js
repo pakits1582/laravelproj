@@ -170,7 +170,7 @@ $(function(){
 				$("#form_addsubjectincurriculum").prepend('<p class="alert '+data.alert+'">'+data.message+'</p>');
 				window.scrollTo(0, 0);
 
-				$("#selected_subjects").html("");
+				$("#selected_subjects, .errors").html("");
 				returnCurriculum(program, curriculum);
 			},
 			error: function (data) {

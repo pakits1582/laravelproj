@@ -41,17 +41,32 @@ class CurriculumService
 
     public function storeCurriculumSubjects($request)
     {
-        $curriculum = Curriculum::with('subjects')->find($request->curriculum_id);
+        $curriculum = Curriculum::find($request->curriculum_id);
+
+        if (!$curriculum) 
+        {
+            return [
+                'success' => false,
+                'message' => 'Curriculum not found!',
+                'alert' => 'alert-danger'
+            ];
+        }
 
         foreach ($request->subjects as $key => $subject) {
-            $subjects[] = new CurriculumSubjects([
+            $subjects[] = [
                 'subject_id' => $subject,
                 'term_id'    => $request->term_id,
                 'year_level' => $request->year_level
-            ]);
+            ];
         }
 
-        return $curriculum->subjects()->saveMany($subjects);
+        $curriculum->subjects()->createMany($subjects);
+
+        return [
+            'success' => true,
+            'message' => 'Subjects sucessfully added!',
+            'alert' => 'alert-success'
+        ];
     }
 
     public function searchSubjects($request)
@@ -60,8 +75,8 @@ class CurriculumService
 
         if(!empty($request->keyword)) {
             $query->where(function($query) use($request){
-                $query->where('code', 'like', $request->keyword.'%')
-                ->orWhere('name', 'like', $request->keyword.'%');
+                $query->where('code', 'like', $request->keyword.'%');
+                // ->orWhere('name', 'like', $request->keyword.'%');
             });
         }
 
