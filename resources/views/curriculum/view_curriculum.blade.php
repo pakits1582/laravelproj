@@ -21,7 +21,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive-sm">
-                                            <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
+                                            <table class="table table-sm table-striped table-bordered" style="font-size: 12px;">
                                                 <thead class="text-primary">
                                                     <tr>
                                                         <th class="w20 mid"><i class="fas fa-fw fa-cog"></i></th>

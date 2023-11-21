@@ -54,6 +54,19 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6">
+                                                <label for="year_level" class="m-0 font-weight-bold text-primary">* Year Level</label>
+                                                <select name="year_level" class="form-control">
+                                                    <option value="">- select year level -</option>
+                                                    @for ($i = 1; $i <= $program->years; $i++)
+                                                        <option value="{{ $i }}" {{ (old('year_level') == $i) ? 'selected' : '' }}>{{ Helpers::yearLevel($i) }}</option>
+                                                    @endfor
+                                                </select>
+                                                <div id="error_year_level" class="errors"></div>
+                                                @error('year_level')
+                                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">* Term</label>
                                                 <select name="term" class="form-control" id="term">
                                                     <option value="">- select term -</option>
@@ -72,19 +85,7 @@
                                                     <p class="text-danger text-xs mt-1">{{$message}}</p>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="year_level" class="m-0 font-weight-bold text-primary">* Year Level</label>
-                                                <select name="year_level" class="form-control">
-                                                    <option value="">- select year level -</option>
-                                                    @for ($i = 1; $i <= $program->years; $i++)
-                                                        <option value="{{ $i }}" {{ (old('year_level') == $i) ? 'selected' : '' }}>{{ Helpers::yearLevel($i) }}</option>
-                                                    @endfor
-                                                </select>
-                                                <div id="error_year_level" class="errors"></div>
-                                                @error('year_level')
-                                                    <p class="text-danger text-xs mt-1">{{$message}}</p>
-                                                @enderror
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                     <div class="form-group">
