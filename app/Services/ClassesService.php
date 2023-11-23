@@ -7,13 +7,14 @@ use App\Models\Room;
 use App\Models\Classes;
 use App\Models\Section;
 use App\Models\Schedule;
+use App\Models\Instructor;
+use App\Models\EnrolledClass;
 use App\Models\ClassesSchedule;
 use App\Models\SectionMonitoring;
 use App\Models\CurriculumSubjects;
-use App\Models\EnrolledClass;
-use App\Models\EnrolledClassSchedule;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\EnrolledClassSchedule;
+use Illuminate\Database\Eloquent\Builder;
 
 class ClassesService
 {
@@ -174,10 +175,17 @@ class ClassesService
 
     public function generateCode()
     {
-        $classes_withnocode = Classes::with('sectioninfo.programinfo.collegeinfo')->where('code', NULL)->orWhere('code', '=', '')->where('period_id', session('current_period'))->get();
+        $classes_withnocode = Classes::with('sectioninfo.programinfo.collegeinfo')
+                                ->where(function ($query) {
+                                    $query->whereNull('code')->orWhere('code', '');
+                                })
+                                ->where('period_id', session('current_period'))
+                                ->get();
 
-        if(count($classes_withnocode)){
-            foreach ($classes_withnocode as $key => $class_withnocode) {
+        if($classes_withnocode->isNotEmpty())
+        {
+            foreach ($classes_withnocode as $key => $class_withnocode) 
+            {
                 $class_code = $class_withnocode->sectioninfo->programinfo->collegeinfo->class_code ?? 'NC';
 
                 $last_code = DB::table('classes')->select(DB::raw('MAX(CAST(SUBSTRING(code, 2, length(code) -1) AS UNSIGNED)) AS lastcode'))->where('code','like', $class_code.'%')->where('period_id', session('current_period'))->get()[0];
@@ -319,10 +327,12 @@ class ClassesService
             $schedule_array = $this->processSchedule($request->schedule);
             $classes_with_schedules = $this->classesWithSchedules();
 
+            $conflicts_sections = [];
+            $conflicts_faculty = [];
+
             foreach ($schedule_array as $key => $sched) 
             {
-                $conflicts_sections = [];
-                $conflicts_faculty = [];
+               
                 $timefrom = $sched['timefrom'];
                 $timeto =  $sched['timeto'];
                 
@@ -347,36 +357,37 @@ class ClassesService
                         }
                     }
                 }//end of days
-                $conflicts_sections = array_unique($conflicts_sections);
+            }
 
-                if($conflicts_sections)
+            $conflicts_sections = array_unique($conflicts_sections);
+
+            if($conflicts_sections)
+            {
+                foreach ($conflicts_sections as $key => $conflict) 
                 {
-                    foreach ($conflicts_sections as $key => $conflict) 
-                    {
-                        $errors[] = [
-                            'class_code' => $conflict->code,
-                            'section_code' => $conflict->sectioninfo->code,
-                            'subject_code' => $conflict->curriculumsubject->subjectinfo->code,
-                            'schedule' => $conflict->schedule->schedule,
-                            'conflict_from' => 'Section'
-                        ];
-                    }
+                    $errors[] = [
+                        'class_code' => $conflict->code,
+                        'section_code' => $conflict->sectioninfo->code,
+                        'subject_code' => $conflict->curriculumsubject->subjectinfo->code,
+                        'schedule' => $conflict->schedule->schedule,
+                        'conflict_from' => 'Section'
+                    ];
                 }
+            }
 
-                $conflicts_faculty = array_unique($conflicts_faculty);
+            $conflicts_faculty = array_unique($conflicts_faculty);
 
-                if($conflicts_faculty)
+            if($conflicts_faculty)
+            {
+                foreach ($conflicts_faculty as $key => $conflict) 
                 {
-                    foreach ($conflicts_faculty as $key => $conflict) 
-                    {
-                        $errors[] = [
-                            'class_code' => $conflict->code,
-                            'section_code' => $conflict->sectioninfo->code,
-                            'subject_code' => $conflict->curriculumsubject->subjectinfo->code,
-                            'schedule' => $conflict->schedule->schedule,
-                            'conflict_from' => 'Faculty'
-                        ];
-                    }
+                    $errors[] = [
+                        'class_code' => $conflict->code,
+                        'section_code' => $conflict->sectioninfo->code,
+                        'subject_code' => $conflict->curriculumsubject->subjectinfo->code,
+                        'schedule' => $conflict->schedule->schedule,
+                        'conflict_from' => 'Faculty'
+                    ];
                 }
             }
         }
@@ -809,4 +820,5 @@ class ClassesService
 
         return $class_schedule_array;
     }
+
 }

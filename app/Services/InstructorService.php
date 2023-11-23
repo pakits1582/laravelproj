@@ -73,4 +73,34 @@ class InstructorService
 
         return $query->get();
     }
+
+    public function dropdownSelectSearch($request)
+    {
+        if($request->searchTerm)
+        {
+            $query = Instructor::orderBy('last_name')->orderBy('first_name');
+            $query->where('user_id', '!=', null);
+
+            if($request->has('searchTerm') && !empty($request->searchTerm)) 
+            {
+                $query->where(function($query) use($request){
+                    $query->where('last_name', 'like', $request->searchTerm.'%')
+                        ->orWhere('first_name', 'like', $request->searchTerm.'%')
+                        ->orWhere('middle_name', 'like', $request->searchTerm.'%');
+                });
+            }
+
+            $instructors = $query->limit(20)->get();
+
+            $data = [];
+            if(!$instructors->isEmpty())
+            {
+                foreach ($instructors as $key => $instructor) {
+                    $data[] = ['id' => $instructor->id, 'text' => $instructor->last_name.', '.$instructor->first_name.' '.$instructor->name_suffix.' '.$instructor->middle_name];
+                }
+            } 
+
+            return $data;
+        }
+    }
 }

@@ -5,6 +5,35 @@ $(function(){
 		}
 	});
 
+    $("#instructor").select2({
+	    // dropdownParent: $("#ui_content3"),
+        minimumInputLength: 2,
+        tags: false,
+        minimumResultsForSearch: 20, // at least 20 results must be displayed
+        ajax: {
+            url: '/instructors/dropdownselectsearch',
+            dataType: 'json',
+            delay: 250,
+            data: function (data) {
+                return {
+                    searchTerm: data.term // search term
+                };
+            },
+            processResults: function(data) {
+                console.log(data);
+                return {
+                    results: $.map(data, function(item) {
+                        return {
+                            text: item.text,
+                            id: item.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+	});
+
     
     $('#scrollable_table').DataTable({
         scrollY: 200,
@@ -17,11 +46,6 @@ $(function(){
         searching: false
     });
 
-
-    $("#instructor").select2({
-	    dropdownParent: $("#ui_content3")
-	});
-
     $("#program_id").select2({
 	    dropdownParent: $("#ui_content2")
 	});
@@ -29,12 +53,22 @@ $(function(){
     $(document).on("change", "#program_id", function(e){
         var program_id = $(this).val();
 
-       
-            $("#year_level, #section").val("");
-            $("#button_group").addClass('d-none');
-            $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+        $("#year_level, #section").val("");
+        $("#button_group").addClass('d-none');
+        $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+        $("#schedule_table").html('');
         
         e.preventDefault();
+    });
+
+    $(document).on("click","#tutorial", function(){
+        var origval = $("#loadunits").attr("data-origval");
+
+        if ($(this).prop('checked')) {
+            $("#loadunits").val(0);
+        } else {
+            $("#loadunits").val(origval);
+        }
     });
 
     $(document).on("change", "#year_level", function(e){
@@ -43,6 +77,11 @@ $(function(){
 
         if(program_id)
         {
+            $("#section").val("");
+            $("#button_group").addClass('d-none');
+            $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+            $("#schedule_table").html('');
+            
             if(year_level)
             {
                 $.ajax({
@@ -66,6 +105,7 @@ $(function(){
                 $("#section").val("");
                 $("#button_group").addClass('d-none');
                 $("#return_classsubjects").html('<tr><td colspan="13" class="mid">No records to be displayed</td></tr>');
+                $("#schedule_table").html('');
             }
         }else{
             showError('Please select program first!');
@@ -79,7 +119,7 @@ $(function(){
         $.ajax({
 			url: "/classes/sectionclasssubjects",
 			type: 'POST',
-			data: ({ 'section' : section}),
+			data: ({ 'section' : section }),
 			success: function(data){
 				//console.log(data);
 				$("#return_classsubjects").html(data);
@@ -94,18 +134,24 @@ $(function(){
 
     function returnScheduleTable(section)
     {
-        $.ajax({
-			url: "/classes/scheduletable",
-			type: 'POST',
-			data: ({ 'section' : section}),
-			success: function(data){
-				//console.log(data);
-				$("#schedule_table").html(data);
-			},
-			error: function (data) {
-				console.log(data);
-			}
-		});
+        if(section)
+        {
+            $.ajax({
+                url: "/classes/scheduletable",
+                type: 'POST',
+                data: ({ 'section' : section}),
+                success: function(data){
+                    //console.log(data);
+                    $("#schedule_table").html(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }else{
+            $("#schedule_table").html('');
+        }
+        
     }
 
     $(document).on("change", "#section", function(e){
@@ -264,6 +310,7 @@ $(function(){
                         $('#subject_name').val(response.data.curriculumsubject.subjectinfo.name);
                         $('#units').val(response.data.units);
                         $('#loadunits').val(response.data.loadunits);
+                        $('#loadunits').attr("data-origval", response.data.loadunits);
                         $('#tfunits').val(response.data.tfunits);
                         $('#lecunits').val(response.data.lecunits);
                         $('#labunits').val(response.data.labunits);
@@ -383,7 +430,7 @@ $(function(){
                         });//end of dialogbox
                     $(".ui-dialog-titlebar").hide();
                 }else{
-                    console.log(response);
+                    //console.log(response);
                     updateCLassSubject(postData);
                 }
             },
@@ -495,7 +542,6 @@ $(function(){
                 if(response.success)
                 {
                     showSuccess(response.message);
-                    returnClassSubjects(section);
                 
                     var section = $("#section").val();
                     returnClassSubjects(section);
@@ -523,7 +569,7 @@ $(function(){
 			type: 'GET',
             dataType: 'json',
             beforeSend: function() {
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Generating codes, please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
                     show: 'fade',
                     resizable: false,	
                     width: 350,

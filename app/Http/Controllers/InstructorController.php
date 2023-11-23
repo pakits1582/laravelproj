@@ -187,4 +187,11 @@ class InstructorController extends Controller
         return $pdf->stream('instructors.pdf');
     }
 
+    public function dropdownselectsearch(Request $request)
+    {
+        $data = $this->instructorService->dropdownSelectSearch($request);
+
+        return response()->json($data);
+    }
+
 }

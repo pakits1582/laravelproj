@@ -12,7 +12,7 @@ use App\Models\CurriculumSubjects;
 use App\Models\Prerequisite;
 use App\Models\Corequisite;
 use App\Models\Equivalent;
-
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class CurriculumService
@@ -52,15 +52,31 @@ class CurriculumService
             ];
         }
 
-        foreach ($request->subjects as $key => $subject) {
+        $subjects = [];
+
+        foreach ($request->subjects as $key => $subject) 
+        {
             $subjects[] = [
+                'curriculum_id' => $curriculum->id,
                 'subject_id' => $subject,
                 'term_id'    => $request->term_id,
-                'year_level' => $request->year_level
+                'year_level' => $request->year_level,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ];
         }
 
-        $curriculum->subjects()->createMany($subjects);
+        $curriculum->subjects()->insert($subjects);
+
+        // foreach ($request->subjects as $key => $subject) {
+        //     $subjects[] = [
+        //         'subject_id' => $subject,
+        //         'term_id'    => $request->term_id,
+        //         'year_level' => $request->year_level
+        //     ];
+        // }
+
+        // $curriculum->subjects()->createMany($subjects);
 
         return [
             'success' => true,

@@ -24,9 +24,9 @@ class ClassesController extends Controller
  
     public function index(InstructorService $instructorService)
     {
-        $instructors = $instructorService->getInstructor();
+        //$instructors = $instructorService->getInstructor();
 
-        return view('class.index', compact('instructors'));
+        return view('class.index');
     }
 
     public function addclassoffering(Section $section)

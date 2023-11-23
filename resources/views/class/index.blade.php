@@ -140,12 +140,12 @@
                                             <div class="col-md-4">
                                                 <label for="term" class="m-0 font-weight-bold text-primary">Instructor</label>
                                                 <select name="instructor_id" class="form-control select clearable" id="instructor">
-                                                    <option value="">- select instructor -</option>
-                                                    @if ($instructors)
+                                                    <option value="">- search instructor -</option>
+                                                    {{-- @if ($instructors)
                                                         @foreach ($instructors as $instructor)
                                                             <option value="{{ $instructor->id }}">{{ $instructor->last_name.', '.$instructor->first_name.' '.$instructor->middle_name }}</option>
                                                         @endforeach
-                                                    @endif
+                                                    @endif --}}
                                                 </select>                                            
                                             </div>
                                             <div class="col-md-6">

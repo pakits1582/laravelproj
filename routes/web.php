@@ -129,6 +129,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
+    Route::get('/instructors/dropdownselectsearch', [InstructorController::class, 'dropdownselectsearch']);
     Route::group(['middleware' => ['inaccess:instructors']], function () {
         Route::view('/instructors/import', 'instructor.import')->name('instructors.import');
         Route::post('/instructors/import', [InstructorController::class, 'import'])->name('instructors.uploadimport');
