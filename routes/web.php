@@ -272,6 +272,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['middleware' => ['inaccess:classes']], function () {
+        Route::get('/classes/{class}/classinfo', [ClassesMergingController::class, 'show']);
         Route::post('/classes/merge', [ClassesMergingController::class, 'merge']);
         Route::post('/classes/searchcodetomerge', [ClassesMergingController::class, 'searchcodetomerge']);
         Route::post('/classes/savemerge', [ClassesMergingController::class, 'savemerge'])->name('classes.savemerge');

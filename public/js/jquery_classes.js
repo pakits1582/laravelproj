@@ -299,6 +299,7 @@ $(function(){
                 url: "/classes/"+class_id+"/edit",
                 dataType: 'json',
                 success: function(response){
+                    console.log(response);
                     if(!jQuery.isEmptyObject(response)){
 
                         $('#delete').prop("disabled", true);
@@ -317,7 +318,12 @@ $(function(){
                         $('#hours').val(response.data.hours);
                         $('#slots').val(response.data.slots);
                         $('#schedule').val(response.data.schedule.schedule);
-                        $('#instructor').val(response.data.instructor_id).trigger('change');
+                        if(response.data.instructor_id !== null)
+                        {
+                            var $newOption = $("<option selected='selected'></option>").val(response.data.instructor_id).text(response.data.instructor.last_name+', '+response.data.instructor.first_name+' '+response.data.instructor.name_suffix+' '+response.data.instructor.middle_name);
+					        $("#instructor").append($newOption).trigger('change');
+                        }
+                        //$('#instructor').val(response.data.instructor_id).trigger('change');
                         if (response.data.tutorial === 1){ $('#tutorial').prop('checked', true) }
                         if (response.data.dissolved === 1){ $('#dissolved').prop('checked', true) }
                         if (response.data.f2f === 1){ $('#f2f').prop('checked', true) }

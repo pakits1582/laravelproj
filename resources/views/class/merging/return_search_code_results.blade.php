@@ -21,7 +21,7 @@
                         <td class="">{{ $class->sectioninfo->code }}</td>
                         <td class="">{{ $class->curriculumsubject->subjectinfo->code }}</td>
                         <td class="">{{ $class->schedule->schedule }}</td>
-                        @php
+                        {{-- @php
                             $faculty = '';
                         @endphp
                         @if ($class->instructor_id)
@@ -36,7 +36,8 @@
                                 $faculty = $callname;
                             @endphp
                         @endif
-                        <td class="">{{ $faculty }}</td>
+                        <td class="">{{ $faculty }}</td> --}}
+                        <td class="">{{ Helpers::getFacultyShortenName($class->instructor) }}</td>
                         <td class="mid">{{ $class->enrolledstudents->count() }}</td>
                         <td class="mid">{{ $class->slots }}</td>
                     </tr>

@@ -112,7 +112,7 @@ $(function(){
     $(document).on("click", ".merge", function(e){
         var class_id = $(this).attr("id");
 
-        $.ajax({url: "/classes/"+class_id, success: function(response)
+        $.ajax({url: "/classes/"+class_id+"/classinfo", success: function(response)
             {
                 //console.log(response);
                 var number_of_enrolled = response.data.enrolledstudents.length

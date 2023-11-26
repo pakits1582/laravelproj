@@ -525,6 +525,25 @@ class Helpers
             return 0; // Default value when combination is not found
         }
     }
+
+    public static function getFacultyShortenName($instructor)
+    {
+        if (!$instructor) 
+        {
+            return '';
+        }
+
+        $last_name = (is_array($instructor)) ? $instructor['last_name'] : $instructor->last_name;
+        $first_name = (is_array($instructor)) ? $instructor['first_name'] : $instructor->first_name; 
+
+        $fname = explode(" ", $first_name);
+        $acronym = "";
+        foreach ($fname as $w) {
+            $acronym .= $w[0];
+        }
+
+        return ($first_name === '(TBA)') ? 'TBA' : $acronym.'. '.$last_name;
+    }
     
 
 }

@@ -39,7 +39,7 @@
             <td class="mid">{{ $section_subject->lecunits }}</td>
             <td class="mid">{{ $section_subject->labunits }}</td>
             <td class="mid">{{ $section_subject->hours }}</td>
-            @php
+            {{-- @php
                 $faculty = '';
             @endphp
             @if ($section_subject->instructor_id)
@@ -54,7 +54,8 @@
                     $faculty = $callname;
                 @endphp
             @endif
-            <td>{{ $faculty }}</td>
+            <td>{{ $faculty }}</td> --}}
+            <td class="">{{ Helpers::getFacultyShortenName($section_subject->instructor) }}</td>
             <td>{{ $section_subject->schedule->schedule }}</td>
             <td class="editable tutorial mid text-uppercase" contenteditable="true" id="{{ $section_subject->id }}" data-value="{{ $section_subject->slots }}">{{ $section_subject->slots }}</td>
             <td>{{ $section_subject->curriculumsubject->curriculum->curriculum }}</td>

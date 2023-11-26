@@ -308,7 +308,7 @@ $(function(){
                         $('#edit').prop("disabled", true);
                         $('input.checks').prop('disabled', true); 
 
-                        $('#period').val(response.data.period_id).trigger('change');
+                        $('#period').val(response.data.period_id);
                         $('#educational_level_id').val(response.data.educational_level_id);
                         $('#college_id').val(response.data.college_id);
 
@@ -343,7 +343,7 @@ $(function(){
                     console.log(data);
                     var errors = data.responseJSON;
                     if ($.isEmptyObject(errors) == false) {
-                        showError('Something went wrong! Can not perform requested action! '+errors.message);
+                        showError('Something went wrong! Can not perform requested action!');
                     }
                 }
             });

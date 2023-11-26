@@ -98,6 +98,7 @@ services:
             PMA_ARBITRARY: 1
             MYSQL_USER: '${DB_USERNAME}'
             MYSQL_PASSWORD: '${DB_PASSWORD}'
+            UPLOAD_LIMIT: 300M
         restart: always
         ports:
             - 8081:80
