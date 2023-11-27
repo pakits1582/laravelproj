@@ -599,33 +599,6 @@ class ClassesService
 		
     }
 
-    public function searchClassSubjectsToMerge($searchcodes)
-    {
-        $searchcodes=  explode(",",preg_replace('/\s+/', ' ', trim($searchcodes)));
-        $searchcodes= array_map('trim', $searchcodes);
-
-        $query = Classes::with([
-            'sectioninfo',
-            'instructor', 
-            'schedule',
-            'enrolledstudents',
-            'curriculumsubject.subjectinfo'
-        ])->where('period_id', session('current_period'));
-
-        $query->where(function($query) use($searchcodes){
-            foreach($searchcodes as $key => $code){
-                $query->orwhere(function($query) use($code){
-                    $query->orWhere('code', 'LIKE', $code.'%');
-                    $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
-                        $query->where('subjects.code', 'LIKE', $code.'%');
-                    });
-                });
-            }
-        });
-
-        return $query->get()->sortBy('curriculumsubject.subjectinfo.code');
-    }
-
     public function displayEnrolledToClassSubject($class)
     {
         $class->load([

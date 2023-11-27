@@ -103,7 +103,7 @@ $(function(){
                 console.log(data);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) == false) {
-                    showError('Something went wrong! Can not perform requested action! '+errors.message);
+                    showError('Something went wrong! Can not perform requested action!');
                 }
             }
         });	
@@ -227,7 +227,7 @@ $(function(){
                                 },
                                 success: function(data){
                                     $("#confirmation").dialog('close');
-                                    //console.log(data);
+                                    console.log(data);
                                     
                                     if(data.success === true)
                                     {
