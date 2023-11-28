@@ -53,7 +53,7 @@
                                                         <label for="name" class="m-0 font-weight-bold text-primary">Period</label>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        @include('partials.periods.dropdown', ['fieldname' => 'period_copyfrom', 'fieldid' => 'period_copyfrom', 'fieldclass' => 'copyclass_dropdown'])                                                
+                                                        @include('partials.periods.dropdown', ['value' => session('current_period'), 'fieldname' => 'period_copyfrom', 'fieldid' => 'period_copyfrom', 'fieldclass' => 'copyclass_dropdown'])                                                
                                                     </div>
                                                 </div>
                                             </div>

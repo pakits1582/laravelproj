@@ -18,7 +18,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12 mx-auto">
-                                <div class="bg-white rounded-lg shadow-sm p-3">
+                                {{-- <div class="bg-white rounded-lg shadow-sm pt-0 p-3"> --}}
                                     <p class="font-italic text-info">Note: You can select curriculum, term and year level to filter subjects to be displayed in the result set.</p>
                                     <!-- credit card info-->
                                     <div id="nav-tab-card" class="tab-pane fade show active">
@@ -28,11 +28,11 @@
                                         <form method="POST" action="{{ route('classes.store') }}"  role="form" id="form_addsubject_class_offering">
                                             @csrf
                                             <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-2">
+                                                <div class="row align-items-center mb-1">
+                                                    <div class="col-md-1">
                                                         <label for="code"  class="m-0 font-weight-bold text-primary">Curriculum</label>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <select name="curriculum" class="form-control filter_curriculum_subjects" id="curriculum">
                                                             <option value="">- select curriculum -</option>
                                                             @if ($section)
@@ -42,14 +42,10 @@
                                                             @endif
                                                         </select>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-2">
+                                                    <div class="col-md-1 right">
                                                         <label for="name" class="m-0 font-weight-bold text-primary">Term</label>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-4">
                                                         <select name="term" class="form-control filter_curriculum_subjects" id="term">
                                                             <option value="">- select term -</option>
                                                                 @if ($terms)
@@ -59,14 +55,10 @@
                                                                 @endif
                                                         </select>                                                    
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-2">
+                                                    <div class="col-md-2 right">
                                                         <label for="name" class="m-0 font-weight-bold text-primary">Year Level</label>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <select name="year_level" class="form-control filter_curriculum_subjects" id="yearlevel">
                                                             <option value="">- select year level -</option>
                                                             @if ($section)
@@ -130,7 +122,7 @@
                                         </form>
                                     </div>
                                   <!-- End -->
-                                </div>
+                                {{-- </div> --}}
                             </div>
                         </div>
                     </div>

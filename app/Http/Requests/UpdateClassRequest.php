@@ -37,12 +37,12 @@ class UpdateClassRequest extends FormRequest
     public function rules()
     {
         return [
-            'units' => 'numeric',
-            'tfunits' =>  'numeric',
-            'loadunits' =>  'numeric',
-            'lecunits' =>  'numeric',
-            'labunits' =>  'numeric',
-            'hours' =>  'numeric',
+            'units' => 'nullable|numeric',
+            'tfunits' =>  'nullable|numeric',
+            'loadunits' =>  'nullable|numeric',
+            'lecunits' =>  'nullable|numeric',
+            'labunits' =>  'nullable|numeric',
+            'hours' =>  'nullable|numeric',
             'slots' => 'sometimes|integer|nullable',
             'tutorial' => [],
             'dissolved' => [],
