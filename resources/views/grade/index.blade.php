@@ -134,8 +134,17 @@
                 </div>
             </div>
         </div>
-        <div id="return_gradefile">
-            <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
+        <div class="row">
+            <div class="col-md-12 mx-auto">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Student's Grade File</h6>
+                    </div>
+                    <div class="card-body" id="return_gradefile">
+                        <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- /.container-fluid -->

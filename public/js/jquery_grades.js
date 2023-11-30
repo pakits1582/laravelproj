@@ -84,7 +84,7 @@ $(function(){
             dataType: 'json',
             cache: false, 
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 $("#grade_id").val(response.id);
             } 
         });
@@ -100,7 +100,7 @@ $(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
+                    //console.log(response);
                     if(response.data == false)
                     {
                         $('.actions').prop('disabled', true);
@@ -160,11 +160,11 @@ $(function(){
             // dataType: 'json',
             cache: false, 
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 $("#return_gradefile").html(response);
             },
             error: function (data) {
-                console.log(data);
+                //console.log(data);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false) {
                     showError('Something went wrong! Can not perform requested action!');

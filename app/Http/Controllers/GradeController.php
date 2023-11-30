@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreGradeInformationRequest;
 use App\Libs\Helpers;
 use App\Models\Grade;
-use App\Models\IssueingOffice;
 use App\Models\School;
 use App\Models\Program;
 use App\Models\Soresolution;
 use Illuminate\Http\Request;
+use App\Models\Configuration;
+use App\Models\IssueingOffice;
 use App\Services\PeriodService;
+use App\Services\StudentService;
 use App\Services\Grade\GradeService;
+use Illuminate\Support\Facades\Auth;
+use App\Services\ConfigurationService;
 use App\Services\Grade\ExternalGradeService;
 use App\Services\Grade\InternalGradeService;
+use App\Http\Requests\StoreGradeInformationRequest;
 
 class GradeController extends Controller
 {
@@ -181,4 +185,14 @@ class GradeController extends Controller
 
     //     return response()->json(['data' => $grade]);
     // }
+
+    public function studentgrade()
+    {
+        $student = (new StudentService)->studentInformationByUserId(Auth::id());
+        $config_schedules = (new ConfigurationService)->configurationSchedule(session('current_period'),'grade_posting');
+        $configuration = Configuration::take(1)->first();
+
+        //return $student_evaluation;
+        return view('grade.student_grade', compact('student', 'config_schedules', 'configuration'));
+    }
 }

@@ -94,6 +94,10 @@ Route::group(['middleware' => ['auth', 'student']], function () {
         Route::get('/facultyevaluations/{facultyevaluation}/evaluateclass', [FacultyEvaluationController::class, 'evaluateclass'])->name('evaluateclass');
         Route::post('/facultyevaluations/saveevaluation', [FacultyEvaluationController::class, 'saveevaluation'])->name('saveevaluation');
     });
+
+    Route::get('/grades/studentgrade', [GradeController::class, 'studentgrade'])->middleware('inaccess:grades/studentgrade')->name('studentgrade');
+
+
     
     // 'evaluations/studentevaluation', 
     // 'grades/studentgrade', 

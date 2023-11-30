@@ -108,7 +108,13 @@ class GradeService
 
         $grades = $grade_file->get();
 
+        return $this->getGradesOfGradeNos($grades);
+    }
+
+    public function getGradesOfGradeNos($grades)
+    {
         $grade_files = [];
+        
         if($grades)
         {
             foreach ($grades as $key => $v) 
