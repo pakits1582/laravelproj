@@ -97,13 +97,13 @@ class GradeService
         Grade::where('id', $grade_id)->firstOrFail()->delete();
     }
 
-    public function returnGradeFiles($request)
+    public function returnGradeFiles($student_id, $period_id = NULL)
     {
-        $grade_file = Grade::with(['period', 'school', 'program'])->where('student_id', $request->student_id);
+        $grade_file = Grade::with(['period', 'school', 'program'])->where('student_id', $student_id);
 
-        if (!empty($request->period_id)) 
+        if ($period_id != NULL) 
         {
-            $grade_file->where('period_id', $request->period_id);
+            $grade_file->where('period_id', $period_id);
         }
 
         $grades = $grade_file->get();

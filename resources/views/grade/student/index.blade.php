@@ -68,8 +68,8 @@
             <h6 class="m-0 font-weight-bold text-primary">Student's Grade File</h6>
         </div>
         <div class="card-body">
-            <div id="return_evaluation">
-                {{-- @include('evaluation.student.evaluation') --}}
+            <div id="">
+                @include('grade.student.grade_file')
             </div>
         </div>
     </div>

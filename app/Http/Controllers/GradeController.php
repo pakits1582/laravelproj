@@ -126,9 +126,9 @@ class GradeController extends Controller
 
     public function gradefile(Request $request)
     {
-        $grade_files = $this->gradeService->returnGradeFiles($request);
+        $grade_files = $this->gradeService->returnGradeFiles($request->student_id, $request->period_id);
 
-        return view('grade.gradefile', compact('grade_files'));
+        return view('grade.grade_file', compact('grade_files'));
     }
 
     public function savesoresolution(Request $request)
@@ -192,7 +192,8 @@ class GradeController extends Controller
         $config_schedules = (new ConfigurationService)->configurationSchedule(session('current_period'),'grade_posting');
         $configuration = Configuration::take(1)->first();
 
-        //return $student_evaluation;
-        return view('grade.student_grade', compact('student', 'config_schedules', 'configuration'));
+        $grade_files = $this->gradeService->returnGradeFiles($student->id);
+
+        return view('grade.student.index', compact('student', 'grade_files', 'config_schedules', 'configuration'));
     }
 }
