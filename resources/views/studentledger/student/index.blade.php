@@ -1,10 +1,10 @@
 {{-- {{ dd($evaluation) }} --}}
 @extends('layout')
-@section('title') {{ 'Grade File' }} @endsection
+@section('title') {{ 'Statement of Accounts' }} @endsection
 @section('content')
 <div class="container-fluid">
-    <h1 class="h3 mb-2 text-gray-800">Grade File</h1>
-    <p class="mb-4">View all recorded internal and external grades.</p>
+    <h1 class="h3 mb-2 text-gray-800">Statement of Accounts</h1>
+    <p class="mb-4">View current semester accounts and previous balance or refund.</p>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -65,11 +65,50 @@
     </div>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Grade File</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Statement of Account</h6>
         </div>
         <div class="card-body">
             <div id="">
-                @include('grade.student.grade_file')
+                @include('studentledger.statementofaccount')
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Payment Schedule</h6>
+                </div>
+                <div class="card-body">
+                    <div id="">
+                        {{-- @include('grade.student.grade_file') --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Previous Balance or Refund</h6>
+                </div>
+                <div class="card-body">
+                    <div id="">
+                        @include('studentledger.previousbalance')
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Previous Statement of Accounts</h6>
+        </div>
+        <div class="card-body">
+            <div id="">
+                @include('studentledger.student.previous_soas')
             </div>
         </div>
     </div>

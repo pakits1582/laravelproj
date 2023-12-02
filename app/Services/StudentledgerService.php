@@ -103,11 +103,20 @@ class StudentledgerService
         return array_values($soa);
     }
 
-    public function returnStatementOfAccounts($student_id, $period_id)
+    public function returnStatementOfAccounts($soas, $period_id = NULL, $operator = '==')
     {
-        $soas = $this->getAllStatementOfAccounts($student_id, $period_id);
-
-        //return $soas;
+        if ($period_id != NULL) {
+            $soas = array_filter($soas, function ($soa) use ($period_id, $operator) {
+                switch ($operator) {
+                    case '==':
+                        return $soa['period_id'] == $period_id;
+                    case '!=':
+                        return $soa['period_id'] != $period_id;
+                    default:
+                        return true;
+                }
+            });
+        }
 
         if($soas)
         {
@@ -293,6 +302,15 @@ class StudentledgerService
     {
         $soas = $this->getAllStatementOfAccounts($student_id, '');
 
+        $previous_period_soas = array_filter($soas, function ($soa) use($period_id) {
+            return $soa['period_id'] != $period_id;
+        });
+
+        return $this->getPreviousBalance($previous_period_soas);
+    }
+
+    public function returnPreviousBalanceRefund2($soas, $period_id)
+    {
         $previous_period_soas = array_filter($soas, function ($soa) use($period_id) {
             return $soa['period_id'] != $period_id;
         });

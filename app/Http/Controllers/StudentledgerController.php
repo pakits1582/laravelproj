@@ -102,7 +102,8 @@ class StudentledgerController extends Controller
 
     public function statementofaccounts(Request $request)
     {
-        $soas = $this->studentledgerService->returnStatementOfAccounts($request->student_id, $request->period_id);
+        $all_soas = $this->studentledgerService->getAllStatementOfAccounts($request->student_id, $request->period_id);
+        $soas = $this->studentledgerService->returnStatementOfAccounts($all_soas);
 
         if($soas && count($soas) > 1)
         {
@@ -110,14 +111,17 @@ class StudentledgerController extends Controller
         }
 
         $has_adjustment = $request->has_adjustment;
-        return view('studentledger.statementofaccount', compact('soas', 'has_adjustment'));
+        $forwardable = true;
+
+        return view('studentledger.statementofaccount', compact('soas', 'has_adjustment', 'forwardable'));
     }
 
     public function previousbalancerefund(Request $request)
     {
         $previous_balances = $this->studentledgerService->returnPreviousBalanceRefund($request->student_id, $request->period_id);
+        $forwardable = true;
 
-        return view('studentledger.previousbalance', compact('previous_balances'));
+        return view('studentledger.previousbalance', compact('previous_balances', 'forwardable'));
     }
 
     public function paymentschedules(Request $request)
@@ -179,5 +183,28 @@ class StudentledgerController extends Controller
 
         //return $save_forward;
         return response()->json($save_forward);
+    }
+
+    public function studentaccountledger()
+    {
+        $student = (new StudentService)->studentInformationByUserId(Auth::id());
+
+        $all_soas = $this->studentledgerService->getAllStatementOfAccounts($student->id);
+        $soas = $this->studentledgerService->returnStatementOfAccounts($all_soas, session('current_period'));
+
+        $previous_balances = $this->studentledgerService->returnPreviousBalanceRefund2($all_soas, session('current_period'));
+        $previous_soas = $this->studentledgerService->returnStatementOfAccounts($all_soas, session('current_period'), '!=');
+
+        $has_adjustment = false;
+        $forwardable = false;
+
+        return view('studentledger.student.index', compact(
+            'student', 
+            'previous_balances',
+            'soas',
+            'has_adjustment',
+            'forwardable',
+            'previous_soas'
+        ));
     }
 }

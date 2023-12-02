@@ -3,7 +3,7 @@
 @section('title') {{ 'Curriculum Evaluation' }} @endsection
 @section('content')
 <div class="container-fluid">
-    <h1 class="h3 mb-2 text-gray-800">Student's Evaluation</h1>
+    <h1 class="h3 mb-2 text-gray-800">Curriculum Evaluation</h1>
     <p class="mb-4">Student's curriculum evaluation.</p>
 
     <div class="card shadow mb-4">

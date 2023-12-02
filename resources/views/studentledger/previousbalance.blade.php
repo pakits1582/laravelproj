@@ -8,7 +8,10 @@
                 <th class="w150">Total Payables</th>
                 <th class="w150">Total Payments</th>
                 <th class="w150">Balance</th>
-                <th class="w250">Action</th>
+                @if (isset($forwardable) && $forwardable == true)
+                    <th class="w250">Action</th>
+                @endif
+                    
             </tr>
         </thead>
         <tbody class="text-black" id="">
@@ -19,14 +22,16 @@
                     <td class="align-middle w150 right">{{ number_format($previous_balance['debit'],2) }}</td>
                     <td class="align-middle w150 right">{{ number_format($previous_balance['credit'],2) }}</td>
                     <td class="align-middle w150 right">{{ number_format($previous_balance['balance'],2) }}</td>
-                    <td class="align-middle right">
-                        <button type="button" id="{{ $previous_balance['period_id'] }}" class="forward_balance btn btn-primary btn-icon-split m-1">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-arrow-right"></i>
-                            </span>
-                            <span class="text">Forward Balance</span>
-                        </button>
-                    </td>
+                    @if (isset($forwardable) && $forwardable == true)
+                        <td class="align-middle right">
+                            <button type="button" id="{{ $previous_balance['period_id'] }}" class="forward_balance btn btn-sm btn-primary btn-icon-split m-1">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <span class="text">Forward Balance</span>
+                            </button>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

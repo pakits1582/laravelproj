@@ -51,6 +51,7 @@ use App\Http\Controllers\ClassesSlotsMonitoringController;
 use App\Http\Controllers\FacultyEvaluationController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\QuestionController;
+use App\Models\Studentledger;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +97,7 @@ Route::group(['middleware' => ['auth', 'student']], function () {
     });
 
     Route::get('/grades/studentgrade', [GradeController::class, 'studentgrade'])->middleware('inaccess:grades/studentgrade')->name('studentgrade');
+    Route::get('/studentledgers/studentaccountledger', [StudentledgerController::class, 'studentaccountledger'])->middleware('inaccess:studentledgers/studentaccountledger')->name('studentaccountledger');
 
 
     
