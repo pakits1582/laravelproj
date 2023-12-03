@@ -82,7 +82,7 @@
                 </div>
                 <div class="card-body">
                     <div id="">
-                        {{-- @include('grade.student.grade_file') --}}
+                        @include('studentledger.payment_schedule')
                     </div>
                 </div>
             </div>

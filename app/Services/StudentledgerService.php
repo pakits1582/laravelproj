@@ -298,61 +298,13 @@ class StudentledgerService
         return $feesArraytoledgerdetails;
     }
 
-    public function returnPreviousBalanceRefund($student_id, $period_id)
-    {
-        $soas = $this->getAllStatementOfAccounts($student_id, '');
-
-        $previous_period_soas = array_filter($soas, function ($soa) use($period_id) {
-            return $soa['period_id'] != $period_id;
-        });
-
-        return $this->getPreviousBalance($previous_period_soas);
-    }
-
-    public function returnPreviousBalanceRefund2($soas, $period_id)
+    public function returnPreviousBalanceRefund($soas, $period_id)
     {
         $previous_period_soas = array_filter($soas, function ($soa) use($period_id) {
             return $soa['period_id'] != $period_id;
         });
 
-        return $this->getPreviousBalance($previous_period_soas);
-    }
-
-    public function getPreviousBalance($soas)
-    {
-        $previousBalance = [];
-
-        if ($soas) 
-        {
-            foreach ($soas as $soa) 
-            {
-                $debit = 0;
-                $credit = 0;
-                foreach ($soa['ledgers'] as $ledger) 
-                {
-                    $amount = $ledger['amount'];
-                    $type = $ledger['type'];
-                    $cancelled = $ledger['ledger_info']['cancelled'] ?? 0;
-                    $credit += ($amount < 0 && $type == 'R' && $cancelled == 0) ? $amount : 0;
-                    $credit += ($amount < 0 && $type != 'R') ? $amount : 0;
-                    $debit += ($amount >= 0) ? $amount : 0;
-                }
-                $balance = $debit + $credit;
-                if (abs($balance) > 0.01) 
-                {
-                    $previousBalance[] = [
-                        'period_id' => $soa['period_id'],
-                        'period_code' => $soa['period_code'],
-                        'period_name' => $soa['period_name'],
-                        'balance' => $balance,
-                        'debit' => $debit,
-                        'credit' => $credit,
-                    ];
-                }
-            }
-        }
-        
-        return $previousBalance;
+        return $this->soaBalance($previous_period_soas);
     }
 
     public function soaBalance($soas)
@@ -389,10 +341,8 @@ class StudentledgerService
         return $soasBalance;
     }
 
-    public function returnPaymentSchedules($student_id, $period_id, $educational_level_id, $enrollment)
+    public function returnPaymentSchedules($soas, $period_id, $educational_level_id, $enrollment)
     {
-        //return $enrollment;
-
         $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $period_id)->where('educational_level_id', $educational_level_id)->get();
 
         if($enrollment == 'false')
@@ -400,7 +350,6 @@ class StudentledgerService
             return 'false';
         }
 
-        $soas = $this->getAllStatementOfAccounts($student_id, $period_id);
         $debit = 0;
         $credit = 0;
 

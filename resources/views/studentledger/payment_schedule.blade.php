@@ -62,21 +62,34 @@
             </div>
         </div>
         <div class="row  align-items-end">
-            <div class="col-md-10">
-                <div class="form-group mb-1">
-                    <select id="pay_period" class="form-control select clearable">
-                        @foreach ($payment_schedule['payment_schedules'] as $key => $schedule)
-                            <option value="{{ $key }}" {{ ($key == $pay_period) ? 'selected' : '' }}>{{ $schedule->description }}</option>
-                        @endforeach
-                    </select>
-                   
+            @if (isset($with_checkbox) && $with_checkbox == true)
+                <div class="col-md-10">
+                    <div class="form-group mb-1">
+                        <select id="pay_period" class="form-control select clearable">
+                            @foreach ($payment_schedule['payment_schedules'] as $key => $schedule)
+                                <option value="{{ $key }}" {{ ($key == $pay_period) ? 'selected' : '' }}>{{ $schedule->description }}</option>
+                            @endforeach
+                        </select>
+                    
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group mb-1">
-                    <input class="" id="pay_period_default" type="checkbox" value="1" {{ ((Auth::user()->paymentperiod)) ? 'checked' : '' }}>
+                <div class="col-md-2">
+                    <div class="form-group mb-1">
+                        <input class="" id="pay_period_default" type="checkbox" value="1" {{ ((Auth::user()->paymentperiod)) ? 'checked' : '' }}>
+                    </div>
                 </div>
-            </div>
+            @else
+                <div class="col-md-12">
+                    <div class="form-group mb-1">
+                        <select id="pay_period" class="form-control select clearable">
+                            @foreach ($payment_schedule['payment_schedules'] as $key => $schedule)
+                                <option value="{{ $key }}" {{ ($key == $pay_period) ? 'selected' : '' }}>{{ $schedule->description }}</option>
+                            @endforeach
+                        </select>
+                    
+                    </div>
+                </div>
+            @endif
         </div>
         <div class="row  align-items-end">
             <div class="col-md-12">

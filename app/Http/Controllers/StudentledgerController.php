@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Libs\Helpers;
 use App\Models\Period;
 use App\Models\Student;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Models\Studentledger;
 use App\Services\PeriodService;
@@ -12,6 +13,7 @@ use App\Services\StudentService;
 use App\Models\UserPaymentperiod;
 use Illuminate\Support\Facades\Auth;
 use App\Services\StudentledgerService;
+use App\Services\Enrollment\EnrollmentService;
 
 class StudentledgerController extends Controller
 {
@@ -118,7 +120,8 @@ class StudentledgerController extends Controller
 
     public function previousbalancerefund(Request $request)
     {
-        $previous_balances = $this->studentledgerService->returnPreviousBalanceRefund($request->student_id, $request->period_id);
+        $all_soas = $this->studentledgerService->getAllStatementOfAccounts($request->student_id);
+        $previous_balances = $this->studentledgerService->returnPreviousBalanceRefund($all_soas, $request->period_id);
         $forwardable = true;
 
         return view('studentledger.previousbalance', compact('previous_balances', 'forwardable'));
@@ -126,15 +129,19 @@ class StudentledgerController extends Controller
 
     public function paymentschedules(Request $request)
     {
+        $soas = $this->studentledgerService->getAllStatementOfAccounts($request->student_id, $request->period_id);
+
         $payment_schedule = $this->studentledgerService->returnPaymentSchedules(
-            $request->student_id, 
+            $soas,
             $request->period_id,
             $request->educational_level_id, 
             $request->enrollment
         );
 
+        $with_checkbox = true;
+
         //return $payment_schedule;
-        return view('studentledger.payment_schedule', compact('payment_schedule'));
+        return view('studentledger.payment_schedule', compact('payment_schedule', 'with_checkbox'));
     }
 
     public function defaultpayperiod(Request $request)
@@ -187,16 +194,36 @@ class StudentledgerController extends Controller
 
     public function studentaccountledger()
     {
+        $current_period = session('current_period');
+
         $student = (new StudentService)->studentInformationByUserId(Auth::id());
+        //$enrollment = (new EnrollmentService)->studentEnrollment($student->id, $current_period ,1);
+
+        $enrollment = Enrollment::with(['assessment' => ['exam', 'breakdowns', 'details']])
+            ->where('student_id', $student->id)
+            ->where('period_id', $current_period)
+            ->where('acctok', 1)->first();
 
         $all_soas = $this->studentledgerService->getAllStatementOfAccounts($student->id);
-        $soas = $this->studentledgerService->returnStatementOfAccounts($all_soas, session('current_period'));
+        $soas = $this->studentledgerService->returnStatementOfAccounts($all_soas, $current_period);
 
-        $previous_balances = $this->studentledgerService->returnPreviousBalanceRefund2($all_soas, session('current_period'));
-        $previous_soas = $this->studentledgerService->returnStatementOfAccounts($all_soas, session('current_period'), '!=');
+        $previous_balances = $this->studentledgerService->returnPreviousBalanceRefund($all_soas, $current_period);
+        $previous_soas = $this->studentledgerService->returnStatementOfAccounts($all_soas, $current_period, '!=');
+
+        $current_soa = array_filter($all_soas, function ($soa) use($current_period) {
+            return $soa['period_id'] == $current_period;
+        });
+
+        $payment_schedule = $this->studentledgerService->returnPaymentSchedules(
+            $current_soa,
+            $current_period,
+            $student->program->level->id, 
+            $enrollment->toArray()
+        );
 
         $has_adjustment = false;
         $forwardable = false;
+        $with_checkbox = false;
 
         return view('studentledger.student.index', compact(
             'student', 
@@ -204,7 +231,9 @@ class StudentledgerController extends Controller
             'soas',
             'has_adjustment',
             'forwardable',
-            'previous_soas'
+            'with_checkbox',
+            'previous_soas',
+            'payment_schedule'
         ));
     }
 }
