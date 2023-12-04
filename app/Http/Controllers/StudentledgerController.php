@@ -158,7 +158,11 @@ class StudentledgerController extends Controller
 
     public function computepaymentsched(Request $request)
     {
-        $payment_schedule = $this->studentledgerService->computePaymentSchedule($request->student_id, $request->period_id, $request->pay_period, $request->enrollment);
+        $enrollment = $request->enrollment;
+
+        $all_soas = $this->studentledgerService->getAllStatementOfAccounts($request->student_id, $request->period_id);
+
+        $payment_schedule = $this->studentledgerService->computePaymentSchedule($all_soas, $request->student_id, $request->period_id, $request->pay_period, $enrollment['program']['educational_level_id'], $enrollment);
         
         return response()->json($payment_schedule);
     }
@@ -195,8 +199,6 @@ class StudentledgerController extends Controller
         $current_period = session('current_period');
 
         $student = (new StudentService)->studentInformationByUserId(Auth::id());
-        //$enrollment = (new EnrollmentService)->studentEnrollment($student->id, $current_period ,1);
-
         $enrollment = Enrollment::with(['assessment' => ['exam', 'breakdowns', 'details']])
             ->where('student_id', $student->id)
             ->where('period_id', $current_period)
@@ -233,5 +235,29 @@ class StudentledgerController extends Controller
             'previous_soas',
             'payment_schedule'
         ));
+    }
+
+    public function recomputepaymentsched(Request $request)
+    {
+        $current_period = session('current_period');
+
+        $student = (new StudentService)->studentInformationByUserId(Auth::id());
+
+        $all_soas = $this->studentledgerService->getAllStatementOfAccounts($student->id, $current_period);
+        $enrollment = Enrollment::with(['assessment' => ['exam', 'breakdowns', 'details']])
+            ->where('student_id', $student->id)
+            ->where('period_id', $current_period)
+            ->where('acctok', 1)->first();
+
+        $payment_schedule = $this->studentledgerService->computePaymentSchedule(
+            $all_soas, 
+            $student->id, 
+            $current_period,
+            $request->pay_period, 
+            $student->program->educational_level_id,
+            $enrollment->toArray()
+        );
+        
+        return response()->json($payment_schedule);
     }
 }

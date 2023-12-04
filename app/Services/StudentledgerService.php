@@ -372,17 +372,16 @@ class StudentledgerService
         return ['payment_schedules' => $payment_schedules, 'assessment_exam' => $enrollment['assessment']['exam'], 'debit' => $debit, 'credit' => $credit];
     }
 
-    public function computePaymentSchedule($student_id, $period_id, $pay_period, $enrollment)
+    public function computePaymentSchedule($soas, $student_id, $period_id, $pay_period, $educational_level, $enrollment)
     {
         if($enrollment == 'false')
         {
             return 'false';
         }
 
-        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $period_id)->where('educational_level_id', $enrollment['program']['educational_level_id'])->get();
+        $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', $period_id)->where('educational_level_id', $educational_level)->get();
         $default_pay_period = (Auth::user()->paymentperiod) ? ((Auth::user()->paymentperiod->pay_period > max(array_keys($payment_schedules->toArray()))) ? max(array_keys($payment_schedules->toArray())) : Auth::user()->paymentperiod->pay_period) : 0;
 
-        $soas = $this->getAllStatementOfAccounts($student_id, $period_id);
         $debit = 0;
         $credit = 0;
 

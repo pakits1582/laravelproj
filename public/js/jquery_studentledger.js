@@ -240,4 +240,23 @@ $(function(){
 
         e.preventDefault();
     });
+
+    $(document).on("change", "#pay_period", function(){
+        var pay_period = $(this).val();
+
+        $.ajax({
+			type: "POST",
+			url:  "/studentledgers/recomputepaymentsched",
+			dataType: 'json',
+			data:  {'pay_period': pay_period},
+			cache: false, 
+			success: function(response){
+				console.log(response);
+                var optionText = $("#pay_period option:selected").text();
+
+                $("#pay_period_text").html(optionText);
+                $("#balance_due").html(response.balance_due);
+			} 
+		});
+    });
 });

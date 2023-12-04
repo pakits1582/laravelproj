@@ -98,6 +98,8 @@ Route::group(['middleware' => ['auth', 'student']], function () {
 
     Route::get('/grades/studentgrade', [GradeController::class, 'studentgrade'])->middleware('inaccess:grades/studentgrade')->name('studentgrade');
     Route::get('/studentledgers/studentaccountledger', [StudentledgerController::class, 'studentaccountledger'])->middleware('inaccess:studentledgers/studentaccountledger')->name('studentaccountledger');
+    Route::post('/studentledgers/recomputepaymentsched', [StudentledgerController::class, 'recomputepaymentsched'])->middleware('inaccess:studentledgers/studentaccountledger')->name('recomputepaymentsched');
+    Route::get('/students/profile', [StudentController::class, 'profile'])->middleware('inaccess:students/profile')->name('profile');
 
 
     

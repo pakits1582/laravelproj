@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Services\StudentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
@@ -151,5 +152,11 @@ class StudentController extends Controller
         return response()->json($result);
     }
 
+    public function profile()
+    {
+        $student = (new StudentService)->studentInformationByUserId(Auth::id());
+        $student->load(['academic_info', 'contact_info', 'personal_info']);
 
+        return view('student.profile.index', compact('student'));
+    }
 }

@@ -1,11 +1,11 @@
-<div class="row">
-    <div class="col-lg-12 mx-auto">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Payables and Payments Trail</h6>
-            </div>
-            <div class="card-body" id="return_studentledger">
-                @if (count($previous_soas) > 0)
+@if ($previous_soas)
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Payables and Payments Trail</h6>
+                </div>
+                <div class="card-body" id="">
                     @foreach ($previous_soas as $soa)
                         <h6 class="font-weight-bold text-primary">{{ $soa['period_code'] }} - {{ $soa['period_name'] }}</h6>
                         <div class="table-responsive" id="table_data">
@@ -90,9 +90,11 @@
                             </table>
                         </div>
                     @endforeach
-                @endif
+                </div>
             </div>
         </div>
     </div>
-</div>
+@else
+    <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
+@endif
 
