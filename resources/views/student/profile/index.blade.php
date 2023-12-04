@@ -63,54 +63,34 @@
         </div>
     </div>
     
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Statement of Account</h6>
-        </div>
-        <div class="card-body">
-            <div id="">
-                
+    <form method="POST" id="form_student_profile" action="" enctype="multipart/form-data">
+        @csrf        
+        <div class="row m-0">
+            <div class="col-lg-6 mx-0">
+                @include('student.profile.personal_information')
+            </div>
+            <div class="col-lg-6">
+                @include('student.profile.contact_information')
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Payment Schedule</h6>
-                </div>
-                <div class="card-body">
-                    <div id="">
-                        
-                    </div>
-                </div>
+        <div class="row m-0">
+            <div class="col-lg-12">
+                @include('student.profile.academic_information')
             </div>
         </div>
-
-        <div class="col-md-8">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Previous Balance or Refund</h6>
-                </div>
-                <div class="card-body">
-                    <div id="">
-                        
-                    </div>
-                </div>
+        <div class="row m-0">
+            <div class="col-lg-12">
+                @include('student.profile.family_information')
             </div>
         </div>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Previous Statement of Accounts</h6>
-        </div>
-        <div class="card-body">
-            <div id="">
-                
+       
+        <div class="row p-3">
+            <div class="col-lg-12">
+                <input type="hidden" name="student_applicant" id="student_applicant" value="{{ $student->id ?? '' }}" >
+                <input type="hidden"  name="agree_terms" type="checkbox" value="1" id="agree_terms" />
+                <input type="submit" name="" id="" class="btn btn-primary btn-user btn-block btn-lg" value="Update Profile">
             </div>
         </div>
-    </div>
+    </form>
 </div>
 @endsection

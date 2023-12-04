@@ -10,6 +10,7 @@ use App\Services\StudentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
@@ -156,7 +157,11 @@ class StudentController extends Controller
     {
         $student = (new StudentService)->studentInformationByUserId(Auth::id());
         $student->load(['academic_info', 'contact_info', 'personal_info']);
+        $regions = json_decode(File::get(public_path('json/region.json')), true);
+        $provinces = json_decode(File::get(public_path('json/province.json')), true);
+        $cities = json_decode(File::get(public_path('json/city.json')), true);
+        $barangays = json_decode(File::get(public_path('json/barangay.json')), true);
 
-        return view('student.profile.index', compact('student'));
+        return view('student.profile.index', compact('student', 'regions', 'provinces', 'cities', 'barangays'));
     }
 }
