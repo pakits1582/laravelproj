@@ -8,7 +8,10 @@
             <div class="row align-items-center mb-2">
                 <div class="col-md-4">
                     <div id="picture_preview" class="image-upload-preview">
-                        <img src="{{ Storage::url($student->picture) }}" alt="Image">
+                        @php
+                            $url = ($student->picture == NULL) ? 'image_uploads/def.png' : $student->picture;
+                        @endphp
+                        <img src="{{ Storage::url($url) }}" alt="Image">
                     </div>
                 </div>
                 <div class="col-md-8">

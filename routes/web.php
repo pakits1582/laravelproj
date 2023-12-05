@@ -99,8 +99,6 @@ Route::group(['middleware' => ['auth', 'student']], function () {
     Route::get('/grades/studentgrade', [GradeController::class, 'studentgrade'])->middleware('inaccess:grades/studentgrade')->name('studentgrade');
     Route::get('/studentledgers/studentaccountledger', [StudentledgerController::class, 'studentaccountledger'])->middleware('inaccess:studentledgers/studentaccountledger')->name('studentaccountledger');
     Route::post('/studentledgers/recomputepaymentsched', [StudentledgerController::class, 'recomputepaymentsched'])->middleware('inaccess:studentledgers/studentaccountledger')->name('recomputepaymentsched');
-    Route::get('/students/profile', [StudentController::class, 'profile'])->middleware('inaccess:students/profile')->name('profile');
-
 
     
     // 'evaluations/studentevaluation', 
@@ -123,7 +121,9 @@ Route::group(['middleware' => ['auth', 'faculty']], function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
-   
+
+    Route::get('/students/profile/{id?}', [StudentController::class, 'profile'])->name('studentprofile');
+
     Route::group(['middleware' => ['inaccess:schools']], function () {
         Route::resource('schools', SchoolController::class)->except(['show', 'destroy'])->missing(function (Request $request) {
             return Redirect::route('schools.index');

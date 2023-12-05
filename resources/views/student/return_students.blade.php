@@ -41,7 +41,9 @@
                             <a href="#" class="btn btn-info btn-circle btn-sm user_action" id="{{ $student->user_id }}" data-action="reset" title="Reset Password">
                                 <i class="fas fa-undo"></i>
                             </a>
-                           
+                            <a href="{{ route('studentprofile', ['id' => $student->user_id ]) }}" class="btn btn-success btn-circle btn-sm" id="" title="Student Profile">
+                                <i class="fas fa-user"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

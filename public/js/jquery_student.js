@@ -79,4 +79,51 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on("submit", "#form_student_profile", function(e){
+        
+        $.ajax({
+            url: "/students/updateapplication",
+            type: 'POST',
+            data: new FormData(this),
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            cache: false,
+            beforeSend: function() {
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons:false
+                });
+                $(".ui-dialog-titlebar").hide();
+            },
+            success: function(response){
+                $("#confirmation").dialog('close');
+                console.log(response);
+                if(response.success == true)
+                {
+                    showSuccess(response.message);
+
+                    window.setTimeout(function(){
+                        location.reload();
+                    }, 1000);
+                }else{
+                    showError(response.message);
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false)
+                {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
+        });
+        e.preventDefault();
+    });
+
 });

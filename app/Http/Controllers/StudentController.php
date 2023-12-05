@@ -153,9 +153,11 @@ class StudentController extends Controller
         return response()->json($result);
     }
 
-    public function profile()
+    public function profile($id = NULL)
     {
-        $student = (new StudentService)->studentInformationByUserId(Auth::id());
+        $id = $id ?? Auth::id();
+
+        $student = (new StudentService)->studentInformationByUserId($id);
         $student->load(['academic_info', 'contact_info', 'personal_info']);
         $regions = json_decode(File::get(public_path('json/region.json')), true);
         $provinces = json_decode(File::get(public_path('json/province.json')), true);
