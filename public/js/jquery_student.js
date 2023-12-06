@@ -132,4 +132,35 @@ $(function(){
         e.preventDefault();
     });
 
+    $(document).on("change", "#picture", function(){
+		$("#changePhoto").submit();
+	});
+	
+	$(document).on("submit", "#changePhoto", function(e){
+		$.ajax({
+            url: "/students/changephoto",
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function(response){
+                console.log(response);
+            },
+            error: function (data) {
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false)
+                {
+                    var return_errors = '';
+                    $.each(errors.errors, function (key, value) {
+                        return_errors += value+'</br>';
+                    });
+
+                    showError(return_errors);
+                }
+            }
+		});
+		e.preventDefault();
+	});
+
 });

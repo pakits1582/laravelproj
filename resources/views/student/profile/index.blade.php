@@ -16,7 +16,8 @@
                     <span>Change current photo</span>
                     <form method="post" enctype="multipart/form-data" id="changePhoto">
                         @csrf
-                        <input type="file" class="upload" name="imagefile" id="file" accept="image/*" />
+                        <input type="file" class="upload" name="picture" id="picture" accept="image/*" />
+                        <input type="hidden" name="id" value="{{ $student->id }}" />
                     </form>
                 </div>
             </div>
@@ -33,7 +34,6 @@
                         </div>
                         <div class="col-md-5">
                             {{ $student->user->idno }}
-                            <input type="hidden" id="student_id" value="{{ $student->id }}" />
                         </div>
                         <div class="col-md-1">
                             <label for="" class="m-0 font-weight-bold text-primary">Year</label>

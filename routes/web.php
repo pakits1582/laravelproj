@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/students/profile/{id?}', [StudentController::class, 'profile'])->name('studentprofile');
     Route::post('/students/updateprofile', [StudentController::class, 'updateprofile'])->name('updateprofile');
+    Route::post('/students/changephoto', [StudentController::class, 'changephoto'])->name('changephoto');
 
 
     Route::group(['middleware' => ['inaccess:schools']], function () {

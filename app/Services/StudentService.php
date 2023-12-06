@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
-use App\Jobs\StudentUserAccess;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Libs\Helpers;
 use App\Models\Period;
+use App\Traits\Upload;
 use App\Models\Student;
 use App\Models\Useraccess;
-use Carbon\Carbon;
+use App\Jobs\StudentUserAccess;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StudentService
 {
+    use Upload;//add this trait
     //
     public function returnStudents($request, $all = false, $limit = 500)
     {
@@ -160,7 +162,7 @@ class StudentService
             'program.collegeinfo',
             'curriculum', 
             'user'
-            ])->where('user_id', $user_id)->first();
+            ])->where('user_id', $user_id)->firstOrFail();
 
         return $student;
     }
@@ -259,5 +261,44 @@ class StudentService
             'alert' => 'alert-success'
         ];
 
+    }
+    
+    public function processPicture($request)
+    {
+        if($request->hasfile('picture'))
+        {
+            $filename = time().rand(1,50);
+            $path = $this->UploadFile($request->file('picture'), 'image_uploads', 'public', $filename);//use the method in the trait
+
+            return $path;
+        }
+    }
+
+    private function removePicture($path)
+    {
+        if(!is_null($path))
+        {
+            $this->deleteFile($path);
+        }
+    }
+
+    public function changePhoto($request, $student)
+    {
+        if(!is_null($student->picture))
+        {
+            $this->removePicture($student->picture);
+        }
+
+        $picture = $this->processPicture($request);
+        $student->picture = $picture;
+            
+        $student->save();
+
+        return [
+            'success' => true,
+            'message' => 'Photo successfully saved!',
+            'alert' => 'alert-success',
+            'status' => 200
+        ];
     }
 }

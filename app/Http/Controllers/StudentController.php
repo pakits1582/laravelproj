@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\ChangePhotoRequest;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -103,8 +104,7 @@ class StudentController extends Controller
 
             return view('student.edit', compact('student'));
         } catch (ModelNotFoundException $e) {
-
-            return redirect()->route('studentindex');
+            return redirect()->route('students.index');
         }
     }
 
@@ -157,14 +157,29 @@ class StudentController extends Controller
     {
         $id = $id ?? Auth::id();
 
-        $student = (new StudentService)->studentInformationByUserId($id);
-        $student->load(['academic_info', 'contact_info', 'personal_info']);
-        $regions = json_decode(File::get(public_path('json/region.json')), true);
-        $provinces = json_decode(File::get(public_path('json/province.json')), true);
-        $cities = json_decode(File::get(public_path('json/city.json')), true);
-        $barangays = json_decode(File::get(public_path('json/barangay.json')), true);
+        try {
+            $student = (new StudentService)->studentInformationByUserId($id);
+           
+            $student->load(['academic_info', 'contact_info', 'personal_info']);
+            $regions = json_decode(File::get(public_path('json/region.json')), true);
+            $provinces = json_decode(File::get(public_path('json/province.json')), true);
+            $cities = json_decode(File::get(public_path('json/city.json')), true);
+            $barangays = json_decode(File::get(public_path('json/barangay.json')), true);
+    
+            return view('student.profile.index', compact('student', 'regions', 'provinces', 'cities', 'barangays'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('students.index');
+        }
+        
+    }
 
-        return view('student.profile.index', compact('student', 'regions', 'provinces', 'cities', 'barangays'));
+    public function changephoto(ChangePhotoRequest $request)
+    {
+        $student = Student::findOrFail($request->id);
+
+        $changephoto = $this->studentService->changePhoto($request, $student);
+
+        return response()->json($changephoto);
     }
 
     public function updateprofile()
