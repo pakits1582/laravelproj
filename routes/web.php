@@ -123,6 +123,8 @@ Route::group(['middleware' => ['auth', 'faculty']], function () {
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/students/profile/{id?}', [StudentController::class, 'profile'])->name('studentprofile');
+    Route::post('/students/updateprofile', [StudentController::class, 'updateprofile'])->name('updateprofile');
+
 
     Route::group(['middleware' => ['inaccess:schools']], function () {
         Route::resource('schools', SchoolController::class)->except(['show', 'destroy'])->missing(function (Request $request) {

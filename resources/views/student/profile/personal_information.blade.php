@@ -4,20 +4,8 @@
     </div>
     <div class="card-body" id="">
         <div class="form-group">
-            <p class="font-italic font-weight-bold text-info">Note: LEGAL NAME (Name on Birth Certificate)</p>
-            <div class="row align-items-center mb-2">
-                <div class="col-md-4">
-                    <div id="picture_preview" class="image-upload-preview">
-                        @php
-                            $url = ($student->picture == NULL) ? 'image_uploads/def.png' : $student->picture;
-                        @endphp
-                        <img src="{{ Storage::url($url) }}" alt="Image">
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <h1 class="m-0 font-weight-bold text-black">{{ $student->name }}</h1>
-                </div>
-            </div>
+            <p class="font-italic font-weight-bold text-info">Note: (*) Denotes field is required.</p>
+            
             <div class="row align-items-center mb-1">
                 <div class="col-md-3 col-sm-3">
                     <label for="sex" class="m-0 font-weight-bold text-primary">* Sex</label>
@@ -131,7 +119,7 @@
                     <div id="error_religion" class="errors"></div>
                 </div>
             </div>
-            <div class="row align-items-center mb-5">
+            <div class="row align-items-center mb-3">
                 <div class="col-md-3 col-sm-3"></div>
                 <div class="col-md-9 col-sm-9">
                     <input type="text" name="religion_specify" readonly value="{{ old('religion_specify', $student->personal_info->religion_specify ?? '') }}" placeholder="IF OTHERS, PLEASE SPECIFY" class="form-control text-uppercase" id="religion_specify"  minlength="2" maxlength="150">
@@ -139,6 +127,43 @@
                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                     @enderror
                     <div id="error_religion_specify" class="errors"></div>
+                </div>
+            </div>
+
+            <div class="row align-items-center mb-1">
+                <div class="col-md-3 col-sm-3">
+                    <label for="telno" class="m-0 font-weight-bold text-primary">Telephone No.</label>
+                </div>
+                <div class="col-md-9 col-sm-9">
+                    <input type="text" name="telno" value="{{ old('telno', $student->contact_info->telno ?? '') }}" placeholder="" class="form-control" id="telno" minlength="4" maxlength="20">
+                    @error('telno')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
+                    <div id="error_telno" class="errors"></div>
+                </div>
+            </div>
+            <div class="row align-items-center mb-1">
+                <div class="col-md-3 col-sm-3">
+                    <label for="mobileno" class="m-0 font-weight-bold text-primary">* Mobile No.</label>
+                </div>
+                <div class="col-md-9 col-sm-9">
+                    <input type="text" name="mobileno" value="{{ old('mobileno', $student->contact_info->mobileno ?? '') }}" required placeholder="09XXXXXXXXX" class="form-control" id="mobileno" minlength="11" maxlength="20">
+                    @error('mobileno')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
+                    <div id="error_mobileno" class="errors"></div>
+                </div>
+            </div>
+            <div class="row align-items-center mb-3">
+                <div class="col-md-3 col-sm-3">
+                    <label for="email" class="m-0 font-weight-bold text-primary">* E-mail Address</label>
+                </div>
+                <div class="col-md-9 col-sm-9">
+                    <input type="email" name="email" value="{{ old('email', $student->contact_info->email ?? '') }}" required placeholder="" class="form-control" id="email" maxlength="150">
+                    @error('email')
+                        <p class="text-danger text-xs mt-1">{{$message}}</p>
+                    @enderror
+                    <div id="error_email" class="errors"></div>
                 </div>
             </div>
 

@@ -1,11 +1,11 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="font-weight-bold text-primary mb-0">Contact Information</h6>
+        <h6 class="font-weight-bold text-primary mb-0">Address Information</h6>
 
     </div>
     <div class="card-body" id="">
         <div class="form-group" id="postcharge_fees">
-            <p class="font-italic font-weight-bold text-info mb-0">Note: Please provide your correct contact information and addresses.</p>
+            <p class="font-italic font-weight-bold text-info mb-0">Note: Please provide your correct contact addresses.</p>
             <div class="row align-items-center mb-3">
                 <div class="col-md-12">
                     <h6 class="m-0 font-weight-bold text-black">Current Address</h6>
@@ -253,7 +253,7 @@
                     <div id="error_permanent_address" class="errors"></div>
                 </div>
             </div>
-            <div class="row align-items-center mb-5">
+            <div class="row align-items-center mb-1">
                 <div class="col-md-3 col-sm-3">
                     <label for="permanent_zipcode" class="m-0 font-weight-bold text-primary">Zip Code</label>
                 </div>
@@ -263,43 +263,6 @@
                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                     @enderror
                     <div id="error_permanent_zipcode" class="errors"></div>
-                </div>
-            </div>
-
-            <div class="row align-items-center mb-1">
-                <div class="col-md-3 col-sm-3">
-                    <label for="telno" class="m-0 font-weight-bold text-primary">Telephone No.</label>
-                </div>
-                <div class="col-md-9 col-sm-9">
-                    <input type="text" name="telno" value="{{ old('telno', $student->contact_info->telno ?? '') }}" placeholder="" class="form-control" id="telno" minlength="4" maxlength="20">
-                    @error('telno')
-                        <p class="text-danger text-xs mt-1">{{$message}}</p>
-                    @enderror
-                    <div id="error_telno" class="errors"></div>
-                </div>
-            </div>
-            <div class="row align-items-center mb-1">
-                <div class="col-md-3 col-sm-3">
-                    <label for="mobileno" class="m-0 font-weight-bold text-primary">* Mobile No.</label>
-                </div>
-                <div class="col-md-9 col-sm-9">
-                    <input type="text" name="mobileno" value="{{ old('mobileno', $student->contact_info->mobileno ?? '') }}" required placeholder="09XXXXXXXXX" class="form-control" id="mobileno" minlength="11" maxlength="20">
-                    @error('mobileno')
-                        <p class="text-danger text-xs mt-1">{{$message}}</p>
-                    @enderror
-                    <div id="error_mobileno" class="errors"></div>
-                </div>
-            </div>
-            <div class="row align-items-center mb-1">
-                <div class="col-md-3 col-sm-3">
-                    <label for="email" class="m-0 font-weight-bold text-primary">* E-mail Address</label>
-                </div>
-                <div class="col-md-9 col-sm-9">
-                    <input type="email" name="email" value="{{ old('email', $student->contact_info->email ?? '') }}" required placeholder="" class="form-control" id="email" maxlength="150">
-                    @error('email')
-                        <p class="text-danger text-xs mt-1">{{$message}}</p>
-                    @enderror
-                    <div id="error_email" class="errors"></div>
                 </div>
             </div>
         </div>

@@ -166,4 +166,9 @@ class StudentController extends Controller
 
         return view('student.profile.index', compact('student', 'regions', 'provinces', 'cities', 'barangays'));
     }
+
+    public function updateprofile()
+    {
+        
+    }
 }

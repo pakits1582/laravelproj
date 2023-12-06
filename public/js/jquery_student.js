@@ -10,6 +10,12 @@ $(function(){
 	    dropdownParent: $("#ui_content2")
 	});
 
+    $("#picture_preview").mouseenter(function() {
+		$(".fileUpload").css("display", "block");
+	}).mouseleave(function() {
+		$(".fileUpload").css("display", "none");
+	});
+
     $(document).on("change", "#program_id", function(){
 		var program = $(this).val();
 		if(program !== ""){
@@ -82,7 +88,7 @@ $(function(){
     $(document).on("submit", "#form_student_profile", function(e){
         
         $.ajax({
-            url: "/students/updateapplication",
+            url: "/students/updateprofile",
             type: 'POST',
             data: new FormData(this),
             dataType: 'json',
