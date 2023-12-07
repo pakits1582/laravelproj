@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ChangePhotoRequest;
 use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -182,8 +183,10 @@ class StudentController extends Controller
         return response()->json($changephoto);
     }
 
-    public function updateprofile()
+    public function updateprofile(UpdateProfileRequest $request)
     {
-        
+        $update_profile = $this->studentService->updateProfile($request);
+
+        return response()->json($update_profile);
     }
 }

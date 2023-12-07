@@ -301,4 +301,36 @@ class StudentService
             'status' => 200
         ];
     }
+
+    public function updateProfile($request)
+    {
+        try {
+            $validatedData = $request->validated()+['contact_no' => NULL, 'contact_email' => NULL];
+            $student = Student::findOrFail($request->id);
+
+            DB::beginTransaction();
+
+            $student->update(['sex' => $validatedData['sex']]);
+
+            (new ApplicationService)->studentPersonalInformation($student,$validatedData);
+            (new ApplicationService)->studentContactInformation($student,$validatedData);
+            (new ApplicationService)->studentAcademicInformation($student,$validatedData);
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => 'Profile successfully updated.',
+                'alert' => 'alert-success',
+                'status' => 200
+            ];
+
+        } catch (ModelNotFoundException $e) {
+            return [
+                'success' => false,
+                'message' => 'Student not found. Please refresh page!',
+                'alert' => 'alert-danger'
+            ];
+        }
+    }
 }

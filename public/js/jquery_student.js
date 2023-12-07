@@ -5,6 +5,44 @@ $(function(){
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+
+    $(".region, .province, .municipality, .barangay").select2({
+	    dropdownParent: $("#ui_content4")
+	});
+
+    $(document).on("change","#shs_strand",function(e){
+		var selected = $(this).val();
+
+		if(selected == 'TECH-VOC'){
+			$('#shs_techvoc_specify').attr("readonly",false).prop('required',true);
+		}else{
+			$('#shs_techvoc_specify').attr("readonly",true).val("").prop('required',false);
+		}
+	});
+
+    $(document).on("change","#religion",function(e){
+		var selected = $(this).val();
+
+		if(selected == '14'){
+			$('#religion_specify').attr("readonly",false);
+		}else{
+			$('#religion_specify').attr("readonly",true).val("");
+		}
+	});
+
+    var confirmationDialog = $("#confirmation").dialog({
+        autoOpen: false,
+        show: 'fade',
+        resizable: false,
+        width: 350,
+        height: 'auto',
+        modal: true,
+        buttons: false,
+        closeOnEscape: false, // Prevent dialog from closing on Esc key
+        open: function(event, ui) {
+            $(".ui-dialog-titlebar", ui.dialog).hide();
+        }
+    });
     
     $("#program_id, #program").select2({
 	    dropdownParent: $("#ui_content2")
@@ -86,29 +124,23 @@ $(function(){
     });
 
     $(document).on("submit", "#form_student_profile", function(e){
-        
+        var postData = $(this).serializeArray();
+        $(".errors").html('');
+
         $.ajax({
             url: "/students/updateprofile",
             type: 'POST',
-            data: new FormData(this),
+            data: postData,
             dataType: 'json',
-            processData: false,
-            contentType: false,
             cache: false,
             beforeSend: function() {
-                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
-                    show: 'fade',
-                    resizable: false,	
-                    width: 350,
-                    height: 'auto',
-                    modal: true,
-                    buttons:false
-                });
-                $(".ui-dialog-titlebar").hide();
+                // Open the confirmation dialog
+                confirmationDialog.dialog("open");
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>');
             },
             success: function(response){
-                $("#confirmation").dialog('close');
-                console.log(response);
+                confirmationDialog.dialog('close');
+                //console.log(response);
                 if(response.success == true)
                 {
                     showSuccess(response.message);
@@ -121,11 +153,13 @@ $(function(){
                 }
             },
             error: function (data) {
-                console.log(data);
+                //console.log(data);
+                confirmationDialog.dialog('close');
                 var errors = data.responseJSON;
-                if ($.isEmptyObject(errors) === false)
-                {
-                    showError('Something went wrong! Can not perform requested action!');
+                if ($.isEmptyObject(errors) == false) {
+                    $.each(errors.errors, function (key, value) {
+                        $('#error_' + key).html('<p class="text-danger text-xs mt-1">'+value+'</p>');
+                    });
                 }
             }
         });
@@ -144,10 +178,16 @@ $(function(){
             processData: false,
             contentType: false,
             success: function(response){
-                console.log(response);
+                //console.log(response);
+                if(response.success == true)
+                {
+                    showSuccess(response.message);
+                }else{
+                    showError(response.message);
+                }
             },
             error: function (data) {
-                console.log(data);
+                //console.log(data);
                 var errors = data.responseJSON;
                 if ($.isEmptyObject(errors) === false)
                 {

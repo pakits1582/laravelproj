@@ -82,7 +82,7 @@
         </div>
     </div>
 
-    <form method="POST" id="form_student_profile" action="" enctype="multipart/form-data">
+    <form method="POST" id="form_student_profile" action="">
         @csrf        
         <div class="row m-0">
             <div class="col-lg-6 pl-0">

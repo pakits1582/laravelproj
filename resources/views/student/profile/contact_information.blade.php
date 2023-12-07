@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-9 col-sm-9">
                     @php
-                        if(isset($applicant))
+                        if(isset($student))
                         {
                             $current_region_code   = Helpers::findCode($regions, 'region_name', $student->contact_info->current_region, 'region_code');
                             $current_province_code = Helpers::findCode($provinces, 'province_name', $student->contact_info->current_province, 'province_code', $current_region_code, 'region_code');
@@ -59,7 +59,7 @@
                 <div class="col-md-9 col-sm-9">
                     <select name="current_province" class="form-control text-uppercase province" id="current_province">
                         <option value="">- select province -</option>           
-                        @if(isset($applicant) && $current_provinces)
+                        @if(isset($student) && $current_provinces)
                             @foreach ($current_provinces as $province)
                                 <option value="{{ $province['province_name'] }}" data-code="{{ $province['province_code'] }}"
                                 @if(old('current_province', $student->contact_info->current_province ?? '') == $province['province_name']) selected @endif
@@ -82,7 +82,7 @@
                 <div class="col-md-9 col-sm-9">
                     <select name="current_municipality" required class="form-control text-uppercase municipality" id="current_municipality">
                         <option value="">- select municipality -</option>   
-                        @if(isset($applicant) && $current_cities)   
+                        @if(isset($student) && $current_cities)   
                             @foreach ($current_cities as $city) 
                                 <option value="{{ $city['city_name'] }}" data-code="{{ $city['city_code'] }}"
                                 @if(old('current_city', $student->contact_info->current_municipality ?? '') == $city['city_name']) selected @endif
@@ -105,7 +105,7 @@
                 <div class="col-md-9 col-sm-9">
                     <select name="current_barangay" required class="form-control text-uppercase barangay" id="current_barangay">
                         <option value="">- select barangay -</option>    
-                        @if(isset($applicant) && $current_barangays)   
+                        @if(isset($student) && $current_barangays)   
                             @foreach ($current_barangays as $barangay) 
                                 <option value="{{ $barangay['brgy_name'] }}" data-code="{{ $barangay['brgy_code'] }}"
                                 @if(old('current_barangay', $student->contact_info->current_barangay ?? '') == $barangay['brgy_name']) selected @endif
@@ -179,7 +179,7 @@
                 <div class="col-md-9 col-sm-9">
                     <select name="permanent_province" class="form-control text-uppercase province" id="permanent_province">
                         <option value="">- select province -</option>
-                        @if(isset($applicant) && $permanent_provinces)
+                        @if(isset($student) && $permanent_provinces)
                             @foreach ($permanent_provinces as $province)
                                 <option value="{{ $province['province_name'] }}" data-code="{{ $province['province_code'] }}"
                                 @if(old('permanent_province', $student->contact_info->permanent_province ?? '') == $province['province_name']) selected @endif
@@ -202,7 +202,7 @@
                 <div class="col-md-9 col-sm-9">
                     <select name="permanent_municipality" class="form-control text-uppercase municipality" id="permanent_municipality">
                         <option value="">- select municipality -</option>  
-                        @if(isset($applicant) && $permanent_cities)   
+                        @if(isset($student) && $permanent_cities)   
                             @foreach ($permanent_cities as $city) 
                                 <option value="{{ $city['city_name'] }}" data-code="{{ $city['city_code'] }}"
                                 @if(old('permanent_city', $student->contact_info->permanent_municipality ?? '') == $city['city_name']) selected @endif
@@ -225,7 +225,7 @@
                 <div class="col-md-9 col-sm-9">
                     <select name="permanent_barangay" class="form-control text-uppercase barangay" id="permanent_barangay">
                         <option value="">- select barangay -</option>
-                        @if(isset($applicant) && $permanent_barangays)   
+                        @if(isset($student) && $permanent_barangays)   
                             @foreach ($permanent_barangays as $barangay) 
                                 <option value="{{ $barangay['brgy_name'] }}" data-code="{{ $barangay['brgy_code'] }}"
                                 @if(old('current_barangay', $student->contact_info->permanent_barangay ?? '') == $barangay['brgy_name']) selected @endif
