@@ -218,7 +218,7 @@ class StudentledgerController extends Controller
             $current_soa,
             $current_period,
             $student->program->level->id, 
-            $enrollment->toArray()
+            $enrollment ? $enrollment->toArray() : 'false'
         );
 
         $has_adjustment = false;
@@ -255,7 +255,7 @@ class StudentledgerController extends Controller
             $current_period,
             $request->pay_period, 
             $student->program->educational_level_id,
-            $enrollment->toArray()
+            $enrollment ? $enrollment->toArray() : 'false'
         );
         
         return response()->json($payment_schedule);

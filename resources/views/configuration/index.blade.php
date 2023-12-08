@@ -418,14 +418,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="date_from" class="m-0 font-weight-bold text-primary">* Date From</label>
-                                    <input type="text" name="date_from" placeholder="" class="form-control datepicker" value="{{ old('date_from') }}">
+                                    <input type="text" name="date_from" autocomplete="off" placeholder="" class="form-control datepicker" value="{{ old('date_from') }}">
                                     @error('date_from')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label for="date_to" class="m-0 font-weight-bold text-primary">Date To</label>
-                                    <input type="text" name="date_to" placeholder="" class="form-control datepicker" value="{{ old('date_to') }}">
+                                    <input type="text" name="date_to" autocomplete="off" placeholder="" class="form-control datepicker" value="{{ old('date_to') }}">
                                     @error('date_to')
                                         <p class="text-danger text-xs mt-1">{{$message}}</p>
                                     @enderror

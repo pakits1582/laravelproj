@@ -384,58 +384,62 @@ class FacultyEvaluationService
 
     public function studentClassesForEvaluation($enrollment)
     {
-        DB::beginTransaction();
-
-        $faculty_evaluations = $enrollment->facultyevaluations;
-
-        $classes_to_evaluate = EnrolledClass::where('enrollment_id', $enrollment->id)
-        ->whereHas('class', function ($query) {
-            $query->where('evaluation', FacultyEvaluation::CLASS_FOR_EVALUATION_TRUE);
-        })->get();
-
-        $classes_not_in_faculty_evaluations = [];
-
-        foreach ($classes_to_evaluate as $class_to_evaluate) 
+        if($enrollment && $enrollment->facultyevaluations)
         {
-            $classId = $class_to_evaluate->class_id;
-            
-            // Check if the class ID is not in faculty evaluations
-            $classNotInFacultyEvaluations = !$faculty_evaluations
-                ->pluck('class_id')
-                ->contains($classId);
+            DB::beginTransaction();
 
-            if ($classNotInFacultyEvaluations) {
-                // If the class is not in faculty evaluations, add it to the result array
-                $classes_not_in_faculty_evaluations[] = $class_to_evaluate;
-            }
-        } 
-        
-        $insert_facultyevaluations = [];
-        if($classes_not_in_faculty_evaluations)
-        {
-            foreach ($classes_not_in_faculty_evaluations as $key => $class_for_evaluation) 
+            $faculty_evaluations = $enrollment->facultyevaluations;
+
+            $classes_to_evaluate = EnrolledClass::where('enrollment_id', $enrollment->id)
+            ->whereHas('class', function ($query) {
+                $query->where('evaluation', FacultyEvaluation::CLASS_FOR_EVALUATION_TRUE);
+            })->get();
+
+            $classes_not_in_faculty_evaluations = [];
+
+            foreach ($classes_to_evaluate as $class_to_evaluate) 
             {
-                $insert_facultyevaluations[] = [
-                    'enrollment_id' => $enrollment->id,
-                    'class_id' => $class_for_evaluation->class_id,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ];
+                $classId = $class_to_evaluate->class_id;
+                
+                // Check if the class ID is not in faculty evaluations
+                $classNotInFacultyEvaluations = !$faculty_evaluations
+                    ->pluck('class_id')
+                    ->contains($classId);
+
+                if ($classNotInFacultyEvaluations) {
+                    // If the class is not in faculty evaluations, add it to the result array
+                    $classes_not_in_faculty_evaluations[] = $class_to_evaluate;
+                }
+            } 
+            
+            $insert_facultyevaluations = [];
+            if($classes_not_in_faculty_evaluations)
+            {
+                foreach ($classes_not_in_faculty_evaluations as $key => $class_for_evaluation) 
+                {
+                    $insert_facultyevaluations[] = [
+                        'enrollment_id' => $enrollment->id,
+                        'class_id' => $class_for_evaluation->class_id,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                }
+
+                $enrollment->facultyevaluations()->insert($insert_facultyevaluations);
             }
 
-            $enrollment->facultyevaluations()->insert($insert_facultyevaluations);
+            DB::commit();
+
+            $enrollment->load([
+                'facultyevaluations.class.sectioninfo',
+                'facultyevaluations.class.instructor',
+                'facultyevaluations.class.schedule',
+                'facultyevaluations.class.curriculumsubject.subjectinfo'
+            ]);
+
+            return $enrollment->facultyevaluations;
         }
-
-        DB::commit();
-
-        $enrollment->load([
-            'facultyevaluations.class.sectioninfo',
-            'facultyevaluations.class.instructor',
-            'facultyevaluations.class.schedule',
-            'facultyevaluations.class.curriculumsubject.subjectinfo'
-        ]);
-
-        return $enrollment->facultyevaluations;
+        
     }
 
     public function evaluateClass($facultyevaluation){

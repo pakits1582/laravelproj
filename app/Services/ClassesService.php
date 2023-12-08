@@ -768,6 +768,11 @@ class ClassesService
 
         $class_schedules = $query->get();
 
+        return $this->classesScheduleTable($class_schedules);
+    }
+
+    public function classesScheduleTable($class_schedules)
+    {
         $class_schedule_array = [];
 
         if ($class_schedules->isNotEmpty()) {

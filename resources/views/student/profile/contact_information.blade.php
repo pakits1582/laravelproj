@@ -19,17 +19,17 @@
                     @php
                         if(isset($student))
                         {
-                            $current_region_code   = Helpers::findCode($regions, 'region_name', $student->contact_info->current_region, 'region_code');
-                            $current_province_code = Helpers::findCode($provinces, 'province_name', $student->contact_info->current_province, 'province_code', $current_region_code, 'region_code');
-                            $current_city_code     = Helpers::findCode($cities, 'city_name', $student->contact_info->current_municipality, 'city_code', $current_province_code, 'province_code');
+                            $current_region_code   = Helpers::findCode($regions, 'region_name', $student->contact_info->current_region ?? '', 'region_code');
+                            $current_province_code = Helpers::findCode($provinces, 'province_name', $student->contact_info->current_province ?? '', 'province_code', $current_region_code, 'region_code');
+                            $current_city_code     = Helpers::findCode($cities, 'city_name', $student->contact_info->current_municipality ?? '', 'city_code', $current_province_code, 'province_code');
 
                             $current_provinces = Helpers::findItemsByCode($provinces, "region_code", $current_region_code);
                             $current_cities    = Helpers::findItemsByCode($cities, "province_code", $current_province_code);
                             $current_barangays = Helpers::findItemsByCode($barangays, "city_code", $current_city_code);
 
-                            $permanent_region_code   = Helpers::findCode($regions, 'region_name', $student->contact_info->permanent_region, 'region_code');
-                            $permanent_province_code = Helpers::findCode($provinces, 'province_name', $student->contact_info->permanent_province, 'province_code', $permanent_region_code, 'region_code');
-                            $permanent_city_code     = Helpers::findCode($cities, 'city_name', $student->contact_info->permanent_municipality, 'city_code', $permanent_province_code, 'province_code');
+                            $permanent_region_code   = Helpers::findCode($regions, 'region_name', $student->contact_info->permanent_region ?? '', 'region_code');
+                            $permanent_province_code = Helpers::findCode($provinces, 'province_name', $student->contact_info->permanent_province ?? '', 'province_code', $permanent_region_code, 'region_code');
+                            $permanent_city_code     = Helpers::findCode($cities, 'city_name', $student->contact_info->permanent_municipality ?? '', 'city_code', $permanent_province_code, 'province_code');
 
                             $permanent_provinces = Helpers::findItemsByCode($provinces, "region_code", $permanent_region_code);
                             $permanent_cities    = Helpers::findItemsByCode($cities, "province_code", $permanent_province_code);
