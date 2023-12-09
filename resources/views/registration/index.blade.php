@@ -63,6 +63,85 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Section Classes Offerings</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive-sm">
+                        <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
+                            <thead class="">
+                                <tr>
+                                    <th class="w20"></th>
+                                    <th class="w50">Code</th>
+                                    <th class="w120 mid">Subject</th>
+                                    <th>Description</th>
+                                    <th class="w40 mid">Units</th>
+                                    <th class="w35 mid">Lec</th>
+                                    <th class="w35 mid">Lab</th>
+                                    <th class="w300 mid">Schedule</th>
+                                    <th class="">Section</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-black" id="return_enrolled_subjects">
+                                <tr><td class="mid" colspan="13">No records to be displayed!</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Registered Subjects</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive-sm">
+                        <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
+                            <thead class="">
+                                <tr>
+                                    <th class="w20"></th>
+                                    <th class="w50">Code</th>
+                                    <th class="w120 mid">Subject</th>
+                                    <th>Description</th>
+                                    <th class="w40 mid">Units</th>
+                                    <th class="w35 mid">Lec</th>
+                                    <th class="w35 mid">Lab</th>
+                                    <th class="w300 mid">Schedule</th>
+                                    <th class="">Section</th>
+                                    <th class="w100">Added By</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-black" id="return_enrolled_subjects">
+                                <tr><td class="mid" colspan="13">No records to be displayed!</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- DISPLAY SCHEDULE TABLE --}}
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Schedule Table</h6>
+                </div>
+                <div class="card-body">
+                    <div id="schedule_table">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
    
 </div>
 @endsection

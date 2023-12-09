@@ -37,4 +37,9 @@ class Section extends Model
     {
         return $this->hasMany(Enrollment::class, 'section_id', 'id');
     }
+
+    public function section_monitorings()
+    {
+        return $this->hasMany(SectionMonitoring::class);
+    }
 }

@@ -12,6 +12,9 @@ class SectionMonitoring extends Model
     
     use HasFactory;
 
+    const STATUS_OPEN = 1;
+    const STATUS_CLOSE = 0;
+
     public function section()
     {
         return $this->belongsTo(Section::class);

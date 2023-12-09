@@ -106,7 +106,7 @@ class EnrollmentService
 
     public function checkIfStudentIsOnProbation($student_id, $period_id)
     {
-        return false;
+        return true;
     }
 
     public function checkIfstudentHasAccountBalance($student_id, $period_id)
@@ -244,7 +244,7 @@ class EnrollmentService
             'schedule',
             'enrolledstudents' => function($query)
             {
-                $query->with('enrollment')->withCount('enrollment');
+                $query->withCount('enrollment');
             },
             'merged' => function($query)
             {

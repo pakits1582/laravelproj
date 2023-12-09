@@ -40,12 +40,11 @@ class RegistrationController extends Controller
 
                 $registration = $this->registrationService->studentRegistration($student);
 
-                return $registration;
-                //return view('registration.index', compact('student'));
+                return view('registration.index', compact('student', 'registration'));
             }
 
         } catch (\Exception $e) {
-            //return Redirect::route('home');
+            return Redirect::route('home');
         }
     }
 }
