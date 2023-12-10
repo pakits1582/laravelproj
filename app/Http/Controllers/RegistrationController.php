@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
-use App\Services\Assessment\AssessmentService;
-use App\Services\Enrollment\EnrollmentService;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\RegistrationService;
 use Illuminate\Support\Facades\Redirect;
+use App\Services\Assessment\AssessmentService;
+use App\Services\Enrollment\EnrollmentService;
 
 class RegistrationController extends Controller
 {
@@ -27,20 +28,33 @@ class RegistrationController extends Controller
        try {
             $student = (new StudentService)->studentInformationByUserId(Auth::id());
 
-            $enrollment = (new EnrollmentService)->studentEnrollment($student->id, session('current_period'));
+            $enrollment = Enrollment::where('student_id', $student->id)->where('period_id', session('current_period'))->first();
+
+            $with_faculty = false;
 
             if($enrollment && $enrollment->assessed == 1)
             {
+                $enrollment->load([
+                    'program.level:id,code,level',
+                    'program.collegeinfo:id,code,name',
+                    'curriculum:id,program_id,curriculum',
+                    'section:id,code,name',
+                ]);
+                
                 $class_schedules = (new AssessmentService)->enrolledClassSchedules($enrollment->id);
                 $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($enrollment->id);
-                $with_faculty = false;
 
                 return view('registration.view_registration', compact('student', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
             }else{
 
                 $registration = $this->registrationService->studentRegistration($student);
+                
+                $class_schedules = (new AssessmentService)->enrolledClassSchedules($registration['enrollment']->id);
+                $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($registration['enrollment']->id);
+                // $section_subjects = (new EnrollmentService())->enrollSection($student->id, $data['section']->section_id, $enrollment->id);
 
-                return view('registration.index', compact('student', 'registration'));
+                //return $registration;
+                return view('registration.index', compact('student', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
             }
 
         } catch (\Exception $e) {

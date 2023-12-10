@@ -82,10 +82,15 @@ class RegistrationService
             ];
     
             $enrollment = Enrollment::firstOrCreate(['period_id' => session('current_period'), 'student_id' => $student->id], $insert_enrollment);
-
-            $data['section_subjects'] = (new EnrollmentService())->enrollSection($student->id, $data['section']->section_id, $enrollment->id);
-            $data['enrolled_classes'] = (new EnrollmentService())->enrolledClassSubjects($enrollment->id);
-            $data['class_schedules']  = (new AssessmentService())->enrolledClassSchedules($enrollment->id);
+            // Load relationships for the enrollment
+            $enrollment->load([
+                'program.level:id,code,level',
+                'program.collegeinfo:id,code,name',
+                'curriculum:id,program_id,curriculum',
+                'section:id,code,name',
+            ]);
+            
+            $data['enrollment'] = $enrollment;            
         }
 
         return $data;
