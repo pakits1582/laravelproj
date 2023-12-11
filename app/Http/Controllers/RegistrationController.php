@@ -7,6 +7,7 @@ use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
 use Illuminate\Support\Facades\Auth;
+use App\Models\EnrolledClassSchedule;
 use App\Services\RegistrationService;
 use Illuminate\Support\Facades\Redirect;
 use App\Services\Assessment\AssessmentService;
@@ -25,7 +26,7 @@ class RegistrationController extends Controller
 
     public function index()
     {
-       try {
+        //try {
             $student = (new StudentService)->studentInformationByUserId(Auth::id());
 
             $enrollment = Enrollment::where('student_id', $student->id)->where('period_id', session('current_period'))->first();
@@ -48,17 +49,30 @@ class RegistrationController extends Controller
             }else{
 
                 $registration = $this->registrationService->studentRegistration($student);
-                
-                $class_schedules = (new AssessmentService)->enrolledClassSchedules($registration['enrollment']->id);
-                $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($registration['enrollment']->id);
-                // $section_subjects = (new EnrollmentService())->enrollSection($student->id, $data['section']->section_id, $enrollment->id);
+                $enrollment = $registration['enrollment'];
 
-                //return $registration;
-                return view('registration.index', compact('student', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
+                $query = EnrolledClassSchedule::with([
+                    'class' => [
+                        'instructor',
+                        'curriculumsubject.subjectinfo', 
+                        'sectioninfo'
+                    ]
+                ])->where('enrollment_id', $registration['enrollment']->id);
+        
+                $enrolled_class_schedules = $query->get();
+                
+                $class_schedules  = (new AssessmentService)->classScheduleArray($enrolled_class_schedules);
+                $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($registration['enrollment']->id);
+                $section_subjects = (new EnrollmentService())->enrollSection($student->id, $registration['enrollment']->section_id, $registration['enrollment']->id);
+                $section_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $section_subjects);
+                $section_subjects = $this->registrationService->checkIfClassIfDuplicate($enrolled_classes, $section_subjects);
+              
+                return $section_subjects;
+                //return view('registration.index', compact('student', 'section_subjects', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
             }
 
-        } catch (\Exception $e) {
-            return Redirect::route('home');
-        }
+        // } catch (\Exception $e) {
+        //     return Redirect::route('home');
+        // }
     }
 }

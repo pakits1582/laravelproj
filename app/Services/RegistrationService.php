@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Enrollment;
 use App\Models\SectionMonitoring;
-use App\Services\Assessment\AssessmentService;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Assessment\AssessmentService;
 use App\Services\Enrollment\EnrollmentService;
 
 class RegistrationService
@@ -165,5 +166,88 @@ class RegistrationService
             // No open sections available
             return false;
         }
+    }
+
+    public function checkClassesIfConflictStudentSchedule($enrollment_schedules, $subjects)
+    {
+        //$enrollment_schedules = EnrolledClassSchedule::with(['class'])->where('enrollment_id', $enrollment_id)->get();
+
+        $checked_subjects = [];
+
+        if($subjects)
+        {
+            foreach ($subjects as $key => $subject)
+            {
+                $conflict = 0;
+                $schedule = $subject->schedule->schedule;
+                
+                if($schedule !== '')
+                {
+                    $schedule = strtoupper(preg_replace('/\s+/', ' ', trim($schedule)));
+                    $schedules = explode(", ", $schedule);
+
+                    foreach($schedules as $sched)
+                    {
+                        $splits = preg_split('/ ([MTWHFSU]+) /', $sched, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+                        $times = $splits[0];
+                        $days  = $splits[1];
+                        $room  = $splits[2];
+
+                        $times    = explode("-", $times);
+                        $timefrom = Carbon::parse($times[0])->format('H:i:s');
+                        $timeto   = Carbon::parse($times[1])->format('H:i:s');
+
+                        $splitdays = preg_split('/(.[HU]?)/' ,$days, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+
+                        $confli = 0;
+                        foreach($splitdays as $splitday)
+                        {
+                            $hasconflict = 0;
+                            foreach ($enrollment_schedules as $k => $v)
+                            {
+                                if($v->to_time > $timefrom && $timeto > $v->from_time && $splitday == $v->day){
+                                    $hasconflict = 1;
+                                    break;
+                                }
+                            }
+                            if($hasconflict == 1){
+                                $confli = 1;
+                                break;
+                            }
+                        }
+
+                        if($confli == 1){
+                            $conflict = 1;
+                        }
+                    }
+                }
+                $checked_subjects[$key] = $subject;
+                $checked_subjects[$key]['conflict'] = $conflict;
+            }
+        }
+
+        return $checked_subjects;
+    }
+
+
+    public function checkIfClassIfDuplicate($enrolled_classes, $section_subjects)
+    {
+        $checked_duplicates = [];
+
+        if($section_subjects)
+        {
+            foreach ($section_subjects as $key => $section_subject) 
+            {  
+                $checked_duplicates[$key] = $section_subject;
+                $class_id = $section_subject['id'];
+                $exists = $enrolled_classes->contains('class.id', $class_id);
+
+                $checked_duplicates[$key]['duplicate'] = ($exists) ? 1 : 0;
+              
+            }
+        }
+
+        return $checked_duplicates;
     }
 }

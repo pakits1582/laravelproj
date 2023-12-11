@@ -241,4 +241,33 @@ class AssessmentService
 
         return compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules');
     }
+
+    public function classScheduleArray($enrolled_class_schedules)
+    {
+        $class_schedule_array = [];
+
+        if ($enrolled_class_schedules->isNotEmpty()) 
+        {
+            foreach ($enrolled_class_schedules as $key => $class_schedule) 
+            {
+                $class_schedule_array[] = [
+                    'class_id' => $class_schedule->class->id,
+                    'class_code' => $class_schedule->class->code,
+                    'from_time' => $class_schedule->from_time,
+                    'to_time' => $class_schedule->to_time,
+                    'day' => $class_schedule->day,
+                    'room' => $class_schedule->room,
+                    'subject_code' => $class_schedule->class->curriculumsubject->subjectinfo->code,
+                    'subject_name' => $class_schedule->class->curriculumsubject->subjectinfo->name,
+                    'instructor_id' => $class_schedule->class->instructor_id,
+                    'instructor_last_name' => $class_schedule->class->instructor->last_name ?? '',
+                    'instructor_first_name' => $class_schedule->class->instructor->first_name ?? '',
+                    'instructor_middle_name' => $class_schedule->class->instructor->midle_name ?? '',
+                    'section_code' => $class_schedule->class->sectioninfo->code,
+                ];
+            }
+        }
+
+        return $class_schedule_array; 
+    }
 }
