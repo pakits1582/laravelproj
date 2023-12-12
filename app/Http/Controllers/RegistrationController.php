@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRegistrationClassesRequest;
 use App\Libs\Helpers;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class RegistrationController extends Controller
 
     public function index()
     {
-        //try {
+        try {
             $student = (new StudentService)->studentInformationByUserId(Auth::id());
 
             $enrollment = Enrollment::where('student_id', $student->id)->where('period_id', session('current_period'))->first();
@@ -67,12 +68,16 @@ class RegistrationController extends Controller
                 $section_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $section_subjects);
                 $section_subjects = $this->registrationService->checkIfClassIfDuplicate($enrolled_classes, $section_subjects);
               
-                return $section_subjects;
-                //return view('registration.index', compact('student', 'section_subjects', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
+                //return $registration;
+                return view('registration.index', compact('student', 'section_subjects', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
             }
+        } catch (\Exception $e) {
+            return Redirect::route('home');
+        }
+    }
 
-        // } catch (\Exception $e) {
-        //     return Redirect::route('home');
-        // }
+    public function store(StoreRegistrationClassesRequest $request)
+    {
+        return $request;
     }
 }

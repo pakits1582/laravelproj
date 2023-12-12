@@ -103,6 +103,8 @@ Route::group(['middleware' => ['auth', 'student']], function () {
 
     Route::group(['middleware' => ['inaccess:registration']], function () {
         Route::get('/registration', [RegistrationController::class, 'index']);
+        Route::post('/registration', [RegistrationController::class, 'store']);
+
     });
 
     // 'evaluations/studentevaluation', 

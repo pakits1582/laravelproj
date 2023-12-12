@@ -1,7 +1,8 @@
+@php
+    $total_units = 0;
+    $total_subjects = 0;
+@endphp
 @if (count($enrolled_classes) > 0)
-    @php
-        $totalunits = 0;
-    @endphp
     @foreach ($enrolled_classes as $enrolled_class)
         <tr class="label">
             <td class="mid"><input type="checkbox" name="" class="select_enrolled_class" value="{{ $enrolled_class->class->id }}" /></td>
@@ -33,15 +34,21 @@
         </tr>
         @php
             $totalunits += $enrolled_class->class->units;
+            $total_subjects++;
         @endphp
     @endforeach
     <tr class="nohover">
         <td colspan="4"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ count($enrolled_classes) }})</h6></td>
-        <td colspan="6"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolledunits">{{ $totalunits }}</span>) Total Units </h6>
+        <td colspan="6"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolled_units">{{ $total_units }}</span>) Total Units </h6>
         </td>
     </tr>
 @else
     <tr class="">
         <td class="mid" colspan="10">No records to be displayed</td>
+    </tr>
+    <tr class="nohover">
+        <td colspan="4"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ $total_subjects }})</h6></td>
+        <td colspan="6"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolled_units">{{ $total_units }}</span>) Total Units </h6>
+        </td>
     </tr>
 @endif
