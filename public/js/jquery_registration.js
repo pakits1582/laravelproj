@@ -35,8 +35,57 @@ $(function(){
 		}
 	});
 
+	function returnEnrolledClassSubjects(enrollment_id)
+    {
+        $.ajax({
+            url: "/registration/enrolledclasssubjects",
+            type: 'POST',
+            data: ({ 'enrollment_id':enrollment_id }),
+            success: function(data){
+                console.log(data);
+                $("#return_enrolled_subjects").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+	function returnSectionOfferings(section_id, student_id, enrollment_id)
+	{
+		$.ajax({
+            url: "/registration/sectionofferings",
+            type: 'POST',
+            data: ({ 'section_id':section_id, 'student_id':student_id, 'enrollment_id':enrollment_id }),
+            success: function(data){
+                console.log(data);
+                $("#return_section_subjects").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+	}
+
+	function returnScheduleTable(enrollment_id)
+    {
+        $.ajax({
+			url: "/registration/scheduletable",
+			type: 'POST',
+			data: ({ 'enrollment_id' : enrollment_id}),
+			success: function(data){
+				$("#schedule_table").html(data);
+			},
+			error: function (data) {
+				console.log(data);
+			}
+		});
+    }
+
 	$(document).on("submit", "#form_add_offerings", function(e){
-		var section  = $("#section").val();
+		var section_id  = $("#section").val();
+		var student_id  = $("#student_id").val();
+		var enrollment_id = $("#enrollment_id").val();
         var postData = $("#form_add_offerings").serializeArray();
 
 		$.ajax({
@@ -59,6 +108,26 @@ $(function(){
 			{
 				$("#confirmation").dialog('close');
 				console.log(response);
+				if(response.success == true)
+				{
+					if($.isEmptyObject(response.full_slots) == false)
+					{
+						var full_slots = 'Failed to add the following class subjects:';
+						$.each(response.full_slots, function (key, value) {
+							full_slots += '<p>'+value.code+' - '+value.subject_code+'</p>';
+						});
+						full_slots += '<p>Slots was full before saving.</p>';
+						showInfo(full_slots);
+					}else{
+						showSuccess(response.message);
+					}
+
+					returnScheduleTable(enrollment_id);
+					returnEnrolledClassSubjects(enrollment_id)
+					returnSectionOfferings(section_id, student_id, enrollment_id)
+				}else{
+					showError(response.message);
+				}
 				
 			},
 			error: function (data) {
@@ -78,5 +147,64 @@ $(function(){
 
 		e.preventDefault();
 	});
+
+	$(document).on("click", "#delete_selected", function(){
+        if($('.select_enrolled_class:checked').length > 0)
+        {
+            $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Delete</div><div class="message">All items related to this class subject will also be deleted. Do you want to continue?<br>You can not undo this process?</div>').dialog({
+                show: 'fade',
+                resizable: false,	
+                draggable: false,
+                width: 350,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                        'Cancel':function(){
+                            $("#confirmation").dialog('close');
+                        },
+                        'OK':function(){
+                            $("#confirmation").dialog('close');
+                            var class_ids = [];
+							var section_id  = $("#section").val();
+							var student_id  = $("#student_id").val();
+							var enrollment_id = $("#enrollment_id").val();
+							
+
+                            $(".select_enrolled_class:checked").each(function() {
+                                class_id = $(this).attr('value');
+                                class_ids.push(class_id);
+                            });
+
+                            $.ajax({
+                                url: '/registration/deleteenrolledsubjects',
+                                type: 'DELETE',
+                                data: ({ 'class_ids' : class_ids, 'enrollment_id' : enrollment_id }),
+                                dataType: 'json',
+                                success: function(response)
+                                {
+                                    if(response.data.success === true)
+                                    {
+                                        showSuccess(response.data.message);
+                                    }
+									returnScheduleTable(enrollment_id);
+									returnEnrolledClassSubjects(enrollment_id)
+									returnSectionOfferings(section_id, student_id, enrollment_id)
+                                },
+                                error: function (data) {
+                                    console.log(data);
+                                    var errors = data.responseJSON;
+                                    if ($.isEmptyObject(errors) == false) {
+                                        showError('Something went wrong! Can not perform requested action!');
+                                    }
+                                }
+                            });
+                        }//end of ok button	
+                     }//end of buttons
+            });//end of dialogbox
+            $(".ui-dialog-titlebar").hide();
+        }else{
+            showError('Please select at least one subject to be deleted!');
+        }
+    });
     
 });

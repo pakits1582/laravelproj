@@ -15,7 +15,7 @@
 	z-index:100000;
 	width: 100%;
 }
-.confirmation{
+.confirmation, .infopop{
 	background:url(../images/help.png) #3498db no-repeat center center;
 	padding-top:100px;
 	background-size:75px 75px;
@@ -40,6 +40,9 @@
 }
 .succ{
 	border:1px solid #2ecc71;
+}
+.info{
+	border:1px solid #3498db;
 }
 
 .ui_title_success{

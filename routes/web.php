@@ -104,6 +104,10 @@ Route::group(['middleware' => ['auth', 'student']], function () {
     Route::group(['middleware' => ['inaccess:registration']], function () {
         Route::get('/registration', [RegistrationController::class, 'index']);
         Route::post('/registration', [RegistrationController::class, 'store']);
+        Route::post('/registration/sectionofferings', [RegistrationController::class, 'sectionofferings']);
+        Route::post('/registration/enrolledclasssubjects', [RegistrationController::class, 'enrolledclasssubjects']);
+        Route::post('/registration/scheduletable', [RegistrationController::class, 'scheduletable']);
+        Route::delete('/registration/deleteenrolledsubjects', [RegistrationController::class, 'deleteenrolledsubjects']);
 
     });
 

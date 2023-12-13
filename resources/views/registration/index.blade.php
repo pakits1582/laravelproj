@@ -189,7 +189,7 @@
                         </span>
                         <span class="text">Add Subjects</span>
                     </button>
-                    <button type="button" id="delete_selected" class="btn btn-sm btn-danger btn-icon-split actions mb-2" disabled>
+                    <button type="button" id="delete_selected" class="btn btn-sm btn-danger btn-icon-split actions mb-2">
                         <span class="icon text-white-50">
                             <i class="fas fa-trash"></i>
                         </span>

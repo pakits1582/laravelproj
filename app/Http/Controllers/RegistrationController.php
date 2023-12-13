@@ -78,6 +78,59 @@ class RegistrationController extends Controller
 
     public function store(StoreRegistrationClassesRequest $request)
     {
-        return $request;
+        $save_classes = $this->registrationService->saveSelectedClasses($request);
+
+        return response()->json($save_classes);
+    }
+
+    public function sectionofferings(Request $request)
+    {
+        $query = EnrolledClassSchedule::with([
+            'class' => [
+                'instructor',
+                'curriculumsubject.subjectinfo', 
+                'sectioninfo'
+            ]
+        ])->where('enrollment_id', $request->enrollment_id);
+
+        $enrolled_class_schedules = $query->get();
+        $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);
+        $section_subjects = (new EnrollmentService())->enrollSection($request->student_id, $request->section_id);
+        $section_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $section_subjects);
+        $section_subjects = $this->registrationService->checkIfClassIfDuplicate($enrolled_classes, $section_subjects);
+
+        return view('registration.section_subjects', compact('section_subjects'));
+
+    }
+
+    public function enrolledclasssubjects(Request $request)
+    {
+        $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);
+
+        return view('enrollment.enrolled_class_subjects', compact('enrolled_classes'));
+    }
+
+    public function scheduletable(Request $request)
+    {
+        $query = EnrolledClassSchedule::with([
+            'class' => [
+                'instructor',
+                'curriculumsubject.subjectinfo', 
+                'sectioninfo'
+            ]
+        ])->where('enrollment_id', $request->enrollment_id);
+
+        $enrolled_class_schedules = $query->get();
+        
+        $class_schedules  = (new AssessmentService)->classScheduleArray($enrolled_class_schedules);
+
+        return view('class.schedule_table', 'class_schedules');
+    }
+
+    public function deleteenrolledsubjects(Request $request)
+    {
+       $data = (new EnrollmentService())->deleteSelectedSubjects($request);
+
+        return response()->json(['data' => $data]);
     }
 }

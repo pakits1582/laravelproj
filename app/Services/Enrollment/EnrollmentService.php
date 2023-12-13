@@ -236,7 +236,7 @@ class EnrollmentService
 
     }
 
-    public function enrollSection($student_id, $section_id, $enrollment_id)
+    public function enrollSection($student_id, $section_id, $enrollment_id="")
     {
         $query = Classes::with([
             'sectioninfo',

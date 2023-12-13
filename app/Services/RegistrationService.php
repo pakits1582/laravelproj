@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use App\Models\Classes;
 use App\Models\Enrollment;
 use App\Models\SectionMonitoring;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Assessment\AssessmentService;
 use App\Services\Enrollment\EnrollmentService;
@@ -249,5 +251,113 @@ class RegistrationService
         }
 
         return $checked_duplicates;
+    }
+
+    public function saveSelectedClasses($request)
+    {
+        $selected_classes =  Classes::with([
+            'curriculumsubject.subjectinfo',
+            'schedule',
+            'enrolledstudents' => function($query)
+            {
+                $query->withCount('enrollment');
+            },
+            'merged' => function($query)
+            {
+                $query->withCount('enrolledstudents');
+            },
+            'mergetomotherclass' => [
+                'enrolledstudents' => function($query)
+                {
+                    $query->withCount('enrollment');
+                },
+                'merged' => function($query)
+                {
+                    $query->withCount('enrolledstudents');
+                },
+            ]
+        ])->whereIn("id", $request->class_ids)->get();
+
+        if($selected_classes->isNotEmpty())
+        {
+            $to_insert_classes = [];
+            $full_slots = [];
+
+            foreach ($selected_classes as $key => $selected_class) 
+            {
+                $total_slots = ($selected_class->merge > 0) ? $selected_class->mergetomotherclass->slots : $selected_class->slots;
+                $total_slots_taken = (new EnrollmentService)->getTotalSlotsTakenOfClass($selected_class); 
+
+                if($total_slots_taken >= $total_slots)
+                {
+                    $full_slots[] = ['code' => $selected_class->code, 'subject_code' => $selected_class->curriculumsubject->subjectinfo->code];
+                }else{
+                    $to_insert_classes[] = $selected_class;
+                }
+            }
+
+            if (!empty($to_insert_classes)) 
+            {
+                DB::beginTransaction();
+
+                $enrollment = Enrollment::findOrFail($request->enrollment_id);
+
+                $enroll_classes = [];
+                $enroll_class_schedules = [];
+
+                foreach ($to_insert_classes as $key => $class_subject)
+                {
+                    $enroll_classes[] = [
+                        'enrollment_id' => $request->enrollment_id,
+                        'class_id' => $class_subject->id,
+                        'user_id' => Auth::id(),
+                        'created_at' => carbon::now(),
+                        'updated_at' => carbon::now()
+                    ];
+                    
+                    if(!is_null($class_subject->schedule->schedule))
+                    {
+                        $class_schedules = (new ClassesService())->processSchedule($class_subject->schedule->schedule);
+
+                        foreach ($class_schedules as $key => $class_schedule) 
+                        {
+                            foreach ($class_schedule['days'] as $key => $day) {
+                                $enroll_class_schedules[] = [
+                                    'enrollment_id' => $request->enrollment_id,
+                                    'class_id' => $class_subject['id'],
+                                    'from_time' => $class_schedule['timefrom'],
+                                    'to_time' => $class_schedule['timeto'],
+                                    'day' => $day,
+                                    'room' => $class_schedule['room'],
+                                    'created_at' => carbon::now(),
+                                    'updated_at' => carbon::now()
+                                ];
+                            }
+                        }
+                    }
+                }
+
+                $enrollment->enrolled_classes()->insert($enroll_classes);
+                $enrollment->enrolled_class_schedules()->insert($enroll_class_schedules);
+
+                DB::commit();
+
+                return [
+                    'success' => true,
+                    'message' => 'Selected class subjects successfully added!',
+                    'alert' => 'alert-success',
+                    'full_slots' => $full_slots,
+                    'status' => 200
+                ];
+            }
+        }
+
+        return [
+            'success' => false,
+            'message' => 'Something went wrong! Can not add selected classes.',
+            'alert' => 'alert-danger',
+            'status' => 200
+        ];
+
     }
 }

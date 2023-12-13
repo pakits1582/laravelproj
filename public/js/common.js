@@ -34,11 +34,11 @@ function showSuccess(msg){
 *** FUNCTION DISPLAY ERROR MESSAGE ***
 *************************************/
 function showInfo(msg){
-    $('<div class="info"><h3 class="popup">Returned Information</h3> ' +msg+ '</div>')
-        .prependTo("#content").delay( 1500 )
+    $('<div class="popups info"><span class="closebuttons"></span><div class="infopop"></div><h3 class="ui_title_confirm">Returned Information!</h3><div class="message">'+msg+'</div></div>')
+        .prependTo("#content")/*.delay( 1500 )
         .fadeOut( 500, function(){
             $(this).remove();
-        }).center();
+        })*/.center();
 }	
 
 function showMessageInForm(form, alert, message){

@@ -33,7 +33,7 @@
             <td class=" mid">{{ $enrolled_class->addedby->idno }}</td>
         </tr>
         @php
-            $totalunits += $enrolled_class->class->units;
+            $total_units += $enrolled_class->class->units;
             $total_subjects++;
         @endphp
     @endforeach
