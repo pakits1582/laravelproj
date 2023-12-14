@@ -1,4 +1,8 @@
 @if (isset($section_subjects) && count($section_subjects) > 0)
+    @php
+        $total_subjects = 0;
+        $total_units = 0;
+    @endphp
     @foreach ($section_subjects as $section_subject)
         @php
             $errors = '';
@@ -26,7 +30,16 @@
             <td class="">{{ $section_subject->schedule->schedule }}</td>
             <td class="w120">{{ $section_subject->sectioninfo->name }}</td>
         </tr>
+        @php
+            $total_units += $section_subject->units;
+            $total_subjects++;
+        @endphp
     @endforeach
+    <tr class="nohover">
+        <td colspan="4"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ $total_subjects }})</h6></td>
+        <td colspan="5"><h6 class="m-0 font-weight-bold text-primary">(<span id="">{{ $total_units }}</span>) Total Units </h6>
+        </td>
+    </tr>
 @else
     <tr>
         <td class="mid" colspan="9">No records to be displayed</td>

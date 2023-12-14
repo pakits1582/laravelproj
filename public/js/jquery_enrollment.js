@@ -660,7 +660,7 @@ $(function(){
 			}else{
 				showError('Please select section first!');
 			}
-	    };
+	    }
 	});
 
     $(document).on('keyup', '#search_classes', function(e){

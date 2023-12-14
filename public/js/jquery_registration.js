@@ -206,5 +206,229 @@ $(function(){
             showError('Please select at least one subject to be deleted!');
         }
     });
+
+	$(document).on("change","#section", function(){
+        var section_id = $(this).val();
+        var enrollment_id = $("#enrollment_id").val();
+		var student_id    = $("#student_id").val();
+
+        if(section_id)
+        {
+            $.ajax({
+                url: "/registration/sectionofferingsbysection",
+                type: 'POST',
+                data: {'enrollment_id':enrollment_id, 'student_id':student_id, 'section_id':section_id},
+                cache:false,
+                beforeSend: function() {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        width: 'auto',
+                        height: 'auto',
+                        modal: true,
+                        buttons: false
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                },
+                success: function(data){
+                    $('#confirmation').dialog('close');
+                    //console.log(data);
+                    $("#return_section_subjects").html(data);
+                },
+				error: function (data) {
+					console.log(data);
+					var errors = data.responseJSON;
+					if ($.isEmptyObject(errors) == false) {
+						showError('Something went wrong! Can not perform requested action!');
+					}
+				}
+            });
+        }
+    });
+
+	$(document).on("click", "#add_subjects", function(e){
+		$.ajax({url: "/registration/searchandaddclasses",success: function(data){
+				$('#modal_container').html(data);
+				$("#searchandaddclasses_model").modal('show');
+			}
+		});	
+        e.preventDefault();
+    });
+
+    $(document).on('keyup', '#search_classes', function(e){
+        var searchcodes   = $(this).val();
+		var enrollment_id = $("#enrollment_id").val();
+		var student_id    = $("#student_id").val();
+
+        if(e.keyCode == '13')
+        {
+			if(searchcodes !== "")
+            {
+				$.ajax({
+					url: "/registration/searchclasssubject",
+					type: 'POST',
+					data: {'searchcodes':searchcodes, 'enrollment_id':enrollment_id, 'student_id':student_id},
+					cache:false,
+					beforeSend: function() {
+						$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+							show: 'fade',
+							resizable: false,	
+							width: 'auto',
+							height: 'auto',
+							modal: true,
+							buttons: false
+						});
+						$(".ui-dialog-titlebar").hide();
+					},
+					success: function(data){
+						$('#confirmation').dialog('close');
+						//console.log(data);
+						$("#return_searchedclasses").html(data);
+					}
+				});	
+			}
+		}
+    });
+
+    // $(document).on("click", ".check_searched_class", function(){
+    //     var taken_units   = parseInt($("#enrolledunits").text());
+	// 	var allowed_units = parseInt($("#units_allowed").val());
+    //     var can_overloadunits = $("#can_overloadunits").val();
+
+    //     if($(this).is(':checked'))
+    //     {
+    //         var checkbox = $(this);
+	// 		var errors   = $(this).attr("data-errors");
+
+	// 		$('.check_searched_class:checked').each(function(){
+	// 			taken_units += isNaN(parseInt($(this).parent().siblings(".units").text())) ? 0 : parseInt($(this).parent().siblings(".units").text());
+	// 		});
+
+    //         errors += ((taken_units > allowed_units)) ? '[MAX UNITS ALLOWED]' : '';
+            
+    //         if(errors)
+    //         {
+    //             $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The subject you are selecting has '+errors+' deficiency!<br>Continue selecting subject?</div>').dialog({
+	// 				show: 'fade',
+	// 				resizable: false,	
+	// 				draggable: false,
+	// 				width: 350,
+	// 				height: 'auto',
+	// 				modal: true,
+	// 				buttons: {
+    //                     'Cancel':function(){
+    //                         $(this).dialog('close');
+    //                         $(checkbox).closest('tr').removeClass('selected');
+    //                         $(checkbox).prop("checked", false);
+    //                     },
+    //                     'OK':function(){
+    //                         $(this).dialog('close');
+    //                         var haspermission = checkbox.attr("data-haspermission");
+
+    //                         if(haspermission == 0){
+    //                             showError('<p class="mid">ACCESS DENIED!</p>Your account does not have enough permission to override deficiency!')
+    //                             $(checkbox).closest('tr').removeClass('selected')
+    //                             $(checkbox).prop("checked", false);
+    //                         }else{
+    //                             if(taken_units > allowed_units)
+    //                             {
+    //                                 $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The maximum units allowed for the student already exceeded.<br>Continue selecting subject?</div>').dialog({
+    //                                     show: 'fade',
+    //                                     resizable: false,	
+    //                                     draggable: false,
+    //                                     width: 350,
+    //                                     height: 'auto',
+    //                                     modal: true,
+    //                                     buttons: {
+    //                                         'Cancel':function(){
+    //                                             $(this).dialog('close');
+    //                                             $(checkbox).closest('tr').removeClass('selected')
+    //                                             $(checkbox).prop("checked", false);
+    //                                         },
+    //                                         'OK':function(){
+    //                                             $(this).dialog('close');
+    //                                             if(can_overloadunits == 0){
+    //                                                 showError('<p class="mid">ACCESS DENIED!</p>Your account does not have enough permission to override deficiency!')
+    //                                                 $(checkbox).closest('tr').removeClass('selected')
+    //                                                 $(checkbox).prop("checked", false);
+    //                                             }else{
+    //                                                 $(checkbox).closest('tr').addClass('selected');
+    //                                             }
+    //                                         }//end of ok button	
+    //                                     }//end of buttons
+    //                                 });//end of dialogbox
+    //                                 $(".ui-dialog-titlebar").hide();
+    //                             }
+    //                         }
+                            
+    //                     }//end of ok button	
+    //                 }//end of buttons
+	// 			});//end of dialogbox
+	// 			$(".ui-dialog-titlebar").hide();
+    //         }else{
+    //             $(checkbox).closest('tr').addClass('selected');
+    //         }
+    //     }
+    // });
+
+    // $(document).on("click", "#add_selected_classes", function(){
+    //     $(this).attr("disable", true);
+
+    //     var selected_classes = $(".check_searched_class:checked");
+	// 	var enrollment_id    = $("#enrollment_id").val();
+
+    //     if(selected_classes.length === 0)
+    //     {
+	// 		showError('Please select atleast one checkbox/class subject to add!');
+	// 		$("#add_selected_classes").attr("disabled", false);	
+	// 	}else{
+    //         var class_ids = selected_classes.map(function(){ return $(this).attr("value"); }).get();
+
+    //         $.ajax({
+	// 			url: "/enrolments/addselectedclasses/",
+	// 			type: 'POST',
+	// 			data: {"class_ids":class_ids, "enrollment_id":enrollment_id},
+    //             dataType: 'json',
+	// 			beforeSend: function() {
+	// 					$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
+	// 						show: 'fade',
+	// 						resizable: false,	
+	// 						width: 'auto',
+	// 						height: 'auto',
+	// 						modal: true,
+	// 						buttons: false
+	// 					});
+	// 					$(".ui-dialog-titlebar").hide();
+	// 				},
+	// 			success: function(response){
+	// 				$("#confirmation").dialog('close');
+    //                 console.log(response);
+    //                 if(response.data.success === true)
+    //                 {
+    //                     showSuccess(response.data.message);
+    //                     $.each(class_ids, function(i, val){
+    //                         $("#searched_class_"+val).remove();
+    //                     });
+    //                     returnEnrolledClassSubjects(enrollment_id);
+    //                     //scheduletable(enrollno);
+    //                     var rowCount = $('#add_classsubjects_table > tbody tr').length;
+
+    //                     if(rowCount == 0){
+    //                         $('#add_classsubjects_table > tbody').append('<tr><td colspan="9" class="mid">No records to be displayed</td></tr>');
+    //                     }
+    //                 }
+	// 			},
+    //             error: function (data) {
+    //                 console.log(data);
+    //                 var errors = data.responseJSON;
+    //                 if ($.isEmptyObject(errors) === false) {
+    //                     showError('Something went wrong! Can not perform requested action!');
+    //                 }
+    //             }
+	// 		});	
+
+    //         $("#add_selected_classes").attr("disabled",false);
+    //     }
+    // });
     
 });

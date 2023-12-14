@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Classes;
 use App\Models\Enrollment;
 use App\Models\SectionMonitoring;
+use App\Models\CurriculumSubjects;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Assessment\AssessmentService;
@@ -358,6 +359,28 @@ class RegistrationService
             'alert' => 'alert-danger',
             'status' => 200
         ];
+    }
 
+    public function checkIfSectionClosed($subjects)
+    {
+        $section_monitorings = SectionMonitoring::where('period_id', session('current_period'))->get();
+
+        $checked_subjects = [];
+
+        if ($subjects) 
+        {
+            foreach ($subjects as $key => $subject) 
+            {
+                $section_id = $subject->sectioninfo->id;
+
+                // CHECK SECTION STATUS HERE
+                $section_status = $section_monitorings->where('section_id', $section_id)->first();
+
+                $checked_subjects[$key] = $subject;
+                $checked_subjects[$key]['section_closed'] = (!empty($section_status) && $section_status->status == 1) ? 0 : 1;
+            }
+        }
+
+        return $checked_subjects;
     }
 }

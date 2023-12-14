@@ -1,5 +1,5 @@
  <!-- Logout Modal-->
- <div class="modal fade" id="modalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+ <div class="modal fade" id="searchandaddclasses_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
  aria-hidden="true" data-keyboard="false" data-backdrop="static">
  <div class="modal-dialog modal-xl" role="document" style="max-width: 80% !important">
      <div class="modal-content">
@@ -21,17 +21,17 @@
                                 <input type="text" class="form-control text-uppercase" autofocus id="search_classes" class="text-uppercase" placeholder="Type class code or subject code to search....">
                             </div>
                             <div class="col-md-1">
-                                <label for="" class="m-0 font-weight-bold text-primary">Section</label>
+                                {{-- <label for="" class="m-0 font-weight-bold text-primary">Section</label> --}}
                             </div>
                             <div class="col-md-3">
-                                <select id="section_searchclasses" class="form-control">
+                                {{-- <select id="section_searchclasses" class="form-control">
                                     <option value="">- select section -</option>
                                     @if ($sections_offered)
                                         @foreach ($sections_offered as $key => $section)
                                             <option value="{{ $section->section->id }}" >{{ $section->section->code }}</option>
                                         @endforeach
                                     @endif
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <form action="" method="post" id="">
                             @csrf
                             <div id="return_searchedclasses">
-                                @include('enrollment.return_searchedclasses')
+                                @include('registration.return_searchedclasses')
                             </div>
                             <button type="button" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3" id="add_selected_classes">Add Selected Classes</button>
                         </form>

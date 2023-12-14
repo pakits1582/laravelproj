@@ -195,12 +195,6 @@
                         </span>
                         <span class="text">Delete Selected</span>
                     </button>
-                    <button type="button" id="delete_all_subjects" class="btn btn-sm btn-danger btn-icon-split actions mb-2">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-trash"></i>
-                        </span>
-                        <span class="text">Delete All Subjects</span>
-                    </button>
                 </div>
             </div>
         </div>
