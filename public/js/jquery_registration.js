@@ -259,6 +259,7 @@ $(function(){
         var searchcodes   = $(this).val();
 		var enrollment_id = $("#enrollment_id").val();
 		var student_id    = $("#student_id").val();
+        var curriculum_id = $("#curriculum_id").val();
 
         if(e.keyCode == '13')
         {
@@ -267,7 +268,7 @@ $(function(){
 				$.ajax({
 					url: "/registration/searchclasssubject",
 					type: 'POST',
-					data: {'searchcodes':searchcodes, 'enrollment_id':enrollment_id, 'student_id':student_id},
+					data: {'searchcodes':searchcodes, 'enrollment_id':enrollment_id, 'student_id':student_id, 'curriculum_id':curriculum_id},
 					cache:false,
 					beforeSend: function() {
 						$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
@@ -282,8 +283,19 @@ $(function(){
 					},
 					success: function(data){
 						$('#confirmation').dialog('close');
-						//console.log(data);
+						console.log(data);
 						$("#return_searchedclasses").html(data);
+
+                        $('#scrollable_table_searched_classes').DataTable({
+                            scrollY: 300,
+                            scrollX: true,
+                            scrollCollapse: true,
+                            paging: false,
+                            "bAutoWidth": false,
+                            ordering: false,
+                            info: false,
+                            searching: false
+                        });
 					}
 				});	
 			}

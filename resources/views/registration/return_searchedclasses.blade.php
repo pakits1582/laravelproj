@@ -1,4 +1,4 @@
-<table id="add_classsubjects_table" class="table table-sm table-striped table-bordered hover compact" style="width:100%; font-size:14px !important;">
+<table id="scrollable_table_searched_classes" class="table table-sm table-striped table-bordered hover compact" style="width:100%; font-size:14px !important;">
     <thead>
         <tr>
             <th class="w30">#</th>
@@ -24,10 +24,15 @@
                     $errors .= ($checked_subject->section_closed === 1) ? '[SECTION CLOSED]' : '';
 
                 @endphp
-                <tr class="label {{ ($errors !== '') ? 'dissolved' : '' }}" id="searched_class_{{ $checked_subject->id }}">
-                    <td class="w30 mid">
-                        <input type="checkbox" name="" data-errors="{{ $errors }}" class="check_searched_class" value="{{ $checked_subject->id }}" />
-                    </td>
+                @if ($errors != '')
+                    <tr class="label dissolved" id="check_{{ $checked_subject->id }}">
+                        <td class="w30 mid"></td>
+                @else
+                    <tr class="label" id="{{ $checked_subject->id }}">
+                        <td class="w30 mid">
+                            <input type="checkbox" name="class_ids[]" class="check_searched_class" id="check_searched_class{{ $checked_subject->id }}" value="{{ $checked_subject->id }}" />
+                        </td>
+                @endif
                     <td class="w50"><b>{{ $checked_subject->code }}</b></td>
                     <td class="w120">{{ $checked_subject->sectioninfo->name }}</td>
                     <td class="w120">{{ $checked_subject->curriculumsubject->subjectinfo->code }}</td>

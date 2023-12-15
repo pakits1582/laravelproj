@@ -59,6 +59,8 @@ class RegistrationService
         if($data['registration_status'] == 0)
         {
             $data['errors'][] = 'Registration is closed.';
+
+            return $data;
         }
 
         $available_sections = $this->checkAvailableSection($student, $data['year_level']);
@@ -111,15 +113,20 @@ class RegistrationService
                 $now = \Carbon\Carbon::now()->startOfDay()->format('Y-m-d');
                 $date_from = \Carbon\Carbon::parse($config_schedule->date_from)->startOfDay()->format('Y-m-d');
                 $date_to = \Carbon\Carbon::parse($config_schedule->date_to)->startOfDay()->format('Y-m-d');
-                
 
                 if ($config_schedule->educational_level_id == 0 && ($now >= $date_from && $now <= $date_to)) 
                 {
                     $is_open = 1;
                     break;
                 }else{
-                    if(!is_null($config_schedule->year))
+                    if($config_schedule->year == 'ALL')
                     {
+                        if($now >= $date_from && $now <= $date_to)
+                        {
+                            $is_open = 1;
+                            break;
+                        }   
+                    }else{
                         if (($student->program->level->id == $config_schedule->educational_level_id && $year_level == $config_schedule->year) && ($now >= $date_from && $now <= $date_to)) 
                         {
                             $is_open = 1;
@@ -173,8 +180,6 @@ class RegistrationService
 
     public function checkClassesIfConflictStudentSchedule($enrollment_schedules, $subjects)
     {
-        //$enrollment_schedules = EnrolledClassSchedule::with(['class'])->where('enrollment_id', $enrollment_id)->get();
-
         $checked_subjects = [];
 
         if($subjects)
@@ -382,5 +387,82 @@ class RegistrationService
         }
 
         return $checked_subjects;
+    }
+
+    public function searchClassSubject($request)
+    {
+        $enrollment_id = $request->enrollment_id;
+        $student_id =  $request->student_id;
+        $curriculum_id =  $request->curriculum_id;
+        $searchcodes = stripslashes($request->searchcodes);
+
+        $searchcodes = array_unique(preg_split('/(\s*,*\s*)*,+(\s*,*\s*)*/', $searchcodes));
+        $searchcodes = array_map('trim', $searchcodes);
+
+        $curriculum_subjects = CurriculumSubjects::with('subjectinfo')
+            ->where("curriculum_id", $curriculum_id)
+            ->get();
+
+        $subjectsincurriculum = [];
+
+        foreach ($searchcodes as $searchcodekey => $searchcode) {
+            // Check if any subjects in $curriculum_subjects have codes starting with the current $searchcode
+            $matchingSubjects = $curriculum_subjects->filter(function ($curriculumSubject) use ($searchcode) {
+                return stripos($curriculumSubject->subjectinfo->code, $searchcode) === 0;
+            });
+
+            if ($matchingSubjects->isNotEmpty()) {
+                // If there are matching subjects, add them to the $subjectsincurriculum array
+                $subjectsincurriculum = array_merge($subjectsincurriculum, $matchingSubjects->toArray());
+            }
+        }
+
+        return $subjectsincurriculum;
+
+        // $query = Classes::with([
+        //     'sectioninfo',
+        //     'schedule',
+        //     'enrolledstudents' => function($query)
+        //     {
+        //         $query->with('enrollment')->withCount('enrollment');
+        //     },
+        //     'merged' => function($query)
+        //     {
+        //         $query->withCount('enrolledstudents');
+        //     },
+        //     'mergetomotherclass' => [
+        //         'enrolledstudents' => function($query)
+        //         {
+        //             $query->withCount('enrollment');
+        //         },
+        //         'merged' => function($query)
+        //         {
+        //             $query->withCount('enrolledstudents');
+        //         },
+        //     ],
+        //     'curriculumsubject' => [
+        //         'subjectinfo', 
+        //         'curriculum',
+        //         'prerequisites' => ['curriculumsubject.subjectinfo','curriculumsubject.equivalents',], 
+        //         'corequisites', 
+        //         'equivalents'
+        //     ]
+        // ])->where('period_id', session('current_period'))->where('dissolved', '!=', 1);
+
+        // $query->where(function($query) use($searchcodes){
+        //     foreach($searchcodes as $key => $code){
+        //         $query->orwhere(function($query) use($code){
+        //             $query->orWhere('code', 'LIKE', $code.'%');
+        //             $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
+        //                 $query->where('subjects.code', 'LIKE', $code.'%');
+        //             });
+        //         });
+        //     }
+        // });
+
+        // $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
+        // $subjects = (new EnrollmentService)->handleClassSubjects($student_id, $section_subjects);
+
+        // return $subjects;
     }
 }

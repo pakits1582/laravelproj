@@ -31,6 +31,34 @@ class EnrollmentService
         $this->internalGradeService = new InternalGradeService();
     }
 
+    public function enrolledClassSchedules($enrollment_id)
+    {
+        $query = EnrolledClassSchedule::with([
+            'class' => [
+                'instructor',
+                'curriculumsubject.subjectinfo', 
+                'sectioninfo'
+            ]
+        ])->where('enrollment_id', $enrollment_id);
+
+        return $query->get();
+    }
+
+    public function enrolledClassSubjects($enrollment_id)
+    {
+        $enrolled_classes = EnrolledClass::with([
+            'class' => [
+                'sectioninfo',
+                'instructor', 
+                'schedule',
+                'curriculumsubject.subjectinfo', 
+            ],
+            'addedby'
+        ])->where('enrollment_id', $enrollment_id)->get();
+
+        return $enrolled_classes;
+    }
+
     public function handleStudentEnrollmentInfo($student_id, $studentinfo)
     {
         $user_programs = (new UserService())->handleUserPrograms(Auth::user());
@@ -576,21 +604,6 @@ class EnrollmentService
         DB::commit();
 
         return true;
-    }
-
-    public function enrolledClassSubjects($enrollment_id)
-    {
-        $enrolled_classes = EnrolledClass::with([
-            'class' => [
-                'sectioninfo',
-                'instructor', 
-                'schedule',
-                'curriculumsubject.subjectinfo', 
-            ],
-            'addedby'
-        ])->where('enrollment_id', $enrollment_id)->get();
-
-        return $enrolled_classes;
     }
 
     public function searchClassSubject($request)

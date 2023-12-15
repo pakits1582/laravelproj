@@ -28,7 +28,7 @@ class RegistrationController extends Controller
 
     public function index()
     {
-        try {
+        //try {
             $student = (new StudentService)->studentInformationByUserId(Auth::id());
 
             $enrollment = Enrollment::where('student_id', $student->id)->where('period_id', session('current_period'))->first();
@@ -44,36 +44,37 @@ class RegistrationController extends Controller
                     'section:id,code,name',
                 ]);
                 
-                $class_schedules = (new AssessmentService)->enrolledClassSchedules($enrollment->id);
+                $enrolled_class_schedules = (new AssessmentService)->enrolledClassSchedules($enrollment->id);
                 $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($enrollment->id);
 
                 return view('registration.view_registration', compact('student', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
             }else{
 
                 $registration = $this->registrationService->studentRegistration($student);
-                $enrollment = $registration['enrollment'];
 
-                $query = EnrolledClassSchedule::with([
-                    'class' => [
-                        'instructor',
-                        'curriculumsubject.subjectinfo', 
-                        'sectioninfo'
-                    ]
-                ])->where('enrollment_id', $registration['enrollment']->id);
-        
-                $enrolled_class_schedules = $query->get();
-                $class_schedules  = (new AssessmentService)->classScheduleArray($enrolled_class_schedules);
-                $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($registration['enrollment']->id);
-                $section_subjects = (new EnrollmentService())->enrollSection($student->id, $registration['enrollment']->section_id, $registration['enrollment']->id);
-                $section_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $section_subjects);
-                $section_subjects = $this->registrationService->checkIfClassIfDuplicate($enrolled_classes, $section_subjects);
-              
-                //return $registration;
-                return view('registration.index', compact('student', 'section_subjects', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
+                if(!empty($registration['errors']))
+                {
+                    $errors = $registration['errors'];
+
+                    return view('registration.index', compact('student', 'errors'));
+                }else{
+                    $enrollment = $registration['enrollment'];
+                    
+                    $enrolled_class_schedules = (new EnrollmentService)->enrolledClassSchedules($registration['enrollment']->id);
+                    $class_schedules  = (new AssessmentService)->classScheduleArray($enrolled_class_schedules);
+                    $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($registration['enrollment']->id);
+                    $section_subjects = (new EnrollmentService())->enrollSection($student->id, $registration['enrollment']->section_id, $registration['enrollment']->id);
+                    $section_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $section_subjects);
+                    $section_subjects = $this->registrationService->checkIfClassIfDuplicate($enrolled_classes, $section_subjects);
+                
+                    //return $registration;
+                    return view('registration.index', compact('student', 'section_subjects', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
+                }
+                
             }
-        } catch (\Exception $e) {
-            return Redirect::route('home');
-        }
+        // } catch (\Exception $e) {
+        //     return Redirect::route('home');
+        // }
     }
 
     public function store(StoreRegistrationClassesRequest $request)
@@ -85,15 +86,7 @@ class RegistrationController extends Controller
 
     public function sectionofferings(Request $request)
     {
-        $query = EnrolledClassSchedule::with([
-            'class' => [
-                'instructor',
-                'curriculumsubject.subjectinfo', 
-                'sectioninfo'
-            ]
-        ])->where('enrollment_id', $request->enrollment_id);
-
-        $enrolled_class_schedules = $query->get();
+        $enrolled_class_schedules = (new EnrollmentService)->enrolledClassSchedules($request->enrollment_id);
         $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);
         $section_subjects = (new EnrollmentService())->enrollSection($request->student_id, $request->section_id);
         $section_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $section_subjects);
@@ -112,19 +105,10 @@ class RegistrationController extends Controller
 
     public function scheduletable(Request $request)
     {
-        $query = EnrolledClassSchedule::with([
-            'class' => [
-                'instructor',
-                'curriculumsubject.subjectinfo', 
-                'sectioninfo'
-            ]
-        ])->where('enrollment_id', $request->enrollment_id);
-
-        $enrolled_class_schedules = $query->get();
-        
+        $enrolled_class_schedules = (new EnrollmentService)->enrolledClassSchedules($request->enrollment_id);
         $class_schedules  = (new AssessmentService)->classScheduleArray($enrolled_class_schedules);
 
-        return view('class.schedule_table', 'class_schedules');
+        return view('class.schedule_table', compact('class_schedules'));
     }
 
     public function deleteenrolledsubjects(Request $request)
@@ -136,14 +120,7 @@ class RegistrationController extends Controller
     
     public function sectionofferingsbysection(Request $request)
     {
-        $query = EnrolledClassSchedule::with([
-            'class' => [
-                'instructor',
-                'curriculumsubject.subjectinfo', 
-                'sectioninfo'
-            ]
-        ])->where('enrollment_id', $request->enrollment_id);
-        $enrolled_class_schedules = $query->get();
+        $enrolled_class_schedules = (new EnrollmentService)->enrolledClassSchedules($request->enrollment_id);
         $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);        
         $section_subjects = (new EnrollmentService)->searchClassSubjectBySection($request);
         $section_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $section_subjects);
@@ -159,35 +136,17 @@ class RegistrationController extends Controller
 
     public function searchclasssubject(Request $request)
     {
-        $query = EnrolledClassSchedule::with([
-            'class' => [
-                'instructor',
-                'curriculumsubject.subjectinfo', 
-                'sectioninfo'
-            ]
-        ])->where('enrollment_id', $request->enrollment_id);
-        $enrolled_class_schedules = $query->get();
-        $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);        
-        $checked_subjects = (new EnrollmentService)->searchClassSubject($request);
+        $enrolled_class_schedules = EnrolledClassSchedule::where('enrollment_id', $request->enrollment_id)->get();
+        $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);     
+           
+        $checked_subjects = $this->registrationService->searchClassSubject($request);
+
+        return $checked_subjects;
+        
         $checked_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $checked_subjects);
         $checked_subjects = $this->registrationService->checkIfClassIfDuplicate($enrolled_classes, $checked_subjects);
         $checked_subjects = $this->registrationService->checkIfSectionClosed($checked_subjects);
 
         return view('registration.return_searchedclasses', compact('checked_subjects'));
     }
-
-    // public function searchclasssubjectbysection(Request $request)
-    // {
-    //     $checked_subjects = $this->enrollmentService->searchClassSubjectBySection($request);
-    //     $user_permissions = Auth::user()->permissions;
-
-    //     return view('enrollment.return_searchedclasses', compact('checked_subjects', 'user_permissions'));
-    // }
-
-    // public function addselectedclasses(Request $request)
-    // {
-    //     $data = $this->enrollmentService->addSelectedClasses($request);
-
-    //     return response()->json(['data' => $data]);
-    // }
 }

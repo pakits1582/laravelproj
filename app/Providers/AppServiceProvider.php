@@ -64,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
         StudentPersonalInformationModel::observe(UppercaseAttributesObserver::class);
         StudentContactInformationModel::observe(UppercaseAttributesObserver::class);
         StudentAcademicInformationModel::observe(UppercaseAttributesObserver::class);
-        Model::preventLazyLoading(! $this->app->isProduction());
+        Model::preventLazyLoading(!app()->isProduction());
         
     }
 }
