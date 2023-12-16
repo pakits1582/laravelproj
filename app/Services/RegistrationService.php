@@ -417,52 +417,50 @@ class RegistrationService
             }
         }
 
-        return $subjectsincurriculum;
+        $query = Classes::with([
+            'sectioninfo',
+            'schedule',
+            'enrolledstudents' => function($query)
+            {
+                $query->with('enrollment')->withCount('enrollment');
+            },
+            'merged' => function($query)
+            {
+                $query->withCount('enrolledstudents');
+            },
+            'mergetomotherclass' => [
+                'enrolledstudents' => function($query)
+                {
+                    $query->withCount('enrollment');
+                },
+                'merged' => function($query)
+                {
+                    $query->withCount('enrolledstudents');
+                },
+            ],
+            'curriculumsubject' => [
+                'subjectinfo', 
+                'curriculum',
+                'prerequisites' => ['curriculumsubject.subjectinfo','curriculumsubject.equivalents',], 
+                'corequisites', 
+                'equivalents'
+            ]
+        ])->where('period_id', session('current_period'))->where('dissolved', '!=', 1);
 
-        // $query = Classes::with([
-        //     'sectioninfo',
-        //     'schedule',
-        //     'enrolledstudents' => function($query)
-        //     {
-        //         $query->with('enrollment')->withCount('enrollment');
-        //     },
-        //     'merged' => function($query)
-        //     {
-        //         $query->withCount('enrolledstudents');
-        //     },
-        //     'mergetomotherclass' => [
-        //         'enrolledstudents' => function($query)
-        //         {
-        //             $query->withCount('enrollment');
-        //         },
-        //         'merged' => function($query)
-        //         {
-        //             $query->withCount('enrolledstudents');
-        //         },
-        //     ],
-        //     'curriculumsubject' => [
-        //         'subjectinfo', 
-        //         'curriculum',
-        //         'prerequisites' => ['curriculumsubject.subjectinfo','curriculumsubject.equivalents',], 
-        //         'corequisites', 
-        //         'equivalents'
-        //     ]
-        // ])->where('period_id', session('current_period'))->where('dissolved', '!=', 1);
+        $query->where(function($query) use($subjectsincurriculum){
+            foreach($subjectsincurriculum as $key => $code){
+                // $query->orwhere(function($query) use($code){
+                //     $query->orWhere('code', 'LIKE', $code.'%');
+                    $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
+                        $query->where('subjects.code', 'LIKE', $code['subjectinfo']['code'].'%');
+                    });
+                // });
+            }
+        });
 
-        // $query->where(function($query) use($searchcodes){
-        //     foreach($searchcodes as $key => $code){
-        //         $query->orwhere(function($query) use($code){
-        //             $query->orWhere('code', 'LIKE', $code.'%');
-        //             $query->orwhereHas('curriculumsubject.subjectinfo', function($query) use($code){
-        //                 $query->where('subjects.code', 'LIKE', $code.'%');
-        //             });
-        //         });
-        //     }
-        // });
+        $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
+        $subjects = (new EnrollmentService)->handleClassSubjects($student_id, $section_subjects);
 
-        // $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
-        // $subjects = (new EnrollmentService)->handleClassSubjects($student_id, $section_subjects);
-
-        // return $subjects;
+        return $subjects;
     }
 }

@@ -13,27 +13,27 @@ $(function(){
 		}
 	});
 
-	$(document).on("change",".checked_offered", function(){
-		var takenunits   = parseInt($("#enrolled_units").text());
-		var allowedunits = parseInt($("#units_allowed").val());
-		
-		if($(this).is(':checked'))
-		{
-			$('.checked_offered:checked').each(function(){
-				takenunits += isNaN(parseInt($(this).closest('tr').find('.units').text())) ? 0 : parseInt($(this).closest('tr').find('.units').text());
-			});   
-
-			if(takenunits > allowedunits){
-				showError('The maximum units allowed exceeded!');
-				$(this).prop('checked',false);
-				return false;
-			}else{
-				$(this).closest('tr').addClass('selected');
-			}
-		}else{
-			$(this).closest('tr').removeClass('selected');
-		}
-	});
+	$(document).on("change", ".checked_offered, .check_searched_class", function () {
+        var takenunits = parseInt($("#enrolled_units").text());
+        var allowedunits = parseInt($("#units_allowed").val());
+    
+        if ($(this).is(':checked')) {
+            $('.checked_offered:checked, .check_searched_class:checked').each(function () {
+                takenunits += isNaN(parseInt($(this).closest('tr').find('.units').text())) ? 0 : parseInt($(this).closest('tr').find('.units').text());
+            });
+    
+            if (takenunits > allowedunits) {
+                showError('The maximum units allowed exceeded!');
+                $(this).prop('checked', false);
+                return false;
+            } else {
+                $(this).closest('tr').addClass('selected');
+            }
+        } else {
+            $(this).closest('tr').removeClass('selected');
+        }
+    });
+    
 
 	function returnEnrolledClassSubjects(enrollment_id)
     {
@@ -301,87 +301,6 @@ $(function(){
 			}
 		}
     });
-
-    // $(document).on("click", ".check_searched_class", function(){
-    //     var taken_units   = parseInt($("#enrolledunits").text());
-	// 	var allowed_units = parseInt($("#units_allowed").val());
-    //     var can_overloadunits = $("#can_overloadunits").val();
-
-    //     if($(this).is(':checked'))
-    //     {
-    //         var checkbox = $(this);
-	// 		var errors   = $(this).attr("data-errors");
-
-	// 		$('.check_searched_class:checked').each(function(){
-	// 			taken_units += isNaN(parseInt($(this).parent().siblings(".units").text())) ? 0 : parseInt($(this).parent().siblings(".units").text());
-	// 		});
-
-    //         errors += ((taken_units > allowed_units)) ? '[MAX UNITS ALLOWED]' : '';
-            
-    //         if(errors)
-    //         {
-    //             $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The subject you are selecting has '+errors+' deficiency!<br>Continue selecting subject?</div>').dialog({
-	// 				show: 'fade',
-	// 				resizable: false,	
-	// 				draggable: false,
-	// 				width: 350,
-	// 				height: 'auto',
-	// 				modal: true,
-	// 				buttons: {
-    //                     'Cancel':function(){
-    //                         $(this).dialog('close');
-    //                         $(checkbox).closest('tr').removeClass('selected');
-    //                         $(checkbox).prop("checked", false);
-    //                     },
-    //                     'OK':function(){
-    //                         $(this).dialog('close');
-    //                         var haspermission = checkbox.attr("data-haspermission");
-
-    //                         if(haspermission == 0){
-    //                             showError('<p class="mid">ACCESS DENIED!</p>Your account does not have enough permission to override deficiency!')
-    //                             $(checkbox).closest('tr').removeClass('selected')
-    //                             $(checkbox).prop("checked", false);
-    //                         }else{
-    //                             if(taken_units > allowed_units)
-    //                             {
-    //                                 $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Selection</div><div class="message">The maximum units allowed for the student already exceeded.<br>Continue selecting subject?</div>').dialog({
-    //                                     show: 'fade',
-    //                                     resizable: false,	
-    //                                     draggable: false,
-    //                                     width: 350,
-    //                                     height: 'auto',
-    //                                     modal: true,
-    //                                     buttons: {
-    //                                         'Cancel':function(){
-    //                                             $(this).dialog('close');
-    //                                             $(checkbox).closest('tr').removeClass('selected')
-    //                                             $(checkbox).prop("checked", false);
-    //                                         },
-    //                                         'OK':function(){
-    //                                             $(this).dialog('close');
-    //                                             if(can_overloadunits == 0){
-    //                                                 showError('<p class="mid">ACCESS DENIED!</p>Your account does not have enough permission to override deficiency!')
-    //                                                 $(checkbox).closest('tr').removeClass('selected')
-    //                                                 $(checkbox).prop("checked", false);
-    //                                             }else{
-    //                                                 $(checkbox).closest('tr').addClass('selected');
-    //                                             }
-    //                                         }//end of ok button	
-    //                                     }//end of buttons
-    //                                 });//end of dialogbox
-    //                                 $(".ui-dialog-titlebar").hide();
-    //                             }
-    //                         }
-                            
-    //                     }//end of ok button	
-    //                 }//end of buttons
-	// 			});//end of dialogbox
-	// 			$(".ui-dialog-titlebar").hide();
-    //         }else{
-    //             $(checkbox).closest('tr').addClass('selected');
-    //         }
-    //     }
-    // });
 
     // $(document).on("click", "#add_selected_classes", function(){
     //     $(this).attr("disable", true);
