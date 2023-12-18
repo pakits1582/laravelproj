@@ -34,7 +34,7 @@ class UnsavedEnrollmentController extends Controller
             'program.level',
             'section:id,code',
             'enrolledby:id,idno'
-        ])->where('period_id', $period_id)->where('acctok', 0)->withCount('enrolled_classes');
+        ])->where('period_id', $period_id)->where('acctok', 0)->orwhere('assessed', 0)->withCount('enrolled_classes');
 
         $query->when(isset($program_id) && !empty($program_id), function ($query) use($program_id) {
             $query->where('program_id', $program_id);

@@ -893,7 +893,7 @@ $(function(){
 
     $(document).on("submit", "#form_enrollment", function(e){
 
-        var enrolledunits  = $("#enrolledunits").text();
+        var enrolledunits  = $("#enrolled_units").text();
 		var enrollment_id = $("#enrollment_id").val();
 		var postData      = $("#form_enrollment").serializeArray();
         postData.push({name: 'enrolled_units', value: enrolledunits });
