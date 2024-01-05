@@ -139,10 +139,7 @@ class RegistrationController extends Controller
         $enrolled_class_schedules = EnrolledClassSchedule::where('enrollment_id', $request->enrollment_id)->get();
         $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);     
            
-        $checked_subjects = $this->registrationService->searchClassSubject($request);
-        $checked_subjects = $this->registrationService->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $checked_subjects);
-        $checked_subjects = $this->registrationService->checkIfClassIfDuplicate($enrolled_classes, $checked_subjects);
-        $checked_subjects = $this->registrationService->checkIfSectionClosed($checked_subjects);
+        $checked_subjects = $this->registrationService->searchClassSubject($request, $enrolled_class_schedules, $enrolled_classes);
 
         return view('registration.return_searchedclasses', compact('checked_subjects'));
     }

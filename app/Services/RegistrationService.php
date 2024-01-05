@@ -389,7 +389,7 @@ class RegistrationService
         return $checked_subjects;
     }
 
-    public function searchClassSubject($request)
+    public function searchClassSubject($request, $enrolled_class_schedules, $enrolled_classes)
     {
         $enrollment_id = $request->enrollment_id;
         $student_id =  $request->student_id;
@@ -417,6 +417,28 @@ class RegistrationService
             }
         }
 
+        if($subjectsincurriculum)
+        {
+            $searched_classes = $this->searchClassSubjectsInCurriculum($subjectsincurriculum);
+
+            if($searched_classes->isNotEmpty())
+            {
+                $subjects = (new EnrollmentService)->handleClassSubjects($student_id, $searched_classes);
+
+                $checked_subjects = $this->checkClassesIfConflictStudentSchedule($enrolled_class_schedules, $subjects);
+                $checked_subjects = $this->checkIfClassIfDuplicate($enrolled_classes, $checked_subjects);
+                $checked_subjects = $this->checkIfSectionClosed($checked_subjects);
+
+                return $checked_subjects;
+            }
+        }
+
+        return [];
+        
+    }
+
+    public function searchClassSubjectsInCurriculum($subjectsincurriculum)
+    {
         $query = Classes::with([
             'sectioninfo',
             'schedule',
@@ -459,8 +481,7 @@ class RegistrationService
         });
 
         $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
-        $subjects = (new EnrollmentService)->handleClassSubjects($student_id, $section_subjects);
 
-        return $subjects;
+        return $section_subjects;
     }
 }
