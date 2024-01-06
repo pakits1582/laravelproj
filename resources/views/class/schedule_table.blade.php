@@ -295,23 +295,27 @@
             }
         }
     @endphp
-    <table id="scheduletable" class="" style="font-size: 14px;">
-        <thead>
-            <tr>
-                <th></th>
-                <th scope="col">Monday</th>
-                <th scope="col">Tuesday</th>
-                <th scope="col">Wednesday</th>
-                <th scope="col">Thursday</th>
-                <th scope="col">Friday</th>
-                <th scope="col">Saturday</th>
-                <th scope="col">Sunday</th>
-            </tr>
-        </thead>
-        @php
-            echo $data_table
-        @endphp
-    </table>
+    <div class="table-responsive-sm">
+        <table class="table table-sm table-striped table-bordered"  id="scheduletable"  style="font-size: 12px;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                    <th>Sunday</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    echo $data_table
+                @endphp
+            </tbody>
+        </table>
+    </div>
     <input type="hidden" name="has_conflict" id="has_conflict" value="{{ $has_conflict}}" />
 @endif
 

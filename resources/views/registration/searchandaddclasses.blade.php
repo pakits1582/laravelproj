@@ -36,7 +36,7 @@
                             <div id="return_searchedclasses">
                                 @include('registration.return_searchedclasses')
                             </div>
-                            <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3" id="">Add Selected Classes</button>
+                            <button type="submit" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3" id="add_selected_searched_classes">Add Selected Classes</button>
                         </form>
                     </div>
                 </div>

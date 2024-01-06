@@ -107,7 +107,7 @@ $(function(){
 			success: function(response)
 			{
 				$("#confirmation").dialog('close');
-				console.log(response);
+				//console.log(response);
 				if(response.success == true)
 				{
 					if($.isEmptyObject(response.full_slots) == false)
@@ -300,6 +300,87 @@ $(function(){
 				});	
 			}
 		}
+    });
+
+    $(document).on("submit", "#form_add_selected_searched_classes", function(e){
+
+        $("#add_selected_searched_classes").attr("disabled", true);
+
+        var selected_classes = $(".check_searched_class:checked");
+
+        
+        if(selected_classes.length == 0)
+        {
+            showError('Please select at least one checkbox/class subject to add!');
+            $("#add_selected_searched_classes").attr("disabled", false);	
+		}else{
+            var student_id = $("#student_id").val();
+            var enrollment_id = $("#enrollment_id").val();
+
+            if(student_id && enrollment_id)
+            {
+                var postData = $("#form_add_selected_searched_classes").serializeArray();
+                postData.push({name: 'student_id', value: student_id });		
+                postData.push({name: 'enrollment_id', value: enrollment_id });	
+
+                $.ajax({
+                    url: "/registration/saveselectedclasses",
+                    type: 'POST',
+                    data: postData,
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                            show: 'fade',
+                            resizable: false,	
+                            width: 350,
+                            height: 'auto',
+                            modal: true,
+                            buttons:false
+                        });
+                        $(".ui-dialog-titlebar").hide();
+                    },
+                    success: function(response)
+                    {
+                        $("#confirmation").dialog('close');
+                        console.log(response);
+                        // if(response.success == true)
+                        // {
+                        //     if($.isEmptyObject(response.full_slots) == false)
+                        //     {
+                        //         var full_slots = 'Failed to add the following class subjects:';
+                        //         $.each(response.full_slots, function (key, value) {
+                        //             full_slots += '<p>'+value.code+' - '+value.subject_code+'</p>';
+                        //         });
+                        //         full_slots += '<p>Slots was full before saving.</p>';
+                        //         showInfo(full_slots);
+                        //     }else{
+                        //         showSuccess(response.message);
+                        //     }
+        
+                        //     returnScheduleTable(enrollment_id);
+                        //     returnEnrolledClassSubjects(enrollment_id)
+                        //     returnSectionOfferings(section_id, student_id, enrollment_id)
+                        // }else{
+                        //     showError(response.message);
+                        // }
+                        
+                    },
+                    error: function (data) {
+                        $("#confirmation").dialog('close');
+                        //console.log(data);
+                        var errors = data.responseJSON;
+                        if ($.isEmptyObject(errors) == false) {        
+                            showError('Oopps! Something went wrong, can not process request!');
+                        }
+                    }
+                });
+                
+            }else{
+                showError('Oopps! Something went wrong, please refresh the page!');
+            }
+        }
+
+        e.preventDefault();
     });
 
     // $(document).on("click", "#add_selected_classes", function(){

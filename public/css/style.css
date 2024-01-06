@@ -451,7 +451,7 @@ div.dataTables_wrapper {
 #scheduletable{
 	width: 100%;
 	border-collapse: collapse;
-	font-size: 13px;
+	font-size: 12px;
 	/* border:1px solid #999; */
 	margin-top: 10px;
 	table-layout: fixed;	
@@ -461,15 +461,13 @@ div.dataTables_wrapper {
 	background-color:#4e73df;
 	color:#fff;
 	height:30px;
-	/*font-size: 13px;*/
-	border-left:1px solid #fff;		
+	font-size: 13px;
 }
 
 #scheduletable td {
-	font-size: 13px;
+	font-size: 12px;
 	border:1px solid #4e73df !important;
 	word-wrap: break-word !important;
-	padding:5px !important;
 }
 
 .fix_height {
@@ -510,7 +508,6 @@ div.dataTables_wrapper {
 .tabschedsub{
 	font-size: 14px;
 	font-weight: bold;
-	padding: 3px;
 }
 
 .tabschedconf{

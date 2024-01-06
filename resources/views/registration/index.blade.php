@@ -153,73 +153,73 @@
             </div>
         </div>
 
-        <div class="row">
-            <form method="POST" id="form_add_offerings">
-                @csrf
-                    <div class="col-lg-12 mx-auto">
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <div class="row align-items-center">
-                                    <div class="col-md-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Enrollment Section Classes Offerings</h6>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select name="section_id" class="form-control" id="section">
-                                            @if ($registration['sections'])
-                                                @foreach ($registration['sections'] as $section)
-                                                    <option value="{{ $section['section_id'] }}" {{ ($section['section_id'] == $enrollment->section_id) ? 'selected' : '' }}>
-                                                        {{ $section['section_name'] }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>    
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p class="m-0 font-italic text-info" style="">
-                                            Note: You can change the section to check for available classes.
-                                        </p>
-                                    </div>
-                                </div>                        
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive-sm">
-                                    <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
-                                        <thead class="">
-                                            <tr>
-                                                <th class="w20"></th>
-                                                <th class="w50">Code</th>
-                                                <th class="w120 mid">Subject</th>
-                                                <th>Description</th>
-                                                <th class="w40 mid">Units</th>
-                                                <th class="w35 mid">Lec</th>
-                                                <th class="w35 mid">Lab</th>
-                                                <th class="w300 mid">Schedule</th>
-                                                <th class="">Section</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="text-black" id="return_section_subjects">
-                                            @include('registration.section_subjects')
-                                        </tbody>
-                                    </table>
+        <form method="POST" id="form_add_offerings">
+            @csrf
+            <div class="row">
+                <div class="col-lg-12 mx-auto">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Enrollment Section Classes Offerings</h6>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <input type="hidden" name="units_allowed" id="units_allowed" value="{{ ($registration['section']['allowed_units'] == 0) ? $registration['allowed_units'] : $registration['section']['allowed_units'] }}" />
-                                <input type="hidden" name="student_id" id="student_id" value="{{ $student->id }}" />
-                                <input type="hidden" name="enrollment_id" id="enrollment_id" value="{{ $enrollment->id }}" />
-                                <input type="hidden" name="curriculum_id" id="curriculum_id" value="{{ $enrollment->curriculum->id }}" />
-
-                                <button type="submit" id="save_selected" class="btn btn-sm btn-primary btn-icon-split actions mb-2">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-plus-square"></i>
-                                    </span>
-                                    <span class="text">Save Selected Subjects</span>
-                                </button>
+                                <div class="col-md-3">
+                                    <select name="section_id" class="form-control" id="section">
+                                        @if ($registration['sections'])
+                                            @foreach ($registration['sections'] as $section)
+                                                <option value="{{ $section['section_id'] }}" {{ ($section['section_id'] == $enrollment->section_id) ? 'selected' : '' }}>
+                                                    {{ $section['section_name'] }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>    
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="m-0 font-italic text-info" style="">
+                                        Note: You can change the section to check for available classes.
+                                    </p>
+                                </div>
+                            </div>                        
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive-sm">
+                                <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
+                                    <thead class="">
+                                        <tr>
+                                            <th class="w20"></th>
+                                            <th class="w50">Code</th>
+                                            <th class="w120 mid">Subject</th>
+                                            <th>Description</th>
+                                            <th class="w40 mid">Units</th>
+                                            <th class="w35 mid">Lec</th>
+                                            <th class="w35 mid">Lab</th>
+                                            <th class="w300 mid">Schedule</th>
+                                            <th class="">Section</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-black" id="return_section_subjects">
+                                        @include('registration.section_subjects')
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                        <div class="card-footer">
+                            <input type="hidden" name="units_allowed" id="units_allowed" value="{{ ($registration['section']['allowed_units'] == 0) ? $registration['allowed_units'] : $registration['section']['allowed_units'] }}" />
+                            <input type="hidden" name="student_id" id="student_id" value="{{ $student->id }}" />
+                            <input type="hidden" name="enrollment_id" id="enrollment_id" value="{{ $enrollment->id }}" />
+                            <input type="hidden" name="curriculum_id" id="curriculum_id" value="{{ $enrollment->curriculum->id }}" />
+
+                            <button type="submit" id="save_selected" class="btn btn-sm btn-primary btn-icon-split actions mb-2">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-plus-square"></i>
+                                </span>
+                                <span class="text">Save Selected Subjects</span>
+                            </button>
+                        </div>
                     </div>
-            </form>
-        </div>
+                </div>
+            </div>
+        </form>
 
         <div class="row">
             <div class="col-lg-12 mx-auto">

@@ -25,12 +25,12 @@
 
                 @endphp
                 @if ($errors != '')
-                    <tr class="label dissolved" id="check_{{ $checked_subject->id }}">
+                    <tr class="label dissolved" id="table_row_{{ $checked_subject->id }}">
                         <td class="w30 mid"></td>
                 @else
-                    <tr class="label" id="{{ $checked_subject->id }}">
+                    <tr class="label" id="table_row_{{ $checked_subject->id }}">
                         <td class="w30 mid">
-                            <input type="checkbox" name="class_ids[]" class="check_searched_class" id="check_searched_class{{ $checked_subject->id }}" value="{{ $checked_subject->id }}" />
+                            <input type="checkbox" name="class_ids[]" class="check_searched_class" id="check_searched_class_{{ $checked_subject->id }}" value="{{ $checked_subject->id }}" />
                         </td>
                 @endif
                     <td class="w50"><b>{{ $checked_subject->code }}</b></td>
