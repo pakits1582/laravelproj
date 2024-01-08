@@ -484,4 +484,5 @@ class RegistrationService
 
         return $section_subjects;
     }
+
 }

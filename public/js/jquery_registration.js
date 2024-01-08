@@ -42,7 +42,7 @@ $(function(){
             type: 'POST',
             data: ({ 'enrollment_id':enrollment_id }),
             success: function(data){
-                console.log(data);
+                //console.log(data);
                 $("#return_enrolled_subjects").html(data);
             },
             error: function (data) {
@@ -58,7 +58,7 @@ $(function(){
             type: 'POST',
             data: ({ 'section_id':section_id, 'student_id':student_id, 'enrollment_id':enrollment_id }),
             success: function(data){
-                console.log(data);
+                //console.log(data);
                 $("#return_section_subjects").html(data);
             },
             error: function (data) {
@@ -123,8 +123,8 @@ $(function(){
 					}
 
 					returnScheduleTable(enrollment_id);
-					returnEnrolledClassSubjects(enrollment_id)
-					returnSectionOfferings(section_id, student_id, enrollment_id)
+					returnEnrolledClassSubjects(enrollment_id);
+					returnSectionOfferings(section_id, student_id, enrollment_id);
 				}else{
 					showError(response.message);
 				}
@@ -283,7 +283,7 @@ $(function(){
 					},
 					success: function(data){
 						$('#confirmation').dialog('close');
-						console.log(data);
+						//console.log(data);
 						$("#return_searchedclasses").html(data);
 
                         $('#scrollable_table_searched_classes').DataTable({
@@ -305,9 +305,7 @@ $(function(){
     $(document).on("submit", "#form_add_selected_searched_classes", function(e){
 
         $("#add_selected_searched_classes").attr("disabled", true);
-
         var selected_classes = $(".check_searched_class:checked");
-
         
         if(selected_classes.length == 0)
         {
@@ -316,6 +314,7 @@ $(function(){
 		}else{
             var student_id = $("#student_id").val();
             var enrollment_id = $("#enrollment_id").val();
+            var section_id  = $("#section").val();
 
             if(student_id && enrollment_id)
             {
@@ -342,31 +341,38 @@ $(function(){
                     success: function(response)
                     {
                         $("#confirmation").dialog('close');
-                        console.log(response);
-                        // if(response.success == true)
-                        // {
-                        //     if($.isEmptyObject(response.full_slots) == false)
-                        //     {
-                        //         var full_slots = 'Failed to add the following class subjects:';
-                        //         $.each(response.full_slots, function (key, value) {
-                        //             full_slots += '<p>'+value.code+' - '+value.subject_code+'</p>';
-                        //         });
-                        //         full_slots += '<p>Slots was full before saving.</p>';
-                        //         showInfo(full_slots);
-                        //     }else{
-                        //         showSuccess(response.message);
-                        //     }
+                        //console.log(response);
+                        if(response.success == true)
+                        {
+                            if($.isEmptyObject(response.full_slots) == false)
+                            {
+                                var full_slots = 'Failed to add the following class subjects:';
+                                $.each(response.full_slots, function (key, value) {
+                                    full_slots += '<p>'+value.code+' - '+value.subject_code+'</p>';
+                                });
+                                full_slots += '<p>Slots was full before saving.</p>';
+                                showInfo(full_slots);
+                            }else{
+                                showSuccess(response.message);
+                            }
+
+                            var class_ids = selected_classes.map(function(){ return $(this).attr("value"); }).get();
+                            $.each(class_ids, function(i, val){
+                                $("#table_row_"+val).remove();
+                            });
         
-                        //     returnScheduleTable(enrollment_id);
-                        //     returnEnrolledClassSubjects(enrollment_id)
-                        //     returnSectionOfferings(section_id, student_id, enrollment_id)
-                        // }else{
-                        //     showError(response.message);
-                        // }
-                        
+                            returnScheduleTable(enrollment_id);
+                            returnEnrolledClassSubjects(enrollment_id);
+                            returnSectionOfferings(section_id, student_id, enrollment_id);
+
+                            $("#add_selected_searched_classes").attr("disabled", false);	
+                        }else{
+                            showError(response.message);
+                        }
                     },
                     error: function (data) {
                         $("#confirmation").dialog('close');
+                        $("#add_selected_searched_classes").attr("disabled", false);	
                         //console.log(data);
                         var errors = data.responseJSON;
                         if ($.isEmptyObject(errors) == false) {        
@@ -382,65 +388,5 @@ $(function(){
 
         e.preventDefault();
     });
-
-    // $(document).on("click", "#add_selected_classes", function(){
-    //     $(this).attr("disable", true);
-
-    //     var selected_classes = $(".check_searched_class:checked");
-	// 	var enrollment_id    = $("#enrollment_id").val();
-
-    //     if(selected_classes.length === 0)
-    //     {
-	// 		showError('Please select atleast one checkbox/class subject to add!');
-	// 		$("#add_selected_classes").attr("disabled", false);	
-	// 	}else{
-    //         var class_ids = selected_classes.map(function(){ return $(this).attr("value"); }).get();
-
-    //         $.ajax({
-	// 			url: "/enrolments/addselectedclasses/",
-	// 			type: 'POST',
-	// 			data: {"class_ids":class_ids, "enrollment_id":enrollment_id},
-    //             dataType: 'json',
-	// 			beforeSend: function() {
-	// 					$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take several minutes, Please wait patiently.<br><div clas="mid"><img src="images/31.gif" /></div></div>').dialog({
-	// 						show: 'fade',
-	// 						resizable: false,	
-	// 						width: 'auto',
-	// 						height: 'auto',
-	// 						modal: true,
-	// 						buttons: false
-	// 					});
-	// 					$(".ui-dialog-titlebar").hide();
-	// 				},
-	// 			success: function(response){
-	// 				$("#confirmation").dialog('close');
-    //                 console.log(response);
-    //                 if(response.data.success === true)
-    //                 {
-    //                     showSuccess(response.data.message);
-    //                     $.each(class_ids, function(i, val){
-    //                         $("#searched_class_"+val).remove();
-    //                     });
-    //                     returnEnrolledClassSubjects(enrollment_id);
-    //                     //scheduletable(enrollno);
-    //                     var rowCount = $('#add_classsubjects_table > tbody tr').length;
-
-    //                     if(rowCount == 0){
-    //                         $('#add_classsubjects_table > tbody').append('<tr><td colspan="9" class="mid">No records to be displayed</td></tr>');
-    //                     }
-    //                 }
-	// 			},
-    //             error: function (data) {
-    //                 console.log(data);
-    //                 var errors = data.responseJSON;
-    //                 if ($.isEmptyObject(errors) === false) {
-    //                     showError('Something went wrong! Can not perform requested action!');
-    //                 }
-    //             }
-	// 		});	
-
-    //         $("#add_selected_classes").attr("disabled",false);
-    //     }
-    // });
-    
+     
 });

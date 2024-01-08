@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth', 'student']], function () {
         Route::post('/registration/searchclasssubject', [RegistrationController::class, 'searchclasssubject']);
         //Route::post('/registration/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
         Route::post('/registration/addselectedclasses', [RegistrationController::class, 'addselectedclasses']);
+        Route::post('/registration/saveselectedclasses', [RegistrationController::class, 'saveselectedclasses']);
 
     });
 

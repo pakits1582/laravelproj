@@ -107,8 +107,9 @@ class RegistrationController extends Controller
     {
         $enrolled_class_schedules = (new EnrollmentService)->enrolledClassSchedules($request->enrollment_id);
         $class_schedules  = (new AssessmentService)->classScheduleArray($enrolled_class_schedules);
+        $with_faculty = false;
 
-        return view('class.schedule_table', compact('class_schedules'));
+        return view('class.schedule_table', compact('class_schedules', 'with_faculty'));
     }
 
     public function deleteenrolledsubjects(Request $request)
@@ -142,5 +143,12 @@ class RegistrationController extends Controller
         $checked_subjects = $this->registrationService->searchClassSubject($request, $enrolled_class_schedules, $enrolled_classes);
 
         return view('registration.return_searchedclasses', compact('checked_subjects'));
+    }
+
+    public function saveselectedclasses(Request $request)
+    {
+        $save_selected_searched_classes = $this->registrationService->saveSelectedClasses($request);
+
+        return response()->json($save_selected_searched_classes);
     }
 }
