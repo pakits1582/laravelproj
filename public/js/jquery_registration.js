@@ -388,5 +388,81 @@ $(function(){
 
         e.preventDefault();
     });
+
+    $(document).on("click", "#assess_registration", function(e){
+        var student_id = $("#student_id").val();
+        var enrollment_id = $("#enrollment_id").val();
+        var has_conflict  = $("#has_conflict").val();
+        
+        $("#assess_registration").attr("disabled", true);
+
+        if(has_conflict > 0)
+        {
+            showError('There are conflict schedules, please check before saving!');
+            $("#assess_registration").attr("disabled", false);
+        }else{
+            var checkboxes = $(".select_enrolled_class");
+
+            if(checkboxes.length == 0)
+            {
+                showError('Please add at least one class subject before assessing enrolment!');
+                $("#assess_registration").attr("disabled", false);
+            }else{
+                $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Confirm Action</div><div class="message">Are you sure you want to assess registration?<br>You can no longer make changes in your registration. Continue?</div>').dialog({
+                    show: 'fade',
+                    resizable: false,	
+                    draggable: false,
+                    width: 350,
+                    height: 'auto',
+                    modal: true,
+                    buttons: {
+                            'Cancel':function(){
+                                $("#confirmation").dialog('close');
+                                location.reload();
+                            },
+                            'OK':function(){
+                                $("#confirmation").dialog('close');
+
+                                $.ajax({
+                                    url: "/registration/saveregistration",
+                                    type: 'POST',
+                                    data: {'enrollment_id':enrollment_id},
+                                    dataType: 'json',
+                                    beforeSend: function() {
+                                        $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                                            show: 'fade',
+                                            resizable: false,	
+                                            width: 350,
+                                            height: 'auto',
+                                            modal: true,
+                                            buttons:false
+                                        });
+                                        $(".ui-dialog-titlebar").hide();
+                                    },
+                                    success: function(response)
+                                    {
+                                        $("#confirmation").dialog('close');
+                                        console.log(response);
+                                        
+                                    },
+                                    error: function (data) {
+                                        $("#confirmation").dialog('close');
+                                        $("#assess_registration").attr("disabled", false);	
+                                        //console.log(data);
+                                        var errors = data.responseJSON;
+                                        if ($.isEmptyObject(errors) == false) {        
+                                            showError('Oopps! Something went wrong, can not process request!');
+                                        }
+                                    }
+                                });
+                            }//end of ok button	
+                         }//end of buttons
+                });//end of dialogbox
+                $(".ui-dialog-titlebar").hide();
+            }
+        }
+
+        e.preventDefault();
+    });
      
 });

@@ -18,7 +18,6 @@
                     </div>
                     <div class="col-md-5">
                         {{ $student->user->idno }}
-                        <input type="hidden" id="student_id" value="{{ $student->id }}" />
                     </div>
                     <div class="col-md-1">
                         <label for="" class="m-0 font-weight-bold text-primary">Year</label>
@@ -251,11 +250,11 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" id="assess_enrollment" class="btn btn-sm btn-success btn-icon-split actions mb-2">
+                        <button type="submit" id="assess_registration" class="btn btn-sm btn-success btn-icon-split actions mb-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-save"></i>
                             </span>
-                            <span class="text">Assess Enrollment</span>
+                            <span class="text">Assess Registration</span>
                         </button>
                         <button type="button" id="add_subjects" class="btn btn-sm btn-primary btn-icon-split actions mb-2">
                             <span class="icon text-white-50">
