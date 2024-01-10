@@ -389,7 +389,7 @@ Route::group(['middleware' => ['auth']], function () {
     
     Route::group(['middleware' => ['inaccess:validations']], function () {
         // Route::group(['middleware' => ['writeability:curriculum']], function () {
-        
+        Route::post('/validations/enrolledclasssubjects', [ValidationController::class, 'enrolledclasssubjects']);
         Route::get('/validations/{enrollment}/unvalidate', [ValidationController::class, 'unvalidate']);
         Route::resource('validations', ValidationController::class)->missing(function (Request $request) {
             return Redirect::route('validations.index');
@@ -580,6 +580,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['inaccess:studentschedules']], function () {
         Route::get('/studentschedules', [StudentScheduleController::class, 'index']);
+        Route::post('/studentschedules/enrolledclasssubjects', [StudentScheduleController::class, 'enrolledclasssubjects']);
+
     });
 
     Route::group(['middleware' => ['inaccess:enrolmentsummary']], function () {

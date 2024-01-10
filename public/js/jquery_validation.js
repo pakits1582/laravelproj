@@ -49,12 +49,12 @@ $(function(){
     function returnEnrolledClassSubjects(enrollment_id)
     {
         $.ajax({
-            url: "/enrolments/enrolledclasssubjects",
+            url: "/validations/enrolledclasssubjects",
             type: 'POST',
             //dataType: 'json',
             data: ({ 'enrollment_id':enrollment_id }),
             success: function(data){
-                console.log(data);
+                //console.log(data);
                 $("#return_enrolled_subjects").html(data);
             },
             error: function (data) {
@@ -68,6 +68,22 @@ $(function(){
         });
     }
 
+    function returnScheduleTable(enrollment_id)
+    {
+        $.ajax({
+			url: "/assessments/scheduletable",
+			type: 'POST',
+			data: ({ 'enrollment_id' : enrollment_id}),
+			success: function(data){
+				//console.log(data);
+				$("#schedule_table").html(data);
+			},
+			error: function (data) {
+				console.log(data);
+			}
+		});
+    }
+
     function returnValidation(student_id)
     {
         $.ajax({
@@ -75,7 +91,7 @@ $(function(){
             type: 'GET',
             dataType: 'json',
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 if(response.data === false)
                 {
                     showError('Student is not enrolled!');
@@ -123,6 +139,7 @@ $(function(){
                             }
                             
                             returnEnrolledClassSubjects(response.data.id);
+                            returnScheduleTable(response.data.id);
                         }
                     }
                 }
@@ -183,7 +200,7 @@ $(function(){
                                 },
                                 success: function(response){
                                     $("#confirmation").dialog('close');
-                                    console.log(response);
+                                    //console.log(response);
                                     if(response.success === true)
                                     {
                                         showSuccess(response.message);
@@ -250,7 +267,7 @@ $(function(){
                                 },
                                 success: function(response){
                                     $("#confirmation").dialog('close');
-                                    console.log(response);
+                                    //console.log(response);
                                     if(response.success === true)
                                     {
                                         showSuccess(response.message);

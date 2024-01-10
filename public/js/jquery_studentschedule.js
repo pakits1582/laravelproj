@@ -49,12 +49,12 @@ $(function(){
     function returnEnrolledClassSubjects(enrollment_id)
     {
         $.ajax({
-            url: "/enrolments/enrolledclasssubjects",
+            url: "/studentschedules/enrolledclasssubjects",
             type: 'POST',
             //dataType: 'json',
             data: ({ 'enrollment_id':enrollment_id }),
             success: function(data){
-                console.log(data);
+                //console.log(data);
                 $("#return_enrolled_subjects").html(data);
             },
             error: function (data) {
@@ -75,7 +75,7 @@ $(function(){
 			type: 'POST',
 			data: ({ 'enrollment_id' : enrollment_id}),
 			success: function(data){
-				console.log(data);
+				//console.log(data);
 				$("#schedule_table").html(data);
 			},
 			error: function (data) {
@@ -91,7 +91,7 @@ $(function(){
             type: 'GET',
             dataType: 'json',
             success: function(response){
-                console.log(response);
+                //console.log(response);
                 if(response.data === false)
                 {
                     showError('Student is not enrolled!');

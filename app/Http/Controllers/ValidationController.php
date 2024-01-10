@@ -7,6 +7,7 @@ use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\ValidationService;
+use App\Services\Enrollment\EnrollmentService;
 
 class ValidationController extends Controller
 {
@@ -105,5 +106,13 @@ class ValidationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function enrolledclasssubjects(Request $request)
+    {
+        $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);
+        $with_checkbox = false;
+
+        return view('enrollment.enrolled_class_subjects', compact('enrolled_classes', 'with_checkbox'));
     }
 }

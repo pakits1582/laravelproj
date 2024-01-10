@@ -3,6 +3,19 @@
     $total_subjects = 0;
 @endphp
 @if (count($enrolled_classes) > 0)
+
+    @if (isset($with_checkbox) && $with_checkbox == true)
+        @php
+            $colspan1 = 4;
+            $colspan2 = 9;
+        @endphp
+    @else
+    @php
+        $colspan1 = 3;
+        $colspan2 = 10;
+    @endphp
+    @endif
+
     @foreach ($enrolled_classes as $enrolled_class)
         <tr class="label">
             @if (isset($with_checkbox) && $with_checkbox == true)
@@ -42,16 +55,16 @@
         @endphp
     @endforeach
     <tr class="nohover">
-        <td colspan="4"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ count($enrolled_classes) }})</h6></td>
+        <td colspan="{{ $colspan1 }}"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ count($enrolled_classes) }})</h6></td>
         <td colspan="6"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolled_units">{{ $total_units }}</span>) Total Units </h6>
         </td>
     </tr>
 @else
     <tr class="">
-        <td class="mid" colspan="10">No records to be displayed</td>
+        <td class="mid" colspan="{{ $colspan2 }}">No records to be displayed</td>
     </tr>
     <tr class="nohover">
-        <td colspan="4"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ $total_subjects }})</h6></td>
+        <td colspan="{{ $colspan1 }}"><h6 class="m-0 font-weight-bold text-primary">Total Subjects ({{ $total_subjects }})</h6></td>
         <td colspan="6"><h6 class="m-0 font-weight-bold text-primary">(<span id="enrolled_units">{{ $total_units }}</span>) Total Units </h6>
         </td>
     </tr>

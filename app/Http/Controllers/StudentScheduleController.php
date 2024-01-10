@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Services\Enrollment\EnrollmentService;
 use Illuminate\Http\Request;
 
 class StudentScheduleController extends Controller
@@ -16,5 +17,13 @@ class StudentScheduleController extends Controller
     public function index()
     {
         return view('studentschedule.index');
+    }
+
+    public function enrolledclasssubjects(Request $request)
+    {
+        $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);
+        $with_checkbox = false;
+
+        return view('enrollment.enrolled_class_subjects', compact('enrolled_classes', 'with_checkbox'));
     }
 }

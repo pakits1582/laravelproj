@@ -80,11 +80,17 @@
                 <div class="col-md-2">
                     <label for="code"  class="m-0 font-weight-bold text-primary">Student</label>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-5">
                     ({{ $student->user->idno }}) {{ $student->name }}
                 </div>
+                <div class="col-md-2">
+                    <label for="code"  class="m-0 font-weight-bold text-primary">Enrollment No. & Date</label>
+                </div>
+                <div class="col-md-3">
+                    {{ $enrollment->id }} - {{ \Carbon\Carbon::parse($enrollment->created_at)->format('F d, Y') }}
+                </div>
             </div>
-            <div class="row">                  
+            {{-- <div class="row">                  
                 <div class="col-md-2">
                     <label for="code"  class="m-0 font-weight-bold text-primary">Enrollment No. & Date</label>
                 </div>
@@ -115,8 +121,7 @@
                         <input type="checkbox" class="checkbox" name="probationary" value="1" id="probationary" disabled
                         {{ (isset($enrollment) && $enrollment->probationary == 1) ? 'checked' : '' }}> Probationary</label>                                            
                 </div>
-
-            </div>
+            </div> --}}
 
             <div class="row">
                 <div class="col-md-2">

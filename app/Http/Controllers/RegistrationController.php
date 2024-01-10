@@ -33,10 +33,12 @@ class RegistrationController extends Controller
 
             $enrollment = Enrollment::where('student_id', $student->id)->where('period_id', session('current_period'))->first();
             $with_faculty = false;
-            $with_checkbox = false;
+            
 
             if($enrollment && $enrollment->assessed == 1)
             {
+                $with_checkbox = false;
+
                 $enrollment->load([
                     'program.level:id,code,level',
                     'program.collegeinfo:id,code,name',
@@ -59,6 +61,7 @@ class RegistrationController extends Controller
                     return view('registration.index', compact('student', 'errors'));
                 }else{
                     $enrollment = $registration['enrollment'];
+                    $with_checkbox = true;
                     
                     $enrolled_class_schedules = (new EnrollmentService)->enrolledClassSchedules($registration['enrollment']->id);
                     $class_schedules  = (new AssessmentService)->classScheduleArray($enrolled_class_schedules);
@@ -68,7 +71,7 @@ class RegistrationController extends Controller
                     $section_subjects = $this->registrationService->checkIfClassIfDuplicate($enrolled_classes, $section_subjects);
                 
                     //return $registration;
-                    return view('registration.index', compact('student', 'section_subjects', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
+                    return view('registration.index', compact('student', 'section_subjects', 'registration', 'class_schedules', 'enrolled_classes', 'with_faculty', 'with_checkbox', 'enrollment'));
                 }
                 
             }

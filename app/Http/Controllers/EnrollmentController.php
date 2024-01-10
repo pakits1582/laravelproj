@@ -152,8 +152,9 @@ class EnrollmentController extends Controller
     public function enrolledclasssubjects(Request $request)
     {
         $enrolled_classes = $this->enrollmentService->enrolledClassSubjects($request->enrollment_id);
+        $with_checkbox = true;
 
-        return view('enrollment.enrolled_class_subjects', compact('enrolled_classes'));
+        return view('enrollment.enrolled_class_subjects', compact('enrolled_classes', 'with_checkbox'));
     }
 
     public function deleteenrolledsubjects(Request $request)

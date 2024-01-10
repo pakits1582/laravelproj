@@ -191,7 +191,7 @@
                                         <th class="w35 mid">Lec</th>
                                         <th class="w35 mid">Lab</th>
                                         <th class="w300 mid">Schedule</th>
-                                        <th class="">Section</th>
+                                        <th class="w100">Section</th>
                                         <th class="w100">Added By</th>
                                     </tr>
                                 </thead>

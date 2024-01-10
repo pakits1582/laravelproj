@@ -156,7 +156,6 @@
                             <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
                                 <thead class="">
                                     <tr>
-                                        <th class="w20"></th>
                                         <th class="w50">Code</th>
                                         <th class="w120 mid">Subject</th>
                                         <th>Description</th>
@@ -164,12 +163,12 @@
                                         <th class="w35 mid">Lec</th>
                                         <th class="w35 mid">Lab</th>
                                         <th class="w300 mid">Schedule</th>
-                                        <th class="">Section</th>
+                                        <th class="w100">Section</th>
                                         <th class="w100">Added By</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-black" id="return_enrolled_subjects">
-                                    <tr><td class="mid" colspan="13">No records to be displayed!</td></tr>
+                                    <tr><td class="mid" colspan="9">No records to be displayed!</td></tr>
                                 </tbody>
                             </table>
                         </div>
