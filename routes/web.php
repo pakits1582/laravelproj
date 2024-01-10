@@ -112,9 +112,17 @@ Route::group(['middleware' => ['auth', 'student']], function () {
 
         Route::get('/registration/searchandaddclasses', [RegistrationController::class, 'searchandaddclasses']);
         Route::post('/registration/searchclasssubject', [RegistrationController::class, 'searchclasssubject']);
-        //Route::post('/registration/searchclasssubjectbysection', [EnrollmentController::class, 'searchclasssubjectbysection']);
         Route::post('/registration/addselectedclasses', [RegistrationController::class, 'addselectedclasses']);
         Route::post('/registration/saveselectedclasses', [RegistrationController::class, 'saveselectedclasses']);
+        Route::put('/registration/{enrollment}', [RegistrationController::class, 'saveregistration']);
+
+        Route::get('/registration/{assessment}/assessmentpreview', [RegistrationController::class, 'assessmentpreview']);
+        Route::get('/registration/{assessment}/assessmentpreview', [RegistrationController::class, 'assessmentpreview']);
+        Route::put('/registration/{assessment}/saveassessment', [RegistrationController::class, 'saveassessment']);
+        Route::get('/registration/printassessment/{assessment}', [RegistrationController::class, 'printassessment']);
+
+
+
 
     });
 

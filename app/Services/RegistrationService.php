@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use App\Models\Classes;
+use App\Models\Assessment;
 use App\Models\Enrollment;
 use App\Models\SectionMonitoring;
 use App\Models\CurriculumSubjects;
@@ -483,6 +484,38 @@ class RegistrationService
         $section_subjects =  $query->get()->sortBy('curriculumsubject.subjectinfo.code');
 
         return $section_subjects;
+    }
+
+    public function saveRegistration($validatedData, $enrollment)
+    {
+        DB::beginTransaction();
+
+        $enrollment->student->update(['year_level' => $validatedData['year_level']]);
+
+        $enrollment->update([
+            'acctok' => 1, 
+            'enrolled_units' => $validatedData['enrolled_units'],
+            'user_id' => Auth::user()->id
+        ]);
+
+        $assessment = Assessment::firstOrCreate([
+            'enrollment_id' => $enrollment->id,
+            'period_id' => session('current_period'),
+        ], [
+            'enrollment_id' => $enrollment->id,
+            'period_id' => session('current_period'),
+            'user_id' => Auth::id()
+        ]);
+
+        DB::commit();
+
+        return [
+            'success' => true,
+            'message' => 'Enrollment successfully saved!',
+            'alert' => 'alert-success',
+            'status' => 200,
+            'assessment_id' => $assessment->id
+        ];
     }
 
 }

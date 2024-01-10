@@ -220,58 +220,65 @@
             </div>
         </form>
 
-        <div class="row">
-            <div class="col-lg-12 mx-auto">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Registered Subjects</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive-sm">
-                            <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
-                                <thead class="">
-                                    <tr>
-                                        <th class="w20"></th>
-                                        <th class="w50">Code</th>
-                                        <th class="w120 mid">Subject</th>
-                                        <th>Description</th>
-                                        <th class="w40 mid">Units</th>
-                                        <th class="w35 mid">Lec</th>
-                                        <th class="w35 mid">Lab</th>
-                                        <th class="w300 mid">Schedule</th>
-                                        <th class="">Section</th>
-                                        <th class="w100">Added By</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-black" id="return_enrolled_subjects">
-                                    @include('enrollment.enrolled_class_subjects')
-                                </tbody>
-                            </table>
+        <form method="POST" id="form_registration">
+            @csrf
+            <div class="row">
+                <div class="col-lg-12 mx-auto">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Registered Subjects</h6>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <button type="submit" id="assess_registration" class="btn btn-sm btn-success btn-icon-split actions mb-2">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-save"></i>
-                            </span>
-                            <span class="text">Assess Registration</span>
-                        </button>
-                        <button type="button" id="add_subjects" class="btn btn-sm btn-primary btn-icon-split actions mb-2">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-plus-square"></i>
-                            </span>
-                            <span class="text">Add Subjects</span>
-                        </button>
-                        <button type="button" id="delete_selected" class="btn btn-sm btn-danger btn-icon-split actions mb-2">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                            <span class="text">Delete Selected</span>
-                        </button>
+                        <div class="card-body">
+                            <div class="table-responsive-sm">
+                                <table class="table table-sm table-striped table-bordered" style="font-size: 14px;">
+                                    <thead class="">
+                                        <tr>
+                                            <th class="w20"></th>
+                                            <th class="w50">Code</th>
+                                            <th class="w120 mid">Subject</th>
+                                            <th>Description</th>
+                                            <th class="w40 mid">Units</th>
+                                            <th class="w35 mid">Lec</th>
+                                            <th class="w35 mid">Lab</th>
+                                            <th class="w300 mid">Schedule</th>
+                                            <th class="">Section</th>
+                                            <th class="w100">Added By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-black" id="return_enrolled_subjects">
+                                        @include('enrollment.enrolled_class_subjects')
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input type="hidden" name="student_id" value="{{ $student->id }}" />
+                            <input type="hidden" name="enrollment_id" value="{{ $enrollment->id }}" />
+                            <input type="hidden" name="year_level" value="{{ $enrollment->year_level }}" />
+
+                            <button type="submit" id="assess_registration" class="btn btn-sm btn-success btn-icon-split actions mb-2">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-save"></i>
+                                </span>
+                                <span class="text">Assess Registration</span>
+                            </button>
+                            <button type="button" id="add_subjects" class="btn btn-sm btn-primary btn-icon-split actions mb-2">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-plus-square"></i>
+                                </span>
+                                <span class="text">Add Subjects</span>
+                            </button>
+                            <button type="button" id="delete_selected" class="btn btn-sm btn-danger btn-icon-split actions mb-2">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                                <span class="text">Delete Selected</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
         {{-- DISPLAY SCHEDULE TABLE --}}
         <div class="row">
             <div class="col-lg-12 mx-auto">

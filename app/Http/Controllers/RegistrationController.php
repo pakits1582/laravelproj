@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use App\Models\Assessment;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
-use App\Models\SectionMonitoring;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EnrolledClassSchedule;
 use App\Services\RegistrationService;
-use Illuminate\Support\Facades\Redirect;
 use App\Services\Assessment\AssessmentService;
 use App\Services\Enrollment\EnrollmentService;
 use App\Http\Requests\StoreRegistrationClassesRequest;
@@ -32,8 +32,8 @@ class RegistrationController extends Controller
             $student = (new StudentService)->studentInformationByUserId(Auth::id());
 
             $enrollment = Enrollment::where('student_id', $student->id)->where('period_id', session('current_period'))->first();
-
             $with_faculty = false;
+            $with_checkbox = false;
 
             if($enrollment && $enrollment->assessed == 1)
             {
@@ -44,10 +44,10 @@ class RegistrationController extends Controller
                     'section:id,code,name',
                 ]);
                 
-                $enrolled_class_schedules = (new AssessmentService)->enrolledClassSchedules($enrollment->id);
+                $class_schedules = (new AssessmentService)->enrolledClassSchedules($enrollment->id);
                 $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($enrollment->id);
 
-                return view('registration.view_registration', compact('student', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment'));
+                return view('registration.view_registration', compact('student', 'class_schedules', 'enrolled_classes', 'with_faculty', 'enrollment', 'with_checkbox'));
             }else{
 
                 $registration = $this->registrationService->studentRegistration($student);
@@ -150,5 +150,40 @@ class RegistrationController extends Controller
         $save_selected_searched_classes = $this->registrationService->saveSelectedClasses($request);
 
         return response()->json($save_selected_searched_classes);
+    }
+
+    public function saveregistration(Request $request, Enrollment $enrollment)
+    {   
+        $validatedData = $request->validate([
+            'year_level' => 'required|numeric|max:5',
+            'enrolled_units' => 'required|numeric|max:50',
+        ]);
+
+        $save_registration = $this->registrationService->saveRegistration($validatedData, $enrollment);
+
+        return response()->json($save_registration);
+    }
+
+    public function assessmentpreview(Assessment $assessment)
+    {
+        $assessment_info = (new AssessmentService)->assessmentInformation($assessment);
+        
+        return view('assessment.assessment_preview', $assessment_info)->with('withbutton', 1);
+    }
+
+    public function saveassessment(Request $request, Assessment $assessment)
+    {
+        $data = (new AssessmentService)->updateAssessment($request, $assessment);
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function printassessment(Assessment $assessment)
+    {
+        $assessment_info = (new AssessmentService)->assessmentInformation($assessment);
+        
+        $pdf = PDF::loadView('assessment.print_assessment', $assessment_info)->setPaper('a4', 'portrait');
+       
+        return $pdf->stream('assessment.pdf');
     }
 }

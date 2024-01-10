@@ -5,7 +5,11 @@
 @if (count($enrolled_classes) > 0)
     @foreach ($enrolled_classes as $enrolled_class)
         <tr class="label">
-            <td class="mid"><input type="checkbox" name="" class="select_enrolled_class" value="{{ $enrolled_class->class->id }}" /></td>
+            @if (isset($with_checkbox) && $with_checkbox == true)
+                <td class="mid">
+                    <input type="checkbox" name="" class="select_enrolled_class" value="{{ $enrolled_class->class->id }}" />
+                </td>
+            @endif
             <td class="">{{ $enrolled_class->class->code }}</td>
             <td class="">{{ $enrolled_class->class->curriculumsubject->subjectinfo->code }}</td>
             <td class="">{{ $enrolled_class->class->curriculumsubject->subjectinfo->name }}</td>

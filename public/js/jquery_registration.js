@@ -389,10 +389,13 @@ $(function(){
         e.preventDefault();
     });
 
-    $(document).on("click", "#assess_registration", function(e){
-        var student_id = $("#student_id").val();
+    $(document).on("submit", "#form_registration", function(e){
+
         var enrollment_id = $("#enrollment_id").val();
         var has_conflict  = $("#has_conflict").val();
+        var enrolled_units = parseInt($("#enrolled_units").text());
+        var postData      = $("#form_registration").serializeArray();
+        postData.push({name: 'enrolled_units', value: enrolled_units });
         
         $("#assess_registration").attr("disabled", true);
 
@@ -423,10 +426,12 @@ $(function(){
                             'OK':function(){
                                 $("#confirmation").dialog('close');
 
+                                //console.log(postData);
                                 $.ajax({
-                                    url: "/registration/saveregistration",
-                                    type: 'POST',
-                                    data: {'enrollment_id':enrollment_id},
+                                    url: "/registration/"+enrollment_id,
+                                    type: 'PUT',
+                                    dataType: 'json',
+                                    data: postData,
                                     dataType: 'json',
                                     beforeSend: function() {
                                         $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">Saving Changes, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
@@ -442,8 +447,46 @@ $(function(){
                                     success: function(response)
                                     {
                                         $("#confirmation").dialog('close');
-                                        console.log(response);
-                                        
+                                        //console.log(response);
+                                        if(response.success === true)
+                                        {
+                                            $.ajax({
+                                                url: "/registration/"+response.assessment_id+"/assessmentpreview",
+                                                type: 'GET',
+                                                beforeSend: function() {
+                                                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Assessment Preview</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                                                        show: 'fade',
+                                                        resizable: false,	
+                                                        width: 350,
+                                                        height: 'auto',
+                                                        modal: true,
+                                                        buttons: false
+                                                    });
+                                                    $(".ui-dialog-titlebar").hide();
+                                                },
+                                                success: function(data){   
+                                                    $("#confirmation").dialog('close');
+                                
+                                                    var header = '<div class="modal fade" id="assessment_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">';
+                                                        header += '<div class="modal-dialog modal-xl" role="document" style="max-width: 90% !important">';
+                                                        header += '<div class="modal-content"><div class="modal-header"><h1 class="modal-title h3 mb-0 text-primary font-weight-bold" id="exampleModalLabel">Assessment Preview</h1>';
+                                                        header += '</div><div class="modal-body">';
+                                                    
+                                                    var footer = '</div></div></div></div>';
+
+                                                    $('#ui_content4').html(header+data+footer);
+                                                    $("#assessment_modal").modal('show');
+
+                                                    $('#assessment_modal').on('shown.bs.modal', function (e) {
+                                                        $("#save_assessment").focus();
+                                                    });
+                                                                        
+                                                },
+                                                error: function (data) {
+                                                    console.log(data);
+                                                }
+                                            });
+                                        }
                                     },
                                     error: function (data) {
                                         $("#confirmation").dialog('close');
@@ -462,6 +505,74 @@ $(function(){
             }
         }
 
+        e.preventDefault();
+    });
+
+    $(document).on("submit","#assessment_form", function(e){
+
+        var enrolled_units = $("#enrolledunits").text();
+        var assessment_id = $("#assessment_id").val();
+		var postData = $(this).serializeArray(); 
+		postData.push({name: 'enrolled_units', value: enrolled_units });
+        $("#save_assessment").prop("disabled", true);
+        
+        $.ajax({
+            url: "/registration/"+assessment_id+"/saveassessment",
+            type: 'PUT',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function() {
+				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+			},
+            success: function(response){
+                $("#confirmation").dialog('close');
+                $("#save_assessment").prop("disabled", false);
+                $('#modalll').modal('hide');
+                if(response.data === true)
+                {
+                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Assessment Saved</div><div class="message">Student was successfully assessed.<br>Print student assessment?</div>').dialog({
+                        show: 'fade',
+                        resizable: false,	
+                        draggable: false,
+                        width: 350,
+                        height: 'auto',
+                        modal: true,
+                        buttons: {
+                                'Cancel':function(){
+                                    $("#confirmation").dialog('close');
+                                    location.reload();				
+                                },
+                                'OK':function(){
+                                    $("#confirmation").dialog('close');
+                                    window.open("/registration/printassessment/"+assessment_id, '_blank'); 
+                                    location.reload();				
+                                }//end of ok button	
+                            }//end of buttons
+                    });//end of dialogbox
+                    $(".ui-dialog-titlebar").hide();
+                    //end of dialogbox
+                }
+                
+            },
+            error: function (data) {
+                $("#confirmation").dialog('close');
+                $("#save_assessment").prop("disabled", false);
+
+                console.log(data);
+                var errors = data.responseJSON;
+                if ($.isEmptyObject(errors) === false) {
+                    showError('Something went wrong! Can not perform requested action!');
+                }
+            }
+        });
         e.preventDefault();
     });
      
