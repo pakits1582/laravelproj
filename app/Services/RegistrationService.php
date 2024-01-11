@@ -88,16 +88,15 @@ class RegistrationService
                 'user_id' => Auth::user()->id
             ];
     
-            $enrollment = Enrollment::firstOrCreate(['period_id' => session('current_period'), 'student_id' => $student->id], $insert_enrollment);
-            // Load relationships for the enrollment
-            $enrollment->load([
+            $data['enrollment'] = Enrollment::updateOrCreate(
+                ['period_id' => session('current_period'), 'student_id' => $student->id],
+                $insert_enrollment
+            )->load([
                 'program.level:id,code,level',
                 'program.collegeinfo:id,code,name',
                 'curriculum:id,program_id,curriculum',
                 'section:id,code,name',
-            ]);
-            
-            $data['enrollment'] = $enrollment;            
+            ]);            
         }
 
         return $data;
@@ -242,22 +241,40 @@ class RegistrationService
 
     public function checkIfClassIfDuplicate($enrolled_classes, $section_subjects)
     {
+        // $checked_duplicates = [];
+
+        // if($section_subjects)
+        // {
+        //     foreach ($section_subjects as $key => $section_subject) 
+        //     {  
+        //         $checked_duplicates[$key] = $section_subject;
+        //         $class_id = $section_subject['id'];
+        //         $exists = $enrolled_classes->contains('class.id', $class_id);
+        //         $checked_duplicates[$key]['duplicate'] = ($exists) ? 1 : 0;      
+        //     }
+        // }
+
+        // return $checked_duplicates;
+
         $checked_duplicates = [];
 
-        if($section_subjects)
-        {
-            foreach ($section_subjects as $key => $section_subject) 
-            {  
+        if ($section_subjects) {
+            foreach ($section_subjects as $key => $section_subject) {
                 $checked_duplicates[$key] = $section_subject;
                 $class_id = $section_subject['id'];
-                $exists = $enrolled_classes->contains('class.id', $class_id);
+                $subject_id = $section_subject['curriculumsubject']['subjectinfo']['id'];
 
-                $checked_duplicates[$key]['duplicate'] = ($exists) ? 1 : 0;
-              
+                // Check if the class_id or subject_id already exists in $enrolled_classes
+                $exists = $enrolled_classes->contains(function ($enrolled_class) use ($class_id, $subject_id) {
+                    return $enrolled_class['class']['id'] == $class_id || $enrolled_class['class']['curriculumsubject']['subjectinfo']['id'] == $subject_id;
+                });
+
+                $checked_duplicates[$key]['duplicate'] = $exists ? 1 : 0;
             }
         }
 
         return $checked_duplicates;
+
     }
 
     public function saveSelectedClasses($request)

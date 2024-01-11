@@ -2,20 +2,20 @@
     $total_units = 0;
     $total_subjects = 0;
 @endphp
-@if (count($enrolled_classes) > 0)
 
-    @if (isset($with_checkbox) && $with_checkbox == true)
-        @php
-            $colspan1 = 4;
-            $colspan2 = 9;
-        @endphp
-    @else
+@if (isset($with_checkbox) && $with_checkbox == true)
     @php
-        $colspan1 = 3;
+        $colspan1 = 4;
         $colspan2 = 10;
     @endphp
-    @endif
+@else
+    @php
+        $colspan1 = 3;
+        $colspan2 = 9;
+    @endphp
+@endif
 
+@if (count($enrolled_classes) > 0)
     @foreach ($enrolled_classes as $enrolled_class)
         <tr class="label">
             @if (isset($with_checkbox) && $with_checkbox == true)

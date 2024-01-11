@@ -60,9 +60,10 @@ class RegistrationController extends Controller
 
                     return view('registration.index', compact('student', 'errors'));
                 }else{
+
                     $enrollment = $registration['enrollment'];
                     $with_checkbox = true;
-                    
+
                     $enrolled_class_schedules = (new EnrollmentService)->enrolledClassSchedules($registration['enrollment']->id);
                     $class_schedules  = (new AssessmentService)->classScheduleArray($enrolled_class_schedules);
                     $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($registration['enrollment']->id);
@@ -102,8 +103,9 @@ class RegistrationController extends Controller
     public function enrolledclasssubjects(Request $request)
     {
         $enrolled_classes = (new EnrollmentService)->enrolledClassSubjects($request->enrollment_id);
+        $with_checkbox = true;
 
-        return view('enrollment.enrolled_class_subjects', compact('enrolled_classes'));
+        return view('enrollment.enrolled_class_subjects', compact('enrolled_classes', 'with_checkbox'));
     }
 
     public function scheduletable(Request $request)

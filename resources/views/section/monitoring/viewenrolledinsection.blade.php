@@ -50,7 +50,7 @@
                                             <td class="">{{ $enrollment->student->name }}</td>
                                             <td class="">{{ $enrollment->program->code }} - {{ $enrollment->year_level }}</td>
                                             <td class="mid">{{ $enrollment->enrolled_units }}</td>
-                                            <td class=""></td>
+                                            <td class="">{{ $enrollment->enrolledby->idno }}</td>
                                             <td class="">{{ \Carbon\Carbon::parse($enrollment->created_at)->format('F d, Y h:i:s') }}</td>
                                             <td class="">{{ $enrollstatus }}</td>
                                         </tr>
