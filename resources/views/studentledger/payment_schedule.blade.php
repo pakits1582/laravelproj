@@ -1,7 +1,7 @@
 @if ($payment_schedule == 'false')
     <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
 @else
-    @if ($payment_schedule['payment_schedules'])
+    @if ($payment_schedule['payment_schedules']->isNotEmpty())
         @php
             $pay_period = (Auth::user()->paymentperiod) ? ((Auth::user()->paymentperiod->pay_period > max(array_keys($payment_schedule['payment_schedules']->toArray()))) ? max(array_keys($payment_schedule['payment_schedules']->toArray())) : Auth::user()->paymentperiod->pay_period) : 0;
         @endphp
@@ -136,5 +136,7 @@
                 </div>
             </div>
         </div>
+    @else
+        <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
     @endif
 @endif
