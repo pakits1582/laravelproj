@@ -23,7 +23,7 @@
     </div>
     <div class="row">
         <div class="col-md-1">
-            <label for="term" class="m-0 font-weight-bold text-primary">ID No.</label>
+            <label for="term" class="m-0 font-weight-bold text-primary">Student No.</label>
         </div>
         <div class="col-md-4">
             <div class="text-black">{{ $assessment->enrollment->student->user->idno }}</div>
@@ -528,6 +528,9 @@
                 <tr><td colspan="2"><strong>Date Printed : </strong>{{ date("F d, Y") }}</td></tr>
                 <tr><td colspan="2"><strong>Printed By : </strong>{{ Auth::user()->{ $info['info'] }->name }}</td></tr>
             </table>
+            @if ($assessment->enrollment->validated == 0)
+                <h6 class="m-3 mid font-weight-bold text-danger">****** Enrolment is not yet validated! ******</h6>
+            @endif
             <div id="due" class="m-3">
                 <em>
                 @php

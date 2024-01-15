@@ -739,7 +739,9 @@
                         <tr><td colspan="2" style="font-size: 12px !important"><span class="bold" style="font-size: 12px;">Date Printed : </span>{{ date("F d, Y") }}</td></tr>
                         <tr><td colspan="2" style="font-size: 12px !important"><span class="bold" style="font-size: 12px;">Printed By : </span>{{ Auth::user()->{ $info['info'] }->name }}</td></tr>
                     </table>
-                    <p></p>
+                    @if ($assessment->enrollment->validated == 0)
+                        <h6 style="font-size: 12px; margin:5px auto; text-align: center;">****** Enrolment is not yet validated! ******</h6>
+                    @endif
                     <div id="due" class="m-3">
                         <div style="font-size: 12px;">
                         @php

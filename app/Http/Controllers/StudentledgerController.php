@@ -227,6 +227,7 @@ class StudentledgerController extends Controller
 
         return view('studentledger.student.index', compact(
             'student', 
+            'enrollment',
             'previous_balances',
             'soas',
             'has_adjustment',
