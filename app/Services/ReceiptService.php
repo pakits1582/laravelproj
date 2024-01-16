@@ -77,11 +77,11 @@ class ReceiptService
         { 
             $result = strcmp(Str::of($request->payor_name)->replaceMatches('/ {2,}/', ' '), Str::of($enrollment->student->name)->replaceMatches('/ {2,}/', ' '));
 
-            if($result !== 0)
+            if($result != 0)
             {
                 return [
                     'success' => false,
-                    'message' => 'The payor name is not equal to the student seleted! Please check entries!',
+                    'message' => 'The payor name is not equal to the student selected! Please check entries!',
                     'alert' => 'alert-danger'
                 ];
             }

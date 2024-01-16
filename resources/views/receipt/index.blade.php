@@ -132,13 +132,25 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-12 mx-auto">
+            <div class="col-md-8 mx-auto">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Payment Information</h6>
                     </div>
                     <div class="card-body" id="">
                         @include('receipt.payment_info')
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow mb-3">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Payment Schedule</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="payment_schedule" class="">
+                            <h6 class="m-0 font-weight-bold text-black mid">No records to be displayed!</h6>
+                        </div>
                     </div>
                 </div>
             </div>

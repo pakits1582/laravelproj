@@ -1,7 +1,7 @@
 <form method="POST" action=""  role="form" id="form_payment">
     @csrf
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="row align-items-start">
                 <div class="col-md-3">
                     <div class="form-group">
@@ -95,9 +95,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 d-flex flex-column">
+        {{-- <div class="col-md-3 d-flex flex-column">
             <label for="code" class="m-0 font-weight-bold text-primary">Payment Schedule</label>
             <div id="payment_schedule" class="border border-primary p-2"></div>
-        </div>
+        </div> --}}
     </div>
 </form>

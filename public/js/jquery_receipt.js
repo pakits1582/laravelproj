@@ -150,9 +150,16 @@ $(function(){
             $("#curriculum").val(student_info.data.values.curriculum.curriculum ? student_info.data.values.curriculum.curriculum : "");
             $("#year_level").val(student_info.data.values.year_level ? student_info.data.values.year_level : "");
             var name = student_info.data.values.last_name;
-                name += ', '+student_info.data.values.first_name;
-                name += (student_info.data.values.name_suffix != '') ? ' '+student_info.data.values.name_suffix : '';
-                name += (student_info.data.values.middle_name != '') ? ' '+student_info.data.values.middle_name : '';
+            name += ', ' + student_info.data.values.first_name;
+            
+            if (student_info.data.values.name_suffix !== null && student_info.data.values.name_suffix !== undefined) {
+                name += ' ' + student_info.data.values.name_suffix;
+            }
+            
+            if (student_info.data.values.middle_name !== null && student_info.data.values.middle_name !== undefined) {
+                name += ' ' + student_info.data.values.middle_name;
+            }
+            
             $("#payor_name").val(name);
 
             returnStatementofaccount(student_id, period_id);
@@ -601,7 +608,6 @@ $(function(){
 							});//end of dialogbox
 						$(".ui-dialog-titlebar").hide();
                     }
-                    
                 },
                 error: function (data) {
                     console.log(data);
