@@ -120,10 +120,21 @@ $(function(){
 			url: "/classes/sectionclasssubjects",
 			type: 'POST',
 			data: ({ 'section' : section }),
+            beforeSend: function() {
+				$("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+					show: 'fade',
+					resizable: false,	
+					width: 350,
+					height: 'auto',
+					modal: true,
+					buttons: false
+				});
+				$(".ui-dialog-titlebar").hide();
+			},
 			success: function(data){
+                $("#confirmation").dialog('close');
 				//console.log(data);
 				$("#return_classsubjects").html(data);
-
                 returnScheduleTable(section);
 			},
 			error: function (data) {
