@@ -249,7 +249,10 @@ class ClassesService
             'curriculumsubject.subjectinfo', 
             'instructor', 
             'schedule',
-            'classschedules' => ['roominfo']])->where('period_id', session('current_period'))->whereNotNull('schedule_id')->get();
+            'classschedules' => ['roominfo']])
+            ->where('period_id', session('current_period'))
+            ->where('dissolved', '!=',  1)
+            ->whereNotNull('schedule_id')->get();
 
         return $classes_with_schedules;
     }
@@ -472,6 +475,11 @@ class ClassesService
             'alert' => 'alert-success',
             'status' => 200
         ];
+    }
+
+    public function dissolvedclass()
+    {
+
     }
 
     public function storeCopyClass($request)
