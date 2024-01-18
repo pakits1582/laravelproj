@@ -14,6 +14,7 @@ use App\Models\SectionMonitoring;
 use App\Models\CurriculumSubjects;
 use Illuminate\Support\Facades\DB;
 use App\Models\EnrolledClassSchedule;
+use App\Models\InternalGrade;
 use Illuminate\Database\Eloquent\Builder;
 
 class ClassesService
@@ -433,6 +434,12 @@ class ClassesService
                     }//end of days
                 }
 
+                $class->classschedules()->delete();
+                $class->classschedules()->insert($classes_schedules);
+
+                $data = $request->validated()+['schedule_id' => $schedule_info->id];
+
+                //UPDATE ALL STUDENTS' CLASS SCHEDULE 
                 if ($class->enrolledstudents->count() > 0 && !empty($class_schedules)) 
                 {
                     $enrolled_class_schedules = [];
@@ -456,19 +463,19 @@ class ClassesService
                     EnrolledClassSchedule::where('class_id', $class->id)->delete();
                     EnrolledClassSchedule::insert($enrolled_class_schedules);
                 }
-
-                $class->classschedules()->delete();
-                $class->classschedules()->insert($classes_schedules);
-
-                $data = $request->validated()+['schedule_id' => $schedule_info->id];
             } 
         }
 
         $class->update($data);
 
         //IF DISSOVED IS EQUAL TO 1, REMOVE ALL STUDENTS ENROLLED IN THE SUBJECT THEN RE-ASSESS
+        if ($request->has('dissolved') && $request->dissolved == 1) 
+        {
+            $this->dissolvedclass($class->id);
+        }
 
         DB::commit();
+        
         return [
             'success' => true,
             'message' => 'Class Subject Successfully Updated!',
@@ -477,9 +484,12 @@ class ClassesService
         ];
     }
 
-    public function dissolvedclass()
+    public function dissolvedclass($class_id)
     {
-
+        ClassesSchedule::where('class_id', $class_id)->delete();
+        EnrolledClass::where('class_id', $class_id)->delete();
+        EnrolledClassSchedule::where('class_id', $class_id)->delete();
+        InternalGrade::where('class_id', $class_id)->delete();
     }
 
     public function storeCopyClass($request)
