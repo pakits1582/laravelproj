@@ -751,8 +751,20 @@ $(function(){
                                 url: '/classes/'+class_id,
                                 type: 'DELETE',
                                 dataType: 'json',
+                                beforeSend: function() {
+                                    $("#confirmation").html('<div class="confirmation"></div><div class="ui_title_confirm">Loading Request</div><div class="message">This may take some time, Please wait patiently.<br><div clas="mid"><img src="/images/31.gif" /></div></div>').dialog({
+                                        show: 'fade',
+                                        resizable: false,	
+                                        width: 350,
+                                        height: 'auto',
+                                        modal: true,
+                                        buttons: false
+                                    });
+                                    $(".ui-dialog-titlebar").hide();
+                                },
                                 success: function(response)
                                 {
+                                    $("#confirmation").dialog('close');
                                     if(response.data.success === false)
                                     {
                                         showError(response.data.message);
@@ -768,6 +780,7 @@ $(function(){
                                     
                                 },
                                 error: function (data) {
+                                    $("#confirmation").dialog('close');
                                     console.log(data);
                                     var errors = data.responseJSON;
                                     if ($.isEmptyObject(errors) == false) {
