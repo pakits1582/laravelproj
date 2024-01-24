@@ -471,7 +471,7 @@ class ClassesService
         //IF DISSOVED IS EQUAL TO 1, REMOVE ALL STUDENTS ENROLLED IN THE SUBJECT THEN RE-ASSESS
         if ($request->has('dissolved') && $request->dissolved == 1) 
         {
-            $this->dissolvedclass($class->id);
+            $this->dissolvedclass($class);
         }
 
         DB::commit();
@@ -484,12 +484,12 @@ class ClassesService
         ];
     }
 
-    public function dissolvedclass($class_id)
+    public function dissolvedclass($class)
     {
-        ClassesSchedule::where('class_id', $class_id)->delete();
-        EnrolledClass::where('class_id', $class_id)->delete();
-        EnrolledClassSchedule::where('class_id', $class_id)->delete();
-        InternalGrade::where('class_id', $class_id)->delete();
+        ClassesSchedule::where('class_id', $class->id)->delete();
+        EnrolledClass::where('class_id', $class->id)->delete();
+        EnrolledClassSchedule::where('class_id', $class->id)->delete();
+        InternalGrade::where('class_id', $class->id)->delete();
     }
 
     public function storeCopyClass($request)

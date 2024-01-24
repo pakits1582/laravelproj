@@ -59,6 +59,8 @@ class ClassesMergingService
                 $class_schedules = (new ClassesService())->processSchedule($mother_class->schedule->schedule);
                 $enrolled_classes_to_merge =  EnrolledClass::whereIn("class_id", $request->class_ids)->get();
 
+                $enroll_class_schedules = [];
+
                 foreach ($enrolled_classes_to_merge as $key => $enrolled_class_to_merge) 
                 {
                     foreach ($class_schedules as $key => $class_schedule) 
