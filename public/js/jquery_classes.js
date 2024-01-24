@@ -563,6 +563,8 @@ $(function(){
                     var section = $("#section").val();
                     returnClassSubjects(section);
                     $("#cancel").trigger('click');
+                }else{
+                    showError('Something went wrong! Can not process request!');
                 }
             },
             error: function (data) {

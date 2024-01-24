@@ -486,10 +486,29 @@ class ClassesService
 
     public function dissolvedclass($class)
     {
+        if($class->ismother == 1)
+        {
+            $children_classes = $class->load('merged')->merged;
+
+            if ($children_classes->isNotEmpty()) 
+            {
+                $children_classes_ids = $children_classes->pluck('id')->toArray();
+            
+                ClassesSchedule::whereIn('class_id', $children_classes_ids)->delete();
+                EnrolledClass::whereIn('class_id', $children_classes_ids)->delete();
+                EnrolledClassSchedule::whereIn('class_id', $children_classes_ids)->delete();
+                InternalGrade::whereIn('class_id', $children_classes_ids)->delete();
+                
+                Classes::whereIn("id", $children_classes_ids)->update(['dissolved' => 1, 'schedule_id' => null, 'instructor_id' => null, 'merge' => null]);
+            }
+        }
+
         ClassesSchedule::where('class_id', $class->id)->delete();
         EnrolledClass::where('class_id', $class->id)->delete();
         EnrolledClassSchedule::where('class_id', $class->id)->delete();
         InternalGrade::where('class_id', $class->id)->delete();
+
+        $class->update(['schedule_id' => null, 'instructor_id' => null, 'ismother' => 0]);
     }
 
     public function storeCopyClass($request)
@@ -596,7 +615,6 @@ class ClassesService
         $class->delete();
 
         //check if last class in the section, if true delete in section_monitorings
-
         $section_classes = Classes::where('section_id', $class->section_id)->where('period_id', session('current_period'))->where('dissolved', '!=', 1)->get();
 
         if ($section_classes->count() == 0) {
