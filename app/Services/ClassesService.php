@@ -601,6 +601,7 @@ class ClassesService
         ]);
         
         //return $class;
+        DB::beginTransaction();
 
         if($class->enrolledstudents->count())
         {
@@ -612,14 +613,24 @@ class ClassesService
             ];
         }
 
-        $class->delete();
-
         //check if last class in the section, if true delete in section_monitorings
         $section_classes = Classes::where('section_id', $class->section_id)->where('period_id', session('current_period'))->where('dissolved', '!=', 1)->get();
 
         if ($section_classes->count() == 0) {
             SectionMonitoring::where('section_id', $class->section_id)->delete();
         } 
+
+        if($class->ismother == 1)
+        {
+            $children_classes = $class->load('merged')->merged;
+            $children_classes_ids = $children_classes->pluck('id')->toArray();
+                
+            Classes::whereIn("id", $children_classes_ids)->update(['schedule_id' => null, 'instructor_id' => null, 'merge' => null]);
+        }
+
+        $class->delete();
+
+        DB::commit();
         
         return [
             'success' => true,
@@ -627,11 +638,6 @@ class ClassesService
             'alert' => 'alert-success',
             'status' => 200
         ];
-
-		//delete from classes
-		//delete from classes_schedules
-		//delete from enrolled_classes
-		//delete from enrolled_classes_schedules
 		
     }
 
