@@ -1,5 +1,5 @@
 
-@if (count($chargedstudents) > 0)
+@if ($chargedstudents !== null && $chargedstudents->isNotEmpty())
     @foreach ($chargedstudents as $chargedstudent)
         <tr class="checkstd">
             <td class="w30 mid">

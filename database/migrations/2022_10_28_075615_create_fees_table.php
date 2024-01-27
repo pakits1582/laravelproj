@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('fee_type_id')->index();
             $table->foreign('fee_type_id')->references('id')->on('fee_types')->onDelete('cascade');
             $table->integer('colindex')->nullable()->default(0);
-            $table->decimal('default_value', 9, 2)->default('0.00')->nullable();
+            $table->decimal('default_value', 9, 2)->nullable()->default('0.00');
             $table->boolean('iscompound')->default(false);
             $table->timestamps();
         });

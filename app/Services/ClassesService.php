@@ -582,7 +582,7 @@ class ClassesService
 
             $first_record = SectionMonitoring::with('section')->whereHas('section', function($query) use($program_id, $year_level){
                 $query->where('sections.program_id', $program_id)->where('sections.year', $year_level);
-            })->first();
+            })->where('period', session('current_period'))->first();
 
             $status = ($first_record) ? 0 : 1;
 

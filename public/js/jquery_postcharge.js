@@ -148,12 +148,12 @@ $(function(){
    
     $(document).on("change",".students", function(){
         if($(this).is(':checked')){
-            //$(this).closest('tr').addClass('selected');
-            $(this).closest('tr').prop('style', 'background-color: rgba(52, 152, 219,0.5) !important;');
+            $(this).closest('tr').addClass('selected');
+            //$(this).closest('tr').prop('style', 'background-color: rgba(52, 152, 219,0.5) !important;');
         }else{
             $(this).prop('checked', false);
-            //$(this).closest('tr').removeClass('selected');
-            $(this).closest('tr').removeAttr('style');
+            $(this).closest('tr').removeClass('selected');
+            //$(this).closest('tr').removeAttr('style');
         }
     });
 

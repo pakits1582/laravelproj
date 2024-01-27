@@ -16,4 +16,10 @@ class Postcharge extends Model
         return $this->belongsTo(Enrollment::class);
     }
 
+    public function fee()
+    {
+        return $this->belongsTo(Fee::class);
+
+    }
+
 }

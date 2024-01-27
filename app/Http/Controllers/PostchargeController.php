@@ -137,25 +137,7 @@ class PostchargeController extends Controller
 
     public function chargedstudents(Request $request)
     {
-        $query = Postcharge::with([
-            'enrollment' => [
-                'student' => function($query) {
-                    $query->select('id', 'last_name', 'first_name', 'middle_name', 'name_suffix', 'user_id');
-                },
-                'student.user' => function($query) {
-                    $query->select('id', 'idno');
-                },
-                'program:id,code,educational_level_id'
-            ]
-        ])->where('fee_id', $request->fee_id);
-        
-        $period_id = $request->period_id;
-        $query->whereHas('enrollment', function($query) use($period_id){
-            $query->where('period_id', $period_id);
-        });
-
-        
-        $chargedstudents = $query->get();
+        $chargedstudents = $this->postchargeService->chargedStudents($request);
 
         return view('postcharge.return_charged_students', compact('chargedstudents'));
     }

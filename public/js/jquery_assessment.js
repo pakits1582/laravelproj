@@ -88,7 +88,7 @@ $(function(){
 			type: 'POST',
 			data: ({ 'enrollment_id' : enrollment_id}),
 			success: function(data){
-				console.log(data);
+				//console.log(data);
 				$("#schedule_table").html(data);
 			},
 			error: function (data) {

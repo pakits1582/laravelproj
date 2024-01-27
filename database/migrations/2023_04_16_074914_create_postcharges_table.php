@@ -20,6 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('fee_id')->index();
             $table->foreign('fee_id')->references('id')->on('fees')->onDelete('cascade');
             $table->decimal('amount', 9, 2)->default('0')->nullable();
+            $table->unsignedBigInteger('user_id')->index()->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
         });
     }

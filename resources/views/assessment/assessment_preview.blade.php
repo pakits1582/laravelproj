@@ -212,7 +212,51 @@
             }
         }
 
+        if($post_charges->isNotEmpty())
+        {
+            foreach ($post_charges as $key => $post_charge) 
+            {
+                $feesArray[] = [
+                    'educational_level_id' => $educational_level_id,
+                    'college_id' => 0,
+                    'program_id' => 0,
+                    'year_level' => 0,
+                    'subject_id' => 0,
+                    'new' => 0,
+                    'old' => 0,
+                    'transferee' => 0,
+                    'cross_enrollee' => 0,
+                    'foreigner' => 0,
+                    'returnee' => 0,
+                    'professional' => 0,
+                    'sex' => 0,
+                    'fee_id' => $post_charge->fee_id,
+                    'rate' => $post_charge->amount,
+                    'payment_scheme' => 1,
+                    'fee' => [
+                        'id' => $post_charge->fee->id,
+                        'code' => $post_charge->fee->code,
+                        'name' => $post_charge->fee->name,
+                        'fee_type_id' => $post_charge->fee->fee_type_id,
+                        'colindex' => $post_charge->fee->colindex,
+                        'default_value' => $post_charge->fee->default_value,
+                        'iscompound' => $post_charge->fee->iscompound,
+                        'feetype' => [
+                                'id' => $post_charge->fee->feetype->id,
+                                'type' => $post_charge->fee->feetype->type,
+                                'inassess' => $post_charge->fee->feetype->inassess,
+                                'order' => $post_charge->fee->feetype->order,
+                            ]
+                    ]       
+                ];
+            }
+        }
+
         $uniqueFeeTypes = collect(array_values(array_unique(array_column(array_column($feesArray, 'fee'), 'feetype'), SORT_REGULAR)))->sortBy('order');
+        $uniqueFeeTypes = $uniqueFeeTypes->unique(function ($item) {
+            return $item['type'];
+        });
+        
         $totaltuition = 0;
         $labfeetotal = 0;
         $miscfeetotal = 0;

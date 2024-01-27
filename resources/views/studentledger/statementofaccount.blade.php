@@ -116,8 +116,9 @@
             </div>
         </div>
     </div>
-    {{-- @dump($has_adjustment)
-    {{ $has_adjustment }} --}}
+
+    @include('postcharge.return_charges')
+
     @if ($has_adjustment == 'true')
         @include('studentadjustment.create')
     @endif

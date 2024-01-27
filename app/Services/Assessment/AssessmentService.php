@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EnrolledClassSchedule;
 use App\Services\Enrollment\EnrollmentService;
+use App\Services\PostchargeService;
 
 class AssessmentService
 {
@@ -236,10 +237,10 @@ class AssessmentService
         $setup_fees        = (new FeeService())->returnSetupFees($assessment->period_id, $assessment->enrollment->program->educational_level_id);
         $payment_schedules = PaymentSchedule::with(['paymentmode'])->where('period_id', session('current_period'))->where('educational_level_id', $assessment->enrollment->program->educational_level_id)->get();
         //POSTCHARGES
-        
+        $post_charges      = (new PostchargeService())->returnStudentPostCharges($assessment->enrollment_id, session('current_period'));
         //PREVIOUS BALANCE
 
-        return compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules');
+        return compact('assessment','configuration','enrolled_classes', 'setup_fees', 'payment_schedules', 'post_charges');
     }
 
     public function classScheduleArray($enrolled_class_schedules)

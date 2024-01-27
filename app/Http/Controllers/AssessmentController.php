@@ -59,7 +59,7 @@ class AssessmentController extends Controller
     public function show(Assessment $assessment)
     {
         $assessment_info = $this->assessmentService->assessmentInformation($assessment);
-        
+    
         return view('assessment.assessment_preview', $assessment_info)->with('withbutton', 1);
     }
 
