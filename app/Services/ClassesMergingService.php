@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
+use App\Models\Room;
 use App\Models\Classes;
 use App\Models\EnrolledClass;
-use App\Models\EnrolledClassSchedule;
-use Carbon\Carbon;
+use App\Models\ClassesSchedule;
 use Illuminate\Support\Facades\DB;
+use App\Models\EnrolledClassSchedule;
 
 class ClassesMergingService
 {
@@ -39,7 +41,7 @@ class ClassesMergingService
 
     public function saveMergeClasses($request)
     {
-        try {
+        //try {
             DB::beginTransaction();
 
             if(!$request->filled('class_ids'))
@@ -56,34 +58,109 @@ class ClassesMergingService
 
             if(!is_null($mother_class->schedule->schedule))
             {
+                // // $rooms = Room::all();
+                // // $class_schedules = (new ClassesService())->processSchedule($mother_class->schedule->schedule);
+                // // $enrolled_classes_to_merge =  EnrolledClass::whereIn("class_id", $request->class_ids)->get();
+
+                // // $enrolled_class_schedules_array = [];
+                // // $classes_schedules_array = [];
+
+                // // foreach ($enrolled_classes_to_merge as $key => $enrolled_class_to_merge) 
+                // // {
+                // //     foreach ($class_schedules as $key => $class_schedule) 
+                // //     {
+                // //         $room_info = $rooms->firstWhere('code', $class_schedule['room']);
+
+                // //         foreach ($class_schedule['days'] as $key => $day) {
+                // //             $enrolled_class_schedules_array[] = [
+                // //                 'enrollment_id' => $enrolled_class_to_merge->enrollment_id,
+                // //                 'class_id' => $enrolled_class_to_merge->class_id,
+                // //                 'from_time' => $class_schedule['timefrom'],
+                // //                 'to_time' => $class_schedule['timeto'],
+                // //                 'day' => $day,
+                // //                 'room' => $class_schedule['room'],
+                // //                 'created_at' => Carbon::now(),
+                // //                 'updated_at' => Carbon::now()
+                // //             ];
+                // //         }
+                // //     }
+                // // }
+
+                // // foreach($request->class_ids as $class_id)
+                // // {
+                // //     foreach ($class_schedules as $key => $class_schedule) 
+                // //     {
+                // //         $room_info = $rooms->firstWhere('code', $class_schedule['room']);
+
+                // //         foreach ($class_schedule['days'] as $key => $day) 
+                // //         {
+                // //             $classes_schedules_array[] = [
+                // //                 'class_id' => $class_id,
+                // //                 'from_time' => $class_schedule['timefrom'],
+                // //                 'to_time' => $class_schedule['timeto'],
+                // //                 'day' => $day,
+                // //                 'room_id' => ($room_info) ? $room_info->id : '',
+                // //                 'schedule_id' => $mother_class->schedule_id,
+                // //                 'created_at' => Carbon::now(),
+                // //                 'updated_at' => Carbon::now()
+                // //             ];
+                // //         }
+                // //     }
+                // // }
+
+                // ClassesSchedule::whereIn("class_id", $request->class_ids)->delete();
+                // ClassesSchedule::insert($classes_schedules_array);
+                
+                // //then delete all enrolled_class_schedules of classes to be merged
+                // EnrolledClassSchedule::whereIn("class_id", $request->class_ids)->delete();
+                // //insert new enrolled class schedules
+                // EnrolledClassSchedule::insert($enrolled_class_schedules_array);
                 $class_schedules = (new ClassesService())->processSchedule($mother_class->schedule->schedule);
-                $enrolled_classes_to_merge =  EnrolledClass::whereIn("class_id", $request->class_ids)->get();
+                $enrolled_classes_to_merge = EnrolledClass::whereIn("class_id", $request->class_ids)->get();
 
-                $enroll_class_schedules = [];
+                $roomCodes = array_unique(array_column($class_schedules, 'room'));
+                $rooms = Room::whereIn('code', $roomCodes)->get()->keyBy('code');
 
-                foreach ($enrolled_classes_to_merge as $key => $enrolled_class_to_merge) 
-                {
-                    foreach ($class_schedules as $key => $class_schedule) 
-                    {
-                        foreach ($class_schedule['days'] as $key => $day) {
-                            $enroll_class_schedules[] = [
+                $enrolled_class_schedules_array = [];
+                $classes_schedules_array = [];
+
+                foreach ($enrolled_classes_to_merge as $enrolled_class_to_merge) {
+                    foreach ($class_schedules as $class_schedule) {
+                        $room_info = $rooms->get($class_schedule['room']);
+
+                        foreach ($class_schedule['days'] as $day) {
+                            $enrolled_class_schedules_array[] = [
                                 'enrollment_id' => $enrolled_class_to_merge->enrollment_id,
                                 'class_id' => $enrolled_class_to_merge->class_id,
                                 'from_time' => $class_schedule['timefrom'],
                                 'to_time' => $class_schedule['timeto'],
                                 'day' => $day,
                                 'room' => $class_schedule['room'],
-                                'created_at' => Carbon::now(),
-                                'updated_at' => Carbon::now()
+                                'created_at' => now(),
+                                'updated_at' => now()
                             ];
                         }
                     }
                 }
-                
-                //then delete all enrolled_class_schedules of classes to be merged
-                EnrolledClassSchedule::whereIn("class_id", $request->class_ids)->delete();
-                //insert new enrolled class schedules
-                EnrolledClassSchedule::insert($enroll_class_schedules);
+
+                foreach ($request->class_ids as $class_id) {
+                    foreach ($class_schedules as $class_schedule) {
+                        $room_info = $rooms->get($class_schedule['room']);
+
+                        foreach ($class_schedule['days'] as $day) {
+                            $classes_schedules_array[] = [
+                                'class_id' => $class_id,
+                                'from_time' => $class_schedule['timefrom'],
+                                'to_time' => $class_schedule['timeto'],
+                                'day' => $day,
+                                'room_id' => $room_info ? $room_info->id : null,
+                                'schedule_id' => $mother_class->schedule_id,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ];
+                        }
+                    }
+                }
             }
 
             //update classes_to_merge set merge and schedule to mother class
@@ -92,7 +169,7 @@ class ClassesMergingService
             //update mother class set ismother=1
             Classes::where("id", $request->class_id)->update(["ismother" => 1]);
                 
-            DB::commit();
+            //DB::commit();
         
             return [
                 'success' => true,
@@ -101,15 +178,15 @@ class ClassesMergingService
                 'status' => 200
             ];            
 
-        } catch (\Exception $e) {
+        // } catch (\Exception $e) {
 
-            return [
-                'success' => false,
-                'message' => 'An error occurred while merging class subjects.',
-                'alert' => 'alert-danger',
-                'status' => 500
-            ];
-        }
+        //     return [
+        //         'success' => false,
+        //         'message' => 'An error occurred while merging class subjects.',
+        //         'alert' => 'alert-danger',
+        //         'status' => 500
+        //     ];
+        // }
     }
 
     public function unmergeClassSubject($request)
