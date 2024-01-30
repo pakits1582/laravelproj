@@ -616,7 +616,7 @@ class ClassesService
         //check if last class in the section, if true delete in section_monitorings
         $section_classes = Classes::where('section_id', $class->section_id)->where('period_id', session('current_period'))->where('dissolved', '!=', 1)->get();
 
-        if ($section_classes->count() == 0) {
+        if ($section_classes->count() == 1) {
             SectionMonitoring::where('section_id', $class->section_id)->delete();
         } 
 

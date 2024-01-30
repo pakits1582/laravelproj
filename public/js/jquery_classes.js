@@ -766,6 +766,8 @@ $(function(){
                                 },
                                 success: function(response)
                                 {
+                                    console.log(response);
+                                    
                                     $("#confirmation").dialog('close');
                                     if(response.data.success === false)
                                     {
