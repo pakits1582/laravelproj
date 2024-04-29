@@ -105,14 +105,20 @@ class ClassesMergingService
                     }
                 }
             }
+            ClassesSchedule::whereIn("class_id", $request->class_ids)->delete();
+            ClassesSchedule::insert($classes_schedules_array);
+                
+            //then delete all enrolled_class_schedules of classes to be merged
+            EnrolledClassSchedule::whereIn("class_id", $request->class_ids)->delete();
+            //insert new enrolled class schedules
+            EnrolledClassSchedule::insert($enrolled_class_schedules_array);
 
             //update classes_to_merge set merge and schedule to mother class
             Classes::whereIn("id", $request->class_ids)->update(['merge' => $request->class_id, 'schedule_id' => $mother_class->schedule_id]);
-
             //update mother class set ismother=1
             Classes::where("id", $request->class_id)->update(["ismother" => 1]);
                 
-            //DB::commit();
+            DB::commit();
         
             return [
                 'success' => true,
