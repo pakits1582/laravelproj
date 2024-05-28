@@ -195,9 +195,17 @@ $(function(){
 /*********************************
 **** FORCE INPUT TO UPPERCASE ****
 *********************************/
-	$(document).on("keyup",".uppercase", function(){
-		this.value = this.value.toUpperCase();
-	});
+    $(document).on("input", ".uppercase", function(e){
+        var start = this.selectionStart;
+        var end = this.selectionEnd;
+
+        // Convert the input value to uppercase
+        this.value = this.value.toUpperCase();
+
+        // Restore the selection range
+        this.setSelectionRange(start, end);
+    });
+
 
 /*****************************************************
 *** FUNCTION TABLE ROW SELECTION TRIGGER CHECKBOX  ***

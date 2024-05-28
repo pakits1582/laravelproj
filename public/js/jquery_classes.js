@@ -599,7 +599,7 @@ $(function(){
                 $(".ui-dialog-titlebar").hide();
             },
 			success: function(response){
-                //console.log(data);
+                console.log(response);
                 $("#confirmation").dialog('close');
                 if(response.success == true)
                 {

@@ -174,38 +174,112 @@ class ClassesService
         ClassesSchedule::where('class_id', $class_id)->delete();
     }
 
+    // public function generateCode()
+    // {
+    //     $classes_withnocode = Classes::with('sectioninfo.programinfo.collegeinfo')
+    //                             ->where(function ($query) {
+    //                                 $query->whereNull('code')->orWhere('code', '');
+    //                             })
+    //                             ->where('period_id', session('current_period'))
+    //                             ->get();
+
+    //     if($classes_withnocode->isNotEmpty())
+    //     {
+    //         foreach ($classes_withnocode as $key => $class_withnocode) 
+    //         {
+    //             $class_code = $class_withnocode->sectioninfo->programinfo->collegeinfo->class_code ?? 'NC';
+
+    //             $last_code = DB::table('classes')->select(DB::raw('MAX(CAST(SUBSTRING(code, 2, length(code) -1) AS UNSIGNED)) AS lastcode'))->where('code','like', $class_code.'%')->where('period_id', session('current_period'))->get()[0];
+    //             $oldcode = ($last_code->lastcode) ? $last_code->lastcode : 0;
+
+    //             $lcode = str_replace($class_code, "", $oldcode)+1;
+	// 			$newcode = $class_code.$lcode++;
+
+    //             //$class_withnocode->code = $newcode;
+    //             $class_withnocode->update(['code' => $newcode]);
+    //         }
+    //     }
+
+    //     return [
+    //         'success' => true,
+    //         'message' => 'Code generated successfully!',
+    //         'alert' => 'alert-success',
+    //     ];
+    // }
+
     public function generateCode()
     {
-        $classes_withnocode = Classes::with('sectioninfo.programinfo.collegeinfo')
-                                ->where(function ($query) {
-                                    $query->whereNull('code')->orWhere('code', '');
-                                })
+        try {
+            // Fetch all classes without codes for the current period
+            $classes_withnocode = Classes::with('sectioninfo.programinfo.collegeinfo')
+                                        ->where(function ($query) {
+                                            $query->whereNull('code')->orWhere('code', '');
+                                        })
+                                        ->where('period_id', session('current_period'))
+                                        ->get();
+
+            if ($classes_withnocode->isNotEmpty()) {
+                $class_codes = [];
+
+                // Group classes by their college's class_code
+                foreach ($classes_withnocode as $class_withnocode) {
+                    $class_code = $class_withnocode->sectioninfo->programinfo->collegeinfo->class_code ?? 'NC';
+                    if (!isset($class_codes[$class_code])) {
+                        $class_codes[$class_code] = 0;
+                    }
+                }
+
+                // Fetch the max code for each class_code in one query
+                $class_code_keys = array_keys($class_codes);
+
+                // Fetch the max code for each class_code in one query
+                $class_code_keys = array_keys($class_codes);
+                $last_codes = DB::table('classes')
+                                ->select(DB::raw('SUBSTRING(code, 1, 1) as class_code_prefix, MAX(CAST(SUBSTRING(code, 2, LENGTH(code) - 1) AS UNSIGNED)) AS lastcode'))
+                                ->whereIn(DB::raw('SUBSTRING(code, 1, 1)'), $class_code_keys)
                                 ->where('period_id', session('current_period'))
+                                ->groupBy('class_code_prefix')
                                 ->get();
 
-        if($classes_withnocode->isNotEmpty())
-        {
-            foreach ($classes_withnocode as $key => $class_withnocode) 
-            {
-                $class_code = $class_withnocode->sectioninfo->programinfo->collegeinfo->class_code ?? 'NC';
+                foreach ($last_codes as $last_code) {
+                    $class_codes[$last_code->class_code_prefix] = $last_code->lastcode;
+                }
 
-                $last_code = DB::table('classes')->select(DB::raw('MAX(CAST(SUBSTRING(code, 2, length(code) -1) AS UNSIGNED)) AS lastcode'))->where('code','like', $class_code.'%')->where('period_id', session('current_period'))->get()[0];
-                $oldcode = ($last_code->lastcode) ? $last_code->lastcode : 0;
+                $updates = [];
+                foreach ($classes_withnocode as $class_withnocode) {
+                    $class_code = $class_withnocode->sectioninfo->programinfo->collegeinfo->class_code ?? 'NC';
+                    $last_code = isset($class_codes[$class_code]) ? $class_codes[$class_code] : 0;
 
-                $lcode = str_replace($class_code, "", $oldcode)+1;
-				$newcode = $class_code.$lcode++;
+                    $new_code = $class_code . (++$last_code);
+                    $class_codes[$class_code] = $last_code;
 
-                //$class_withnocode->code = $newcode;
-                $class_withnocode->update(['code' => $newcode]);
+                    $updates[] = [
+                        'id' => $class_withnocode->id,
+                        'code' => $new_code
+                    ];
+                }
+
+                // Batch update
+                foreach ($updates as $update) {
+                    Classes::where('id', $update['id'])->update(['code' => $update['code']]);
+                }
             }
-        }
 
-        return [
-            'success' => true,
-            'message' => 'Code generated successfully!',
-            'alert' => 'alert-success',
-        ];
+            return [
+                'success' => true,
+                'message' => 'Code generated successfully!',
+                'alert' => 'alert-success',
+            ];
+
+        } catch (\Throwable $th) {
+            return [
+                'success' => false,
+                'message' => 'Something went wrong, can not generate class codes!',
+                'alert' => 'alert-danger',
+            ];
+        }
     }
+
 
     public function processSchedule($schedule)
     {
