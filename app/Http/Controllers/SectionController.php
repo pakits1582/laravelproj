@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libs\Helpers;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreSectionRequest;
@@ -9,6 +10,11 @@ use App\Http\Requests\UpdateSectionRequest;
 
 class SectionController extends Controller
 {
+    public function __construct()
+    {
+        Helpers::setLoad(['jquery_section.js', 'select2.full.min.js']);
+    }
+
     /**
      * Display a listing of the resource.
      *
