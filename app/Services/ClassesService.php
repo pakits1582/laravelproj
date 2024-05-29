@@ -79,18 +79,24 @@ class ClassesService
     {
         $query = Classes::with([
                 'sectioninfo',
-                'instructor', 
+                'instructor',
                 'schedule',
                 'enrolledstudents',
                 'curriculumsubject' => [
-                    'subjectinfo', 
+                    'subjectinfo',
                     'curriculum',
                     // 'prerequisites' => ['curriculumsubject.subjectinfo'], 
                     // 'corequisites', 
                     // 'equivalents'
                 ],
                 'mergetomotherclass.curriculumsubject.subjectinfo'
-            ])->where('section_id', $section)->where('period_id', $period);
+            ])
+            ->where('section_id', $section)
+            ->where('period_id', $period)
+            ->leftJoin('classes_schedules', 'classes.id', '=', 'classes_schedules.class_id')
+            ->select('classes.*', 'classes_schedules.day', 'classes_schedules.from_time')
+            ->groupBy('classes.id', 'classes.code')
+            ->orderByRaw("FIELD(classes_schedules.`day`, 'M', 'T', 'W', 'TH', 'F', 'S', 'SU'), classes_schedules.from_time ASC");
         
         $query->when($with_dissolved == false, function ($q) {
             return $q->where('dissolved', '!=', 1);
@@ -480,82 +486,99 @@ class ClassesService
 
         DB::beginTransaction();
 
-        if($request->filled('schedule'))
-        {
-            if($request->schedule !== $class->schedule->schedule)
-            { 
-                $rooms = Room::all();
-                $schedule_info = Schedule::firstOrCreate(['schedule' => $request->schedule], ['schedule' => $request->schedule]);
-                $class_schedules = $this->processSchedule($request->schedule);
-                
-                $classes_schedules = [];
+        try {
+            if ($request->filled('schedule') && $request->schedule !== $class->schedule->schedule) {
+                if (empty($request->schedule)) {
+                    // If schedule is empty, update schedule_id to NULL and delete schedules
+                    $this->deleteSchedules($class);
+                    $data['schedule_id'] = null;
+                } else {
+                    $rooms = Room::all();
+                    $schedule_info = Schedule::firstOrCreate(['schedule' => $request->schedule], ['schedule' => $request->schedule]);
+                    $class_schedules = $this->processSchedule($request->schedule);
+                    
+                    $classes_schedules = [];
 
-                foreach ($class_schedules as $key => $class_schedule) 
-                {
-                    $room_info = $rooms->firstWhere('code', $class_schedule['room']);
-                   
-                    foreach ($class_schedule['days'] as $key => $day) {
-                        $classes_schedules[] =  [
-                                        'class_id'    => $class->id,
-                                        'from_time'   => $class_schedule['timefrom'],
-                                        'to_time'     => $class_schedule['timeto'],
-                                        'day'         => $day,
-                                        'room_id'     => ($room_info) ? $room_info->id : '',
-                                        'schedule_id' => $schedule_info->id,
-                                        'created_at'  => Carbon::now(),
-                                        'updated_at'  => Carbon::now()
-                                    ];
-                    }//end of days
-                }
-
-                $class->classschedules()->delete();
-                $class->classschedules()->insert($classes_schedules);
-
-                $data = $request->validated()+['schedule_id' => $schedule_info->id];
-
-                //UPDATE ALL STUDENTS' CLASS SCHEDULE 
-                if ($class->enrolledstudents->count() > 0 && !empty($class_schedules)) 
-                {
-                    $enrolled_class_schedules = [];
-
-                    foreach ($class->enrolledstudents as $key => $enrolled_class) 
-                    {
-                        foreach ($classes_schedules as $key => $sched) 
-                        {
-                            $enrolled_class_schedules[] = [
-                                'enrollment_id' => $enrolled_class->enrollment_id,
-                                'class_id'      => $class->id,
-                                'from_time'     => $sched['from_time'],
-                                'to_time'       => $sched['to_time'],
-                                'day'           => $sched['day'],
-                                'room'          => $rooms->firstWhere('id', $sched['room_id'])->code,
-                                'created_at'    => Carbon::now(),
-                                'updated_at'    => Carbon::now()
+                    foreach ($class_schedules as $class_schedule) {
+                        $room_info = $rooms->firstWhere('code', $class_schedule['room']);
+                        
+                        foreach ($class_schedule['days'] as $day) {
+                            $classes_schedules[] = [
+                                'class_id'    => $class->id,
+                                'from_time'   => $class_schedule['timefrom'],
+                                'to_time'     => $class_schedule['timeto'],
+                                'day'         => $day,
+                                'room_id'     => ($room_info) ? $room_info->id : '',
+                                'schedule_id' => $schedule_info->id,
+                                'created_at'  => Carbon::now(),
+                                'updated_at'  => Carbon::now()
                             ];
                         }
                     }
-                    EnrolledClassSchedule::where('class_id', $class->id)->delete();
-                    EnrolledClassSchedule::insert($enrolled_class_schedules);
+
+                    $this->deleteSchedules($class);
+                    $class->classschedules()->insert($classes_schedules);
+
+                    $data['schedule_id'] = $schedule_info->id;
+
+                    // Update all students' class schedule
+                    if ($class->enrolledstudents->count() > 0 && !empty($classes_schedules)) {
+                        $enrolled_class_schedules = [];
+
+                        foreach ($class->enrolledstudents as $enrolled_class) {
+                            foreach ($classes_schedules as $sched) {
+                                $enrolled_class_schedules[] = [
+                                    'enrollment_id' => $enrolled_class->enrollment_id,
+                                    'class_id'      => $class->id,
+                                    'from_time'     => $sched['from_time'],
+                                    'to_time'       => $sched['to_time'],
+                                    'day'           => $sched['day'],
+                                    'room'          => $rooms->firstWhere('id', $sched['room_id'])->code,
+                                    'created_at'    => Carbon::now(),
+                                    'updated_at'    => Carbon::now()
+                                ];
+                            }
+                        }
+                        EnrolledClassSchedule::where('class_id', $class->id)->delete();
+                        EnrolledClassSchedule::insert($enrolled_class_schedules);
+                    }
                 }
-            } 
+            } elseif (!$request->filled('schedule')) {
+                // If schedule is not filled, update schedule_id to NULL and delete schedules
+                $this->deleteSchedules($class);
+                $data['schedule_id'] = null;
+            }
+
+            $class->update($data);
+
+            // If dissolved is equal to 1, remove all students enrolled in the subject then re-assess
+            if ($request->has('dissolved') && $request->dissolved == 1) {
+                $this->dissolvedclass($class);
+            }
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => 'Class Subject Successfully Updated!',
+                'alert' => 'alert-success',
+                'status' => 200
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'success' => false,
+                'message' => 'Failed to update Class Subject. Error: ' . $e->getMessage(),
+                'alert' => 'alert-danger',
+                'status' => 500
+            ];
         }
+    }
 
-        $class->update($data);
-
-        //IF DISSOVED IS EQUAL TO 1, REMOVE ALL STUDENTS ENROLLED IN THE SUBJECT THEN RE-ASSESS
-        if ($request->has('dissolved') && $request->dissolved == 1) 
-        {
-            $this->dissolvedclass($class);
-        }
-
-        DB::commit();
-        
-        return [
-            'success' => true,
-            'message' => 'Class Subject Successfully Updated!',
-            'alert' => 'alert-success',
-            'status' => 200
-        ];
+    private function deleteSchedules($class)
+    {
+        $class->classschedules()->delete();
+        EnrolledClassSchedule::where('class_id', $class->id)->delete();
     }
 
     public function dissolvedclass($class)

@@ -44,7 +44,8 @@ class SectionMonitoringService
 
         $query->groupBy('sections.id')
         ->orderBy('programs.code')
-        ->orderBy('sections.year');
+        ->orderBy('sections.year')
+        ->orderBy('sections.code');
 
         $slot_monitoring = $query->get();
 

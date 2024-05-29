@@ -49,7 +49,7 @@ class UpdateClassRequest extends FormRequest
             'f2f' => [],
             'isprof' => [],
             'instructor_id' => [],
-            'schedule' => ''
+            'schedule' => 'nullable'
         ];
     }
 }
